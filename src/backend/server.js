@@ -40,13 +40,41 @@ app.get(`/${serverConfig.systemReference}/systemList`, function(request, respons
     return response.status(200).json(upgiSystem.list);
 });
 
+/*
+app.get(`/${serverConfig.systemReference}/validationTest`, function(request, response) { // test a token for validity
+    // check for token
+    let accessToken = (request.body && request.body.accessToken) ||
+        (request.query && request.query.accessToken) ||
+        request.headers['x-access-token'];
+    if (accessToken) { // if a token is found
+        jwt.verify(accessToken, serverConfig.passphrase, function(error, decodedToken) {
+            if (error) {
+                utility.logger.error(`token validation failure: ${error}`);
+                return response.status(403).json({
+                    error: error
+                });
+            }
+            utility.logger.info('token is valid');
+            return response.status(200).json({
+                error: null
+            });
+        });
+    } else { // if there is no token, return an error
+        utility.logger.error('token does not exist');
+        return response.status(403).json({
+            error: 'token does not exist'
+        });
+    }
+});
+*/
+
 app.post(`/${serverConfig.systemReference}/login`, function(request, response) { // handles login requests
     utility.logger.info(`received login request from ${request.body.loginID}`);
     let ldapClient = ldap.createClient({ url: serverConfig.ldapServerUrl });
     ldapClient.bind(`uid=${request.body.loginID},ou=user,dc=upgi,dc=ddns,dc=net`, request.body.password, function(error) {
         if (error) {
             utility.logger.error(`LDAP validation failure: ${error.lde_message}`);
-            return response.status(403).send({
+            return response.status(403).json({
                 errorMessage: error.lde_message
             });
         }
@@ -62,7 +90,7 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
             });
             if (userPrivObject.length !== 1) {
                 utility.logger.info(`userPrivObject.length: ${userPrivObject.length}`);
-                return response.status(403).send({
+                return response.status(403).json({
                     errorMessage: '此帳號沒有使用權限'
                 });
             } else {
@@ -71,7 +99,7 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
                 });
                 if (systemMembershipObject.length !== 1) {
                     utility.logger.info(`systemMembershipObject.length: ${systemMembershipObject.length}`);
-                    return response.status(403).send({
+                    return response.status(403).json({
                         errorMessage: '此帳號沒有使用權限'
                     });
                 }
@@ -79,12 +107,11 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
                 let payload = {
                     loginID: request.body.loginID,
                     systemID: request.body.systemID,
-                    privilege: systemPrivilege.getPrivObject(request.body.loginID, request.body.systemID),
-                    expiration: systemMembershipObject[0].accessPeriod
+                    privilege: systemPrivilege.getPrivObject(request.body.loginID, request.body.systemID)
                 };
                 let token = jwt.sign(payload, serverConfig.passphrase, { expiresIn: systemMembershipObject[0].accessPeriod });
                 utility.logger.info(`${request.body.loginID} login procedure completed`);
-                return response.status(200).send({
+                return response.status(200).json({
                     token: token,
                     redirectUrl: function() {
                         return upgiSystem.list.filter(function(system) {

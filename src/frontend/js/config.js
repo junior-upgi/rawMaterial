@@ -11,6 +11,6 @@ function serverHost() {
 }
 const serverPort = '9006';
 
-export const loginHtmlSource = './view/login.html';
+export const viewFileSourceUrl = './view';
 export const loginUrl = `${serverHost()}:${serverPort}/${systemReference}/login`;
 export let serverUrl = `${serverHost()}:${serverPort}/${systemReference}`;

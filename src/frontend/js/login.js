@@ -1,7 +1,8 @@
-import { loginHtmlSource, loginUrl, serverUrl } from './config.js';
+import { viewFileSourceUrl, loginUrl, serverUrl } from './config.js';
+import { decode } from 'jsonwebtoken';
 
 export function displayLoginForm() {
-    $('body').empty().load(loginHtmlSource, function(response) {
+    $('body').empty().load(`${viewFileSourceUrl}/login.html`, function(response) {
         $.get(`${serverUrl}/systemList`, function(systemList) {
             systemList.forEach(function(system) {
                 if (!system.hide) {
@@ -30,7 +31,12 @@ function submitHandler() {
                 dataType: 'json',
                 success: function(response) {
                     $('div#statusMessage').empty().text(`驗證成功，五秒後將轉移至${$('select#systemID option:selected').text()}頁面`);
-                    sessionStorage.rawMaterialToken = response.token;
+                    sessionStorage.token = response.token;
+                    sessionStorage.loginID = decode(response.token, { complete: true }).payload.loginID;
+                    sessionStorage.systemID = decode(response.token, { complete: true }).payload.systemID;
+                    sessionStorage.role = decode(response.token, { complete: true }).payload.privilege.role;
+                    sessionStorage.accessType = decode(response.token, { complete: true }).payload.privilege.accessType;
+                    sessionStorage.funcPrivList = JSON.stringify(decode(response.token, { complete: true }).payload.privilege.funcPrivList);
                     setTimeout(function() {
                         window.location = response.redirectUrl;
                     }, 5000);

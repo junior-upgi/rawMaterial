@@ -1,12 +1,11 @@
-import { systemReference } from './config.js';
+import { viewFileSourceUrl } from './config.js';
 import { displayLoginForm } from './login.js';
 
 $('document').ready(function() {
     // check if login token existence
-    if (sessionStorage.rawMaterialToken === undefined) {
+    if (sessionStorage.token === undefined) {
         displayLoginForm();
     } else {
-        console.log(systemReference);
-        console.log(sessionStorage.rawMaterialToken);
+        $('body').empty().load(`${viewFileSourceUrl}/${sessionStorage.role}.html`);
     }
 });

@@ -1,44 +1,44 @@
-const clone = require('clone');
-
 const list = [{
     erpID: '05060001',
     membership: [{
         systemID: 1,
-        status: 'admin', // 'admin','corporateUser','supplierUser'
-        accessType: 'full', // 'full','partial'
+        role: 'admin', // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+        accessType: 'full', // 'full','partial','none'
         accessPeriod: 3600,
-        funcList: []
+        funcPrivList: []
     }, {
         systemID: 6,
-        status: 'admin', // 'admin','corporateUser','supplierUser'
-        accessType: 'full', // 'full','partial'
+        role: 'admin', // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+        accessType: 'full', // 'full','partial','none'
         accessPeriod: 3600,
-        funcList: []
+        funcPrivList: []
     }, {
         systemID: 7,
-        status: 'admin', // 'admin','corporateUser','supplierUser'
-        accessType: 'full', // 'full','partial'
-        accessPeriod: 3600,
-        funcList: []
+        role: 'admin', // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+        accessType: 'full', // 'full','partial','none'
+        accessPeriod: 10,
+        funcPrivList: []
     }]
 }];
 
 function getPrivObject(erpID, systemID) {
-    let userPrivObject = {
-        erpID: '',
-        membership: []
+    let privObject = {
+        role: null,
+        accessType: null,
+        funcPrivList: []
     };
-    list.forEach(function(userPrivItem) {
-        if (userPrivItem.erpID === erpID) {
-            userPrivObject.erpID = userPrivItem.erpID;
-            userPrivItem.membership.forEach(function(membershipItem) {
+    list.forEach(function(listItem) {
+        if (listItem.erpID === erpID) {
+            listItem.membership.forEach(function(membershipItem) {
                 if (membershipItem.systemID === parseInt(systemID)) {
-                    userPrivObject.membership[0] = clone(membershipItem);
+                    privObject.role = membershipItem.role;
+                    privObject.accessType = membershipItem.accessType;
+                    privObject.funcPrivList = membershipItem.funcPrivList.slice();
                 }
             });
         }
     });
-    return userPrivObject;
+    return privObject;
 }
 
 module.exports = {
