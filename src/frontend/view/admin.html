@@ -1,1 +1,15 @@
 <p>管理員帳號登入</p>
+
+<script>
+    $.ajax({
+        url: 'http://127.0.0.1:9006/rawMaterial/test',
+        headers: {
+            'x-access-token': sessionStorage.token
+        }
+    }).done(function(response) {
+        console.log(response);
+    }).fail(function(error) {
+        console.log(error);
+    });
+
+</script>

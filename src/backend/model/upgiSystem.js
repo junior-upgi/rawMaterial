@@ -47,7 +47,7 @@ const list = [{
     reference: 'rawMaterial',
     cReference: '原物料採購管理系統',
     functionList: [],
-    frontendUrl: `${serverConfig.publicServerUrl}/${serverConfig.systemReference}/index.html`,
+    frontendUrl: `${serverConfig.publicServerUrl}/index.html`,
     hide: false
 }];
 

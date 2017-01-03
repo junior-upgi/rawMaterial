@@ -35,7 +35,7 @@ function submitHandler() {
                     sessionStorage.loginID = decode(response.token, { complete: true }).payload.loginID;
                     sessionStorage.systemID = decode(response.token, { complete: true }).payload.systemID;
                     sessionStorage.role = decode(response.token, { complete: true }).payload.privilege.role;
-                    sessionStorage.accessType = decode(response.token, { complete: true }).payload.privilege.accessType;
+                    sessionStorage.accessLevel = decode(response.token, { complete: true }).payload.privilege.accessLevel;
                     sessionStorage.funcPrivList = JSON.stringify(decode(response.token, { complete: true }).payload.privilege.funcPrivList);
                     setTimeout(function() {
                         window.location = response.redirectUrl;

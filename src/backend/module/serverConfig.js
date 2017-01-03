@@ -33,9 +33,9 @@ function mssqlServerUrl() {
 
 function publicServerUrl() {
     if (development === true) {
-        return `${serverHost}:${serverPort}`; // development
+        return `${serverHost}:${serverPort}/${systemReference}`; // development
     } else {
-        return `http://upgi.ddns.net:${serverPort}`; // production
+        return `http://upgi.ddns.net:${serverPort}/${systemReference}`; // production
     }
 }
 const upgiSystemAccount = 'upgiSystem';

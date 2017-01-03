@@ -40,34 +40,6 @@ app.get(`/${serverConfig.systemReference}/systemList`, function(request, respons
     return response.status(200).json(upgiSystem.list);
 });
 
-/*
-app.get(`/${serverConfig.systemReference}/validationTest`, function(request, response) { // test a token for validity
-    // check for token
-    let accessToken = (request.body && request.body.accessToken) ||
-        (request.query && request.query.accessToken) ||
-        request.headers['x-access-token'];
-    if (accessToken) { // if a token is found
-        jwt.verify(accessToken, serverConfig.passphrase, function(error, decodedToken) {
-            if (error) {
-                utility.logger.error(`token validation failure: ${error}`);
-                return response.status(403).json({
-                    error: error
-                });
-            }
-            utility.logger.info('token is valid');
-            return response.status(200).json({
-                error: null
-            });
-        });
-    } else { // if there is no token, return an error
-        utility.logger.error('token does not exist');
-        return response.status(403).json({
-            error: 'token does not exist'
-        });
-    }
-});
-*/
-
 app.post(`/${serverConfig.systemReference}/login`, function(request, response) { // handles login requests
     utility.logger.info(`received login request from ${request.body.loginID}`);
     let ldapClient = ldap.createClient({ url: serverConfig.ldapServerUrl });
@@ -94,7 +66,7 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
                     errorMessage: '此帳號沒有使用權限'
                 });
             } else {
-                let systemMembershipObject = userPrivObject[0].membership.filter(function(membershipObject) {
+                let systemMembershipObject = userPrivObject[0].membershipList.filter(function(membershipObject) {
                     return membershipObject.systemID === parseInt(request.body.systemID);
                 });
                 if (systemMembershipObject.length !== 1) {
@@ -121,6 +93,49 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
                 });
             }
         });
+    });
+});
+
+// middleware for token validation, anything blow this point will subject to this function
+app.use(function(request, response, next) {
+    // get the full request route
+    let requestRoute = `${request.protocol}://${request.get('Host')}${request.originalUrl}`;
+    // check request for token
+    let accessToken =
+        (request.body && request.body.accessToken) ||
+        (request.query && request.query.accessToken) ||
+        request.headers['x-access-token'];
+    if (accessToken) { // if a token is found
+        jwt.verify(accessToken, serverConfig.passphrase, function(error, decodedToken) {
+            if (error) {
+                utility.logger.error(`token validation failure: ${error}`);
+                return response.status(403).redirect({
+                    error: error
+                });
+            }
+            utility.logger.info('token is valid, checking access privilege');
+            let loginID = decodedToken.loginID;
+            let systemID = decodedToken.systemID;
+            if (systemPrivilege.checkRoutePriv(loginID, systemID, requestRoute)) {
+                next();
+            } else {
+                utility.logger.error('user does not have access privilege');
+                return response.status(403).json({
+                    error: 'user does not access privilege'
+                });
+            }
+        });
+    } else { // if there is no token, return an error
+        utility.logger.error('token does not exist');
+        return response.status(403).json({
+            error: 'token does not exist'
+        });
+    }
+});
+
+app.get(`/${serverConfig.systemReference}/test`, function(request, response) {
+    return response.status(200).json({
+        message: 'passed the test'
     });
 });
 
