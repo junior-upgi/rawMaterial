@@ -1,0 +1,25 @@
+{
+    "name": "raw-material",
+    "description": "program frontend to monitor and regulate purchase and transport of raw material used in glass production",
+    "main": "index.bundle.js",
+    "authors": [
+        "Chia-Yu Tsai"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/junior-upgi/rawMaterial",
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "jquery-ui": "^1.12.1",
+        "jquery": "^3.1.1",
+        "bootstrap": "^3.3.7",
+        "moment": "^2.17.1",
+        "moment-timezone": "^0.5.11",
+        "chart.js": "^2.4.0",
+        "numeral": "^2.0.4"
+    }
+}
