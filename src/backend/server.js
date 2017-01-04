@@ -1,13 +1,10 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// const CronJob = require('cron').CronJob;
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const ldap = require('ldapjs');
 const moment = require('moment-timezone');
 const morgan = require('morgan');
-// const httpRequest = require('request-promise');
-const Sequalize = require('sequelize');
 const favicon = require('serve-favicon');
 
 const serverConfig = require('./module/serverConfig.js');
