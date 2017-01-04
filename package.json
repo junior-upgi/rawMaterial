@@ -38,9 +38,7 @@
     "q": "^1.4.1",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
-    "sequelize": "^3.28.0",
     "serve-favicon": "^2.3.2",
-    "tedious": "^1.14.0",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
