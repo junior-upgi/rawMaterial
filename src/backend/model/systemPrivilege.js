@@ -1,3 +1,5 @@
+const serverConfig = require('../module/serverConfig.js');
+
 const list = [{
     erpID: '05060001',
     membershipList: [{
@@ -18,6 +20,24 @@ const list = [{
         accessLevel: 'full', // 'full','partial','none'
         accessPeriod: 3600,
         funcPrivList: ['*']
+    }]
+}, {
+    erpID: '95070003',
+    membershipList: [{
+        systemID: 7,
+        role: 'purchasingStaff', // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+        accessLevel: 'partial', // 'full','partial','none'
+        accessPeriod: 3600,
+        funcPrivList: [`/${serverConfig.serverUrl}/${serverConfig.systemReference}/test`]
+    }]
+}, {
+    erpID: '09100001',
+    membershipList: [{
+        systemID: 7,
+        role: 'furnaceStaff', // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+        accessLevel: 'partial', // 'full','partial','none'
+        accessPeriod: 3600,
+        funcPrivList: [`/${serverConfig.serverUrl}/${serverConfig.systemReference}/test`]
     }]
 }];
 

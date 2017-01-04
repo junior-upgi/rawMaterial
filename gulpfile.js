@@ -109,7 +109,7 @@ function startBrowserSync() {
         return;
     }
     let option = {
-        proxy: `${serverConfig.publicServerUrl}/index.html`,
+        proxy: `${serverConfig.serverUrl}/${serverConfig.systemReference}/index.html`,
         port: serverConfig.browserSyncPort,
         files: ['./src/frontend/** /*.*'],
         ghostMode: {

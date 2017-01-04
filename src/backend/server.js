@@ -96,6 +96,7 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
     });
 });
 
+/*
 // middleware for token validation, anything blow this point will subject to this function
 app.use(function(request, response, next) {
     // get the full request route
@@ -109,8 +110,8 @@ app.use(function(request, response, next) {
         jwt.verify(accessToken, serverConfig.passphrase, function(error, decodedToken) {
             if (error) {
                 utility.logger.error(`token validation failure: ${error}`);
-                return response.status(403).redirect({
-                    error: error
+                return response.status(403).json({
+                    error: error.message
                 });
             }
             utility.logger.info('token is valid, checking access privilege');
@@ -119,9 +120,9 @@ app.use(function(request, response, next) {
             if (systemPrivilege.checkRoutePriv(loginID, systemID, requestRoute)) {
                 next();
             } else {
-                utility.logger.error('user does not have access privilege');
+                utility.logger.error(`user does not have access privilege to ${requestRoute}`);
                 return response.status(403).json({
-                    error: 'user does not access privilege'
+                    error: `user does not have access privilege to ${requestRoute}`
                 });
             }
         });
@@ -132,6 +133,7 @@ app.use(function(request, response, next) {
         });
     }
 });
+*/
 
 app.get(`/${serverConfig.systemReference}/test`, function(request, response) {
     return response.status(200).json({

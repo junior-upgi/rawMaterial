@@ -34,7 +34,7 @@ function mssqlServerUrl() {
 
 function publicServerUrl() {
     if (development === true) {
-        return `${serverHost}:${serverPort}/${systemReference}`; // development
+        return `${serverHost}:${browserSyncPort}/${systemReference}`; // development
     } else {
         return `http://upgi.ddns.net:${serverPort}/${systemReference}`; // production
     }
