@@ -7,6 +7,7 @@ const ldap = require('ldapjs');
 const moment = require('moment-timezone');
 const morgan = require('morgan');
 // const httpRequest = require('request-promise');
+const Sequalize = require('sequelize');
 const favicon = require('serve-favicon');
 
 const serverConfig = require('./module/serverConfig.js');
@@ -96,7 +97,6 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
     });
 });
 
-/*
 // middleware for token validation, anything blow this point will subject to this function
 app.use(function(request, response, next) {
     // get the full request route
@@ -133,7 +133,6 @@ app.use(function(request, response, next) {
         });
     }
 });
-*/
 
 app.get(`/${serverConfig.systemReference}/test`, function(request, response) {
     return response.status(200).json({

@@ -1,4 +1,4 @@
-const CronJob = require('cron').CronJob;
+const cron = require('node-cron');
 const fs = require('fs');
 const moment = require('moment-timezone');
 const mssql = require('mssql');
@@ -60,7 +60,7 @@ function executeQuery(queryString, callback) {
         });
 }
 
-let statusReport = new CronJob('00 00,30 00,01,05-23 * * *', function() {
+let statusReport = cron.schedule('0 0,30 0,6-23 * * *', function() {
     logger.info(`${serverConfig.systemReference} reporting mechanism triggered`);
     let issuedDatetime = moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
     let message = `${issuedDatetime} ${serverConfig.systemReference} server reporting in from ${serverConfig.serverHostname}`;
@@ -80,7 +80,7 @@ let statusReport = new CronJob('00 00,30 00,01,05-23 * * *', function() {
         alertSystemError('statusReport', error);
         return logger.error(`${serverConfig.systemReference} reporting mechanism failure ${error}`);
     });
-}, null, false, serverConfig.workingTimezone);
+}, false);
 
 function alertSystemError(functionRef, message) {
     let currentDatetime = moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
