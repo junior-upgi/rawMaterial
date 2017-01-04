@@ -63,7 +63,7 @@ function executeQuery(queryString, callback) {
 let statusReport = new CronJob('00 00,30 00,01,05-23 * * *', function() {
     logger.info(`${serverConfig.systemReference} reporting mechanism triggered`);
     let issuedDatetime = moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
-    let message = `${issuedDatetime} ${serverConfig.systemReference} server reporting in`;
+    let message = `${issuedDatetime} ${serverConfig.systemReference} server reporting in from ${serverConfig.serverHostname}`;
     httpRequest({
         method: 'post',
         uri: serverConfig.botAPIUrl + telegramBot.getToken('upgiITBot') + '/sendMessage',

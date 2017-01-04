@@ -1,6 +1,7 @@
 const systemReference = 'rawMaterial';
 
 const development = true;
+const serverHostname = 'svd13216pwb';
 const serverHost = 'http://127.0.0.1';
 const serverPort = 9006;
 const browserSyncPort = 9996;
@@ -68,6 +69,7 @@ module.exports = {
     passphrase: passphrase(),
     publicServerUrl: publicServerUrl(),
     serverHost: serverHost,
+    serverHostname: serverHostname,
     serverPort: serverPort,
     serverUrl: `${serverHost}:${serverPort}`,
     smtpTransportAccount: smtpTransportAccount,
