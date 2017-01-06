@@ -1,4 +1,6 @@
-function getAllUrlParams(url) {
+export const monthList = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+
+export function getAllUrlParams(url) {
     let queryString = url ? url.split('?')[1] : window.location.search.slice(1); // get query string from url (optional) or window
     let obj = {}; // we'll store the parameters here
     if (queryString) { // if query string exists
@@ -11,7 +13,7 @@ function getAllUrlParams(url) {
                 paramNum = v.slice(1, -1);
                 return '';
             });
-            let paramValue = typeof (a[1]) === 'undefined' ? true : a[1]; // set parameter value (use 'true' if empty)
+            let paramValue = typeof(a[1]) === 'undefined' ? true : a[1]; // set parameter value (use 'true' if empty)
             // paramName = paramName.toLowerCase(); // (optional) keep case consistent
             // paramValue = paramValue.toLowerCase();
             if (obj[paramName]) { // if parameter name already exists
@@ -21,7 +23,7 @@ function getAllUrlParams(url) {
                 if (typeof paramNum === 'undefined') { // if no array index number specified...
                     obj[paramName].push(paramValue); // put the value on the end of the array
                 } else { // if array index number specified...
-                    obj[paramName][paramNum] = paramValue;// put the value at that index number
+                    obj[paramName][paramNum] = paramValue; // put the value at that index number
                 }
             } else { // if param name doesn't exist yet, set it
                 obj[paramName] = paramValue;
@@ -30,7 +32,3 @@ function getAllUrlParams(url) {
     }
     return obj;
 }
-
-module.exports = {
-    getAllUrlParams
-};

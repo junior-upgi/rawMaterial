@@ -1,1 +1,95 @@
-<p>窯爐單位人員帳號登入</p>
+<div class="container">
+    <div class="row page-header">
+        <div class="col-xs-9">
+            <h1>統義玻璃股份有限公司&nbsp;<small>原料進貨下單作業</small></h1>
+        </div>
+        <div class="col-xs-3 text-right">
+            使用權限到期時間: <span id="accessExpDisplay"></span>
+        </div>
+    </div>
+    <div class="row">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li id="yearSelector" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button">年度&nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a>Action</a></li>
+                                <li><a>Another action</a></li>
+                                <li><a>Something else here</a></li>
+                                <li><a>Separated link</a></li>
+                                <li><a>One more separated link</a></li>
+                            </ul>
+                        </li>
+                        <li id="monthSelector" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button">月份&nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a>一月</a></li>
+                                <li><a>二月</a></li>
+                                <li><a>三月</a></li>
+                                <li><a>四月</a></li>
+                                <li><a>五月</a></li>
+                                <li><a>六月</a></li>
+                                <li><a>七月</a></li>
+                                <li><a>八月</a></li>
+                                <li><a>九月</a></li>
+                                <li><a>十月</a></li>
+                                <li><a>十一月</a></li>
+                                <li><a>十二月</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form id="purchaseRequest" class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <button type="button" class="rawMaterial btn btn-default dropdown-toggle" data-toggle="dropdown">原料選項&nbsp;<span class="caret"></span></button>
+                                    <ul class="rawMaterial dropdown-menu"></ul>
+                                </div>
+                                <!-- /btn-group -->
+                                <input id="NAME" type="text" class="rawMaterial form-control" readonly required>
+                                <input id="PRD_NO" type="text" name="PRD_NO" class="rawMaterial form-control hidden" readonly required>
+                                <input id="typeID" type="number" name="typeID" class="rawMaterial form-control hidden" readonly required>
+                            </div>
+                            <!-- /input-group -->
+                            <input id="requestDate" type="date" name="requestDate" class="form-control" required>
+                            <input type="number" name="quantity" class="form-control" placeholder="數量" required>
+                        </div>
+                        <button id="submitButton" type="submit" class="btn btn-default">預約</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <button id="exportButton" type="button" class="btn btn-default navbar-btn">輸出</button>
+                            <button id="logoutButton" type="button" class="btn btn-default navbar-btn">登出</button>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+    <div class="row">
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <th class="col-xs-2 text-center"><strong></strong></th>
+                <th class="col-xs-2 text-center"><strong>日期</strong></th>
+                <th class="col-xs-2 text-center"><strong>項目</strong></th>
+                <th class="col-xs-2 text-center"><strong>數量</strong></th>
+                <th class="col-xs-3 text-center"><strong>狀態</strong></th>
+                <th class="col-xs-3 text-center"><strong>備註</strong></th>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <td colspan="6">
+                    <h4>注意事項</h4>
+                    <textarea rows="10" style="width:100%;border:none;"></textarea>
+                </td>
+            </tfoot>
+        </table>
+    </div>
+    <br>
+    <div id="statusMessage"></div>
+</div>

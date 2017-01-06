@@ -2,7 +2,7 @@ const systemReference = 'rawMaterial';
 
 const development = true;
 const serverHostname = 'svd13216pwb';
-const serverHost = 'http://127.0.0.1';
+const serverHost = 'http://localhost';
 const serverPort = 9006;
 const browserSyncPort = 9996;
 

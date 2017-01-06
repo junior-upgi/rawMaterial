@@ -26,9 +26,9 @@ const list = [{
     membershipList: [{
         systemID: 7,
         role: 'purchasingStaff', // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
-        accessLevel: 'partial', // 'full','partial','none'
+        accessLevel: 'none', // 'full','partial','none'
         accessPeriod: 3600,
-        funcPrivList: [`/${serverConfig.serverUrl}/${serverConfig.systemReference}/test`]
+        funcPrivList: []
     }]
 }, {
     erpID: '09100001',
@@ -37,11 +37,14 @@ const list = [{
         role: 'furnaceStaff', // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
         accessLevel: 'partial', // 'full','partial','none'
         accessPeriod: 3600,
-        funcPrivList: [`/${serverConfig.serverUrl}/${serverConfig.systemReference}/test`]
+        funcPrivList: [
+            `${serverConfig.serverUrl}/${serverConfig.systemReference}/validateToken`
+        ]
     }]
 }];
 
 function checkRoutePriv(erpID, systemID, requestRoute) {
+    let passedPrivCheck = false;
     let userPrivObj = list.filter(function(userPrivObj) {
         return userPrivObj.erpID === erpID; // get the user privilge object
     });
@@ -50,17 +53,22 @@ function checkRoutePriv(erpID, systemID, requestRoute) {
             return membership.systemID === parseInt(systemID);
         });
         if (membership.length > 0) { // privilage routes found
-            if (membership[0].accessLevel === 'full') { return true; } // if user has full access right
-            if (membership[0].accessLevel === 'none') { return false; } // if user has no access right
-            // loop through the membership list to get a match
-            membership.forEach(function(privRoute) {
-                if (privRoute === requestRoute) {
-                    return true; // matching privilege found
-                }
-            });
+            if (membership[0].accessLevel === 'full') { // if user has full access right
+                passedPrivCheck = true;
+            } else if (membership[0].accessLevel === 'none') { // if user has no access right
+                passedPrivCheck = false;
+            } else { // loop through the membership list to get a match
+                membership[0].funcPrivList.forEach(function(privRoute) {
+                    if (privRoute === requestRoute) {
+                        passedPrivCheck = true; // matching privilege found
+                    }
+                });
+            }
+        } else {
+            passedPrivCheck = false;
         }
     }
-    return false; // no matching privilege
+    return passedPrivCheck;
 }
 
 function getPrivObject(erpID, systemID) {

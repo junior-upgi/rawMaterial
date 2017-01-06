@@ -8,23 +8,24 @@ const morgan = require('morgan');
 const favicon = require('serve-favicon');
 
 const serverConfig = require('./module/serverConfig.js');
+const tokenValidation = require('./module/tokenValidation.js');
 const utility = require('./module/utility.js');
 
-const upgiSystem = require('./model/upgiSystem.js');
+const rawMaterial = require('./model/rawMaterial.js');
 const systemPrivilege = require('./model/systemPrivilege.js');
 const telegramUser = require('./model/telegramUser.js');
 // const telegramBot = require('./model/telegramBot.js');
+const upgiSystem = require('./model/upgiSystem.js');
 
 let app = express();
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
-
 // app.use(favicon(__dirname + '/../src/frontend/upgiLogo.png')); // middleware to serve favicon
 app.use(favicon(__dirname + '/../public/upgiLogo.png')); // middleware to serve favicon
-app.use(`/${serverConfig.systemReference}`, express.static('./public')); // serve static files
-app.use(`/${serverConfig.systemReference}/bower_components`, express.static('./bower_components')); // serve static files
+app.use(`/${serverConfig.systemReference}`, express.static(__dirname + '/../public')); // serve static files
+app.use(`/${serverConfig.systemReference}/bower_components`, express.static(__dirname + '/../bower_components')); // serve static files
 
 app.get(`/${serverConfig.systemReference}/status`, function(request, response) {
     return response.status(200).json({
@@ -94,46 +95,14 @@ app.post(`/${serverConfig.systemReference}/login`, function(request, response) {
     });
 });
 
-// middleware for token validation, anything blow this point will subject to this function
-app.use(function(request, response, next) {
-    // get the full request route
-    let requestRoute = `${request.protocol}://${request.get('Host')}${request.originalUrl}`;
-    // check request for token
-    let accessToken =
-        (request.body && request.body.accessToken) ||
-        (request.query && request.query.accessToken) ||
-        request.headers['x-access-token'];
-    if (accessToken) { // if a token is found
-        jwt.verify(accessToken, serverConfig.passphrase, function(error, decodedToken) {
-            if (error) {
-                utility.logger.error(`token validation failure: ${error}`);
-                return response.status(403).json({
-                    error: error.message
-                });
-            }
-            utility.logger.info('token is valid, checking access privilege');
-            let loginID = decodedToken.loginID;
-            let systemID = decodedToken.systemID;
-            if (systemPrivilege.checkRoutePriv(loginID, systemID, requestRoute)) {
-                next();
-            } else {
-                utility.logger.error(`user does not have access privilege to ${requestRoute}`);
-                return response.status(403).json({
-                    error: `user does not have access privilege to ${requestRoute}`
-                });
-            }
-        });
-    } else { // if there is no token, return an error
-        utility.logger.error('token does not exist');
-        return response.status(403).json({
-            error: 'token does not exist'
-        });
-    }
+// serves raw material list
+app.get(`/${serverConfig.systemReference}/rawMaterialList`, function(request, response) {
+    return response.status(200).json(rawMaterial.list);
 });
 
-app.get(`/${serverConfig.systemReference}/test`, function(request, response) {
+app.get(`/${serverConfig.systemReference}/validateToken`, tokenValidation, function(request, response) {
     return response.status(200).json({
-        message: 'passed the test'
+        error: null
     });
 });
 
