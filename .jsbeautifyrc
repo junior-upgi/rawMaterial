@@ -7,6 +7,6 @@
         "css": ["css", "scss"],
         "html": ["htm", "html", "handlebars"]
     },
-    "brace_style": "collapse-preserve-inline",
+    "brace_style": "collapse,preserve-inline",
     "end_with_newline": true
 }

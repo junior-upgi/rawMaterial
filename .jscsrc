@@ -27,6 +27,7 @@
         "try",
         "catch"
     ],
+    "requireDotNotation": false,
     "requireSpaceAfterBinaryOperators": [
         "=",
         ",",

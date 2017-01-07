@@ -1,10 +1,9 @@
 const systemReference = 'rawMaterial';
-
 const development = true;
 const serverHostname = 'svd13216pwb';
-const serverHost = 'http://localhost';
-const serverPort = 9006;
-const browserSyncPort = 9996;
+
+// broadcasting configuration
+const botAPIUrl = 'https://api.telegram.org/bot';
 
 function broadcastServerUrl() {
     let broadcastServerPort = 9001;
@@ -14,7 +13,22 @@ function broadcastServerUrl() {
         return `http://192.168.168.25:${broadcastServerPort}/broadcast`; // access broadcast server from LAN (production)
     }
 }
+const smtpTransportAccount = 'smtps://junior.upgi@gmail.com:cHApPPZV@smtp.gmail.com';
 
+// server configuration
+const serverHost = 'http://localhost';
+const serverPort = 9006;
+const browserSyncPort = 9996;
+
+function publicServerUrl() {
+    if (development === true) {
+        return `${serverHost}:${browserSyncPort}/${systemReference}`; // development
+    } else {
+        return `http://upgi.ddns.net:${serverPort}/${systemReference}`; // production
+    }
+}
+
+// database access configuration
 function mssqlServerHost() {
     if (development === true) {
         return 'http://127.0.0.1'; // access database through SSH (development)
@@ -31,20 +45,14 @@ function mssqlServerUrl() {
         return `${mssqlServerHost()}:${mssqlServerPort}`; // access database from LAN (production)
     }
 }
-
-function publicServerUrl() {
-    if (development === true) {
-        return `${serverHost}:${browserSyncPort}/${systemReference}`; // development
-    } else {
-        return `http://upgi.ddns.net:${serverPort}/${systemReference}`; // production
-    }
-}
 const upgiSystemAccount = 'upgiSystem';
 const upgiSystemPassword = 'upgiSystem';
-const smtpTransportAccount = 'smtps://junior.upgi@gmail.com:cHApPPZV@smtp.gmail.com';
+
+// misc
 const workingTimezone = 'Asia/Taipei';
 
-const botAPIUrl = 'https://api.telegram.org/bot';
+// ldap
+const ldapServerUrl = 'ldap://upgi.ddns.net:389';
 
 function passphrase() { // can be later changed to pull something from other locations
     return 'This is not a passphrase';
@@ -55,7 +63,7 @@ module.exports = {
     broadcastServerUrl: broadcastServerUrl(),
     browserSyncPort: browserSyncPort,
     development: development,
-    ldapServerUrl: 'ldap://upgi.ddns.net:389',
+    ldapServerUrl: ldapServerUrl,
     logDir: 'log',
     mssqlConfig: {
         server: mssqlServerHost().slice(7),

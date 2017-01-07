@@ -27,15 +27,16 @@ app.use(favicon(__dirname + '/../public/upgiLogo.png')); // middleware to serve 
 app.use(`/${serverConfig.systemReference}`, express.static(__dirname + '/../public')); // serve static files
 app.use(`/${serverConfig.systemReference}/bower_components`, express.static(__dirname + '/../bower_components')); // serve static files
 
-app.get(`/${serverConfig.systemReference}/status`, function(request, response) {
+app.get(`/${serverConfig.systemReference}/status`, function(request, response) { // serve system status
     return response.status(200).json({
+        hostname: serverConfig.serverHostname,
         system: serverConfig.systemReference,
         status: 'online',
         timestamp: moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
     });
 });
 
-app.get(`/${serverConfig.systemReference}/systemList`, function(request, response) { // serve system information
+app.get(`/${serverConfig.systemReference}/systemList`, function(request, response) { // serve system accessibilty by this server
     return response.status(200).json(upgiSystem.list);
 });
 
