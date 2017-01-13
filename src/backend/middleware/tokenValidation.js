@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-const serverConfig = require('./serverConfig.js');
-const utility = require('./utility.js');
+const serverConfig = require('../module/serverConfig.js');
+const utility = require('../module/utility.js');
 
 const systemPrivilege = require('../model/systemPrivilege.js');
 

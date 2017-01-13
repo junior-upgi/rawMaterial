@@ -1,5 +1,6 @@
-import { viewFileSourceUrl } from './config.js';
+import { serverUrl } from './config.js';
 import { displayLoginForm } from './login.js';
+
 import { adminTest } from './admin.js';
 import { blackListedTest } from './blackListed.js';
 import { furnaceStaffTest, furnaceInitInterface } from './furnaceStaff.js';
@@ -23,7 +24,7 @@ $('document').ready(function() {
     if (sessionStorage.token === undefined) {
         displayLoginForm();
     } else {
-        $('body').empty().load(`${viewFileSourceUrl}/${sessionStorage.role}.html`, function() {
+        $('body').empty().load(`${serverUrl}/view/${sessionStorage.role}.html`, function() {
             branchTest[sessionStorage.role]();
             initInterface[sessionStorage.role]();
         });

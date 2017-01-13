@@ -38,7 +38,7 @@ const list = [{
         accessLevel: 'partial', // 'full','partial','none'
         accessPeriod: 3600,
         funcPrivList: [
-            `${serverConfig.serverUrl}/${serverConfig.systemReference}/validateToken`
+            `${serverConfig.serverUrl}/${serverConfig.systemReference}/validate`
         ]
     }]
 }];

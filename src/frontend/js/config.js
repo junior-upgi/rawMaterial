@@ -1,5 +1,4 @@
 export const systemReference = 'rawMaterial';
-
 const development = true;
 
 function serverHost() {
@@ -12,27 +11,12 @@ function serverHost() {
 const serverPort = 9006;
 const browserSyncPort = 9996;
 
-export const viewFileSourceUrl = './view';
-export function loginUrl() {
+function constructServerUrl() {
     if (development === true) {
-        return `${serverHost()}:${browserSyncPort}/${systemReference}/login`;
+        return `${serverHost()}:${browserSyncPort}/${systemReference}`; // development
     } else {
-        return `${serverHost()}:${serverPort}/${systemReference}/login`;
+        return `${serverHost()}:${serverPort}/${systemReference}`; // production
     }
 }
 
-export function validateTokenUrl() {
-    if (development === true) {
-        return `${serverHost()}:${browserSyncPort}/${systemReference}/validateToken`;
-    } else {
-        return `${serverHost()}:${serverPort}/${systemReference}/validateToken`;
-    }
-}
-
-export function serverUrl() {
-    if (development === true) {
-        return `${serverHost()}:${browserSyncPort}/${systemReference}`;
-    } else {
-        return `${serverHost()}:${serverPort}/${systemReference}`;
-    }
-}
+export const serverUrl = constructServerUrl();

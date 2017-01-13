@@ -1,11 +1,6 @@
 <div class="container">
     <div class="row page-header">
-        <div class="col-xs-9">
-            <h1>統義玻璃股份有限公司&nbsp;<small>原料進貨下單作業</small></h1>
-        </div>
-        <div class="col-xs-3 text-right">
-            使用權限到期時間: <span id="accessExpDisplay"></span>
-        </div>
+        <h1>統義玻璃股份有限公司&nbsp;<small>原料進貨下單作業</small></h1>
     </div>
     <div class="row">
         <nav class="navbar navbar-default">
@@ -48,13 +43,13 @@
                                     <ul class="rawMaterial dropdown-menu"></ul>
                                 </div>
                                 <!-- /btn-group -->
-                                <input id="NAME" type="text" class="rawMaterial form-control" readonly required>
-                                <input id="PRD_NO" type="text" name="PRD_NO" class="rawMaterial form-control hidden" readonly required>
-                                <input id="typeID" type="number" name="typeID" class="rawMaterial form-control hidden" readonly required>
+                                <input id="NAME" name="NAME" type="text" class="rawMaterial form-control" readonly required>
+                                <input id="PRD_NO" name="PRD_NO" type="text" class="rawMaterial form-control hidden">
+                                <input id="typeID" name="typeID" type="number" class="rawMaterial form-control hidden">
                             </div>
                             <!-- /input-group -->
-                            <input id="requestDate" type="date" name="requestDate" class="form-control" required>
-                            <input type="number" name="quantity" class="form-control" placeholder="數量" required>
+                            <input id="requestDate" name="requestDate" type="date" class="form-control" required>
+                            <input id="quantity" name="quantity" type="number" class="form-control" placeholder="數量" required>
                         </div>
                         <button id="submitButton" type="submit" class="btn btn-default">預約</button>
                     </form>
@@ -90,6 +85,10 @@
             </tfoot>
         </table>
     </div>
-    <br>
-    <div id="statusMessage"></div>
+    <footer class="navbar-fixed-bottom">
+        <div id="statusMessage" class="col-xs-8 text-left"></div>
+        <div class="col-xs-4 text-right">
+            使用權限到期時間: <span id="accessExpDisplay"></span>
+        </div>
+    </footer>
 </div>

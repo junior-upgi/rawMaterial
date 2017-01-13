@@ -1,9 +1,9 @@
-import { viewFileSourceUrl, loginUrl, serverUrl } from './config.js';
+import { serverUrl } from './config.js';
 import { decode } from 'jsonwebtoken';
 
 export function displayLoginForm() {
-    $('body').empty().load(`${viewFileSourceUrl}/login.html`, function(response) {
-        $.get(`${serverUrl()}/systemList`, function(systemList) {
+    $('body').empty().load(`${serverUrl}/view/login.html`, function(response) {
+        $.get(`${serverUrl}/systemList`, function(systemList) {
             systemList.forEach(function(system) {
                 if (!system.hide) {
                     $('select#systemID').append(`<option value="${system.id}">${system.cReference}</option>`);
@@ -19,7 +19,7 @@ function submitHandler() {
         if ($(this)[0].checkValidity()) {
             event.preventDefault();
             $.ajax({
-                url: loginUrl(),
+                url: `${serverUrl}/login`,
                 type: 'post',
                 contentType: 'application/x-www-form-urlencoded',
                 data: {
