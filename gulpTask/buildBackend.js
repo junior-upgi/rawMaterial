@@ -2,23 +2,21 @@ const del = require('del');
 const gulp = require('gulp');
 const yargs = require('yargs').argv;
 
-// const serverConfig = require('../src/backend/module/serverConfig.js');
+const serverConfig = require('../src/backend/module/serverConfig.js');
 const utility = require('./utility.js');
 
 const $ = require('gulp-load-plugins')({ lazy: true, camelize: true });
 
 gulp.task('removeBuildFiles', function() {
+    let logFileList = `./${serverConfig.logDir}/**/*.*`;
     let buildDir = './build';
-    // let logDir = `./${serverConfig.logDir}`;
     let tempDir = './temp';
-    let dirList = [
-        buildDir,
-        // logDir,
-        tempDir
-    ];
+    // let logDir = './${serverConfig.logDir}';
+    let dirList = [logFileList, buildDir, tempDir];
+    // let dirList = [logFileList, buildDir, tempDir, logDir];
     utility.log(`remove backend files at: ${$.util.colors.blue(dirList)}`);
-    // return del.sync(dirList, { force: true });
-    return del(dirList, { force: true });
+    return del.sync(dirList, { force: true });
+    // return del(dirList, { force: true });
 });
 
 gulp.task('lintBackendFiles', ['removeBuildFiles'], function() {

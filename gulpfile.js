@@ -59,7 +59,7 @@ gulp.task('frontendMonitor', function() {
                 browserSync.reload({
                     stream: false
                 });
-            }, 5000);
+            }, 1000);
         });
     gulp
         .watch(watchList.staticFileList, ['buildFrontend'])
@@ -70,7 +70,7 @@ gulp.task('frontendMonitor', function() {
                 browserSync.reload({
                     stream: false
                 });
-            }, 5000);
+            }, 1000);
         });
 });
 
