@@ -1,36 +1,27 @@
 const del = require('del');
 const gulp = require('gulp');
-const eslint = require('gulp-eslint');
-const gulpIf = require('gulp-if');
-const jscs = require('gulp-jscs');
-const jscsStylish = require('gulp-jscs-stylish');
-const print = require('gulp-print');
-const gulpUtil = require('gulp-util');
-const merge = require('merge-stream');
 const yargs = require('yargs').argv;
 
-const serverConfig = require('../src/backend/module/serverConfig.js');
+// const serverConfig = require('../src/backend/module/serverConfig.js');
 const utility = require('./utility.js');
 
-gulp.task('reset', function() {
+const $ = require('gulp-load-plugins')({ lazy: true, camelize: true });
+
+gulp.task('removeBuildFiles', function() {
     let buildDir = './build';
-    utility.log(`remove backend files at: ${gulpUtil.colors.blue(buildDir)}`);
-    let buildRemovalStream = del.sync(buildDir);
-
-    utility.log(`remove server log outputs at: ${gulpUtil.colors.blue(serverConfig.logDir)}`);
-    let logRemovalStream = del.sync(serverConfig.logDir);
-
+    // let logDir = `./${serverConfig.logDir}`;
     let tempDir = './temp';
-    utility.log(`remove temp folder at: ${gulpUtil.colors.blue(tempDir)}`);
-    let tempRemovalStream = del.sync(tempDir);
-
-    return merge(
-        buildRemovalStream,
-        logRemovalStream,
-        tempRemovalStream);
+    let dirList = [
+        buildDir,
+        // logDir,
+        tempDir
+    ];
+    utility.log(`remove backend files at: ${$.util.colors.blue(dirList)}`);
+    // return del.sync(dirList, { force: true });
+    return del(dirList, { force: true });
 });
 
-gulp.task('lint', ['reset'], function() {
+gulp.task('lintBackendFiles', ['removeBuildFiles'], function() {
     utility.log('backend code evaluation with Eslint and JSCS');
     let backendScriptList = [
         './*.js',
@@ -39,16 +30,16 @@ gulp.task('lint', ['reset'], function() {
     ];
     return gulp
         .src(backendScriptList)
-        .pipe(gulpIf(yargs.verbose, print()))
-        .pipe(jscs())
-        .pipe(jscsStylish())
-        .pipe(jscs.reporter('fail'))
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        .pipe($.if(yargs.verbose, $.print()))
+        .pipe($.jscs())
+        .pipe($.jscsStylish())
+        .pipe($.jscs.reporter('fail'))
+        .pipe($.eslint())
+        .pipe($.eslint.format())
+        .pipe($.eslint.failAfterError());
 });
 
-gulp.task('build', ['lint'], function() {
+gulp.task('buildBackend', ['lintBackendFiles'], function() {
     utility.log('building backend server files...');
     return gulp
         .src('./src/backend/**/*.*')

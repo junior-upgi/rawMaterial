@@ -2,10 +2,7 @@ const gulp = require('gulp');
 const requireDir = require('require-dir');
 
 const browserSync = require('browser-sync');
-const $ = require('gulp-load-plugins')({
-    lazy: true,
-    camelize: true
-});
+const $ = require('gulp-load-plugins')({ lazy: true, camelize: true });
 
 const serverConfig = require('./src/backend/module/serverConfig.js');
 const utility = require('./gulpTask/utility.js');
@@ -14,7 +11,7 @@ requireDir('./gulpTask');
 
 gulp.task('help', $.taskListing);
 
-gulp.task('startServer', ['preRebuild', 'lint', 'buildBackend'], function() {
+gulp.task('startServer', ['buildBackend', 'buildFrontend'], function() {
     let nodemonOption = {
         script: './build/server.js',
         delayTime: 1,
@@ -23,9 +20,9 @@ gulp.task('startServer', ['preRebuild', 'lint', 'buildBackend'], function() {
             'NODE_ENV': serverConfig.development ? 'development' : 'production'
         },
         verbose: false,
-        ext: 'html js mustache',
+        ext: 'html js hbs',
         watch: ['./src/backend/'],
-        tasks: ['preRebuild', 'lint', 'buildBackend']
+        tasks: ['buildBackend']
     };
     return $.nodemon(nodemonOption)
         .on('start', function() {
@@ -36,7 +33,7 @@ gulp.task('startServer', ['preRebuild', 'lint', 'buildBackend'], function() {
             utility.log('files triggered the restart:\n' + event);
         })
         .on('crash', function() {
-            utility.log('*** server had crashed...');
+            utility.log('*** server crashed...');
         })
         .on('shutdown', function() {
             utility.log('*** server had been shutdown...');
@@ -48,31 +45,36 @@ gulp.task('frontendMonitor', function() {
         scriptList: ['./src/frontend/**/*.js'],
         staticFileList: [
             './src/frontend/**/*.html',
+            './src/frontend/**/*.hbs',
             './src/frontend/**/*.css',
             './src/frontend/**/*.scss'
         ]
     };
-    gulp.watch(watchList.scriptList, ['transpile']).on('change', function(event) {
-        setTimeout(function() {
-            utility.log('File ' + event.path + ' was ' + event.type);
-            browserSync.notify('伺服器重新啟動，頁面即將同步重置...');
-            browserSync.reload({
-                stream: false
-            });
-        }, 5000);
-    });
-    gulp.watch(watchList.staticFileList, ['favicon', 'html', 'partialHtml', 'style']).on('change', function(event) {
-        setTimeout(function() {
-            utility.log('File ' + event.path + ' was ' + event.type);
-            browserSync.notify('伺服器重新啟動，頁面即將同步重置...');
-            browserSync.reload({
-                stream: false
-            });
-        }, 5000);
-    });
+    gulp
+        .watch(watchList.scriptList, ['buildFrontend'])
+        .on('change', function(event) {
+            setTimeout(function() {
+                utility.log('File ' + event.path + ' was ' + event.type);
+                browserSync.notify('伺服器重新啟動，頁面即將同步重置...');
+                browserSync.reload({
+                    stream: false
+                });
+            }, 5000);
+        });
+    gulp
+        .watch(watchList.staticFileList, ['buildFrontend'])
+        .on('change', function(event) {
+            setTimeout(function() {
+                utility.log('File ' + event.path + ' was ' + event.type);
+                browserSync.notify('伺服器重新啟動，頁面即將同步重置...');
+                browserSync.reload({
+                    stream: false
+                });
+            }, 5000);
+        });
 });
 
-gulp.task('startDevelopmentServer', ['preRebuild', 'lint', 'buildBackend', 'buildFrontend', 'frontendMonitor'], function() {
+gulp.task('startDevelopmentServer', ['buildBackend', 'buildFrontend', 'frontendMonitor'], function() {
     let nodemonOption = {
         script: './build/server.js',
         delayTime: 1,
@@ -81,9 +83,9 @@ gulp.task('startDevelopmentServer', ['preRebuild', 'lint', 'buildBackend', 'buil
             'NODE_ENV': serverConfig.development ? 'development' : 'production'
         },
         verbose: false,
-        ext: 'html js handlebars',
+        ext: 'html js hbs',
         watch: ['./src/backend/'],
-        tasks: ['preRebuild', 'lint', 'buildBackend', 'buildFrontend']
+        tasks: ['buildBackend']
     };
     return $.nodemon(nodemonOption)
         .on('start', function() {
@@ -93,12 +95,12 @@ gulp.task('startDevelopmentServer', ['preRebuild', 'lint', 'buildBackend', 'buil
         .on('restart', function(event) {
             utility.log('*** server restarted and operating on: ' + serverConfig.serverUrl);
             utility.log('files triggered the restart:\n' + event);
+            /*
             setTimeout(function() {
                 browserSync.notify('伺服器重新啟動，頁面即將同步重置...');
-                browserSync.reload({
-                    stream: false
-                });
+                browserSync.reload({ stream: false });
             }, 5000);
+            */
         })
         .on('crash', function() {
             utility.log('*** server had crashed...');
@@ -109,25 +111,19 @@ gulp.task('startDevelopmentServer', ['preRebuild', 'lint', 'buildBackend', 'buil
 });
 
 function startBrowserSync() {
-    if (browserSync.active) {
-        return;
-    }
+    if (browserSync.active) { return; }
     let option = {
         proxy: `${serverConfig.serverUrl}/${serverConfig.systemReference}/index.html`,
         port: serverConfig.browserSyncPort,
-        files: ['./src/frontend/** /*.*'],
-        ghostMode: {
-            clicks: true,
-            location: false,
-            forms: true,
-            scroll: true
-        },
-        injectChanges: true,
-        logFileChanges: true,
-        logLevel: 'debug',
-        logPrefix: 'gulp-output',
+        ghostMode: { clicks: true, location: false, forms: true, scroll: true },
+        // files: ['./src/frontend/**/*.*'],
+        // injectChanges: true,
+        // logFileChanges: true,
+        logLevel: 'info', // 'debug','info','slient'
+        // logPrefix: 'gulp-output',
         notify: true,
-        reloadDelay: 1000
+        reloadDelay: 1000,
+        open: (serverConfig.development) ? 'local' : 'false'
     };
     browserSync(option);
     utility.log('start browserSync on port: ' + serverConfig.serverPort);
