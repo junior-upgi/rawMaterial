@@ -1,3 +1,3 @@
-export function blackListedTest() {
+export function blackListedValidate() {
     console.log('blackListed.js loaded...');
 }

@@ -1,5 +1,3 @@
-export const monthList = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
-
 export function getAllUrlParams(url) {
     let queryString = url ? url.split('?')[1] : window.location.search.slice(1); // get query string from url (optional) or window
     let obj = {}; // we'll store the parameters here

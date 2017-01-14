@@ -1,3 +1,3 @@
-export function purchasingStaffTest() {
+export function purchasingStaffValidate() {
     console.log('purchasingStaff.js loaded...');
 }

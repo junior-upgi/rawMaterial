@@ -1,12 +1,13 @@
 import { decode } from 'jsonwebtoken';
 import moment from 'moment-timezone';
 
-import { serverUrl } from './config.js';
-import { monthList } from './utility.js';
+import { YearSelector } from './yearSelector.js';
 
-import { Shipment } from './model/shipment.js';
+import { serverUrl } from '../config.js';
 
-export function furnaceStaffTest() {
+import { Shipment } from '../model/shipment.js';
+
+export function furnaceStaffValidate() {
     $.ajax({
         method: 'get',
         url: `${serverUrl}/validate`,
@@ -32,52 +33,16 @@ export function furnaceStaffTest() {
 }
 
 export function furnaceInitInterface() {
-    let prerequisite = function() {
-        return new Promise(function(resolve, reject) {
-            initMaterialSelector()
-                .then(function() {
-                    initYearSelector();
-                    initMonthSelector();
-                    return loadCurrentData();
-                }).then(function(recordset) {
-                    console.log(recordset);
-                    initFormDateInput();
-                    initSubmitButton();
-                    initExportButton();
-                    initLogoutButton();
-                    initAllowedAccessCounter();
-                    resolve('prerequisites initialized');
-                }).catch(function(error) {
-                    reject(error);
-                });
-        });
-    };
-
-    prerequisite()
-        .then(function() {
-            displayCurrentSchedule();
-            $('div#statusMessage').text('初始化完成');
-            setTimeout(function() {
-                $('div#statusMessage').fadeOut('slow', function() {
-                    $(this).text('').show();
-                });
-            }, 5000);
-        }).catch(function(error) {
-            console.log('error occured');
-        });
-}
-
-function initYearSelector() {
-    let currentYear = new Date().getFullYear();
-    $('li#yearSelector a.dropdown-toggle').html(`${currentYear}&nbsp;<span class="caret"></span>`);
-    console.log('TODO: fill year selector with proper data');
-    console.log('TODO: yearSelector click handler');
+    let yearSelector = new YearSelector('li#yearDropdown.dropdown', [{ year: 2015 }, { year: 2016 }, { year: 2017 }]);
 }
 
 function initMonthSelector() {
-    let currentMonth = new Date().getMonth();
-    $('li#monthSelector a.dropdown-toggle').html(`${monthList[currentMonth]}&nbsp;<span class="caret"></span>`);
-    console.log('TODO: monthSelector click handler');
+    return new Promise(function(resolve, reject) {
+        let monthList = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+        let currentMonth = new Date().getMonth();
+        $('li#monthSelector a.dropdown-toggle').html(`${monthList[currentMonth]}&nbsp;<span class="caret"></span>`);
+        console.log('TODO: monthSelector click handler');
+    });
 }
 
 function loadCurrentData() {

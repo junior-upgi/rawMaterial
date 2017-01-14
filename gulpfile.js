@@ -46,7 +46,11 @@ gulp.task('startServer', ['preRebuild', 'lint', 'buildBackend'], function() {
 gulp.task('frontendMonitor', function() {
     let watchList = {
         scriptList: ['./src/frontend/**/*.js'],
-        staticFileList: ['./src/frontend/**/*.html', './src/frontend/**/*.css']
+        staticFileList: [
+            './src/frontend/**/*.html',
+            './src/frontend/**/*.css',
+            './src/frontend/**/*.scss'
+        ]
     };
     gulp.watch(watchList.scriptList, ['transpile']).on('change', function(event) {
         setTimeout(function() {
@@ -57,7 +61,7 @@ gulp.task('frontendMonitor', function() {
             });
         }, 5000);
     });
-    gulp.watch(watchList.staticFileList, ['favicon', 'html', 'partialHtml', 'css']).on('change', function(event) {
+    gulp.watch(watchList.staticFileList, ['favicon', 'html', 'partialHtml', 'style']).on('change', function(event) {
         setTimeout(function() {
             utility.log('File ' + event.path + ' was ' + event.type);
             browserSync.notify('伺服器重新啟動，頁面即將同步重置...');

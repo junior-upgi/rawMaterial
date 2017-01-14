@@ -1,18 +1,18 @@
 import { serverUrl } from './config.js';
 import { displayLoginForm } from './login.js';
 
-import { adminTest } from './admin.js';
-import { blackListedTest } from './blackListed.js';
-import { furnaceStaffTest, furnaceInitInterface } from './furnaceStaff.js';
-import { purchasingStaffTest } from './purchasingStaff.js';
-import { supplierTest } from './supplier.js';
+import { adminValidate } from './admin/entry.js';
+import { blackListedValidate } from './blackListed/entry.js';
+import { furnaceStaffValidate, furnaceInitInterface } from './furnaceStaff/entry.js';
+import { purchasingStaffValidate } from './purchasingStaff/entry.js';
+import { supplierValidate } from './supplier/entry.js';
 
-const branchTest = {
-    admin: adminTest,
-    blackListed: blackListedTest,
-    furnaceStaff: furnaceStaffTest,
-    purchasingStaff: purchasingStaffTest,
-    supplier: supplierTest
+const appBranchList = {
+    admin: adminValidate,
+    blackListed: blackListedValidate,
+    furnaceStaff: furnaceStaffValidate,
+    purchasingStaff: purchasingStaffValidate,
+    supplier: supplierValidate
 };
 
 const initInterface = {
@@ -25,7 +25,7 @@ $('document').ready(function() {
         displayLoginForm();
     } else {
         $('body').empty().load(`${serverUrl}/view/${sessionStorage.role}.html`, function() {
-            branchTest[sessionStorage.role]();
+            appBranchList[sessionStorage.role]();
             initInterface[sessionStorage.role]();
         });
     }
