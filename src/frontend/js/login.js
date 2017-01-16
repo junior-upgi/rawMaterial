@@ -30,7 +30,7 @@ function submitHandler() {
                 encode: true,
                 dataType: 'json',
                 success: function(response) {
-                    $('div#statusMessage').empty().text(`驗證成功，五秒後將轉移至${$('select#systemID option:selected').text()}頁面`);
+                    $('div#statusMessage').empty().text(`驗證成功，轉移至${$('select#systemID option:selected').text()}頁面`);
                     sessionStorage.token = response.token;
                     sessionStorage.loginID = decode(response.token, { complete: true }).payload.loginID;
                     sessionStorage.systemID = decode(response.token, { complete: true }).payload.systemID;
@@ -39,7 +39,7 @@ function submitHandler() {
                     sessionStorage.funcPrivList = JSON.stringify(decode(response.token, { complete: true }).payload.privilege.funcPrivList);
                     setTimeout(function() {
                         window.location = response.redirectUrl;
-                    }, 5000);
+                    }, 1000);
                 },
                 error: function(error) {
                     $('div#statusMessage').empty().text(`驗證失敗: ${error.responseJSON.errorMessage}`);
