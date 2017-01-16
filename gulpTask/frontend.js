@@ -1,6 +1,8 @@
+const browsersync = require('browser-sync');
 const del = require('del');
 const gulp = require('gulp');
 const merge = require('merge-stream');
+// const runSequence = require('run-sequence');
 const yargs = require('yargs').argv;
 
 // transpiling and concatnation specific
@@ -14,13 +16,13 @@ const utility = require('./utility.js');
 
 const $ = require('gulp-load-plugins')({ lazy: true, camelize: true });
 
-gulp.task('removePublic', function() {
-    let publicDir = './public';
-    utility.log(`remove frontend files at: ${$.util.colors.blue(publicDir)}`);
-    return del.sync([publicDir], { force: true });
+gulp.task('removeFrontendScriptDir', function() {
+    let scriptDir = './public/js';
+    utility.log(`remove frontend script folder: ${$.util.colors.blue(scriptDir)}`);
+    return del.sync([scriptDir], { force: true });
 });
 
-gulp.task('lintFrontendFiles', ['removePublic'], function() {
+gulp.task('lintFrontendFiles', function() {
     utility.log('frontend code evaluation with Eslint and JSCS');
     let frontendScriptList = [
         './*.js',
@@ -38,7 +40,7 @@ gulp.task('lintFrontendFiles', ['removePublic'], function() {
         .pipe($.eslint.failAfterError());
 });
 
-gulp.task('transpileFrontendFiles', ['lintFrontendFiles'], function() {
+gulp.task('transpileFrontendFiles', ['removeFrontendScriptDir', 'lintFrontendFiles'], function() {
     utility.log('ES6 code transpile, bundling and uglify...');
     let entryPointList = ['./src/frontend/js/index.js'];
     let destDir = './public/js';
@@ -53,12 +55,19 @@ gulp.task('transpileFrontendFiles', ['lintFrontendFiles'], function() {
             .pipe($.sourcemaps.init({ loadMaps: true }))
             .pipe($.uglify({ mangle: false, compress: { sequences: false } }))
             .pipe($.sourcemaps.write('./', { sourceRoot: './src/frontend' }))
-            .pipe(gulp.dest(destDir));
+            .pipe(gulp.dest(destDir))
+            .pipe(browsersync.stream());
     });
     return eventStream.merge.apply(null, taskList);
 });
 
-gulp.task('compileStylingFiles', function() {
+gulp.task('removeStyleDir', function() {
+    let styleFileDir = './public/css';
+    utility.log(`remove frontend script folder: ${$.util.colors.blue(styleFileDir)}`);
+    return del.sync([styleFileDir], { force: true });
+});
+
+gulp.task('compileStylingFiles', ['removeStyleDir'], function() {
     utility.log('processing SASS files');
     let scssSourceDir = './src/frontend/css/*.scss';
     let scssStream = gulp.src(scssSourceDir)
@@ -76,10 +85,40 @@ gulp.task('compileStylingFiles', function() {
         .pipe($.minifyCss())
         .pipe(gulp.dest(destDir));
 
-    return mergedStream;
+    return mergedStream
+        .pipe(browsersync.stream());
 });
 
-gulp.task('buildFrontend', ['transpileFrontendFiles', 'compileStylingFiles'], function() {
+gulp.task('removeTemplateDir', function() {
+    let templateDir = './public/template';
+    utility.log(`remove frontend files at: ${$.util.colors.blue(templateDir)}`);
+    return del.sync([templateDir], { force: true });
+});
+
+gulp.task('removeViewDir', function() {
+    let viewDir = './public/view';
+    utility.log(`remove frontend files at: ${$.util.colors.blue(viewDir)}`);
+    return del.sync([viewDir], { force: true });
+});
+
+gulp.task('removeHtmlFiles', function() {
+    let htmlFilePath = './public/**/*.html';
+    utility.log(`remove frontend files at: ${$.util.colors.blue(htmlFilePath)}`);
+    return del.sync([htmlFilePath], { force: true });
+});
+
+gulp.task('removeFavicon', function() {
+    let faviconPath = './public/**/*.html';
+    utility.log(`remove favicon at: ${$.util.colors.blue(faviconPath)}`);
+    return del.sync([faviconPath], { force: true });
+});
+
+gulp.task('buildFrontendStaticFiles', [
+    'removeTemplateDir',
+    'removeViewDir',
+    'removeHtmlFiles',
+    'removeFavicon'
+], function() {
     utility.log('process handlebars templates');
     let hbsSource = './src/frontend/**/*.hbs';
     let hbsDestDir = './public';
@@ -101,5 +140,6 @@ gulp.task('buildFrontend', ['transpileFrontendFiles', 'compileStylingFiles'], fu
         .src(htmlSource)
         .pipe(gulp.dest(htmlDestDir));
 
-    return merge(hbsStream, faviconStream, htmlStream);
+    return merge(hbsStream, faviconStream, htmlStream)
+        .pipe(browsersync.stream());
 });

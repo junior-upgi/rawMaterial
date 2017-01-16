@@ -1,4 +1,4 @@
-import { Handlebars } from 'handlebars';
+import Handlebars from 'handlebars';
 
 import { serverUrl } from '../config.js';
 
@@ -8,17 +8,16 @@ export class YearSelector {
         this.selectedYear = this.currentYear;
         this.yearList = yearList.slice();
         this.container = $(containerId);
-        // this.dropdownMenu = $('li#yearSelector ul');
-        // this.dropdownToggle = $('li#yearSelector a');
         this.templateData = {
             selectedYear: this.selectedYear,
             yearList: this.yearList
         };
+        let container = this.container;
+        let templateData = this.templateData;
         $.get(`${serverUrl}/template/yearSelector.hbs`, function(templateHtml) {
-            this.template = templateHtml;
-            this.compiledTemplate = Handlebars.compile(templateHtml);
-            this.container.html(this.compiledTemplate(this.templateData));
-            console.log('todo: implement event handler');
+            let compiledTemplate = Handlebars.compile(templateHtml);
+            container.html(compiledTemplate(templateData));
+            console.log('todo: implement yearSelector event handler');
         });
     }
 }

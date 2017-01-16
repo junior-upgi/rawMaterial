@@ -1,11 +1,12 @@
-import { decode } from 'jsonwebtoken';
-import moment from 'moment-timezone';
+// import { decode } from 'jsonwebtoken';
+// import moment from 'moment-timezone';
 
-import { YearSelector } from './yearSelector.js';
+// import { YearSelector } from './yearSelector.js';
+// import { MonthSelector } from './monthSelector.js';
 
 import { serverUrl } from '../config.js';
 
-import { Shipment } from '../model/shipment.js';
+// import { Shipment } from '../model/shipment.js';
 
 export function furnaceStaffValidate() {
     $.ajax({
@@ -33,18 +34,12 @@ export function furnaceStaffValidate() {
 }
 
 export function furnaceInitInterface() {
-    let yearSelector = new YearSelector('li#yearDropdown.dropdown', [{ year: 2015 }, { year: 2016 }, { year: 2017 }]);
+    console.log('todo: ajax for actual year list that has data');
+    // let yearSelector = new YearSelector('li#yearSelector.dropdown', [{ year: 2015 }, { year: 2016 }, { year: 2017 }]);
+    // let monthSelector = new MonthSelector('li#monthSelector.dropdown');
 }
 
-function initMonthSelector() {
-    return new Promise(function(resolve, reject) {
-        let monthList = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
-        let currentMonth = new Date().getMonth();
-        $('li#monthSelector a.dropdown-toggle').html(`${monthList[currentMonth]}&nbsp;<span class="caret"></span>`);
-        console.log('TODO: monthSelector click handler');
-    });
-}
-
+/*
 function loadCurrentData() {
     return new Promise(function(resolve, reject) {
         let currentYear = new Date().getFullYear().toString();
@@ -173,3 +168,4 @@ function accessExp() {
 function displayCurrentSchedule() {
     console.log('TODO: display schedule of current month');
 }
+*/

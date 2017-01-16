@@ -17,7 +17,7 @@ main.use(cors());
 main.use(morgan('dev'));
 main.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
 main.use(bodyParser.json()); // parse application/json
-main.use(favicon(path.join(__dirname + '/../public/upgiLogo.png'))); // middleware to serve favicon
+main.use(favicon(path.join(__dirname + '/upgiLogo.png'))); // middleware to serve favicon
 main.use('/', express.static(path.join(__dirname + '/../public'))); // serve static files
 main.use('/bower_components', express.static(path.join(__dirname + '/../bower_components'))); // serve static files
 

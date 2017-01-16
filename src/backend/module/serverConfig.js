@@ -18,11 +18,11 @@ const smtpTransportAccount = 'smtps://junior.upgi@gmail.com:cHApPPZV@smtp.gmail.
 // server configuration
 const serverHost = 'http://localhost';
 const serverPort = 9006;
-const browserSyncPort = 9996;
+const browsersyncPort = 9996;
 
 function publicServerUrl() {
     if (development === true) {
-        return `${serverHost}:${browserSyncPort}/${systemReference}`; // development
+        return `${serverHost}:${browsersyncPort}/${systemReference}`; // development
     } else {
         return `http://upgi.ddns.net:${serverPort}/${systemReference}`; // production
     }
@@ -61,7 +61,7 @@ function passphrase() { // can be later changed to pull something from other loc
 module.exports = {
     botAPIUrl: botAPIUrl,
     broadcastServerUrl: broadcastServerUrl(),
-    browserSyncPort: browserSyncPort,
+    browsersyncPort: browsersyncPort,
     development: development,
     ldapServerUrl: ldapServerUrl,
     logDir: 'log',

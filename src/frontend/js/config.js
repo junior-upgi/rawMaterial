@@ -9,11 +9,11 @@ function serverHost() {
     }
 }
 const serverPort = 9006;
-const browserSyncPort = 9996;
+const browsersyncPort = 9996;
 
 function constructServerUrl() {
     if (development === true) {
-        return `${serverHost()}:${browserSyncPort}/${systemReference}`; // development
+        return `${serverHost()}:${browsersyncPort}/${systemReference}`; // development
     } else {
         return `${serverHost()}:${serverPort}/${systemReference}`; // production
     }
