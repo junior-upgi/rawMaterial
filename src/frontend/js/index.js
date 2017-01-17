@@ -1,3 +1,66 @@
+import { decode } from 'jsonwebtoken';
+import Vue from 'vue';
+
+import { loginComponent } from '../js/login.js';
+
+window.onload = function() {
+    new Vue({
+        el: '#app',
+        components: {
+            'login-template': loginComponent,
+            'furnace-staff-template': { template: '<div>mock furnace staff template</div>' }
+        },
+        data: {
+            token: null,
+            loginId: null,
+            role: null,
+            testParent: 'abc'
+        },
+        methods: {
+            userRedirect(token) {
+                this.token = token;
+                this.loginId = decode(token, { complete: true }).payload.loginId;
+                this.role = decode(token, { complete: true }).payload.role;
+            }
+        }
+    });
+};
+
+/*
+import { serverUrl } from './config.js';
+
+window.onload = function() {
+    $.get(`${serverUrl}/template/login.html`)
+        .then(function(loginTemplateHtml) {
+            let loginTemplate = {
+                template: loginTemplateHtml,
+                methods: {
+                    submitForm: function(event) {
+                        console.log('submitClicked');
+                    }
+                }
+            };
+            new Vue({
+                el: '#app',
+                components: {
+                    'login-template': loginTemplate,
+                    'furnace-staff-template': { template: '<div>mock furnace staff template</div>' }
+                },
+                data: {
+                    token: null,
+                    role: null
+                },
+                methods: {
+                    submitForm: function(event) {
+                        alert(event);
+                    }
+                }
+            });
+        });
+};
+*/
+
+/*
 import { serverUrl } from './config.js';
 import { displayLoginForm } from './login.js';
 
@@ -30,3 +93,4 @@ $('document').ready(function() {
         });
     }
 });
+*/

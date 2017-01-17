@@ -68,7 +68,7 @@ gulp.task('startDevelopmentServer', [
             utility.log($.util.colors.red(`File ${event.path} was ${event.type}`));
         });
     gulp
-        .watch(['./src/frontend/**/*.html', './src/frontend/**/*.hbs'], ['buildFrontendStaticFiles'])
+        .watch(['./src/frontend/**/*.html', './src/frontend/**/*.hbs', './src/frontend/**/*.vue'], ['buildFrontendStaticFiles'])
         .on('change', function(event) {
             browsersync.notify('HTML markup 變更，頁面即將再重編後同步重置...');
             utility.log($.util.colors.red(`File ${event.path} was ${event.type}`));

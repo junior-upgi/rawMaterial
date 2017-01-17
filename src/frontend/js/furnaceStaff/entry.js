@@ -1,8 +1,8 @@
 // import moment from 'moment-timezone';
 
-import { YearSelector } from './yearSelector.js';
-import { MonthSelector } from './monthSelector.js';
-import { NotificationDisplay } from './notificationDisplay';
+// import { YearSelector } from './yearSelector.js';
+// import { MonthSelector } from './monthSelector.js';
+// import { NotificationDisplay } from './notificationDisplay';
 
 import { serverUrl } from '../config.js';
 
@@ -34,10 +34,10 @@ export function furnaceStaffValidate() {
 }
 
 export function furnaceInitInterface() {
-    let notificationDisplay = new NotificationDisplay('body', '系統初始化...');
-    console.log('todo: ajax for actual year list that has data');
-    let yearSelector = new YearSelector('li#yearSelector.dropdown', [{ year: 2015 }, { year: 2016 }, { year: 2017 }]);
-    let monthSelector = new MonthSelector('li#monthSelector.dropdown');
+    // let notificationDisplay = new NotificationDisplay('body', '系統初始化...');
+    // console.log('todo: ajax for actual year list that has data');
+    // let yearSelector = new YearSelector('li#yearSelector.dropdown', [{ year: 2015 }, { year: 2016 }, { year: 2017 }]);
+    // let monthSelector = new MonthSelector('li#monthSelector.dropdown');
 }
 
 /*

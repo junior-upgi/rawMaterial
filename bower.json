@@ -21,6 +21,8 @@
     "moment-timezone": "^0.5.11",
     "chart.js": "^2.4.0",
     "numeral": "^2.0.4",
-    "handlebars": "^4.0.5"
+    "handlebars": "^4.0.5",
+    "vue": "^2.1.9",
+    "vue-resource": "^1.0.3"
   }
 }

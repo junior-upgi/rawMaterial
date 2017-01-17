@@ -13,13 +13,14 @@
     <script src="./bower_components/jquery/dist/jquery.min.js"></script>
     <script src="./bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="./css/style.css" />
-    <!--
-    <script src="./bower_components/handlebars/handlebars.min.js"></script>
-    -->
     <script src="./js/index.bundle.js"></script>
 </head>
 
 <body>
+    <div id="app">
+        <login-template v-if="(token === null) && (role === null)" v-on:user-validated="userRedirect"></login-template>
+        <furnace-staff-template v-if="(token !== null) && (role === 'furnaceStaff')">mockFurnaceStaffTemplate</furnace-staff-template>
+    </div>
 </body>
 
 </html>

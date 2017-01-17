@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "program backend to monitor and regulate purchase and transport of raw material used in glass production",
   "main": "server.js",
+  "browser": {
+    "vue": "vue/dist/vue.common"
+  },
   "scripts": {
     "start": "gulp startDevelopmentServer"
   },

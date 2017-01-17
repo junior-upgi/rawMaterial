@@ -24,7 +24,6 @@ main.use('/bower_components', express.static(path.join(__dirname + '/../bower_co
 main.use('/', require('./route/status.js')); // serve system status
 main.use('/', require('./route/login.js')); // handles login requests
 main.use('/', require('./route/validate.js')); // handles page entry jwt validation
-main.use('/', require('./route/systemList.js')); // serve information on forms available on the system
 
 main.get('/rawMaterialList', function(request, response) { // serves raw material list
     return response.status(200).json(rawMaterial.list);

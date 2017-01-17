@@ -89,6 +89,12 @@ gulp.task('compileStylingFiles', ['removeStyleDir'], function() {
         .pipe(browsersync.stream());
 });
 
+gulp.task('removeComponentDir', function() {
+    let componentDir = './public/component';
+    utility.log(`remove frontend files at: ${$.util.colors.blue(componentDir)}`);
+    return del.sync([componentDir], { force: true });
+});
+
 gulp.task('removeTemplateDir', function() {
     let templateDir = './public/template';
     utility.log(`remove frontend files at: ${$.util.colors.blue(templateDir)}`);
@@ -114,11 +120,19 @@ gulp.task('removeFavicon', function() {
 });
 
 gulp.task('buildFrontendStaticFiles', [
+    'removeComponentDir',
     'removeTemplateDir',
     'removeViewDir',
     'removeHtmlFiles',
     'removeFavicon'
 ], function() {
+    utility.log('process vue components');
+    let vueSourceDir = './src/frontend/**/*.vue';
+    let vueDestDir = './public';
+    let vueStream = gulp
+        .src(vueSourceDir)
+        .pipe(gulp.dest(vueDestDir));
+
     utility.log('process handlebars templates');
     let hbsSource = './src/frontend/**/*.hbs';
     let hbsDestDir = './public';
@@ -140,6 +154,6 @@ gulp.task('buildFrontendStaticFiles', [
         .src(htmlSource)
         .pipe(gulp.dest(htmlDestDir));
 
-    return merge(hbsStream, faviconStream, htmlStream)
+    return merge(vueStream, hbsStream, faviconStream, htmlStream)
         .pipe(browsersync.stream());
 });
