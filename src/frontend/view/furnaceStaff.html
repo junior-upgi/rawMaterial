@@ -1,6 +1,6 @@
 <div class="container">
-    <div class="row page-header">
-        <h1>統義玻璃股份有限公司&nbsp;<small>原料進貨下單作業</small></h1>
+    <div class="row">
+        <h3>統義玻璃股份有限公司&nbsp;<small>原料進貨下單作業</small></h3>
     </div>
     <div class="row">
         <nav class="navbar navbar-default">
@@ -11,21 +11,15 @@
                         <li id="monthSelector" class="dropdown"></li>
                     </ul>
                     <form id="purchaseRequest" class="navbar-form navbar-left">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-btn">
-                                    <button type="button" class="rawMaterial btn btn-default dropdown-toggle" data-toggle="dropdown">原料選項&nbsp;<span class="caret"></span></button>
-                                    <ul class="rawMaterial dropdown-menu"></ul>
-                                </div>
-                                <!-- /btn-group -->
-                                <input id="NAME" name="NAME" type="text" class="rawMaterial form-control" readonly required>
-                                <input id="PRD_NO" name="PRD_NO" type="text" class="rawMaterial form-control hidden">
-                                <input id="typeID" name="typeID" type="number" class="rawMaterial form-control hidden">
-                            </div>
-                            <!-- /input-group -->
-                            <input id="requestDate" name="requestDate" type="date" class="form-control" required>
-                            <input id="quantity" name="quantity" type="number" class="form-control" placeholder="數量" required>
-                        </div>
+                        <select class="form-control">
+                                <option>a</option>
+                                <option>b</option>
+                                <option>c</option>
+                                <option>d</option>
+                                <option>e</option>
+                        </select>
+                        <input id="requestDate" name="requestDate" type="date" class="form-control" required>
+                        <input id="quantity" name="quantity" type="number" class="form-control" placeholder="數量" required>
                         <button id="submitButton" type="submit" class="btn btn-default">預約</button>
                     </form>
                     <ul class="nav navbar-nav navbar-right">
@@ -60,10 +54,4 @@
             </tfoot>
         </table>
     </div>
-    <footer class="navbar-fixed-bottom">
-        <div id="statusMessage" class="col-xs-8 text-left"></div>
-        <div class="col-xs-4 text-right">
-            使用權限到期時間: <span id="accessExpDisplay"></span>
-        </div>
-    </footer>
 </div>
