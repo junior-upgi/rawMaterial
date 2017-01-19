@@ -8,8 +8,6 @@ const favicon = require('serve-favicon');
 const serverConfig = require('./module/serverConfig.js');
 const utility = require('./module/utility.js');
 
-const rawMaterial = require('./model/rawMaterial.js');
-
 let app = express();
 let main = express.Router();
 app.use(`/${serverConfig.systemReference}`, main);
@@ -24,12 +22,8 @@ main.use('/bower_components', express.static(path.join(__dirname + '/../bower_co
 main.use('/', require('./route/status.js')); // serve system status
 main.use('/', require('./route/login.js')); // handles login requests
 main.use('/', require('./route/validate.js')); // handles page entry jwt validation
-
-main.get('/rawMaterialList', function(request, response) { // serves raw material list
-    return response.status(200).json(rawMaterial.list);
-});
-
-main.use('/', require('./model/shipment.js')); // route to serve shipment related information
+main.use('/', require('./route/rawMaterial.js')); // serves raw material list
+main.use('/', require('./route/shipment.js')); // route to serve shipment related information
 
 app.listen(serverConfig.serverPort, function(error) { // start backend server
     if (error) {

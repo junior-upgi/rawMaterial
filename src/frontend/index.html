@@ -18,8 +18,8 @@
 
 <body>
     <div id="app">
-        <login-template v-if="(token === null) && (role === null)" v-on:user-validated="userRedirect"></login-template>
-        <furnace-staff-template v-if="(token !== null) && (role === 'furnaceStaff')">mockFurnaceStaffTemplate</furnace-staff-template>
+        <component v-bind:is="activeView"></component>
+        <status></status>
     </div>
 </body>
 

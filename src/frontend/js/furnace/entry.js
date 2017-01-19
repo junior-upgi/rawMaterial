@@ -1,13 +1,74 @@
+import Vue from 'vue';
+import VueResource from 'vue-resource';
+import { mapGetters, mapMutations } from 'vuex';
+Vue.use(VueResource);
+
+import { store } from '../store/store.js';
+
+import { scheduleSelector } from './scheduleSelector.js';
+import { reservationForm } from './reservationForm.js';
+import { shipmentTable } from './shipmentTable.js';
+
+export default {
+    name: 'furnaceComponent',
+    store: store,
+    components: {
+        'schedule-selector': scheduleSelector,
+        'reservation-form': reservationForm,
+        'shipment-table': shipmentTable
+    },
+    computed: { ...mapGetters({ showRevision: 'getShowRevision' }) },
+    data: function() {
+        return {
+            reservationData: {}
+        };
+    },
+    methods: { ...mapMutations({
+            logout: 'logout',
+            toggleShowRevision: 'toggleShowRevision'
+        })
+    },
+    template: `
+        <div class="container">
+            <br><br><br>
+            <div class="row">
+                <h2>統義玻璃股份有限公司&nbsp;<small>原料預約進貨作業</small></h2>
+            </div>
+            <br>
+            <div class="row">
+                <nav class="navbar navbar-default navbar-fixed-top">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <schedule-selector></schedule-selector>
+                            <reservation-form></reservation-form>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <button type="button" class="btn btn-default navbar-btn" v-bind:class="{active:showRevision}" v-on:click="toggleShowRevision">顯示修改</button>
+                                    <button type="button" class="btn btn-default navbar-btn" disabled>輸出</button>
+                                    <button type="button" class="btn btn-default navbar-btn" v-on:click="logout">登出</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <shipment-table></shipment-table>
+            </div>
+        </div>`
+};
+
 // import moment from 'moment-timezone';
 
 // import { YearSelector } from './yearSelector.js';
 // import { MonthSelector } from './monthSelector.js';
 // import { NotificationDisplay } from './notificationDisplay';
 
-import { serverUrl } from '../config.js';
+// import { serverUrl } from '../config.js';
 
 // import { Shipment } from '../model/shipment.js';
 
+/*
 export function furnaceStaffValidate() {
     $.ajax({
         method: 'get',
@@ -39,6 +100,7 @@ export function furnaceInitInterface() {
     // let yearSelector = new YearSelector('li#yearSelector.dropdown', [{ year: 2015 }, { year: 2016 }, { year: 2017 }]);
     // let monthSelector = new MonthSelector('li#monthSelector.dropdown');
 }
+*/
 
 /*
 function loadCurrentData() {

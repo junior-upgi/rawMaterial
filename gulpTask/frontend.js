@@ -46,7 +46,10 @@ gulp.task('transpileFrontendFiles', ['removeFrontendScriptDir', 'lintFrontendFil
     let destDir = './public/js';
     let taskList = entryPointList.map(function(entryPoint) {
         return browserify(entryPoint, { debug: true })
-            .transform(babelify, { presets: ['es2015'], sourceMaps: true })
+            .transform(babelify, { presets: [
+                    ['es2015'],
+                    ['stage-2']
+                ], sourceMaps: true })
             .bundle()
             .on('error', function(error) { console.error(error); })
             .pipe(source(entryPoint.slice(18)))

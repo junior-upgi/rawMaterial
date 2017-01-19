@@ -56,7 +56,7 @@ gulp.task('startDevelopmentServer', [
         .on('shutdown', function() { utility.log($.util.colors.red('*** server had been shutdown...')); });
 
     gulp
-        .watch(['./src/frontend/js/**/*.js', '!./src/frontend/js/**/*.map'], ['transpileFrontendFiles'])
+        .watch(['./src/frontend/js/**/*.js'], ['transpileFrontendFiles'])
         .on('change', function(event) {
             browsersync.notify('程式碼變更，頁面即將再重編後同步重置...');
             utility.log($.util.colors.red(`File ${event.path} was ${event.type}`));

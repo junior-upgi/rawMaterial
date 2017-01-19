@@ -1,14 +1,12 @@
-const serverConfig = require('../module/serverConfig.js');
-
 const list = [{
     erpId: '05060001',
-    role: 'admin' // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+    role: 'admin' // 'admin','furnace','purchasing','supplier','blackListed'
 }, {
     erpId: '95070003',
-    role: 'purchasingStaff' // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+    role: 'purchasing' // 'admin','furnace','purchasing','supplier','blackListed'
 }, {
     erpId: '09100001',
-    role: 'furnaceStaff' // 'admin','furnaceStaff','purchasingStaff','supplier','blackListed'
+    role: 'furnace' // 'admin','furnace','purchasing','supplier','blackListed'
 }];
 
 function checkMembership(loginId) {

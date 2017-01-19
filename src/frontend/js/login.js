@@ -1,20 +1,60 @@
-import $ from 'jquery';
 import { decode } from 'jsonwebtoken';
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
+import { mapMutations } from 'vuex';
 
-import { bus } from './index.js';
+import { store } from './store/store.js';
 
 import { serverUrl } from '../js/config.js';
 
-export const loginComponent = {
-    name: 'login-template',
+export default {
+    name: 'loginComponent',
+    store: store,
+    data: function() {
+        return {
+            loginId: null,
+            password: null
+        };
+    },
+    mounted: function() {
+        this.updateStatusMessage('請輸入帳號密碼進行登入');
+    },
+    methods: {
+        ...mapMutations({
+            updateStatusMessage: 'updateStatusMessage',
+            restoreToken: 'restoreToken',
+            redirectUser: 'redirectUser'
+        }),
+        submitForm: function() {
+            if (document.getElementById('loginForm').checkValidity()) {
+                this.updateStatusMessage('檢視帳號檢視中，請稍後...');
+                Vue.http.post(`${serverUrl}/login`, {
+                    loginId: this.loginId,
+                    password: this.password
+                }).then((response) => {
+                    this.password = '';
+                    response.json().then((response) => {
+                        this.updateStatusMessage('登入成功，請稍待...');
+                        sessionStorage.token = response.token;
+                        this.restoreToken(sessionStorage.token);
+                        this.redirectUser(decode(sessionStorage.token, { complete: true }).payload.role);
+                    });
+                }, (error) => {
+                    this.loginId = '';
+                    this.password = '';
+                    error.json().then((error) => {
+                        this.updateStatusMessage(`請重新登入 (錯誤: ${error.errorMessage})`);
+                    });
+                });
+            }
+        }
+    },
     template: `
         <div class="container">
             <div class="row">
                 <div class="page-header">
-                    <h1>統義玻璃股份有限公司&nbsp;<small>原料管控系統登入頁面</small></h1>
+                    <h2>統義玻璃股份有限公司&nbsp;<small>原料採購進貨控管系統登入頁面</small></h2>
                 </div>
             </div>
             <div class="row">
@@ -40,33 +80,6 @@ export const loginComponent = {
                 </form>
             </div>
             <br>
-            <div>{{ statusMessage }}</div>
-        </div>`,
-    data: function() {
-        return {
-            loginId: '',
-            password: '',
-            statusMessage: '請輸入帳號密碼進行登入'
-        };
-    },
-    methods: {
-        submitForm: function() {
-            if ($('form#loginForm')[0].checkValidity()) {
-                this.statusMessage = '檢視帳號檢視中，請稍後...';
-                Vue.http.post(`${serverUrl}/login`, {
-                    loginId: this.loginId,
-                    password: this.password
-                }).then((response) => {
-                    this.password = '';
-                    response.json().then((response) => {
-                        this.statusMessage = '登入成功，請稍待...';
-                        this.$emit('user-validated', response.token);
-                    });
-                }, (error) => {
-                    error.json().then((error) => { this.statusMessage = error.errorMessage; });
-                    this.password = '';
-                });
-            }
-        }
-    }
+            <br>
+        </div>`
 };
