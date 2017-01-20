@@ -28,6 +28,9 @@ const Shipment = sequelize.define('shipment', {
     quantity: { type: Sequelize.INTEGER, allowNull: false },
     note: { type: Sequelize.TEXT },
     arrivalDate: { type: Sequelize.DATEONLY },
+    supplierWeight: { type: Sequelize.INTEGER },
+    fullWeight: { type: Sequelize.INTEGER },
+    emptyWeight: { type: Sequelize.INTEGER },
     created: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
     modified: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
     deprecated: { type: Sequelize.DATE }
