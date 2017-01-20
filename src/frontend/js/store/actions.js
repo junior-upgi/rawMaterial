@@ -49,28 +49,66 @@ export default {
             headers: { 'x-access-token': sessionStorage.token }
         }).then((response) => {
             response.json().then((response) => {
-                Vue.http.post(`${serverUrl}/data/planSchedule`, {
-                    year: new Date(requestContent.requestDate).getFullYear(),
-                    month: new Date(requestContent.requestDate).getMonth()
-                }, {
-                    headers: { 'x-access-token': sessionStorage.token }
-                }).then((response) => {
-                    response.json().then((response) => {
-                        context.commit('updatePlanSchedule', response);
-                        alert('原料預約進廠成功');
-                        alert('implement broadcast');
-                    });
-                }, (error) => {
-                    error.json().then((error) => {
-                        alert(`預約進貨發生錯誤:\n${error.errorMessage}\n系統即將重置`);
-                        sessionStorage.clear();
-                        window.location.replace(`${serverUrl}/index.html`);
-                    });
-                });
+                context.commit('updatePlanSchedule', response);
+                context.commit('newYearSelection', new Date(requestContent.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(requestContent.requestDate).getMonth());
+                alert('原料預約進廠成功');
+                alert('implement broadcast');
             });
         }, (error) => {
             error.json().then((error) => {
                 alert(`預約進貨發生錯誤:\n${error.errorMessage}\n系統即將重置`);
+                sessionStorage.clear();
+                window.location.replace(`${serverUrl}/index.html`);
+            });
+        });
+    },
+    cancelShipment: function(context, payload) {
+        let confirmationMessage = `請確認是否取消 ${payload.shipment.requestDate} 【${payload.shipment.CUS_SNM}】 進貨 ${payload.shipment.PRDT_SNM}`;
+        if (confirm(confirmationMessage)) {
+            Vue.http.delete(`${serverUrl}/data/planSchedule/delete`, {
+                body: {
+                    id: payload.shipment.id,
+                    requestDate: payload.shipment.requestDate
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }).then((response) => {
+                response.json().then((response) => {
+                    context.commit('updatePlanSchedule', response);
+                    context.commit('newYearSelection', new Date(payload.shipment.requestDate).getFullYear());
+                    context.commit('newMonthSelection', new Date(payload.shipment.requestDate).getMonth());
+                    alert('取消原料進廠預約成功');
+                    alert('implement broadcast');
+                });
+            }, (error) => {
+                error.json().then((error) => {
+                    alert(`取消進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
+                    sessionStorage.clear();
+                    window.location.replace(`${serverUrl}/index.html`);
+                });
+            });
+        }
+    },
+    reviseReqQty: function(context, payload) {
+        Vue.http.put(`${serverUrl}/data/planSchedule/update`, {
+            requestDate: payload.shipment.requestDate,
+            id: payload.shipment.id,
+            quantity: payload.shipment.quantity,
+            note: payload.shipment.note,
+            arrivalDate: payload.shipment.arrivalDate
+        }, {
+            headers: { 'x-access-token': sessionStorage.token }
+        }).then((response) => {
+            response.json().then((response) => {
+                context.commit('updatePlanSchedule', response);
+                context.commit('newYearSelection', new Date(payload.shipment.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.shipment.requestDate).getMonth());
+                alert('原料進廠預約修改成功');
+                alert('implement broadcast');
+            });
+        }, (error) => {
+            error.json().then((error) => {
+                alert(`修改進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
                 sessionStorage.clear();
                 window.location.replace(`${serverUrl}/index.html`);
             });

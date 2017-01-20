@@ -36,17 +36,14 @@ export default {
     newMonthSelection(state, newMonthSelection) { state.monthSelected = newMonthSelection; },
     updateRawMatList(state, rawMatListData) { state.rawMatList = rawMatListData.slice(); },
     rawMatSelected(state, rawMatSelection) {
-        console.log(typeof rawMatSelection);
         if (rawMatSelection !== '-1') {
             state.CUS_NO = state.rawMatList[rawMatSelection].CUS_NO;
             state.PRD_NO = state.rawMatList[rawMatSelection].PRD_NO;
             state.typeId = state.rawMatList[rawMatSelection].typeId;
         } else {
-            console.log('1: ' + state.PRD_NO);
             state.CUS_NO = null;
             state.PRD_NO = null;
             state.TypeId = null;
-            console.log('2: ' + state.PRD_NO);
         }
     }
 };

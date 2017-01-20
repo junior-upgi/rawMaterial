@@ -17,7 +17,7 @@ export let reservationForm = {
     },
     data: function() {
         return {
-            selectedRawMatIndex: null,
+            selectedRawMatIndex: -1,
             quantity: null,
             requestDate: null
         };
@@ -50,7 +50,6 @@ export let reservationForm = {
             }
             $event.preventDefault();
             this.selectedRawMatIndex = -1;
-            this.rawMatSelected();
             this.quantity = '';
             this.requestDate = '';
         }

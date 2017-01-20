@@ -34,6 +34,32 @@ const logger = new(winston.Logger)({
     ]
 });
 
+function performQuery(queryString) {
+    return new Promise(function(resolve, reject) {
+        let mssqlConnection = new mssql.Connection(serverConfig.mssqlConfig);
+        mssqlConnection.connect()
+            .then(function() {
+                let mssqlRequest = new mssql.Request(mssqlConnection);
+                mssqlRequest.query(queryString)
+                    .then(function(recordset) {
+                        mssqlConnection.close();
+                        logger.info(`${serverConfig.systemReference} database access completed`);
+                        resolve(recordset);
+                    })
+                    .catch(function(error) {
+                        logger.error(`${serverConfig.systemReference} database access failure: ${error}`);
+                        alertSystemError('database query', error);
+                        reject(`${serverConfig.systemReference} database access failure: ${error}`);
+                    });
+            })
+            .catch(function(error) {
+                logger.error(`${serverConfig.systemReference} database connection failure: ${error}`);
+                alertSystemError('database connection', error);
+                reject(`${serverConfig.systemReference} database connection failure: ${error}`);
+            });
+    });
+}
+
 function executeQuery(queryString, callback) {
     logger.info(`${serverConfig.systemReference} database access function triggered`);
     logger.info(`query: ${queryString}`);
@@ -153,6 +179,7 @@ module.exports = {
     alertSystemError: alertSystemError,
     sendMessage: sendMessage,
     executeQuery: executeQuery,
+    performQuery: performQuery,
     fileRemoval: fileRemoval,
     logger: logger,
     statusReport: statusReport

@@ -1,7 +1,6 @@
 const Sequelize = require('sequelize');
 
 const serverConfig = require('../module/serverConfig.js');
-const utility = require('../module/utility.js');
 
 const sequelize = new Sequelize(
     serverConfig.systemReference,
@@ -26,6 +25,9 @@ const Shipment = sequelize.define('shipment', {
     modified: { type: Sequelize.DATE, defaultValue: Sequelize.NOW },
     deprecated: { type: Sequelize.DATE }
 }, {
+    getterMethods: {
+        requestYear: function() { return new Date(this.requestDate).getFullYear(); }
+    },
     timestamps: true,
     paranoid: true,
     createdAt: 'created',
