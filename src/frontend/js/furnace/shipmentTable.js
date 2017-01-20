@@ -44,30 +44,62 @@ export let shipmentTable = {
                 <template v-else>
                     <template v-if="PRD_NO===null">
                         <tr v-for="shipment in planSchedule" v-if="((!shipment.deprecated) || (showRevision))">
-                            <td></td>
-                            <td class="text-center">{{shipment.requestDate}}</td>
+                            <td>
+                                <s v-if="shipment.deprecated"></s>
+                                <template v-else></template>
+                            </td>
+                            <td class="text-center">
+                                <s v-if="shipment.deprecated">{{shipment.requestDate}}</s>
+                                <template v-else>{{shipment.requestDate}}</template>
+                            </td>
                             <td>
                                 <small>
-                                    {{shipment.CUS_SNM}}&nbsp;{{shipment.PRDT_SNM}}&nbsp;{{shipment.specification}}
+                                    <s v-if="shipment.deprecated">{{shipment.CUS_SNM}}&nbsp;{{shipment.PRDT_SNM}}&nbsp;{{shipment.specification}}</s>
+                                    <template v-else>{{shipment.CUS_SNM}}&nbsp;{{shipment.PRDT_SNM}}&nbsp;{{shipment.specification}}</template>
                                 </small>
                             </td>
-                            <td class="text-center">{{shipment.quantity}}</td>
-                            <td></td>
-                            <td>{{shipment.note}}</td>
+                            <td class="text-center">
+                                <s v-if="shipment.deprecated">{{shipment.quantity}}</s>
+                                <template v-else>{{shipment.quantity}}</template>
+                            </td>
+                            <td>
+                                <s v-if="shipment.deprecated"></s>
+                                <template v-else></template>
+                            </td>
+                            <td>
+                                <s v-if="shipment.deprecated">{{shipment.note}}</s>
+                                <template v-else>{{shipment.note}}</template>
+                            </td>
                         </tr>
                     </template>
                     <template v-else>
                         <tr v-for="shipment in planSchedule" v-if="(shipment.PRD_NO === PRD_NO) && ((!shipment.deprecated) || (showRevision))">
-                            <td></td>
-                            <td class="text-center">{{shipment.requestDate}}</td>
+                            <td>
+                                <s v-if="shipment.deprecated"></s>
+                                <template v-else></template>
+                            </td>
+                            <td class="text-center">
+                                <s v-if="shipment.deprecated">{{shipment.requestDate}}</s>
+                                <template v-else>{{shipment.requestDate}}</template>
+                            </td>
                             <td>
                                 <small>
-                                    {{shipment.CUS_SNM}}&nbsp;{{shipment.PRDT_SNM}}&nbsp;{{shipment.specification}}
+                                    <s v-if="shipment.deprecated">{{shipment.CUS_SNM}}&nbsp;{{shipment.PRDT_SNM}}&nbsp;{{shipment.specification}}</s>
+                                    <template v-else>{{shipment.CUS_SNM}}&nbsp;{{shipment.PRDT_SNM}}&nbsp;{{shipment.specification}}</template>
                                 </small>
                             </td>
-                            <td class="text-center">{{shipment.quantity}}</td>
-                            <td></td>
-                            <td>{{shipment.note}}</td>
+                            <td class="text-center">
+                                <s v-if="shipment.deprecated">{{shipment.quantity}}</s>
+                                <template v-else>{{shipment.quantity}}</template>
+                            </td>
+                            <td>
+                                <s v-if="shipment.deprecated"></s>
+                                <template v-else></template>
+                            </td>
+                            <td>
+                                <s v-if="shipment.deprecated">{{shipment.note}}</s>
+                                <template v-else>{{shipment.note}}</template>
+                            </td>
                         </tr>
                     <template>
                 </template>
