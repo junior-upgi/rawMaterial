@@ -46,6 +46,17 @@ router.delete('/data/planSchedule/delete', tokenValidation, function(request, re
     });
 });
 
+router.get('/data/dataAvailability', tokenValidation, function(request, response) {
+    let queryString = 'SELECT DATEPART(yyyy,requestDate) AS year FROM rawMaterial.dbo.planSchedule GROUP BY DATEPART(yyyy,requestDate) ORDER BY DATEPART(yyyy,requestDate);';
+    utility.performQuery(queryString)
+        .then(function(recordset) {
+            return response.status(200).json(recordset);
+        }).catch(function(error) {
+            utility.logger.error(`/data/dataAvailability route failure: ${error}`);
+            return response.status(500).json({ errorMessage: `/data/dataAvailability route failure: ${error}` });
+        });
+});
+
 router.put('/data/planSchedule/update', tokenValidation, function(request, response) {
     let requestDate = request.body.requestDate;
     let id = request.body.id;
@@ -112,17 +123,6 @@ router.post('/data/planSchedule/add', tokenValidation, function(request, respons
         });
     }).catch(function(error) { // utility.logger.error(`/data/planSchedule/add route failure: ${error}`);
         return response.status(500).json({ errorMessage: `/data/planSchedule/add route failure: ${error}` });
-    });
-});
-
-router.get('/data/availability', tokenValidation, function(request, response) {
-    let queryString = 'SELECT DATEPART(yyyy,requestDate) AS year FROM rawMaterial.dbo.planSchedule GROUP BY DATEPART(yyyy,requestDate) ORDER BY DATEPART(yyyy,requestDate);';
-    utility.executeQuery(queryString, function(recordset, error) {
-        if (error) {
-            utility.logger.error(`/data/availability route failure: ${error}`);
-            return response.status(500).json({ errorMessage: error });
-        }
-        return response.status(200).json(recordset);
     });
 });
 

@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const uuidV4 = require('uuid/v4');
 
 const serverConfig = require('../module/serverConfig.js');
 
@@ -13,7 +14,13 @@ const sequelize = new Sequelize(
     });
 
 const Shipment = sequelize.define('shipment', {
-    id: { type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true },
+    id: {
+        type: Sequelize.UUID,
+        defaultValue: function() {
+            return uuidV4().toUpperCase();
+        },
+        primaryKey: true
+    },
     requestDate: { type: Sequelize.DATEONLY, unique: 'compositeIndex', allowNull: false },
     CUS_NO: { type: Sequelize.STRING, unique: 'compositeIndex', allowNull: false },
     PRD_NO: { type: Sequelize.STRING, unique: 'compositeIndex', allowNull: false },

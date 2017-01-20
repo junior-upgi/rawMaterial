@@ -24,10 +24,9 @@ export let scheduleSelector = {
     },
     created: function() {
         this.updateStatusMessage('進度選項初始化...');
-        Vue.http.get(`${serverUrl}/data/availability`, {
+        Vue.http.get(`${serverUrl}/data/dataAvailability`, {
             headers: { 'x-access-token': sessionStorage.token }
         }).then((response) => {
-            this.password = '';
             response.json().then((recordset) => {
                 recordset.forEach((record) => {
                     this.yearList.push(record.year);
