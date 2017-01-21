@@ -27,9 +27,6 @@ export let shipmentEntry = {
             let weekdayIndex = new Date(dateString).getDay();
             return this.weekdayList[weekdayIndex];
         },
-        formatValue: function(originalValue) {
-            return numeral(originalValue).format('0,0');
-        },
         showEstWeight: function(estWeight, unitOfMeasure) {
             return `預計 ${numeral(estWeight).format('0,0')} ${unitOfMeasure}`;
         },
@@ -46,6 +43,11 @@ export let shipmentEntry = {
                     this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: this.selectedMonth });
                 }
             }
+        }
+    },
+    filters: {
+        toTonnage: function(value) {
+            return `${numeral(Math.round(value / 1000)).format('0,0')} 噸`;
         }
     },
     template: `
@@ -76,7 +78,7 @@ export let shipmentEntry = {
             <!-- scheduled q'ty of truck shipments -->
             <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.quantity}}</small></s>
-                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="shipment.quantity" :title="showEstWeight(shipment.estWeight,shipment.UT)" />
+                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="shipment.quantity" :title="shipment.estWeight|toTonnage" />
             </td>
 
             <!--  v-on:focus="recordReqQty(shipment.quantity)" v-on:blur="updateReqQtyTriggered({type:'reviseShipment',shipment:shipment})" -->

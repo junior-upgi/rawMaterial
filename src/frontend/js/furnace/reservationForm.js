@@ -53,9 +53,11 @@ export let reservationForm = {
             this.selectedRawMatIndex = -1;
             this.quantity = '';
             this.requestDate = '';
-        },
-        formatValue: function(originalValue) {
-            return numeral(originalValue).format('0,0');
+        }
+    },
+    filters: {
+        toTonnage: function(value) {
+            return `${numeral(Math.round(value / 1000)).format('0,0')} 噸`;
         }
     },
     template: `
@@ -63,7 +65,7 @@ export let reservationForm = {
             <select class="form-control xs-col-12" v-model="selectedRawMatIndex" v-on:change="rawMatSelected(selectedRawMatIndex)" required >
                 <option value="-1">顯示本月所有項目</option>
                 <option v-for="(rawMat, index) in rawMatList" v-bind:value="index">
-                    【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} {{rawMat.specification}} (每車預估 {{formatValue(rawMat.unitPerTruck)}} {{rawMat.UT}})
+                    【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} {{rawMat.specification}} (每車約 {{rawMat.unitPerTruck|toTonnage}})
                 </option>
             </select>
             <input type="date" class="form-control" required v-model="requestDate" v-on:change="checkDateValidity" required />
