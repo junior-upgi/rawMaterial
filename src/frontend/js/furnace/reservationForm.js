@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import numeral from 'numeral';
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
@@ -52,6 +53,9 @@ export let reservationForm = {
             this.selectedRawMatIndex = -1;
             this.quantity = '';
             this.requestDate = '';
+        },
+        formatValue: function(originalValue) {
+            return numeral(originalValue).format('0,0');
         }
     },
     template: `
@@ -59,7 +63,7 @@ export let reservationForm = {
             <select class="form-control xs-col-12" v-model="selectedRawMatIndex" v-on:change="rawMatSelected(selectedRawMatIndex)" required >
                 <option value="-1"></option>
                 <option v-for="(rawMat, index) in rawMatList" v-bind:value="index">
-                    【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} {{rawMat.specification}}
+                    【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} {{rawMat.specification}} (每車預估 {{formatValue(rawMat.unitPerTruck)}} {{rawMat.UT}})
                 </option>
             </select>
             <input type="date" class="form-control" required v-model="requestDate" v-on:change="checkDateValidity" required />
