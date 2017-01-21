@@ -35,6 +35,10 @@ const logger = new(winston.Logger)({
 });
 
 function performQuery(queryString) {
+    console.log('-------------------------');
+    logger.info('query execution request received:');
+    logger.info(queryString);
+    console.log('-------------------------');
     return new Promise(function(resolve, reject) {
         let mssqlConnection = new mssql.Connection(serverConfig.mssqlConfig);
         mssqlConnection.connect()

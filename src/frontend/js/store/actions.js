@@ -89,20 +89,17 @@ export default {
             });
         }
     },
-    reviseReqQty: function(context, payload) {
+    updateRecord: function(context, payload) {
         Vue.http.put(`${serverUrl}/data/planSchedule/update`, {
-            requestDate: payload.shipment.requestDate,
-            id: payload.shipment.id,
-            quantity: payload.shipment.quantity,
-            note: payload.shipment.note,
-            arrivalDate: payload.shipment.arrivalDate
+            original: payload.original,
+            updated: payload.updated
         }, {
             headers: { 'x-access-token': sessionStorage.token }
         }).then((response) => {
             response.json().then((response) => {
                 context.commit('updatePlanSchedule', response);
-                context.commit('newYearSelection', new Date(payload.shipment.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(payload.shipment.requestDate).getMonth());
+                context.commit('newYearSelection', new Date(payload.original.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.original.requestDate).getMonth());
                 alert('原料進廠預約修改成功');
                 alert('implement broadcast');
             });

@@ -10,7 +10,7 @@ SELECT
 	,a.quantity
     ,b.unitPerTruck*a.quantity AS estWeight
     ,b.UT
-    ,a.arrivalDate
+    ,CONVERT(char(10),a.arrivalDate,126) AS arrivalDate
     ,a.supplierWeight
     ,a.fullWeight
     ,a.emptyWeight

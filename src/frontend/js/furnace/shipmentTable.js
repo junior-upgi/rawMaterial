@@ -12,7 +12,7 @@ let emptyShipmentScheduleEntry = {
     props: ['selectedYear', 'selectedMonth'],
     template: `
         <tr class="row">
-            <td colspan="9" class="text-center">
+            <td colspan="11" class="text-center">
                 <h4>{{selectedYear}} 年 {{selectedMonth+1}} 月份查無資料</h4>
             </td>
         </tr>`
@@ -54,7 +54,7 @@ export let shipmentTable = {
         <table class="table table-striped table-hover table-condensed">
             <thead>
                 <tr class="row">
-                    <th class="text-center col-xs-1"></th>
+                    <th class="text-center"></th>
                     <th class="text-center col-xs-1"><strong>需求日期</strong></th>
                     <th class="text-center col-xs-2"><strong>原料項目</strong></th>
                     <th class="text-center col-xs-1"><strong>預約車次</strong></th>
@@ -62,7 +62,9 @@ export let shipmentTable = {
                     <th class="text-center col-xs-1"><strong>出車秤重</strong></th>
                     <th class="text-center col-xs-1"><strong>入廠秤重</strong></th>
                     <th class="text-center col-xs-1"><strong>出廠秤重</strong></th>
-                    <th class="text-center col-xs-3"><strong>備註</strong></th>
+                    <th class="text-center col-xs-2"><strong>備註</strong></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
                 </tr>
             </thead>
             <tbody>
@@ -78,8 +80,8 @@ export let shipmentTable = {
             </tbody>
             <tfoot>
                 <tr class="row">
-                    <td colspan="9">
-                        <h4>注意事項</h4>
+                    <td colspan="11">
+                        <h4>&nbsp;&nbsp;&nbsp;注意事項</h4>
                         <textarea rows="5" style="width:100%;border:none;"></textarea>
                     </td>
                 </tr>
