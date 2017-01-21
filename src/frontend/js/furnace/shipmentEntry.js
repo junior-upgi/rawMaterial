@@ -1,3 +1,4 @@
+import numeral from 'numeral';
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
@@ -22,6 +23,16 @@ export let shipmentEntry = {
             cancelShipment: 'cancelShipment',
             reviseReqQty: 'reviseReqQty'
         }),
+        convertToWeekday: function(dateString) {
+            let weekdayIndex = new Date(dateString).getDay();
+            return this.weekdayList[weekdayIndex];
+        },
+        formatValue: function(originalValue) {
+            return numeral(originalValue).format('0,0');
+        },
+        showEstWeight: function(estWeight, unitOfMeasure) {
+            return `預計 ${numeral(estWeight).format('0,0')} ${unitOfMeasure}`;
+        },
         recordReqQty: function(originalValue) {
             this.originalValue = originalValue;
         },
@@ -35,14 +46,11 @@ export let shipmentEntry = {
                     this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: this.selectedMonth });
                 }
             }
-        },
-        convertToWeekday: function(dateString) {
-            let weekdayIndex = new Date(dateString).getDay();
-            return this.weekdayList[weekdayIndex];
         }
     },
     template: `
-        <tr>
+        <tr class="row">
+            <!-- action buttons -->
             <td>
                 <s v-if="shipment.deprecated"></s>
                 <template v-else>
@@ -51,39 +59,52 @@ export let shipmentEntry = {
                     </button>
                 </template>
             </td>
+            <!-- requestDate -->
             <td class="text-center">
-                <s v-if="shipment.deprecated">{{shipment.requestDate}}&nbsp;{{convertToWeekday(shipment.requestDate)}}</s>
+                <s v-if="shipment.deprecated"><small>{{shipment.requestDate}}&nbsp;{{convertToWeekday(shipment.requestDate)}}</small></s>
                 <template v-else>{{shipment.requestDate}}&nbsp;{{convertToWeekday(shipment.requestDate)}}</template>
             </td>
+            <!-- composite field display what kind of rawMat shipment is scheduled -->
             <td>
                 <small>
-                    <s v-if="shipment.deprecated">{{shipment.PRDT_SNM}}&nbsp;【{{shipment.CUS_SNM}}】&nbsp;{{shipment.specification}}</s>
-                    <template v-else>{{shipment.PRDT_SNM}}&nbsp;【{{shipment.CUS_SNM}}】&nbsp;{{shipment.specification}}</template>
+                    <s v-if="shipment.deprecated"><small>{{shipment.PRDT_SNM}}&nbsp;【{{shipment.CUS_SNM}}】&nbsp;{{shipment.specification}}</small></s>
+                    <template v-else>
+                        {{shipment.PRDT_SNM}}&nbsp;【{{shipment.CUS_SNM}}】&nbsp;{{shipment.specification}}
+                    </template>
                 </small>
             </td>
+            <!-- scheduled q'ty of truck shipments -->
             <td class="text-center">
-                <s v-if="shipment.deprecated">{{shipment.quantity}}</s>
-                <input class="form-control input-sm text-center" type="number" min="1" v-else v-model="shipment.quantity" v-on:focus="recordReqQty(shipment.quantity)" v-on:blur="updateReqQtyTriggered({type:'reviseShipment',shipment:shipment})">
+                <s v-if="shipment.deprecated"><small>{{shipment.quantity}}</small></s>
+                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="shipment.quantity" :title="showEstWeight(shipment.estWeight,shipment.UT)" />
             </td>
+
+            <!--  v-on:focus="recordReqQty(shipment.quantity)" v-on:blur="updateReqQtyTriggered({type:'reviseShipment',shipment:shipment})" -->
+
+            <!-- date of arrival -->
             <td>
-                <s v-if="shipment.deprecated"></s>
-                <template v-else></template>
+                <s v-if="shipment.deprecated"><small>{{shipment.arrivalDate}}</small></s>
+                <input v-else class="form-control input-sm text-center" type="date" v-model="shipment.arrivalDate" />
             </td>
+            <!-- weight on supplier's shipment bill -->
             <td>
-                <s v-if="shipment.deprecated"></s>
-                <template v-else></template>
+                <s v-if="shipment.deprecated"><small>{{shipment.supplierWeight}}</small></s>
+                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="shipment.supplierWeight" />
             </td>
+            <!-- full truck enter weight -->
             <td>
-                <s v-if="shipment.deprecated"></s>
-                <template v-else></template>
+                <s v-if="shipment.deprecated"><small>{{shipment.fullWeight}}</small></s>
+                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="shipment.fullWeight" />
             </td>
+            <!-- empty truck exit weight -->
             <td>
-                <s v-if="shipment.deprecated"></s>
-                <template v-else></template>
+                <s v-if="shipment.deprecated"><small>{{shipment.emptyWeight}}</small></s>
+                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="shipment.emptyWeight" />
             </td>
+            <!-- notes -->
             <td>
-                <s v-if="shipment.deprecated">{{shipment.note}}</s>
-                <template v-else>{{shipment.note}}</template>
+                <s v-if="shipment.deprecated"><small>{{shipment.note}}</small></s>
+                <input v-else class="form-control input-sm text-center" type="text" maxlength="255" v-model="shipment.note" />
             </td>
         </tr>`
 };

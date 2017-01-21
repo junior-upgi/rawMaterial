@@ -29,7 +29,7 @@ export default {
         })
     },
     template: `
-        <div class="container">
+        <div class="container-fluid">
             <br><br><br>
             <div class="row">
                 <h2>統義玻璃股份有限公司&nbsp;<small>原料預約進貨作業</small></h2>

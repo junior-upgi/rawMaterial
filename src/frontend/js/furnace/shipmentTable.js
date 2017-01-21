@@ -11,7 +11,7 @@ let emptyShipmentScheduleEntry = {
     name: 'emptyShipmentScheduleEntry',
     props: ['selectedYear', 'selectedMonth'],
     template: `
-        <tr>
+        <tr class="row">
             <td colspan="9" class="text-center">
                 <h4>{{selectedYear}} 年 {{selectedMonth+1}} 月份查無資料</h4>
             </td>
@@ -53,15 +53,17 @@ export let shipmentTable = {
     template: `
         <table class="table table-striped table-hover table-condensed">
             <thead>
-                <th class="text-center"></th>
-                <th class="text-center"><strong>需求日期</strong></th>
-                <th class="text-center"><strong>原料項目</strong></th>
-                <th class="text-center"><strong>預約車次</strong></th>
-                <th class="text-center"><strong>進場日期</strong></th>
-                <th class="text-center"><strong>出車秤重</strong></th>
-                <th class="text-center"><strong>入廠秤重</strong></th>
-                <th class="text-center"><strong>出廠秤重</strong></th>
-                <th><strong>備註</strong></th>
+                <tr class="row">
+                    <th class="text-center col-xs-1"></th>
+                    <th class="text-center col-xs-1"><strong>需求日期</strong></th>
+                    <th class="text-center col-xs-2"><strong>原料項目</strong></th>
+                    <th class="text-center col-xs-1"><strong>預約車次</strong></th>
+                    <th class="text-center col-xs-1"><strong>進場日期</strong></th>
+                    <th class="text-center col-xs-1"><strong>出車秤重</strong></th>
+                    <th class="text-center col-xs-1"><strong>入廠秤重</strong></th>
+                    <th class="text-center col-xs-1"><strong>出廠秤重</strong></th>
+                    <th class="text-center col-xs-3"><strong>備註</strong></th>
+                </tr>
             </thead>
             <tbody>
                 <emptyShipmentScheduleEntry v-if="planSchedule.length===0" :selected-year="selectedYear" :selected-month="selectedMonth"></emptyShipmentScheduleEntry>
@@ -75,7 +77,7 @@ export let shipmentTable = {
                 </template>
             </tbody>
             <tfoot>
-                <tr>
+                <tr class="row">
                     <td colspan="9">
                         <h4>注意事項</h4>
                         <textarea rows="5" style="width:100%;border:none;"></textarea>

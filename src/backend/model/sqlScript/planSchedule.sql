@@ -8,7 +8,12 @@ SELECT
 	,a.typeId
 	,b.specification
 	,a.quantity
+    ,b.unitPerTruck*a.quantity AS estWeight
+    ,b.UT
     ,a.arrivalDate
+    ,a.supplierWeight
+    ,a.fullWeight
+    ,a.emptyWeight
 	,a.note
     ,a.created
     ,a.modified

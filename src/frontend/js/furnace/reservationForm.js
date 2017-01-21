@@ -61,7 +61,7 @@ export let reservationForm = {
     template: `
         <form id="reservationForm" class="navbar-form navbar-left" v-on:submit.prevent>
             <select class="form-control xs-col-12" v-model="selectedRawMatIndex" v-on:change="rawMatSelected(selectedRawMatIndex)" required >
-                <option value="-1"></option>
+                <option value="-1">顯示本月所有項目</option>
                 <option v-for="(rawMat, index) in rawMatList" v-bind:value="index">
                     【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} {{rawMat.specification}} (每車預估 {{formatValue(rawMat.unitPerTruck)}} {{rawMat.UT}})
                 </option>
