@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 Vue.use(VueResource);
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 import { store } from '../store/store.js';
 
 import { shipmentEntry } from './shipmentEntry.js';
+import { monthlyMemoBulletin } from './monthlyMemoBulletin.js';
 
 let emptyShipmentScheduleEntry = {
     name: 'emptyShipmentScheduleEntry',
@@ -22,14 +23,12 @@ export let shipmentTable = {
     name: 'shipmentTable',
     store: store,
     data: function() {
-        return {
-            originalValue: null,
-            weekdayList: ['(日)', '(一)', '(二)', '(三)', '(四)', '(五)', '(六)']
-        };
+        return { weekdayList: ['(日)', '(一)', '(二)', '(三)', '(四)', '(五)', '(六)'] };
     },
     components: {
         'emptyShipmentScheduleEntry': emptyShipmentScheduleEntry,
-        'shipmentEntry': shipmentEntry
+        'shipmentEntry': shipmentEntry,
+        'monthlyMemoBulletin': monthlyMemoBulletin
     },
     computed: {
         ...mapGetters({
@@ -45,10 +44,16 @@ export let shipmentTable = {
             updatePlanSchedule: 'updatePlanSchedule',
             cancelShipment: 'cancelShipment',
             reviseReqQty: 'reviseReqQty'
-        })
+        }),
+        ...mapMutations({ updateStatusMessage: 'updateStatusMessage' })
     },
     created: function() {
-        this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: this.selectedMonth });
+        this.updateStatusMessage('讀取當月進貨資料...');
+        this.updatePlanSchedule({
+            type: 'updatePlanSchedule',
+            selectedYear: this.selectedYear,
+            selectedMonth: this.selectedMonth
+        });
     },
     template: `
         <table class="table table-striped table-hover table-condensed">
@@ -93,7 +98,7 @@ export let shipmentTable = {
                 <tr class="row">
                     <td colspan="11">
                         <h4>&nbsp;&nbsp;&nbsp;注意事項</h4>
-                        <textarea rows="5" style="width:100%;border:none;"></textarea>
+                        <monthlyMemoBulletin :selected-year="selectedYear" :selected-month="selectedMonth"></monthlyMemoBulletin>
                     </td>
                 </tr>
             </tfoot>

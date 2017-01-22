@@ -23,7 +23,7 @@ export let scheduleSelector = {
         };
     },
     created: function() {
-        this.updateStatusMessage('進度選項初始化...');
+        this.updateStatusMessage('確認歷史資料...');
         Vue.http.get(`${serverUrl}/data/dataAvailability`, {
             headers: { 'x-access-token': sessionStorage.token }
         }).then((response) => {
@@ -38,12 +38,10 @@ export let scheduleSelector = {
             });
         });
     },
-    mounted: function() {
-        setTimeout(() => { this.updateStatusMessage(''); }, 2000);
-    },
     methods: {
         ...mapActions({
-            updatePlanSchedule: 'updatePlanSchedule'
+            updatePlanSchedule: 'updatePlanSchedule',
+            initMonthlyMemo: 'initMonthlyMemo'
         }),
         ...mapMutations({
             updateStatusMessage: 'updateStatusMessage',
@@ -53,10 +51,20 @@ export let scheduleSelector = {
         selectYear: function(newYearSelection) {
             this.newYearSelection(newYearSelection);
             this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: this.selectedMonth });
+            this.initMonthlyMemo({
+                type: 'initMonthlyMemo',
+                selectedYear: newYearSelection,
+                selectedMonth: this.selectedMonth
+            });
         },
         selectMonth: function(index) {
             this.newMonthSelection(index);
             this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: index });
+            this.initMonthlyMemo({
+                type: 'initMonthlyMemo',
+                selectedYear: this.selectedYear,
+                selectedMonth: index
+            });
         }
     },
     template: `

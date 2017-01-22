@@ -22,6 +22,8 @@ export const store = new Vuex.Store({
         PRD_NO: null,
         TypeId: null,
         showRevision: false,
+        monthlyMemo: null,
+        monthlyMemoLoaded: false,
         lastStatusMessage: '程式初始化...'
     },
     getters: getters,

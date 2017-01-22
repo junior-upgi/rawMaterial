@@ -71,6 +71,28 @@ export default {
             });
         });
     },
+    updateRecord: function(context, payload) {
+        Vue.http.put(`${serverUrl}/data/planSchedule/update`, {
+            original: payload.original,
+            updated: payload.updated
+        }, {
+            headers: { 'x-access-token': sessionStorage.token }
+        }).then((response) => {
+            response.json().then((response) => {
+                context.commit('updatePlanSchedule', response);
+                context.commit('newYearSelection', new Date(payload.original.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.original.requestDate).getMonth());
+                alert('原料進廠預約修改成功');
+                alert('implement broadcast');
+            });
+        }, (error) => {
+            error.json().then((error) => {
+                alert(`修改進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
+                sessionStorage.clear();
+                window.location.replace(`${serverUrl}/index.html`);
+            });
+        });
+    },
     updatePlanSchedule(context, selectedTime) {
         Vue.http.post(`${serverUrl}/data/planSchedule`, {
             year: selectedTime.selectedYear,
@@ -89,23 +111,15 @@ export default {
             });
         });
     },
-    updateRecord: function(context, payload) {
-        Vue.http.put(`${serverUrl}/data/planSchedule/update`, {
-            original: payload.original,
-            updated: payload.updated
-        }, {
+    initMonthlyMemo: function(context, payload) {
+        context.commit('clearMonthlyMemo');
+        Vue.http.get(`${serverUrl}/monthlyMemo/${payload.selectedYear}/${payload.selectedMonth}`, {
             headers: { 'x-access-token': sessionStorage.token }
         }).then((response) => {
-            response.json().then((response) => {
-                context.commit('updatePlanSchedule', response);
-                context.commit('newYearSelection', new Date(payload.original.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(payload.original.requestDate).getMonth());
-                alert('原料進廠預約修改成功');
-                alert('implement broadcast');
-            });
+            context.commit('initMonthlyMemo', response.body[0]);
         }, (error) => {
             error.json().then((error) => {
-                alert(`修改進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
+                alert(`注意事項留言板內容查詢發生錯誤:\n${error.errorMessage})\n系統即將重置`);
                 sessionStorage.clear();
                 window.location.replace(`${serverUrl}/index.html`);
             });

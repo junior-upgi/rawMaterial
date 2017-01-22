@@ -18,12 +18,8 @@ export default {
         'shipment-table': shipmentTable
     },
     computed: { ...mapGetters({ showRevision: 'getShowRevision' }) },
-    data: function() {
-        return {
-            reservationData: {}
-        };
-    },
-    methods: { ...mapMutations({
+    methods: {
+        ...mapMutations({
             logout: 'logout',
             toggleShowRevision: 'toggleShowRevision'
         })

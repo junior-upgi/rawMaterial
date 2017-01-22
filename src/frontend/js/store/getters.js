@@ -16,5 +16,13 @@ export default {
     getShowRevision: function(state) { return state.showRevision; },
     getPlanSchedule: function(state) { return state.planSchedule; },
     getRawMatList: function(state) { return state.rawMatList; },
-    getRawMatErpId: function(state) { return state.PRD_NO; }
+    getRawMatErpId: function(state) { return state.PRD_NO; },
+    getMonthlyMemoStatus: function(state) { return state.monthlyMemoLoaded; },
+    getMonthlyMemo: function(state) {
+        if (state.monthlyMemoLoaded === false) {
+            return null;
+        } else {
+            return state.monthlyMemo;
+        }
+    }
 };

@@ -27,6 +27,8 @@ export default {
             state.PRD_NO = null;
             state.TypeId = null;
             state.showRevision = false;
+            state.monthlyMemo = null;
+            state.monthlyMemoLoaded = false;
             state.lastStatusMessage = '程式初始化...';
         }
     },
@@ -45,5 +47,13 @@ export default {
             state.PRD_NO = null;
             state.TypeId = null;
         }
+    },
+    clearMonthlyMemo(state) {
+        state.monthlyMemoLoaded = false;
+        state.monthlyMemo = null;
+    },
+    initMonthlyMemo(state, monthlyMemo) {
+        state.monthlyMemo = monthlyMemo.content;
+        state.monthlyMemoLoaded = true;
     }
 };

@@ -12,7 +12,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.post('/data/planSchedule', tokenValidation, function(request, response) {
-    let queryString = `SELECT * FROM rawMaterial.dbo.planSchedule WHERE DATEPART(yyyy,requestDate)=${request.body.year} AND DATEPART(m,requestDate)=${request.body.month + 1} ORDER BY requestDate,CUS_NO,typeId,created,modified,deprecated;`;
+    let queryString = `SELECT * FROM rawMaterial.dbo.planSchedule WHERE DATEPART(yyyy,requestDate)=${request.body.year} AND DATEPART(m,requestDate)=${parseInt(request.body.month) + 1} ORDER BY requestDate,CUS_NO,typeId,created,modified,deprecated;`;
     utility.performQuery(queryString)
         .then(function(recordset) {
             return response.status(200).json(recordset);
