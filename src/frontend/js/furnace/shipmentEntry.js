@@ -118,6 +118,9 @@ export let shipmentEntry = {
         toTonnage: function(value, origQty, tempQty) {
             return `${numeral(Math.round((value / origQty * tempQty) / 1000)).format('0,0')} 噸`;
         },
+        formatWeight: function(value, unit) {
+            return `${numeral(value).format('0,0')} ${unit}`;
+        },
         toWeekday: function(dateString) {
             let weekdayList = ['(日)', '(一)', '(二)', '(三)', '(四)', '(五)', '(六)'];
             let weekdayIndex = new Date(dateString).getDay();
@@ -153,28 +156,28 @@ export let shipmentEntry = {
                 <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="tempRecord.quantity" :title="shipment.estWeight|toTonnage(shipment.quantity,tempRecord.quantity)" @change="markUnprestine('quantity')" />
             </td>
             <!-- date of arrival -->
-            <td>
+            <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.arrivalDate}}</small></s>
                 <input v-else class="form-control input-sm text-center" type="date" v-model="tempRecord.arrivalDate" @change="markUnprestine('arrivalDate')" />
             </td>
             <!-- weight on supplier's shipment bill -->
-            <td>
-                <s v-if="shipment.deprecated"><small>{{shipment.supplierWeight}}</small></s>
-                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="tempRecord.supplierWeight" @change="markUnprestine('supplierWeight')" />
+            <td class="text-right">
+                <s v-if="shipment.deprecated"><small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.supplierWeight" @change="markUnprestine('supplierWeight')" />
             </td>
             <!-- full truck enter weight -->
-            <td>
-                <s v-if="shipment.deprecated"><small>{{shipment.fullWeight}}</small></s>
-                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="tempRecord.fullWeight" @change="markUnprestine('fullWeight')" />
+            <td class="text-right">
+                <s v-if="shipment.deprecated"><small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.fullWeight" @change="markUnprestine('fullWeight')" />
             </td>
             <!-- empty truck exit weight -->
-            <td>
-                <s v-if="shipment.deprecated"><small>{{shipment.emptyWeight}}</small></s>
-                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="tempRecord.emptyWeight" @change="markUnprestine('emptyWeight')" />
+            <td class="text-right">
+                <s v-if="shipment.deprecated"><small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.emptyWeight" @change="markUnprestine('emptyWeight')" />
             </td>
             <!-- notes -->
             <td>
-                <s v-if="shipment.deprecated"><small>{{shipment.note}}</small></s>
+                <s v-if="shipment.deprecated">&nbsp;<small>{{shipment.note}}</small></s>
                 <input v-else class="form-control input-sm" type="text" maxlength="255" v-model="tempRecord.note" @change="markUnprestine('note')" />
             </td>
             <!-- save buttons -->
