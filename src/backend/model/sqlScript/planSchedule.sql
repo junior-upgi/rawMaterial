@@ -15,6 +15,7 @@ SELECT
     ,a.fullWeight
     ,a.emptyWeight
 	,a.note
+    ,a.finalized
     ,a.created
     ,a.modified
     ,a.deprecated

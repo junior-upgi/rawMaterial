@@ -131,20 +131,23 @@ export let shipmentEntry = {
         <tr class="row">
             <!-- cancel buttons -->
             <td class="text-center">
-                <s v-if="shipment.deprecated"></s>
-                <button v-else type="button" class="btn btn-danger btn-sm" @click="cancelShipment({type:'cancelShipment',shipment:shipment})">
+                <button v-if="(!shipment.deprecated)&&(!shipment.finalized)" type="button" class="btn btn-danger btn-sm" @click="cancelShipment({type:'cancelShipment',shipment:shipment})">
                     <span class="glyphicon glyphicon-trash"></span>&nbsp;<small>取消</small>
                 </button>
+                <template v-else-if="!shipment.finalized"><span class="glyphicon glyphicon-trash"></span>&nbsp;<b><small>取消</small></b></template>
+                <template v-else><span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<b><small>結案</small></b></template>
             </td>
             <!-- requestDate -->
             <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.requestDate}}&nbsp;{{shipment.requestDate|toWeekday}}</small></s>
+                <b v-else-if="shipment.finalized"><small>{{shipment.requestDate}}&nbsp;{{shipment.requestDate|toWeekday}}</small></b>
                 <template v-else>{{shipment.requestDate}}&nbsp;{{shipment.requestDate|toWeekday}}</template>
             </td>
             <!-- composite field display what kind of rawMat shipment is scheduled -->
             <td>
                 <small>
                     <s v-if="shipment.deprecated"><small>{{shipment.PRDT_SNM}}&nbsp;【{{shipment.CUS_SNM}}】&nbsp;{{shipment.specification}}</small></s>
+                    <b v-else-if="shipment.finalized"><small>{{shipment.PRDT_SNM}}&nbsp;【{{shipment.CUS_SNM}}】&nbsp;{{shipment.specification}}</small></b>
                     <template v-else>
                         {{shipment.PRDT_SNM}}&nbsp;【{{shipment.CUS_SNM}}】&nbsp;{{shipment.specification}}
                     </template>
@@ -153,44 +156,48 @@ export let shipmentEntry = {
             <!-- scheduled q'ty of truck shipments -->
             <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.quantity}}</small></s>
+                <b v-else-if="shipment.finalized"><small>{{shipment.quantity}}</small></b>
                 <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="tempRecord.quantity" :title="shipment.estWeight|toTonnage(shipment.quantity,tempRecord.quantity)" @change="markUnprestine('quantity')" />
             </td>
             <!-- date of arrival -->
             <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.arrivalDate}}</small></s>
+                <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.arrivalDate}}</small></b>
                 <input v-else class="form-control input-sm text-center" type="date" v-model="tempRecord.arrivalDate" @change="markUnprestine('arrivalDate')" />
             </td>
             <!-- weight on supplier's shipment bill -->
             <td class="text-right">
                 <s v-if="shipment.deprecated"><small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
                 <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.supplierWeight" @change="markUnprestine('supplierWeight')" />
             </td>
             <!-- full truck enter weight -->
             <td class="text-right">
                 <s v-if="shipment.deprecated"><small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
                 <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.fullWeight" @change="markUnprestine('fullWeight')" />
             </td>
             <!-- empty truck exit weight -->
             <td class="text-right">
                 <s v-if="shipment.deprecated"><small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
                 <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.emptyWeight" @change="markUnprestine('emptyWeight')" />
             </td>
             <!-- notes -->
             <td>
                 <s v-if="shipment.deprecated">&nbsp;<small>{{shipment.note}}</small></s>
+                <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.note}}</small></b>
                 <input v-else class="form-control input-sm" type="text" maxlength="255" v-model="tempRecord.note" @change="markUnprestine('note')" />
             </td>
             <!-- save buttons -->
             <td class="text-center">
-                <s v-if="shipment.deprecated"></s>
-                <button v-else :disabled="prestine" type="button" class="btn btn-success btn-sm" @click="submitUpdate">
+                <button v-if="(!shipment.deprecated)&&(!shipment.finalized)" :disabled="prestine" type="button" class="btn btn-success btn-sm" @click="submitUpdate">
                     <span class="glyphicon glyphicon-pencil"></span>&nbsp;<small>儲存</small>
                 </button>
             </td>
             <!-- restore buttons -->
             <td class="text-center">
-                <s v-if="shipment.deprecated"></s>
-                <button v-else :disabled="prestine" type="button" class="btn btn-primary btn-sm" @click="restoreRecord">
+                <button v-if="(!shipment.deprecated)&&(!shipment.finalized)" :disabled="prestine" type="button" class="btn btn-primary btn-sm" @click="restoreRecord">
                     <span class="glyphicon glyphicon-refresh"></span>&nbsp;<small>還原</small>
                 </button>
             </td>
