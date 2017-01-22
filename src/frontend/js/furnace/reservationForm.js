@@ -38,21 +38,23 @@ export let reservationForm = {
                 this.requestDate = '';
             }
         },
-        makeReservation: function($event) {
+        makeReservation: function() {
             if (document.getElementById('reservationForm').checkValidity()) {
-                this.scheduleNewShipment({
-                    type: 'scheduleNewShipment',
-                    requestDate: this.requestDate,
-                    CUS_NO: this.rawMatList[this.selectedRawMatIndex].CUS_NO,
-                    PRD_NO: this.rawMatList[this.selectedRawMatIndex].PRD_NO,
-                    typeId: this.rawMatList[this.selectedRawMatIndex].typeId,
-                    quantity: this.quantity
-                });
+                if (this.selectedRawMatIndex > -1) {
+                    this.scheduleNewShipment({
+                        type: 'scheduleNewShipment',
+                        requestDate: this.requestDate,
+                        CUS_NO: this.rawMatList[this.selectedRawMatIndex].CUS_NO,
+                        PRD_NO: this.rawMatList[this.selectedRawMatIndex].PRD_NO,
+                        typeId: this.rawMatList[this.selectedRawMatIndex].typeId,
+                        quantity: this.quantity
+                    });
+                    this.quantity = '';
+                    this.requestDate = '';
+                } else {
+                    alert('請選擇一項原料再進行進貨預約');
+                }
             }
-            $event.preventDefault();
-            this.selectedRawMatIndex = -1;
-            this.quantity = '';
-            this.requestDate = '';
         }
     },
     filters: {
@@ -61,15 +63,15 @@ export let reservationForm = {
         }
     },
     template: `
-        <form id="reservationForm" class="navbar-form navbar-left" v-on:submit.prevent>
-            <select class="form-control xs-col-12" v-model="selectedRawMatIndex" v-on:change="rawMatSelected(selectedRawMatIndex)" required >
-                <option value="-1">顯示本月所有項目</option>
-                <option v-for="(rawMat, index) in rawMatList" v-bind:value="index">
+        <form id="reservationForm" class="navbar-form navbar-left" @submit.prevent>
+            <select class="form-control xs-col-12" v-model="selectedRawMatIndex" @change="rawMatSelected(selectedRawMatIndex)" required >
+                <option value="-1">顯示本月所有進貨作業項目</option>
+                <option v-for="(rawMat, index) in rawMatList" :value="index">
                     【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} {{rawMat.specification}} (每車約 {{rawMat.unitPerTruck|toTonnage}})
                 </option>
             </select>
-            <input type="date" class="form-control" required v-model="requestDate" v-on:change="checkDateValidity" required />
+            <input type="date" class="form-control" required v-model="requestDate" @change="checkDateValidity" required />
             <input type="number" class="form-control" placeholder="數量" min="1" v-model="quantity" required />
-            <button type="submit" class="btn btn-default" v-on:click="makeReservation">預約</button>
+            <button type="submit" class="btn btn-default" @click="makeReservation">預約</button>
         </form>`
 };

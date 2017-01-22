@@ -38,31 +38,6 @@ export default {
             });
         });
     },
-    scheduleNewShipment(context, requestContent) {
-        Vue.http.post(`${serverUrl}/data/planSchedule/add`, {
-            requestDate: requestContent.requestDate,
-            CUS_NO: requestContent.CUS_NO,
-            PRD_NO: requestContent.PRD_NO,
-            typeId: requestContent.typeId,
-            quantity: requestContent.quantity
-        }, {
-            headers: { 'x-access-token': sessionStorage.token }
-        }).then((response) => {
-            response.json().then((response) => {
-                context.commit('updatePlanSchedule', response);
-                context.commit('newYearSelection', new Date(requestContent.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(requestContent.requestDate).getMonth());
-                alert('原料預約進廠成功');
-                alert('implement broadcast');
-            });
-        }, (error) => {
-            error.json().then((error) => {
-                alert(`預約進貨發生錯誤:\n${error.errorMessage}\n系統即將重置`);
-                sessionStorage.clear();
-                window.location.replace(`${serverUrl}/index.html`);
-            });
-        });
-    },
     cancelShipment: function(context, payload) {
         let confirmationMessage = `請確認是否取消 ${payload.shipment.requestDate} 【${payload.shipment.CUS_SNM}】 進貨 ${payload.shipment.PRDT_SNM}`;
         if (confirm(confirmationMessage)) {
@@ -88,6 +63,31 @@ export default {
                 });
             });
         }
+    },
+    scheduleNewShipment(context, requestContent) {
+        Vue.http.post(`${serverUrl}/data/planSchedule/add`, {
+            requestDate: requestContent.requestDate,
+            CUS_NO: requestContent.CUS_NO,
+            PRD_NO: requestContent.PRD_NO,
+            typeId: requestContent.typeId,
+            quantity: requestContent.quantity
+        }, {
+            headers: { 'x-access-token': sessionStorage.token }
+        }).then((response) => {
+            response.json().then((response) => {
+                context.commit('updatePlanSchedule', response);
+                context.commit('newYearSelection', new Date(requestContent.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(requestContent.requestDate).getMonth());
+                alert('原料預約進廠成功');
+                alert('implement broadcast');
+            });
+        }, (error) => {
+            error.json().then((error) => {
+                alert(`預約進貨發生錯誤:\n${error.errorMessage}\n系統即將重置`);
+                sessionStorage.clear();
+                window.location.replace(`${serverUrl}/index.html`);
+            });
+        });
     },
     updateRecord: function(context, payload) {
         Vue.http.put(`${serverUrl}/data/planSchedule/update`, {
