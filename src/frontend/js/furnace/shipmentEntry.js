@@ -29,7 +29,6 @@ export let shipmentEntry = {
     },
     methods: {
         ...mapActions({
-            updatePlanSchedule: 'updatePlanSchedule',
             cancelShipment: 'cancelShipment',
             updateRecord: 'updateRecord'
         }),

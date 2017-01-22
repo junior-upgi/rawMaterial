@@ -68,13 +68,25 @@ export let shipmentTable = {
                 </tr>
             </thead>
             <tbody>
-                <emptyShipmentScheduleEntry v-if="planSchedule.length===0" :selected-year="selectedYear" :selected-month="selectedMonth"></emptyShipmentScheduleEntry>
+                <emptyShipmentScheduleEntry
+                    v-if="planSchedule.length===0"
+                    :selected-year="selectedYear"
+                    :selected-month="selectedMonth">
+                </emptyShipmentScheduleEntry>
                 <template v-else>
                     <template v-if="PRD_NO===null">
-                        <shipmentEntry v-for="shipment in planSchedule" v-if="((!shipment.deprecated)||(showRevision))" :shipment="shipment"></shipmentEntry>
+                        <shipmentEntry
+                            v-for="shipment in planSchedule"
+                            v-if="((!shipment.deprecated)||(showRevision))"
+                            :shipment="shipment">
+                        </shipmentEntry>
                     </template>
                     <template v-else>
-                        <shipmentEntry v-for="shipment in planSchedule" v-if="(shipment.PRD_NO === PRD_NO)&&((!shipment.deprecated)||(showRevision))" :shipment="shipment"></shipmentEntry>
+                        <shipmentEntry
+                            v-for="shipment in planSchedule"
+                            v-if="(shipment.PRD_NO === PRD_NO)&&((!shipment.deprecated)||(showRevision))"
+                            :shipment="shipment">
+                        </shipmentEntry>
                     <template>
                 </template>
             </tbody>
