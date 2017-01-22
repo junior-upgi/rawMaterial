@@ -78,11 +78,6 @@ router.put('/data/planSchedule/update', tokenValidation, function(request, respo
             }
             delete combined.id; // remove the id field
             utility.logger.info('create a new record with updated info');
-            console.log('--------------------------------------------------------');
-            console.log('========================================================');
-            utility.logger.info(combined);
-            console.log('========================================================');
-            console.log('--------------------------------------------------------');
             return shipment.table.create(combined);
         }).then(function() {
             utility.logger.info('return a fresh copy of updated schedule');

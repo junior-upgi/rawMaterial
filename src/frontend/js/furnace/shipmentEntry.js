@@ -27,16 +27,6 @@ export let shipmentEntry = {
     created: function() {
         this.prestine = true;
     },
-    filters: {
-        toTonnage: function(value, origQty, tempQty) {
-            return `${numeral(Math.round((value / origQty * tempQty) / 1000)).format('0,0')} 噸`;
-        },
-        toWeekday: function(dateString) {
-            let weekdayList = ['(日)', '(一)', '(二)', '(三)', '(四)', '(五)', '(六)'];
-            let weekdayIndex = new Date(dateString).getDay();
-            return weekdayList[weekdayIndex];
-        }
-    },
     methods: {
         ...mapActions({
             updatePlanSchedule: 'updatePlanSchedule',
@@ -61,31 +51,48 @@ export let shipmentEntry = {
                 return true;
             }
         },
+        processEmptyField: function(fieldName) {
+            // change empty field to null for eaiser backend handling
+            if ((this.tempRecord[fieldName] === '') && (this.shipment[fieldName] === null)) {
+                this.tempRecord[fieldName] = null;
+            }
+        },
+        checkForDifference: function(fieldName) {
+            // checking if any actual modification exists
+            let diffCount = 0; // hold count of difference
+            for (let index in this.tempRecord) { // loop through tempRecord properties
+                // compare each property with data from shipment record(original value)
+                if (this.tempRecord[index] !== this.shipment[index]) {
+                    diffCount++; // count difference
+                }
+            }
+            this.prestine = (diffCount > 0) ? false : true; // if count is greater than 0, than mark dirty(unprestine)
+        },
         markUnprestine: function(fieldName) {
             switch (fieldName) {
-                case 'quantity': // perform null check, quantity is NOT a nullable field
+                case 'quantity':
                     if (this.tempRecord.quantity === '') {
-                        alert('預約車次必須大於\'1\'，若要取消請使用取消按鈕。\n\n資料將還原至原始狀態');
+                        alert('預約車次必須有數值且大於\'1\'，若要取消請使用取消按鈕。\n\n資料將還原至原始狀態');
                         this.restoreRecord();
                         break;
                     } else {
-                        this.prestine = false;
+                        this.checkForDifference(fieldName);
                         break;
                     }
-                case 'arrivalDate': // check date so no future date is picked
+                case 'arrivalDate':
+                    // check date so no future date is picked
                     if (!this.checkArrivalDate()) {
                         alert('到場日期不可為未來日期。\n\n資料將還原至原始狀態');
                         this.restoreRecord();
                         break;
                     } else {
-                        this.prestine = false;
+                        this.processEmptyField(fieldName);
+                        this.checkForDifference(fieldName);
                         break;
                     }
                 default:
-                    if ((this.tempRecord[fieldName] === '') && (this.shipment[fieldName] === null)) {
-                        this.tempRecord[fieldName] = null; // change empty field to null for eaiser backend handling
-                    }
-                    this.prestine = false;
+                    this.processEmptyField(fieldName);
+                    this.checkForDifference(fieldName);
                     break;
             }
         },
@@ -106,6 +113,16 @@ export let shipmentEntry = {
                 };
                 this.updateRecord(payload);
             }
+        }
+    },
+    filters: {
+        toTonnage: function(value, origQty, tempQty) {
+            return `${numeral(Math.round((value / origQty * tempQty) / 1000)).format('0,0')} 噸`;
+        },
+        toWeekday: function(dateString) {
+            let weekdayList = ['(日)', '(一)', '(二)', '(三)', '(四)', '(五)', '(六)'];
+            let weekdayIndex = new Date(dateString).getDay();
+            return weekdayList[weekdayIndex];
         }
     },
     template: `

@@ -5,24 +5,6 @@ Vue.use(VueResource);
 import { serverUrl } from '../config.js';
 
 export default {
-    updatePlanSchedule(context, selectedTime) {
-        Vue.http.post(`${serverUrl}/data/planSchedule`, {
-            year: selectedTime.selectedYear,
-            month: selectedTime.selectedMonth
-        }, {
-            headers: { 'x-access-token': sessionStorage.token }
-        }).then((response) => {
-            response.json().then((response) => {
-                context.commit('updatePlanSchedule', response);
-            });
-        }, (error) => {
-            error.json().then((error) => {
-                alert(`進貨時間表查詢發生錯誤:\n${error.errorMessage}\n系統即將重置`);
-                sessionStorage.clear();
-                window.location.replace(`${serverUrl}/index.html`);
-            });
-        });
-    },
     updateRawMatList(context) {
         Vue.http.get(`${serverUrl}/data/rawMaterialSpecDetail`, {
             headers: { 'x-access-token': sessionStorage.token }
@@ -84,6 +66,24 @@ export default {
         }, (error) => {
             error.json().then((error) => {
                 alert(`預約進貨發生錯誤:\n${error.errorMessage}\n系統即將重置`);
+                sessionStorage.clear();
+                window.location.replace(`${serverUrl}/index.html`);
+            });
+        });
+    },
+    updatePlanSchedule(context, selectedTime) {
+        Vue.http.post(`${serverUrl}/data/planSchedule`, {
+            year: selectedTime.selectedYear,
+            month: selectedTime.selectedMonth
+        }, {
+            headers: { 'x-access-token': sessionStorage.token }
+        }).then((response) => {
+            response.json().then((response) => {
+                context.commit('updatePlanSchedule', response);
+            });
+        }, (error) => {
+            error.json().then((error) => {
+                alert(`進貨時間表查詢發生錯誤:\n${error.errorMessage}\n系統即將重置`);
                 sessionStorage.clear();
                 window.location.replace(`${serverUrl}/index.html`);
             });
