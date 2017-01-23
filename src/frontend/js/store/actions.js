@@ -124,5 +124,21 @@ export default {
                 window.location.replace(`${serverUrl}/index.html`);
             });
         });
+    },
+    updateMonthlyMemo: function(context, payload) {
+        context.commit('clearMonthlyMemo');
+        Vue.http.post(`${serverUrl}/monthlyMemo/${payload.selectedYear}/${payload.selectedMonth}`, {
+            content: payload.content
+        }, {
+            headers: { 'x-access-token': sessionStorage.token }
+        }).then((response) => {
+            context.commit('initMonthlyMemo', response.body[0]);
+        }, (error) => {
+            error.json().then((error) => {
+                alert(`注意事項留言板內容更新發生錯誤:\n${error.errorMessage})\n系統即將重置`);
+                sessionStorage.clear();
+                window.location.replace(`${serverUrl}/index.html`);
+            });
+        });
     }
 };

@@ -12,7 +12,11 @@ export let monthlyMemoBulletin = {
             monthlyMemo: 'getMonthlyMemo'
         }),
         bulletinTitle: function() {
-            return `  ${this.selectedYear} 年 ${this.selectedMonth + 1} 月份注意事項留言板`;
+            if ((this.currentContent !== this.monthlyMemo) && (this.monthlyMemoStatus === true)) {
+                return `${this.selectedYear} 年 ${this.selectedMonth + 1} 月份注意事項留言板 (新增內容待儲存)`;
+            } else {
+                return `${this.selectedYear} 年 ${this.selectedMonth + 1} 月份注意事項留言板`;
+            }
         }
     },
     props: ['selectedYear', 'selectedMonth'],
@@ -34,8 +38,21 @@ export let monthlyMemoBulletin = {
         }
     },
     methods: {
-        ...mapActions({ initMonthlyMemo: 'initMonthlyMemo' }),
-        ...mapMutations({ updateStatusMessage: 'updateStatusMessage' })
+        ...mapActions({
+            initMonthlyMemo: 'initMonthlyMemo',
+            updateMonthlyMemo: 'updateMonthlyMemo'
+        }),
+        ...mapMutations({ updateStatusMessage: 'updateStatusMessage' }),
+        updateMemo: function(currentContent) {
+            if (currentContent !== this.monthlyMemo) {
+                this.updateMonthlyMemo({
+                    type: 'updateMonthlyMemo',
+                    selectedYear: this.selectedYear,
+                    selectedMonth: this.selectedMonth,
+                    content: this.currentContent
+                });
+            }
+        }
     },
     created: function() {
         this.initMonthlyMemo({
@@ -44,9 +61,17 @@ export let monthlyMemoBulletin = {
             selectedMonth: this.selectedMonth
         });
     },
+    updated: function() {
+        let monthlyMemoBulletin = document.getElementById('monthlyMemoBulletin');
+        monthlyMemoBulletin.scrollTop = monthlyMemoBulletin.scrollHeight;
+    },
     template: `
         <footer class="navbar-fixed-bottom">
-            <textarea class="form-control" id="monthlyMemoBulletin" rows="10" :placeholder="bulletinTitle" style="width:100%;resize:none;background-color:#B3FFFF;" v-model="currentContent"></textarea>
-            <br>
+            <div class="panel panel-primary">
+                <div class="panel-heading">{{bulletinTitle}}</div>
+                <div class="panel-body">
+                    <textarea class="form-control" id="monthlyMemoBulletin" rows="5" placeholder="請輸入備忘項目" style="width:100%;border:none;resize:none;" v-model="currentContent" @blur="updateMemo(currentContent)"></textarea>
+                </div>
+            </div>
         </footer>`
 };
