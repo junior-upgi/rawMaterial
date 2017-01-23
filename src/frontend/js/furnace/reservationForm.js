@@ -12,9 +12,20 @@ export let reservationForm = {
     store: store,
     computed: {
         ...mapGetters({
+            selectedYear: 'getSelectedYear',
+            selectedMonth: 'getSelectedMonth',
             showRevision: 'getShowRevision',
             rawMatList: 'getRawMatList'
-        })
+        }),
+        allowBatchReservation: function() {
+            let firstDateOfCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // first day of the current month
+            let firstDateOfSelectedMonthYear = new Date(this.selectedYear, this.selectedMonth, 1); // first day of the selected month/year
+            if (!(this.selectedRawMatIndex >= 0) && (firstDateOfCurrentMonth <= firstDateOfSelectedMonthYear)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     },
     data: function() {
         return {
@@ -25,7 +36,10 @@ export let reservationForm = {
     },
     created: function() { this.updateRawMatList(); },
     methods: {
-        ...mapMutations({ rawMatSelected: 'rawMatSelected' }),
+        ...mapMutations({
+            rawMatSelected: 'rawMatSelected',
+            toggleEnableBatchReservation: 'toggleEnableBatchReservation'
+        }),
         ...mapActions({
             updateRawMatList: 'updateRawMatList',
             scheduleNewShipment: 'scheduleNewShipment'
@@ -73,6 +87,10 @@ export let reservationForm = {
             <input type="date" class="form-control" required v-model="requestDate" @change="checkDateValidity" required />
             <input type="number" class="form-control" placeholder="數量" min="1" v-model="quantity" required />
             <button type="submit" class="btn btn-default" @click="makeReservation">預約</button>
-            <button type="button" class="btn btn-default" disabled>批次預約</button>
+            <button
+                type="button"
+                class="btn btn-default"
+                :disabled="allowBatchReservation"
+                @click="toggleEnableBatchReservation">批次預約</button>
         </form>`
 };

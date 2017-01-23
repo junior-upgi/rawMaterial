@@ -23,9 +23,10 @@ export default {
             state.rawMatList = [];
             state.yearSelected = new Date().getFullYear();
             state.monthSelected = new Date().getMonth();
+            state.selectedRawMatIndex = '-1';
             state.CUS_NO = null;
             state.PRD_NO = null;
-            state.TypeId = null;
+            state.typeId = null;
             state.showRevision = false;
             state.monthlyMemo = null;
             state.monthlyMemoLoaded = false;
@@ -39,13 +40,15 @@ export default {
     updateRawMatList(state, rawMatListData) { state.rawMatList = rawMatListData.slice(); },
     rawMatSelected(state, rawMatSelection) {
         if (rawMatSelection !== '-1') {
+            state.selectedRawMatIndex = rawMatSelection;
             state.CUS_NO = state.rawMatList[rawMatSelection].CUS_NO;
             state.PRD_NO = state.rawMatList[rawMatSelection].PRD_NO;
             state.typeId = state.rawMatList[rawMatSelection].typeId;
         } else {
+            state.selectedRawMatIndex = '-1';
             state.CUS_NO = null;
             state.PRD_NO = null;
-            state.TypeId = null;
+            state.typeId = null;
         }
     },
     clearMonthlyMemo(state) {
@@ -55,5 +58,8 @@ export default {
     initMonthlyMemo(state, monthlyMemo) {
         state.monthlyMemo = monthlyMemo.content;
         state.monthlyMemoLoaded = true;
+    },
+    toggleEnableBatchReservation(state) {
+        state.enableBatchReservation = !state.enableBatchReservation;
     }
 };

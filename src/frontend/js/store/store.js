@@ -18,10 +18,12 @@ export const store = new Vuex.Store({
         rawMatList: [],
         yearSelected: new Date().getFullYear(),
         monthSelected: new Date().getMonth(),
+        selectedRawMatIndex: '-1', // this is selection value (should be typed as string and not number)
         CUS_NO: null,
         PRD_NO: null,
-        TypeId: null,
+        typeId: null,
         showRevision: false,
+        enableBatchReservation: false,
         monthlyMemo: null,
         monthlyMemoLoaded: false,
         lastStatusMessage: '程式初始化...'

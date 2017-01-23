@@ -21,11 +21,28 @@ export default {
         'monthly-memo-bulletin': monthlyMemoBulletin,
         'batch-reservation': batchReservation
     },
-    computed: { ...mapGetters({
+    computed: {
+        ...mapGetters({
             showRevision: 'getShowRevision',
             selectedYear: 'getSelectedYear',
-            selectedMonth: 'getSelectedMonth'
-        })
+            selectedMonth: 'getSelectedMonth',
+            rawMatList: 'getRawMatList',
+            selectedRawMatIndex: 'getSelectedRawMatIndex',
+            enableBatchReservation: 'getEnableBatchReservation'
+        }),
+        batchReservationReady: function() {
+            let firstDateOfCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // first day of the current month
+            let firstDateOfSelectedMonthYear = new Date(this.selectedYear, this.selectedMonth, 1); // first day of the selected month/year
+            // condition is met when all the following are true
+            // A. a valid raw material is selected (index value > 0, since -1 is the general default selection)
+            // B. enableBatchReservation state variable is set to true by button press
+            // C. the current month is in the prior then the selected year month(only current month or future reservation is allowed)
+            if ((this.selectedRawMatIndex >= 0) && this.enableBatchReservation && (firstDateOfCurrentMonth <= firstDateOfSelectedMonthYear)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     },
     methods: {
         ...mapMutations({
@@ -57,7 +74,8 @@ export default {
                     </div>
                 </nav>
             </div>
-            <batch-reservation :selected-year="selectedYear" :selected-month="selectedMonth"></batch-reservation>
+            <batch-reservation v-if="batchReservationReady" :selected-year="selectedYear" :selected-month="selectedMonth">
+            </batch-reservation>
             <div class="row">
                 <shipment-table></shipment-table>
             </div>

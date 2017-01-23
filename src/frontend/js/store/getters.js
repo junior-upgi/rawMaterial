@@ -18,6 +18,8 @@ export default {
     getRawMatList: function(state) { return state.rawMatList; },
     getRawMatErpId: function(state) { return state.PRD_NO; },
     getMonthlyMemoStatus: function(state) { return state.monthlyMemoLoaded; },
+    getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
+    getEnableBatchReservation: function(state) { return state.enableBatchReservation; },
     getMonthlyMemo: function(state) {
         if (state.monthlyMemoLoaded === false) {
             return null;
