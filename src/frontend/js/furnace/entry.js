@@ -9,6 +9,7 @@ import { scheduleSelector } from './scheduleSelector.js';
 import { reservationForm } from './reservationForm.js';
 import { shipmentTable } from './shipmentTable.js';
 import { monthlyMemoBulletin } from './monthlyMemoBulletin.js';
+import batchReservation from './batchReservation.js';
 
 export default {
     name: 'furnaceComponent',
@@ -17,7 +18,8 @@ export default {
         'schedule-selector': scheduleSelector,
         'reservation-form': reservationForm,
         'shipment-table': shipmentTable,
-        'monthly-memo-bulletin': monthlyMemoBulletin
+        'monthly-memo-bulletin': monthlyMemoBulletin,
+        'batch-reservation': batchReservation
     },
     computed: { ...mapGetters({
             showRevision: 'getShowRevision',
@@ -55,6 +57,7 @@ export default {
                     </div>
                 </nav>
             </div>
+            <batch-reservation :selected-year="selectedYear" :selected-month="selectedMonth"></batch-reservation>
             <div class="row">
                 <shipment-table></shipment-table>
             </div>
