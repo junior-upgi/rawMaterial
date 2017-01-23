@@ -35,7 +35,28 @@ export let shipmentTable = {
             showRevision: 'getShowRevision',
             planSchedule: 'getPlanSchedule',
             PRD_NO: 'getRawMatErpId'
-        })
+        }),
+        noDisplayableData: function() {
+            if (this.planSchedule.length === 0) {
+                return true;
+            } else {
+                let entryCount = 0;
+                if (this.PRD_NO === null) {
+                    this.planSchedule.forEach((shipment) => {
+                        if (((shipment.deprecated) && (this.showRevision)) || (!shipment.deprecated)) {
+                            entryCount++;
+                        }
+                    });
+                } else {
+                    this.planSchedule.forEach((shipment) => {
+                        if ((shipment.PRD_NO === this.PRD_NO) && (((shipment.deprecated) && (this.showRevision)) || (!shipment.deprecated))) {
+                            entryCount++;
+                        }
+                    });
+                }
+                return (entryCount === 0) ? true : false;
+            }
+        }
     },
     methods: {
         ...mapActions({
@@ -69,9 +90,9 @@ export let shipmentTable = {
                     <th colspan="2" class="text-center"></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="dataRecordContainer">
                 <emptyShipmentScheduleEntry
-                    v-if="planSchedule.length===0"
+                    v-if="noDisplayableData"
                     :selected-year="selectedYear"
                     :selected-month="selectedMonth">
                 </emptyShipmentScheduleEntry>
@@ -84,6 +105,7 @@ export let shipmentTable = {
                         </shipmentEntry>
                     </template>
                     <template v-else>
+                        <template></template>
                         <shipmentEntry
                             v-for="shipment in planSchedule"
                             v-if="(shipment.PRD_NO === PRD_NO)&&((!shipment.deprecated)||(showRevision))"
