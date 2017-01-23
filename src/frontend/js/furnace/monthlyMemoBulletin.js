@@ -67,8 +67,8 @@ export let monthlyMemoBulletin = {
     },
     template: `
         <footer class="navbar-fixed-bottom">
-            <div class="panel panel-primary">
-                <div class="panel-heading">{{bulletinTitle}}</div>
+            <div class="panel panel-primary" style="border:none;">
+                <div class="panel-heading"><strong>{{bulletinTitle}}<strong></div>
                 <div class="panel-body">
                     <textarea class="form-control" id="monthlyMemoBulletin" rows="5" placeholder="請輸入備忘項目" style="width:100%;border:none;resize:none;" v-model="currentContent" @blur="updateMemo(currentContent)"></textarea>
                 </div>
