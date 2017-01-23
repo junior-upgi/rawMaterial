@@ -167,25 +167,36 @@ export let shipmentEntry = {
             </td>
             <!-- weight on supplier's shipment bill -->
             <td class="text-right">
-                <s v-if="shipment.deprecated"><small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <span v-if="shipment.supplierWeight===null"></span>
+                <span v-else-if="shipment.deprecated">
+                    <s><small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
+                </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
                 <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.supplierWeight" @change="markUnprestine('supplierWeight')" />
             </td>
             <!-- full truck enter weight -->
             <td class="text-right">
-                <s v-if="shipment.deprecated"><small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <span v-if="shipment.supplierWeight===null"></span>
+                <span v-else-if="shipment.deprecated">
+                    <s><small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
+                </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
                 <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.fullWeight" @change="markUnprestine('fullWeight')" />
             </td>
             <!-- empty truck exit weight -->
             <td class="text-right">
-                <s v-if="shipment.deprecated"><small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small>&nbsp;</s>
+                <span v-if="shipment.supplierWeight===null"></span>
+                <span v-else-if="shipment.deprecated">
+                    <s><small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
+                </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
                 <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.emptyWeight" @change="markUnprestine('emptyWeight')" />
             </td>
             <!-- notes -->
             <td>
-                <s v-if="shipment.deprecated">&nbsp;<small>{{shipment.note}}</small></s>
+                <span v-if="shipment.deprecated">
+                    &nbsp;<s><small>{{shipment.note}}</small></s>
+                </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.note}}</small></b>
                 <input v-else class="form-control input-sm" type="text" maxlength="255" v-model="tempRecord.note" @change="markUnprestine('note')" />
             </td>

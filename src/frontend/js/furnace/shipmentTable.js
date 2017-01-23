@@ -64,9 +64,9 @@ export let shipmentTable = {
                     <th class="col-xs-3">&nbsp;&nbsp;<strong>原料項目</strong></th>
                     <th class="text-center col-xs-1"><strong>預約車次</strong></th>
                     <th class="text-center col-xs-1"><strong>進場日期</strong></th>
-                    <th class="text-right col-xs-1"><strong>出車秤重</strong>&nbsp;&nbsp;</th>
-                    <th class="text-right col-xs-1"><strong>入廠秤重</strong>&nbsp;&nbsp;</th>
-                    <th class="text-right col-xs-1"><strong>出廠秤重</strong>&nbsp;&nbsp;</th>
+                    <th class="text-center col-xs-1"><strong>出車秤重</strong></th>
+                    <th class="text-center col-xs-1"><strong>入廠秤重</strong></th>
+                    <th class="text-center col-xs-1"><strong>出廠秤重</strong></th>
                     <th class="col-xs-3">&nbsp;&nbsp;<strong>備註</strong></th>
                     <th colspan="2" class="text-center"></th>
                 </tr>
