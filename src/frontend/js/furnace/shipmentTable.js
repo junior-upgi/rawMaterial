@@ -54,7 +54,7 @@ export let shipmentTable = {
         });
     },
     template: `
-        <table class="table table-striped table-hover table-condensed">
+        <table class="table table-hover table-condensed">
             <thead>
                 <tr class="row">
                     <th class="text-center"></th>

@@ -11,6 +11,16 @@ export let shipmentEntry = {
     name: 'shipmentEntry',
     store: store,
     props: ['shipment'],
+    computed: {
+        isWeekend: function() {
+            let weekdayIndex = new Date(this.shipment.requestDate).getDay();
+            if ((weekdayIndex === 0) || (weekdayIndex === 6)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
     data: function() {
         return {
             prestine: null,
@@ -133,7 +143,7 @@ export let shipmentEntry = {
         }
     },
     template: `
-        <tr class="row">
+        <tr class="row" :class="{'bg-danger':isWeekend}">
             <!-- cancel buttons -->
             <td class="text-center">
                 <button v-if="(!shipment.deprecated)&&(!shipment.finalized)" type="button" class="btn btn-danger btn-sm" @click="cancelShipment({type:'cancelShipment',shipment:shipment})">
@@ -162,13 +172,13 @@ export let shipmentEntry = {
             <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.quantity}}</small></s>
                 <b v-else-if="shipment.finalized"><small>{{shipment.quantity}}</small></b>
-                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="tempRecord.quantity" :title="shipment.estWeight|toTonnage(shipment.quantity,tempRecord.quantity)" @change="markUnprestine('quantity')" />
+                <input v-else class="form-control input-sm text-center" type="number" min="1" v-model="tempRecord.quantity" :title="shipment.estWeight|toTonnage(shipment.quantity,tempRecord.quantity)" @change="markUnprestine('quantity')" style="border:none;" />
             </td>
             <!-- date of arrival -->
             <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.arrivalDate}}</small></s>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.arrivalDate}}</small></b>
-                <input v-else class="form-control input-sm text-center" type="date" v-model="tempRecord.arrivalDate" @change="markUnprestine('arrivalDate')" />
+                <input v-else class="form-control input-sm text-center" type="date" v-model="tempRecord.arrivalDate" @change="markUnprestine('arrivalDate')" style="border:none;" />
             </td>
             <!-- weight on supplier's shipment bill -->
             <td class="text-right">
@@ -177,7 +187,7 @@ export let shipmentEntry = {
                     <s><small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
                 </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
-                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.supplierWeight" @change="markUnprestine('supplierWeight')" />
+                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.supplierWeight" @change="markUnprestine('supplierWeight')" style="border:none;" />
             </td>
             <!-- full truck enter weight -->
             <td class="text-right">
@@ -186,7 +196,7 @@ export let shipmentEntry = {
                     <s><small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
                 </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
-                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.fullWeight" @change="markUnprestine('fullWeight')" />
+                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.fullWeight" @change="markUnprestine('fullWeight')" style="border:none;" />
             </td>
             <!-- empty truck exit weight -->
             <td class="text-right">
@@ -195,7 +205,7 @@ export let shipmentEntry = {
                     <s><small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
                 </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small>&nbsp;</b>
-                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.emptyWeight" @change="markUnprestine('emptyWeight')" />
+                <input v-else class="form-control input-sm text-right" type="number" min="1" v-model="tempRecord.emptyWeight" @change="markUnprestine('emptyWeight')" style="border:none;" />
             </td>
             <!-- notes -->
             <td>
@@ -203,7 +213,7 @@ export let shipmentEntry = {
                     &nbsp;<s><small>{{shipment.note}}</small></s>
                 </span>
                 <b v-else-if="shipment.finalized">&nbsp;<small>{{shipment.note}}</small></b>
-                <input v-else class="form-control input-sm" type="text" maxlength="255" v-model="tempRecord.note" @change="markUnprestine('note')" />
+                <input v-else class="form-control input-sm" type="text" maxlength="255" v-model="tempRecord.note" @change="markUnprestine('note')" style="border:none;" />
             </td>
             <!-- save buttons -->
             <td class="text-center">
