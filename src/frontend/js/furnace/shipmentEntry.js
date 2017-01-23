@@ -167,7 +167,7 @@ export let shipmentEntry = {
             </td>
             <!-- weight on supplier's shipment bill -->
             <td class="text-right">
-                <span v-if="shipment.supplierWeight===null"></span>
+                <span v-if="shipment.deprecated && shipment.supplierWeight===null"></span>
                 <span v-else-if="shipment.deprecated">
                     <s><small>{{shipment.supplierWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
                 </span>
@@ -176,7 +176,7 @@ export let shipmentEntry = {
             </td>
             <!-- full truck enter weight -->
             <td class="text-right">
-                <span v-if="shipment.supplierWeight===null"></span>
+                <span v-if="shipment.deprecated && shipment.fullWeight===null"></span>
                 <span v-else-if="shipment.deprecated">
                     <s><small>{{shipment.fullWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
                 </span>
@@ -185,7 +185,7 @@ export let shipmentEntry = {
             </td>
             <!-- empty truck exit weight -->
             <td class="text-right">
-                <span v-if="shipment.supplierWeight===null"></span>
+                <span v-if="shipment.deprecated && shipment.emptyWeight===null"></span>
                 <span v-else-if="shipment.deprecated">
                     <s><small>{{shipment.emptyWeight|formatWeight(shipment.UT)}}</small></s>&nbsp;
                 </span>
