@@ -3,7 +3,7 @@ export default {
     props: ['selectedYear', 'selectedMonth'],
     data: function() {
         return {
-            weekdayList: ['(日)', '(一)', '(二)', '(三)', '(四)', '(五)', '(六)']
+            weekdayList: ['週日', '週一', '週二', '週三', '週四', '週五', '週六']
         };
     },
     computed: {
@@ -14,7 +14,7 @@ export default {
     methods: {
         dateLabel: function(datePart) {
             let date = new Date(`${this.selectedYear.toString()}-${(this.selectedMonth + 1).toString()}-${datePart.toString()}`);
-            return `${date.getDate()} ${this.weekdayList[date.getDay()]}`;
+            return `${date.getMonth() + 1}/${date.getDate()}`;
         },
         dateMatching(weekIndex, weekdayIndex, dayInMonthIndex) {
             let weekdayIndexOfFirst = new Date(`${this.selectedYear.toString()}-${(this.selectedMonth + 1).toString()}-1`).getDay();
@@ -40,10 +40,23 @@ export default {
                     <tbody>
                         <tr v-for="weekIndex in 5">
                             <td v-for="weekdayIndex in 7" class="text-center" style="border:1px sold black;">
-                                <button v-for="dayInMonthIndex in daysInMonth" v-if="dateMatching(weekIndex,weekdayIndex,dayInMonthIndex)" type="button" class="btn btn-default btn-xs">{{dateLabel(dayInMonthIndex)}}</button>
+                                <button
+                                    v-for="dayInMonthIndex in daysInMonth"
+                                    v-if="dateMatching(weekIndex,weekdayIndex,dayInMonthIndex)"
+                                    type="button" class="btn btn-default btn-xs">
+                                    {{dateLabel(dayInMonthIndex)}}
+                                </button>
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="row text-center" colspan="7">
+                                <button type="button" class="btn btn-primary btn-md">預約</button>
+                                <button type="button" class="btn btn-danger btn-md">取消</button>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>`
