@@ -73,5 +73,6 @@ export let reservationForm = {
             <input type="date" class="form-control" required v-model="requestDate" @change="checkDateValidity" required />
             <input type="number" class="form-control" placeholder="數量" min="1" v-model="quantity" required />
             <button type="submit" class="btn btn-default" @click="makeReservation">預約</button>
+            <button type="button" class="btn btn-default" disabled>批次預約</button>
         </form>`
 };
