@@ -49,22 +49,26 @@ export let scheduleSelector = {
             newMonthSelection: 'newMonthSelection'
         }),
         selectYear: function(newYearSelection) {
-            this.newYearSelection(newYearSelection);
-            this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: this.selectedMonth });
-            this.initMonthlyMemo({
-                type: 'initMonthlyMemo',
-                selectedYear: newYearSelection,
-                selectedMonth: this.selectedMonth
-            });
+            if (newYearSelection !== this.selectedYear) {
+                this.newYearSelection(newYearSelection);
+                this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: this.selectedMonth });
+                this.initMonthlyMemo({
+                    type: 'initMonthlyMemo',
+                    selectedYear: newYearSelection,
+                    selectedMonth: this.selectedMonth
+                });
+            }
         },
-        selectMonth: function(index) {
-            this.newMonthSelection(index);
-            this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: index });
-            this.initMonthlyMemo({
-                type: 'initMonthlyMemo',
-                selectedYear: this.selectedYear,
-                selectedMonth: index
-            });
+        selectMonth: function(newMonthSelection) {
+            if (newMonthSelection !== this.selectedMonth) {
+                this.newMonthSelection(newMonthSelection);
+                this.updatePlanSchedule({ type: 'updatePlanSchedule', selectedYear: this.selectedYear, selectedMonth: newMonthSelection });
+                this.initMonthlyMemo({
+                    type: 'initMonthlyMemo',
+                    selectedYear: this.selectedYear,
+                    selectedMonth: newMonthSelection
+                });
+            }
         }
     },
     template: `
