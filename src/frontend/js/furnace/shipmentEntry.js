@@ -27,6 +27,11 @@ export let shipmentEntry = {
     created: function() {
         this.prestine = true;
     },
+    watch: {
+        shipment: function(updatedShipmentObject) {
+            this.restoreRecord();
+        }
+    },
     methods: {
         ...mapActions({
             cancelShipment: 'cancelShipment',

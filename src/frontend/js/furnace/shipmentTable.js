@@ -6,7 +6,6 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { store } from '../store/store.js';
 
 import { shipmentEntry } from './shipmentEntry.js';
-import { monthlyMemoBulletin } from './monthlyMemoBulletin.js';
 
 let emptyShipmentScheduleEntry = {
     name: 'emptyShipmentScheduleEntry',
@@ -27,8 +26,7 @@ export let shipmentTable = {
     },
     components: {
         'emptyShipmentScheduleEntry': emptyShipmentScheduleEntry,
-        'shipmentEntry': shipmentEntry,
-        'monthlyMemoBulletin': monthlyMemoBulletin
+        'shipmentEntry': shipmentEntry
     },
     computed: {
         ...mapGetters({
@@ -96,10 +94,16 @@ export let shipmentTable = {
             </tbody>
             <tfoot>
                 <tr class="row">
-                    <td colspan="11">
-                        <h4>&nbsp;&nbsp;&nbsp;注意事項</h4>
-                        <monthlyMemoBulletin :selected-year="selectedYear" :selected-month="selectedMonth"></monthlyMemoBulletin>
-                    </td>
+                    <th class="text-center"></th>
+                    <th class="text-center col-xs-1"><strong>需求日期</strong></th>
+                    <th class="col-xs-3">&nbsp;&nbsp;<strong>原料項目</strong></th>
+                    <th class="text-center col-xs-1"><strong>預約車次</strong></th>
+                    <th class="text-center col-xs-1"><strong>進場日期</strong></th>
+                    <th class="text-center col-xs-1"><strong>出車秤重</strong></th>
+                    <th class="text-center col-xs-1"><strong>入廠秤重</strong></th>
+                    <th class="text-center col-xs-1"><strong>出廠秤重</strong></th>
+                    <th class="col-xs-3">&nbsp;&nbsp;<strong>備註</strong></th>
+                    <th colspan="2" class="text-center"></th>
                 </tr>
             </tfoot>
         </table>`

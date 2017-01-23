@@ -10,7 +10,7 @@ export default {
         })
     },
     template: `
-        <footer class="navbar-fixed-bottom">
+        <footer class="navbar-fixed-bottom" style="background-color:white;">
             <div class="col-xs-8 text-left">
                 <span>{{ statusMessage }}</span>
             </div>
