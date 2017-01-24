@@ -17,10 +17,16 @@ export let reservationForm = {
             showRevision: 'getShowRevision',
             rawMatList: 'getRawMatList'
         }),
+        firstDateOfCurrentMonth() {
+            let firstDateOfCurrentMonth = new Date().setDate(1);
+            return moment(firstDateOfCurrentMonth, 'YYYY-MM-DD HH:mm:ss');
+        },
+        firstDateOfSelectedMonthYear() {
+            let firstDateOfSelectedMonthYear = new Date(this.selectedYear, this.selectedMonth, 1);
+            return moment(firstDateOfSelectedMonthYear, 'YYYY-MM-DD HH:mm:ss');
+        },
         disallowBatchReservation: function() {
-            let firstDateOfCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // first day of the current month
-            let firstDateOfSelectedMonthYear = new Date(this.selectedYear, this.selectedMonth, 1); // first day of the selected month/year
-            if (!(this.selectedRawMatIndex >= 0) && (firstDateOfCurrentMonth <= firstDateOfSelectedMonthYear)) {
+            if ((parseInt(this.selectedRawMatIndex) === -1) || (this.firstDateOfCurrentMonth <= this.firstDateOfSelectedMonthYear)) {
                 return true;
             } else {
                 return false;
@@ -78,17 +84,18 @@ export let reservationForm = {
     },
     template: `
         <form id="reservationForm" class="navbar-form navbar-left" @submit.prevent>
-            <select class="form-control xs-col-12" v-model="selectedRawMatIndex" @change="rawMatSelected(selectedRawMatIndex)" required >
+            <select style="font-size: 6px;" class="form-control" v-model="selectedRawMatIndex" @change="rawMatSelected(selectedRawMatIndex)" required >
                 <option value="-1">顯示本月所有進貨作業項目</option>
                 <option v-for="(rawMat, index) in rawMatList" :value="index">
                     【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} {{rawMat.specification}} (每車約 {{rawMat.unitPerTruck|toTonnage}})
                 </option>
             </select>
-            <input type="date" class="form-control" required v-model="requestDate" @change="checkDateValidity" required />
-            <input type="number" class="form-control" placeholder="數量" min="1" v-model="quantity" required />
-            <button type="submit" class="btn btn-default" @click="makeReservation">預約</button>
+            <input style="font-size:6px;" type="date" class="form-control" required v-model="requestDate" @change="checkDateValidity" required />
+            <input style="font-size:6px;width:70px;" type="number" class="form-control text-center" placeholder="數量" min="1" v-model="quantity" required />
+            <button style="font-size:6px;" type="submit" class="btn btn-default" @click="makeReservation">預約</button>
             <button
                 type="button" class="btn btn-default"
+                style="font-size:6px;"
                 :disabled="disallowBatchReservation"
                 @click="toggleEnableBatchReservation">
                 批次預約

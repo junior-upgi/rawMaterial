@@ -19,6 +19,10 @@ export let shipmentEntry = {
             } else {
                 return false;
             }
+        },
+        isToday: function() {
+            let today = moment(new Date(), 'YYYY-MM-DD hh:mm:ss').format('YYYY-MM-DD');
+            return (today === this.shipment.requestDate) ? true : false;
         }
     },
     data: function() {
@@ -143,7 +147,7 @@ export let shipmentEntry = {
         }
     },
     template: `
-        <tr class="row" :class="{'bg-danger':isWeekend}">
+        <tr class="row" :class="{'bg-danger':isWeekend,'bg-primary':isToday}">
             <!-- cancel buttons -->
             <td class="text-center">
                 <button v-if="(!shipment.deprecated)&&(!shipment.finalized)" type="button" class="btn btn-danger btn-sm" @click="cancelShipment({type:'cancelShipment',shipment:shipment})">
@@ -156,7 +160,7 @@ export let shipmentEntry = {
             <td class="text-center">
                 <s v-if="shipment.deprecated"><small>{{shipment.requestDate}}&nbsp;{{shipment.requestDate|toWeekday}}</small></s>
                 <b v-else-if="shipment.finalized"><small>{{shipment.requestDate}}&nbsp;{{shipment.requestDate|toWeekday}}</small></b>
-                <template v-else>{{shipment.requestDate}}&nbsp;{{shipment.requestDate|toWeekday}}</template>
+                <template v-else><small>{{shipment.requestDate}}&nbsp;{{shipment.requestDate|toWeekday}}</small></template>
             </td>
             <!-- composite field display what kind of rawMat shipment is scheduled -->
             <td>

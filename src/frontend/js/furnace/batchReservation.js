@@ -1,56 +1,6 @@
-import moment from 'moment-timezone';
-
 import { mapGetters } from 'vuex';
 
-let reservationButton = {
-    name: 'reservationButton',
-    props: ['weekIndex', 'weekdayIndex', 'dayInMonthIndex'],
-    computed: {
-        ...mapGetters({
-            selectedYear: 'getSelectedYear',
-            selectedMonth: 'getSelectedMonth',
-            relevantSchedule: 'getRelevantSchedule'
-        }),
-        date: function() {
-            return moment(new Date(this.selectedYear, this.selectedMonth, this.dayInMonthIndex), 'YYYY-MM-DD HH:mm:ss');
-        },
-        dateLabel: function() {
-            return this.date.format('MM/DD');
-        },
-        disallowReservation: function() {
-            let date = new Date(this.selectedYear, this.selectedMonth, this.dayInMonthIndex);
-            let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-            if (today >= date) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        scheduled: function() {
-            let scheduled = false;
-            let date = this.date;
-            this.relevantSchedule.forEach(function(relevantShipment) {
-                if ((relevantShipment.requestDate === date.format('YYYY-MM-DD')) && !relevantShipment.deprecated) {
-                    scheduled = true;
-                }
-            });
-            return scheduled;
-        }
-    },
-    methods: {
-        processScheduleRequest: function() {
-            console.log('processing');
-        }
-    },
-    template: `
-        <button
-            type="button" class="btn btn-xs"
-            :disabled="disallowReservation"
-            :class="{'btn-primary':scheduled,'btn-default':!scheduled}"
-            @click="processScheduleRequest">
-            {{dateLabel}}
-        </button>`
-};
+import reservationButton from './reservationButton.js';
 
 export default {
     name: 'batchReservation',

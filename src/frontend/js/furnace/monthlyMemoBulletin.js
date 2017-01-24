@@ -17,12 +17,31 @@ export let monthlyMemoBulletin = {
             } else {
                 return `${this.selectedYear} 年 ${this.selectedMonth + 1} 月份注意事項留言板`;
             }
+        },
+        memoSize: function() { // v-bind to rows property of the textarea (for minimizing)
+            if (this.minimizedState) {
+                return 1;
+            } else {
+                return 10;
+            }
+        },
+        disallowEdit: function() { // v-bind to disabled property of the textarea (past bulletin does not allow edit)
+            let currentYear = new Date().getFullYear();
+            let currentMonth = new Date().getMonth();
+            if (currentYear < this.selectedYear) {
+                return false;
+            } else if (currentYear > this.selectedYear) {
+                return true;
+            } else {
+                return currentMonth > this.selectedMonth ? true : false;
+            }
         }
     },
     props: ['selectedYear', 'selectedMonth'],
     data: function() {
         return {
-            currentContent: null
+            currentContent: null,
+            minimizedState: true
         };
     },
     watch: {
@@ -52,6 +71,9 @@ export let monthlyMemoBulletin = {
                     content: this.currentContent
                 });
             }
+        },
+        minimizeToggle: function() { // reverse minimize toggle of the bulletin pane
+            this.minimizedState = !this.minimizedState;
         }
     },
     created: function() {
@@ -61,16 +83,30 @@ export let monthlyMemoBulletin = {
             selectedMonth: this.selectedMonth
         });
     },
-    updated: function() {
+    updated: function() { // keeps the textarea to always scroll to bottom at refresh
         let monthlyMemoBulletin = document.getElementById('monthlyMemoBulletin');
         monthlyMemoBulletin.scrollTop = monthlyMemoBulletin.scrollHeight;
     },
     template: `
         <footer class="navbar-fixed-bottom">
             <div class="panel panel-primary" style="border:none;">
-                <div class="panel-heading">{{bulletinTitle}}</div>
+                <div class="panel-heading">
+                    <template v-if="minimizedState">
+                        <span class="glyphicon glyphicon-triangle-top" @click="minimizeToggle"></span> {{bulletinTitle}}
+                    </template>
+                    <template v-else>
+                        <span class="glyphicon glyphicon-triangle-bottom" @click="minimizeToggle"></span> {{bulletinTitle}}
+                    </template>
+                </div>
                 <div class="panel-body">
-                    <textarea class="form-control" id="monthlyMemoBulletin" rows="5" placeholder="請輸入備忘項目" style="width:100%;border:none;resize:none;" v-model="currentContent" @blur="updateMemo(currentContent)"></textarea>
+                    <textarea
+                        id="monthlyMemoBulletin" placeholder="請輸入備忘項目"
+                        style="width:100%;border:none;resize:none;"
+                        class="form-control"
+                        :rows="memoSize"
+                        :disabled="disallowEdit"
+                        v-model="currentContent"
+                        @blur="updateMemo(currentContent)"></textarea>
                 </div>
             </div>
         </footer>`

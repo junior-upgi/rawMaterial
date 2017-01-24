@@ -1,0 +1,85 @@
+import moment from 'moment-timezone';
+
+import { mapGetters, mapMutations } from 'vuex';
+
+export default {
+    name: 'reservationButton',
+    props: ['weekIndex', 'weekdayIndex', 'dayInMonthIndex'],
+    computed: {
+        ...mapGetters({
+            selectedYear: 'getSelectedYear',
+            selectedMonth: 'getSelectedMonth',
+            relevantSchedule: 'getRelevantSchedule',
+            relevantShipment: 'getRelevantShipment',
+            CUS_NO: 'getSupplierErpId',
+            PRD_NO: 'getRawMatErpId',
+            typeId: 'getTypeId'
+        }),
+        date: function() {
+            return moment(new Date(this.selectedYear, this.selectedMonth, this.dayInMonthIndex), 'YYYY-MM-DD HH:mm:ss');
+        },
+        dateLabel: function() {
+            return this.date.format('MM/DD');
+        },
+        disallowReservation: function() { // disable the template button based on date and whether it's already toggled or not
+            let date = new Date(this.selectedYear, this.selectedMonth, this.dayInMonthIndex);
+            let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+            if ((today >= date) || (this.modified === true)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        scheduled: function() { // return true or false by checking if the template button is associated with an existing schedule shipment
+            let scheduled = false;
+            let date = this.date;
+            this.relevantSchedule.forEach(function(relevantShipment) {
+                if ((relevantShipment.requestDate === date.format('YYYY-MM-DD')) && !relevantShipment.deprecated) {
+                    scheduled = true;
+                }
+            });
+            return scheduled;
+        }
+    },
+    data: function() {
+        return {
+            modified: false
+        };
+    },
+    updated: function() {
+        this.modified = false;
+    },
+    methods: {
+        ...mapMutations({
+            pushBatchReservation: 'pushBatchReservation'
+        }),
+        processScheduleRequest: function() {
+            if (this.scheduled) { // if it's on the existing schedule, it's registered for cancellation(to deprecate)
+                this.pushBatchReservation({
+                    type: 'pushBatchReservation',
+                    action: 'delete',
+                    id: this.relevantShipment.id
+                });
+            } else { // if it's not scheduled yet, push a new object on to the batchReservationQueue in the store
+                this.pushBatchReservation({
+                    type: 'pushBatchReservation',
+                    action: 'post',
+                    requestDate: this.date.format('YYYY-MM-DD'),
+                    CUS_NO: this.CUS_NO,
+                    PRD_NO: this.PRD_NO,
+                    typeId: this.typeId,
+                    quantity: 1
+                });
+            }
+            this.modified = true;
+        }
+    },
+    template: `
+        <button
+            type="button" class="btn btn-xs"
+            :disabled="disallowReservation"
+            :class="{'btn-primary':scheduled,'btn-default':!scheduled}"
+            @click="processScheduleRequest">
+            {{dateLabel}}
+        </button>`
+};

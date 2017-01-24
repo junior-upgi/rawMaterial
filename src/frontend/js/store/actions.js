@@ -140,5 +140,8 @@ export default {
                 window.location.replace(`${serverUrl}/index.html`);
             });
         });
+    },
+    commitBatchReservation: function(context) {
+        context.commit('resetBatchReservation');
     }
 };

@@ -79,7 +79,7 @@ export let shipmentTable = {
             <thead>
                 <tr class="row">
                     <th class="text-center"></th>
-                    <th class="text-center col-xs-1"><strong>需求日期</strong></th>
+                    <th class="text-center col-xs-2"><strong>需求日期</strong></th>
                     <th class="col-xs-3">&nbsp;&nbsp;<strong>原料項目</strong></th>
                     <th class="text-center col-xs-1"><strong>預約車次</strong></th>
                     <th class="text-center col-xs-1"><strong>進場日期</strong></th>

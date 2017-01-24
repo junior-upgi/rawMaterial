@@ -16,7 +16,9 @@ export default {
     getShowRevision: function(state) { return state.showRevision; },
     getPlanSchedule: function(state) { return state.planSchedule; },
     getRawMatList: function(state) { return state.rawMatList; },
+    getSupplierErpId: function(state) { return state.CUS_NO; },
     getRawMatErpId: function(state) { return state.PRD_NO; },
+    getTypeId: function(state) { return state.typeId; },
     getMonthlyMemoStatus: function(state) { return state.monthlyMemoLoaded; },
     getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
     getEnableBatchReservation: function(state) { return state.enableBatchReservation; },
@@ -40,5 +42,13 @@ export default {
             }
         });
         return relevantSchedule;
+    },
+    getRelevantShipment: function(state) {
+        let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
+        return state.planSchedule.filter(function(shipment) {
+            return (shipment.CUS_NO === selectedRawMaterial.CUS_NO) &&
+                (shipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
+                (shipment.typeId === selectedRawMaterial.typeId);
+        })[0];
     }
 };

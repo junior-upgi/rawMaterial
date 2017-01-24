@@ -76,13 +76,13 @@ export let scheduleSelector = {
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">{{ selectedYear }}&nbsp;<span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li v-for="year in yearList" v-on:click="selectYear(year)"><a>{{ year }}</a></li>
+                    <li v-for="year in yearList" v-on:click="selectYear(year)"><a style="font-size: 6px;">{{ year }}</a></li>
                 </ul>
             </li>
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">{{ monthList[selectedMonth] }}&nbsp;<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li v-for="(month, index) in monthList" v-on:click="selectMonth(index)"><a>{{ month }}</a></li>
+                <ul style="font-size: 6px;" class="dropdown-menu">
+                    <li style="font-size: 6px;" v-for="(month, index) in monthList" v-on:click="selectMonth(index)"><a style="font-size: 6px;">{{ month }}</a></li>
                 </ul>
             </li>
         </ul>`

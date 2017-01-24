@@ -60,19 +60,20 @@ export default {
             <div class="row">
                 <nav class="navbar navbar-default navbar-fixed-top">
                     <div class="container-fluid">
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <div class="collapse navbar-collapse">
                             <schedule-selector></schedule-selector>
                             <reservation-form></reservation-form>
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <button type="button"
-                                        class="btn btn-default navbar-btn"
+                                    <button
+                                        type="button" class="btn btn-default btn-sm navbar-btn"
+                                        style="font-style:6px;"
                                         v-bind:class="{active:showRevision}"
                                         v-on:click="toggleShowRevision">
                                         顯示修改
                                     </button>
-                                    <button type="button" class="btn btn-default navbar-btn" disabled>輸出</button>
-                                    <button type="button" class="btn btn-default navbar-btn" v-on:click="logout">登出</button>
+                                    <button type="button" class="btn btn-default btn-sm navbar-btn" style="font-style:6px;" disabled>輸出</button>
+                                    <button type="button" class="btn btn-default btn-sm navbar-btn" style="font-style:6px;" v-on:click="logout">登出</button>
                                 </li>
                             </ul>
                         </div>

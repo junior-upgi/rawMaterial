@@ -23,7 +23,7 @@ export default {
             state.rawMatList = [];
             state.yearSelected = new Date().getFullYear();
             state.monthSelected = new Date().getMonth();
-            state.selectedRawMatIndex = '-1';
+            state.selectedRawMatIndex = -1;
             state.CUS_NO = null;
             state.PRD_NO = null;
             state.typeId = null;
@@ -41,13 +41,13 @@ export default {
     newMonthSelection(state, newMonthSelection) { state.monthSelected = newMonthSelection; },
     updateRawMatList(state, rawMatListData) { state.rawMatList = rawMatListData.slice(); },
     rawMatSelected(state, rawMatSelection) {
-        if (rawMatSelection !== '-1') {
-            state.selectedRawMatIndex = rawMatSelection;
+        if (parseInt(rawMatSelection) > -1) {
+            state.selectedRawMatIndex = parseInt(rawMatSelection);
             state.CUS_NO = state.rawMatList[rawMatSelection].CUS_NO;
             state.PRD_NO = state.rawMatList[rawMatSelection].PRD_NO;
             state.typeId = state.rawMatList[rawMatSelection].typeId;
         } else {
-            state.selectedRawMatIndex = '-1';
+            state.selectedRawMatIndex = -1;
             state.CUS_NO = null;
             state.PRD_NO = null;
             state.typeId = null;
@@ -64,5 +64,11 @@ export default {
     toggleEnableBatchReservation(state) {
         state.batchReservationQueue = [];
         state.enableBatchReservation = !state.enableBatchReservation;
+    },
+    pushBatchReservation(state, payload) {
+        state.batchReservationQueue.push(payload);
+    },
+    resetBatchReservationQueue(state) {
+        state.batchReservationQueue = [];
     }
 };
