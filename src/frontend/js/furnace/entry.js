@@ -65,7 +65,12 @@ export default {
                             <reservation-form></reservation-form>
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <button type="button" class="btn btn-default navbar-btn" v-bind:class="{active:showRevision}" v-on:click="toggleShowRevision">顯示修改</button>
+                                    <button type="button"
+                                        class="btn btn-default navbar-btn"
+                                        v-bind:class="{active:showRevision}"
+                                        v-on:click="toggleShowRevision">
+                                        顯示修改
+                                    </button>
                                     <button type="button" class="btn btn-default navbar-btn" disabled>輸出</button>
                                     <button type="button" class="btn btn-default navbar-btn" v-on:click="logout">登出</button>
                                 </li>
@@ -74,7 +79,10 @@ export default {
                     </div>
                 </nav>
             </div>
-            <batch-reservation v-if="batchReservationReady" :selected-year="selectedYear" :selected-month="selectedMonth">
+            <batch-reservation
+                v-if="batchReservationReady"
+                :selected-year="selectedYear"
+                :selected-month="selectedMonth">
             </batch-reservation>
             <div class="row">
                 <shipment-table></shipment-table>

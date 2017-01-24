@@ -1,5 +1,60 @@
+import moment from 'moment-timezone';
+
+import { mapGetters } from 'vuex';
+
+let reservationButton = {
+    name: 'reservationButton',
+    props: ['weekIndex', 'weekdayIndex', 'dayInMonthIndex'],
+    computed: {
+        ...mapGetters({
+            selectedYear: 'getSelectedYear',
+            selectedMonth: 'getSelectedMonth',
+            relevantSchedule: 'getRelevantSchedule'
+        }),
+        date: function() {
+            return moment(new Date(this.selectedYear, this.selectedMonth, this.dayInMonthIndex), 'YYYY-MM-DD HH:mm:ss');
+        },
+        dateLabel: function() {
+            return this.date.format('MM/DD');
+        },
+        disallowReservation: function() {
+            let date = new Date(this.selectedYear, this.selectedMonth, this.dayInMonthIndex);
+            let today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+            if (today >= date) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        scheduled: function() {
+            let scheduled = false;
+            let date = this.date;
+            this.relevantSchedule.forEach(function(relevantShipment) {
+                if ((relevantShipment.requestDate === date.format('YYYY-MM-DD')) && !relevantShipment.deprecated) {
+                    scheduled = true;
+                }
+            });
+            return scheduled;
+        }
+    },
+    methods: {
+        processScheduleRequest: function() {
+            console.log('processing');
+        }
+    },
+    template: `
+        <button
+            type="button" class="btn btn-xs"
+            :disabled="disallowReservation"
+            :class="{'btn-primary':scheduled,'btn-default':!scheduled}"
+            @click="processScheduleRequest">
+            {{dateLabel}}
+        </button>`
+};
+
 export default {
     name: 'batchReservation',
+    components: { 'reservation-button': reservationButton },
     props: ['selectedYear', 'selectedMonth'],
     data: function() {
         return {
@@ -7,6 +62,7 @@ export default {
         };
     },
     computed: {
+        ...mapGetters({ relevantSchedule: 'getRelevantSchedule' }),
         daysInMonth: function() {
             return new Date(this.selectedYear, this.selectedMonth + 1, 0).getDate();
         }
@@ -31,7 +87,9 @@ export default {
         <div class="row">
             <div class="col-xs-offset-3 col-xs-6">
                 <table class="table table-bordered table-hover table-condensed">
-                    <caption class="text-center"><h3>{{selectedYear}} 年 {{selectedMonth+1}} 月份批次預約</h3></caption>
+                    <caption class="text-center">
+                        <h3>{{selectedYear}} 年 {{selectedMonth+1}} 月份批次預約</h3>
+                    </caption>
                     <thead>
                         <tr>
                             <td v-for="weekdayIndex in 7" class="text-center">{{weekdayList[weekdayIndex-1]}}</td>
@@ -40,12 +98,11 @@ export default {
                     <tbody>
                         <tr v-for="weekIndex in 5">
                             <td v-for="weekdayIndex in 7" class="text-center" style="border:1px sold black;">
-                                <button
+                                <reservation-button
                                     v-for="dayInMonthIndex in daysInMonth"
                                     v-if="dateMatching(weekIndex,weekdayIndex,dayInMonthIndex)"
-                                    type="button" class="btn btn-default btn-xs">
-                                    {{dateLabel(dayInMonthIndex)}}
-                                </button>
+                                    :day-in-month-index="dayInMonthIndex">
+                                </reservation-button>
                             </td>
                         </tr>
                     </tbody>
@@ -58,6 +115,7 @@ export default {
                         </tr>
                     </tfoot>
                 </table>
+                <br><br><br>
             </div>
         </div>`
 };

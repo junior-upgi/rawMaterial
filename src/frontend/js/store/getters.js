@@ -26,5 +26,19 @@ export default {
         } else {
             return state.monthlyMemo;
         }
+    },
+    getRelevantSchedule: function(state) {
+        let relevantSchedule = [];
+        let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
+        state.planSchedule.forEach(function(shipment) {
+            if (
+                (shipment.CUS_NO === selectedRawMaterial.CUS_NO) &&
+                (shipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
+                (shipment.typeId === selectedRawMaterial.typeId)
+            ) {
+                relevantSchedule.push(shipment);
+            }
+        });
+        return relevantSchedule;
     }
 };

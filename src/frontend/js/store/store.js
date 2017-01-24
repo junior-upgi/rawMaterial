@@ -24,6 +24,7 @@ export const store = new Vuex.Store({
         typeId: null,
         showRevision: false,
         enableBatchReservation: false,
+        batchReservationQueue: [],
         monthlyMemo: null,
         monthlyMemoLoaded: false,
         lastStatusMessage: '程式初始化...'

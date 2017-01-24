@@ -28,6 +28,8 @@ export default {
             state.PRD_NO = null;
             state.typeId = null;
             state.showRevision = false;
+            state.enableBatchReservation = false;
+            state.batchReservationQueue = [];
             state.monthlyMemo = null;
             state.monthlyMemoLoaded = false;
             state.lastStatusMessage = '程式初始化...';
@@ -60,6 +62,7 @@ export default {
         state.monthlyMemoLoaded = true;
     },
     toggleEnableBatchReservation(state) {
+        state.batchReservationQueue = [];
         state.enableBatchReservation = !state.enableBatchReservation;
     }
 };
