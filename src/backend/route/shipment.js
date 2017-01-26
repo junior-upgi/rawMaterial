@@ -14,16 +14,14 @@ router.use(bodyParser.json());
 router.route('/data/restful/planSchedule')
     .all(tokenValidation)
     .get(function(request, response, next) {
-        utility.logger.info('GET /data/restful/planSchedule invoked...');
-        shipment.table
-            .findAll({ where: request.query })
+        let queryString = `SELECT * FROM rawMaterial.dbo.planSchedule WHERE DATEPART(yyyy,requestDate)=${request.query.year} AND DATEPART(m,requestDate)=${parseInt(request.query.month) + 1} ORDER BY requestDate,CUS_NO,typeId,created,modified,deprecated;`;
+        utility.performQuery(queryString)
             .then(function(recordset) {
-                utility.logger.info('record retrieved');
+                utility.logger.info('record retrieved and filtered');
                 return response.status(200).json(recordset);
             }).catch(function(error) {
-                utility.logger.error(error.name);
-                utility.logger.error(error.message);
-                return response.status(500).json({ errorMessage: error.message });
+                utility.logger.error(error);
+                return response.status(500).json({ errorMessage: `${error}` });
             });
     })
     .post(function(request, response, next) {
