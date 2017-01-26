@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 
-import { store } from './store/store.js';
 import { serverUrl } from '../js/config.js';
+import { store } from './store/store.js';
 
 export default {
     name: 'loginComponent',

@@ -14,10 +14,11 @@ router.use(bodyParser.json());
 router.route('/data/restful/planSchedule')
     .all(tokenValidation)
     .get(function(request, response, next) {
-        console.log(request.query);
+        utility.logger.info('GET /data/restful/planSchedule invoked...');
         shipment.table
             .findAll({ where: request.query })
             .then(function(recordset) {
+                utility.logger.info('record retrieved');
                 return response.status(200).json(recordset);
             }).catch(function(error) {
                 utility.logger.error(error.name);
@@ -26,9 +27,11 @@ router.route('/data/restful/planSchedule')
             });
     })
     .post(function(request, response, next) {
+        utility.logger.info('POST /data/restful/planSchedule invoked...');
         shipment.table
             .create(request.body.fieldList)
             .then(function() {
+                utility.logger.info('record inserted');
                 return response.status(200).end();
             }).catch(function(error) {
                 utility.logger.error(error.name);
@@ -37,9 +40,11 @@ router.route('/data/restful/planSchedule')
             });
     })
     .put(function(request, response, next) {
+        utility.logger.info('PUT /data/restful/planSchedule invoked...');
         shipment.table
             .update(request.body.fieldList, { where: request.body.conditionList })
             .then(function() {
+                utility.logger.info('record updated');
                 return response.status(200).end();
             }).catch(function(error) {
                 utility.logger.error(error.name);
@@ -48,10 +53,12 @@ router.route('/data/restful/planSchedule')
             });
     })
     .delete(function(request, response, next) {
+        utility.logger.info('DELETE /data/restful/planSchedule invoked...');
         let currentDatetime = moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
         shipment.table
             .update({ deprecated: currentDatetime }, { where: request.body.condition })
             .then(function() {
+                utility.logger.info('record deprecated');
                 return response.status(200).end();
             }).catch(function(error) {
                 utility.logger.error(error.name);

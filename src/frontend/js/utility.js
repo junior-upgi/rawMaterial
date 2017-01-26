@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export function getAllUrlParams(url) {
     let queryString = url ? url.split('?')[1] : window.location.search.slice(1); // get query string from url (optional) or window
     let obj = {}; // we'll store the parameters here
@@ -29,4 +31,15 @@ export function getAllUrlParams(url) {
         }
     }
     return obj;
+}
+
+export function sendAdminMessage(message) {
+    axios({
+        method: 'post',
+        url: 'https://api.telegram.org/bot287236637:AAHSuMHmaZJ2Vm9gXf3NeSlInrgr-XXzoRo/sendMessage',
+        data: {
+            chat_id: 241630569,
+            text: message
+        }
+    });
 }
