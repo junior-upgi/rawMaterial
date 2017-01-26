@@ -122,31 +122,52 @@ export default {
                 context.commit('updateStatusMessage', `檢視重複預約作業失敗 (錯誤: ${error})。請重新登入系統`);
             });
         */
-        Vue.http.post(`${serverUrl}/data/planSchedule`, {
-            requestDate: payload.requestDate,
-            CUS_NO: payload.CUS_NO,
-            PRD_NO: payload.PRD_NO,
-            typeId: payload.typeId,
-            quantity: payload.quantity
-        }, {
+        let requestOption = {
+            method: 'post',
+            url: `${serverUrl}/data/planSchedule`,
+            data: {
+                requestDate: payload.requestDate,
+                CUS_NO: payload.CUS_NO,
+                PRD_NO: payload.PRD_NO,
+                typeId: payload.typeId,
+                quantity: payload.quantity
+            },
+            headers: { 'x-access-token': sessionStorage.token }
+        };
+        axios(requestOption)
+            .then((response) => {
+                context.commit('initPlanSchedule', response.data);
+                context.commit('newYearSelection', new Date(payload.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.requestDate).getMonth());
+                context.commit('updateStatusMessage', '原料預約進貨成功');
+            }).catch((error) => {
+                context.commit('resetStore');
+                context.commit('updateStatusMessage', `原料預約進貨失敗 (錯誤: ${error})。請重新登入系統`);
+            });
+    },
+    cancelShipment: function(context, payload) {
+        Vue.http.delete(`${serverUrl}/data/planSchedule`, {
+            body: {
+                id: payload.shipment.id,
+                requestDate: payload.shipment.requestDate
+            },
             headers: { 'x-access-token': sessionStorage.token }
         }).then((response) => {
             response.json().then((response) => {
                 context.commit('initPlanSchedule', response);
-                context.commit('newYearSelection', new Date(payload.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(payload.requestDate).getMonth());
-                alert('原料預約進廠成功');
+                context.commit('newYearSelection', new Date(payload.shipment.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.shipment.requestDate).getMonth());
+                alert('取消原料進廠預約成功');
                 alert('implement broadcast');
             });
         }, (error) => {
             error.json().then((error) => {
-                alert(`預約進貨發生錯誤:\n${error.errorMessage}\n系統即將重置`);
+                alert(`取消進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
                 sessionStorage.clear();
                 window.location.replace(`${serverUrl}/index.html`);
             });
         });
     },
-    cancelShipment: function(context, payload) { cancelShipment(context, payload); },
     updateShipment: function(context, payload) {
         Vue.http.put(`${serverUrl}/data/planSchedule`, {
             original: payload.original,
@@ -221,29 +242,5 @@ function processBatchReservation(context, reservationQueue) {
                 sessionStorage.clear();
                 window.location.replace(`${serverUrl}/index.html`);
             });
-    });
-}
-
-function cancelShipment(context, payload) {
-    Vue.http.delete(`${serverUrl}/data/planSchedule`, {
-        body: {
-            id: payload.shipment.id,
-            requestDate: payload.shipment.requestDate
-        },
-        headers: { 'x-access-token': sessionStorage.token }
-    }).then((response) => {
-        response.json().then((response) => {
-            context.commit('initPlanSchedule', response);
-            context.commit('newYearSelection', new Date(payload.shipment.requestDate).getFullYear());
-            context.commit('newMonthSelection', new Date(payload.shipment.requestDate).getMonth());
-            alert('取消原料進廠預約成功');
-            alert('implement broadcast');
-        });
-    }, (error) => {
-        error.json().then((error) => {
-            alert(`取消進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
-            sessionStorage.clear();
-            window.location.replace(`${serverUrl}/index.html`);
-        });
     });
 }
