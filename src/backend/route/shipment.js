@@ -11,6 +11,54 @@ const shipment = require('../model/shipmentTable.js');
 const router = express.Router();
 router.use(bodyParser.json());
 
+router.route('/data/restful/planSchedule')
+    .all(tokenValidation)
+    .get(function(request, response, next) {
+        console.log(request.query);
+        shipment.table
+            .findAll({ where: request.query })
+            .then(function(recordset) {
+                return response.status(200).json(recordset);
+            }).catch(function(error) {
+                utility.logger.error(error.name);
+                utility.logger.error(error.message);
+                return response.status(500).json({ errorMessage: error.message });
+            });
+    })
+    .post(function(request, response, next) {
+        shipment.table
+            .create(request.body.fieldList)
+            .then(function(recordset) {
+                return response.status(200).end();
+            }).catch(function(error) {
+                utility.logger.error(error.name);
+                utility.logger.error(error.message);
+                return response.status(500).json({ errorMessage: error.message });
+            });
+    })
+    .put(function(request, response, next) {
+        shipment.table
+            .update(request.body.fieldList, { where: request.body.conditionList })
+            .then(function(recordset) {
+                return response.status(200).end();
+            }).catch(function(error) {
+                utility.logger.error(error.name);
+                utility.logger.error(error.message);
+                return response.status(500).json({ errorMessage: error.message });
+            });
+    })
+    .delete(function(request, response, next) {
+        shipment.table
+            .destroy({ where: request.body.condition })
+            .then(function(recordset) {
+                return response.status(200).end();
+            }).catch(function(error) {
+                utility.logger.error(error.name);
+                utility.logger.error(error.message);
+                return response.status(500).json({ errorMessage: error.message });
+            });
+    });
+
 router.route('/data/planSchedule')
     .all(tokenValidation)
     .get(function(request, response, next) {

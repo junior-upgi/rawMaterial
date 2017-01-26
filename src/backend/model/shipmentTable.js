@@ -40,10 +40,10 @@ const Shipment = sequelize.define('shipment', {
         requestYear: function() { return new Date(this.requestDate).getFullYear(); }
     },
     timestamps: true,
-    paranoid: true,
+    // paranoid: true,
     createdAt: 'created',
     updatedAt: 'modified',
-    deletedAt: 'deprecated',
+    // deletedAt: 'deprecated',
     underscore: false,
     freezeTableName: true,
     tableName: 'shipment'
