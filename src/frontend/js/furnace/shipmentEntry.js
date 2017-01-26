@@ -154,13 +154,21 @@ export let shipmentEntry = {
             <!-- cancel buttons -->
             <td class="text-center">
                 <button
-                    type="button" class="btn btn-danger btn-sm"
                     v-if="(!shipment.deprecated)&&(!shipment.finalized)"
+                    type="button" class="btn btn-danger btn-sm"
                     @click="confirmShipmentCancellation(shipment)">
                     <span class="glyphicon glyphicon-trash"></span>&nbsp;<small>取消</small>
                 </button>
-                <template v-else-if="!shipment.finalized"><span class="glyphicon glyphicon-trash"></span>&nbsp;<b><small>取消</small></b></template>
-                <template v-else><span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<b><small>結案</small></b></template>
+                <button
+                    v-else-if="!shipment.finalized"
+                    type="button" class="btn btn-default btn-sm" disabled>
+                    <span class="glyphicon glyphicon-trash"></span>&nbsp;<b><small>取消</small></b>
+                </button>
+                <button
+                    v-else
+                    type="button" class="btn btn-default btn-sm" disabled>
+                    <span class="glyphicon glyphicon-ok-circle"></span>&nbsp;<b><small>結案</small></b>
+                </button>
             </td>
             <!-- requestDate -->
             <td class="text-center">

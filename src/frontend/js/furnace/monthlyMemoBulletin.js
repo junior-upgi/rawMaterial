@@ -5,6 +5,8 @@ export let monthlyMemoBulletin = {
     name: 'monthlyMemoBulletin',
     store: store,
     computed: { ...mapGetters({
+            selectedYear: 'getSelectedYear',
+            selectedMonth: 'getSelectedMonth',
             monthlyMemoStatus: 'getMonthlyMemoStatus',
             monthlyMemo: 'getMonthlyMemo'
         }),
@@ -34,7 +36,6 @@ export let monthlyMemoBulletin = {
             }
         }
     },
-    props: ['selectedYear', 'selectedMonth'],
     data: function() {
         return {
             currentContent: null,

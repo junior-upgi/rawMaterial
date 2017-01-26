@@ -53,7 +53,7 @@ export default {
         <footer class="navbar-fixed-bottom" style="background-color:white;">
             <div class="col-xs-8 text-left">
                 <span v-if="expired"></span>
-                <span v-else>{{statusMessage}}</span>
+                <span v-else><strong>{{statusMessage}}<strong></span>
             </div>
             <div class="col-xs-4 text-right">
                 使用權限到期時間:&nbsp;<span>{{accessExp}}</span>

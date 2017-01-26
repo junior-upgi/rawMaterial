@@ -1,7 +1,4 @@
 import axios from 'axios';
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-Vue.use(VueResource);
 
 import { serverUrl } from '../config.js';
 
@@ -80,48 +77,6 @@ export default {
             });
     },
     scheduleShipment: function(context, payload) {
-        /*
-        context.commit('updateStatusMessage', `查詢 ${payload.requestDate} 是否已經預約進貨...`);
-        let checkExistenceReqOpt = {
-            method: 'get',
-            url: `${serverUrl}/data/planSchedule/checkExistence`,
-            params: {
-                requestDate: payload.requestDate,
-                CUS_NO: payload.CUS_NO,
-                PRD_NO: payload.PRD_NO,
-                typeId: payload.typeId
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        };
-        let existingShipmentList = [];
-        let existingQuantity = 0;
-        axios(checkExistenceReqOpt)
-            .then((response) => {
-                if (response.data.length > 1) {
-                    context.commit('updateStatusMessage', '發現重複預約狀況，將合併新、舊預約資料...');
-                    response.data.forEach((existingShipment) => {
-                        existingShipmentList.push(existingShipment);
-                    });
-                    existingShipmentList.reduce((existingShipment) => {
-                        existingQuantity += existingShipment.quantity;
-                    });
-                }
-                let deleteReqOpt = {
-                    method: 'delete',
-                    url: `${serverUrl}/data/planSchedule`,
-                    params: {
-                        requestDate: payload.requestDate,
-                        CUS_NO: payload.CUS_NO,
-                        PRD_NO: payload.PRD_NO,
-                        typeId: payload.typeId
-                    },
-                    headers: { 'x-access-token': sessionStorage.token }
-                };
-            }).catch((error) => {
-                context.commit('resetStore');
-                context.commit('updateStatusMessage', `檢視重複預約作業失敗 (錯誤: ${error})。請重新登入系統`);
-            });
-        */
         let requestOption = {
             method: 'post',
             url: `${serverUrl}/data/planSchedule`,
@@ -146,49 +101,46 @@ export default {
             });
     },
     cancelShipment: function(context, payload) {
-        Vue.http.delete(`${serverUrl}/data/planSchedule`, {
-            body: {
+        let requestOption = {
+            method: 'delete',
+            url: `${serverUrl}/data/planSchedule`,
+            data: {
                 id: payload.shipment.id,
                 requestDate: payload.shipment.requestDate
             },
             headers: { 'x-access-token': sessionStorage.token }
-        }).then((response) => {
-            response.json().then((response) => {
-                context.commit('initPlanSchedule', response);
-                context.commit('newYearSelection', new Date(payload.shipment.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(payload.shipment.requestDate).getMonth());
-                alert('取消原料進廠預約成功');
-                alert('implement broadcast');
+        };
+        axios(requestOption)
+            .then((response) => {
+                context.commit('initPlanSchedule', response.data);
+                context.commit('newYearSelection', new Date(payload.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.requestDate).getMonth());
+                context.commit('updateStatusMessage', '取消原料進廠預約成功');
+            }).catch((error) => {
+                context.commit('resetStore');
+                context.commit('updateStatusMessage', `取消原料進貨預約失敗 (錯誤: ${error})。請重新登入系統`);
             });
-        }, (error) => {
-            error.json().then((error) => {
-                alert(`取消進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
-                sessionStorage.clear();
-                window.location.replace(`${serverUrl}/index.html`);
-            });
-        });
     },
     updateShipment: function(context, payload) {
-        Vue.http.put(`${serverUrl}/data/planSchedule`, {
-            original: payload.original,
-            updated: payload.updated
-        }, {
+        let requestOption = {
+            method: 'put',
+            url: `${serverUrl}/data/planSchedule`,
+            data: {
+                original: payload.original,
+                updated: payload.updated
+            },
             headers: { 'x-access-token': sessionStorage.token }
-        }).then((response) => {
-            response.json().then((response) => {
-                context.commit('initPlanSchedule', response);
-                context.commit('newYearSelection', new Date(payload.original.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(payload.original.requestDate).getMonth());
-                alert('原料進廠預約修改成功');
-                alert('implement broadcast');
+        };
+        axios(requestOption)
+            .then((response) => {
+                context.commit('initPlanSchedule', response.data);
+                context.commit('newYearSelection', new Date(payload.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.requestDate).getMonth());
+                context.commit('updateStatusMessage', '原料進廠預約修改成功');
+            }).catch((error) => {
+                context.commit('resetStore');
+                context.commit('updateStatusMessage', `原料進廠預約修改失敗 (錯誤: ${error})。請重新登入系統`);
             });
-        }, (error) => {
-            error.json().then((error) => {
-                alert(`修改進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
-                sessionStorage.clear();
-                window.location.replace(`${serverUrl}/index.html`);
-            });
-        });
     },
     commitBatchReservation: function(context, payload) {
         console.log(payload);
@@ -201,46 +153,3 @@ export default {
         */
     }
 };
-
-function processBatchReservation(context, reservationQueue) {
-    let chainInit = Promise.resolve();
-    reservationQueue.forEach(function(reservation) {
-        chainInit = chainInit
-            .then(function() {
-                if (reservation.action === 'delete') {
-                    return axios({
-                        method: reservation.action,
-                        url: `${serverUrl}/data/planSchedule`,
-                        body: {
-                            id: reservation.shipment.id,
-                            requestDate: reservation.shipment.requestDate
-                        },
-                        headers: { 'x-access-token': sessionStorage.token }
-                    });
-                } else if (reservation.action === 'post') {
-                    return axios({
-                        method: reservation.action,
-                        url: `${serverUrl}/data/planSchedule`,
-                        body: {
-                            requestDate: reservation.requestDate,
-                            CUS_NO: reservation.CUS_NO,
-                            PRD_NO: reservation.PRD_NO,
-                            typeId: reservation.typeId,
-                            quantity: reservation.quantity
-                        },
-                        headers: { 'x-access-token': sessionStorage.token }
-                    });
-                } else {
-                    alert(`批次進貨預約發生錯誤:\n未知reservation.action項目${reservation.action}\n系統即將重置`);
-                    sessionStorage.clear();
-                    window.location.replace(`${serverUrl}/index.html`);
-                }
-            }).then(function(response) {
-                context.commit('initPlanSchedule', response);
-            }).catch(function(error) {
-                alert(`批次進貨預約發生錯誤:\n${error.errorMessage}\n系統即將重置`);
-                sessionStorage.clear();
-                window.location.replace(`${serverUrl}/index.html`);
-            });
-    });
-}
