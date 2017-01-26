@@ -30,8 +30,11 @@ window.onload = function() {
             })
         },
         created: function() {
+            // if jwt token exists in the sessionStorage
             if ((sessionStorage.token !== undefined) && (sessionStorage.token !== undefined) && (sessionStorage.token !== '')) {
+                // restore token from session storage
                 this.restoreToken(sessionStorage.token);
+                // cause router action (redirect) by setting the role property
                 this.redirectUser(decode(sessionStorage.token, { complete: true }).payload.role);
             }
         }

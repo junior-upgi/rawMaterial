@@ -50,5 +50,11 @@ export default {
                 (shipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
                 (shipment.typeId === selectedRawMaterial.typeId);
         })[0];
+    },
+    getBatchReservationQueue: function(state) {
+        return state.batchReservationQueue;
+    },
+    getYearList: function(state) {
+        return state.yearList;
     }
 };

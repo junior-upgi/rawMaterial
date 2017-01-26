@@ -24,7 +24,7 @@ main.use('/', require('./route/login.js')); // handles login requests
 main.use('/', require('./route/validate.js')); // handles page entry jwt validation
 main.use('/', require('./route/rawMaterial.js')); // serves raw material list
 main.use('/', require('./route/shipment.js')); // route to serve shipment related information
-main.use('/', require('./route/monthMemo.js')); // server monthlyMemo data
+main.use('/', require('./route/monthlyMemo.js')); // server monthlyMemo data
 
 app.listen(serverConfig.serverPort, function(error) { // start backend server
     if (error) {

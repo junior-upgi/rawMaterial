@@ -1,11 +1,7 @@
-import { decode } from 'jsonwebtoken';
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-Vue.use(VueResource);
-import { mapMutations } from 'vuex';
+import axios from 'axios';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 import { store } from './store/store.js';
-
 import { serverUrl } from '../js/config.js';
 
 export default {
@@ -17,35 +13,44 @@ export default {
             password: null
         };
     },
-    mounted: function() {
-        this.updateStatusMessage('請輸入帳號密碼進行登入');
+    computed: {
+        ...mapGetters({
+            token: 'getToken',
+            role: 'getRole'
+        })
     },
+    mounted: function() { this.updateStatusMessage('請輸入帳號密碼進行登入'); },
     methods: {
         ...mapMutations({
             updateStatusMessage: 'updateStatusMessage',
             restoreToken: 'restoreToken',
-            redirectUser: 'redirectUser'
+            redirectUser: 'redirectUser',
+            initYearList: 'initYearList',
+            resetStore: 'resetStore'
+        }),
+        ...mapActions({
+            checkDataAvailibility: 'checkDataAvailibility'
         }),
         submitForm: function() {
             if (document.getElementById('loginForm').checkValidity()) {
                 this.updateStatusMessage('檢視帳號檢視中，請稍後...');
-                Vue.http.post(`${serverUrl}/login`, {
+                axios.post(`${serverUrl}/login`, {
                     loginId: this.loginId,
                     password: this.password
                 }).then((response) => {
                     this.password = '';
-                    response.json().then((response) => {
-                        this.updateStatusMessage('登入成功，請稍待...');
-                        sessionStorage.token = response.token;
-                        this.restoreToken(sessionStorage.token);
-                        this.redirectUser(decode(sessionStorage.token, { complete: true }).payload.role);
-                    });
-                }, (error) => {
-                    this.loginId = '';
-                    this.password = '';
-                    error.json().then((error) => {
-                        this.updateStatusMessage(`請重新登入 (錯誤: ${error.errorMessage})`);
-                    });
+                    this.updateStatusMessage('登入成功，請稍待...');
+                    sessionStorage.token = response.data.token;
+                    this.restoreToken(sessionStorage.token);
+                    return this.checkDataAvailibility();
+                }).then((response) => {
+                    this.updateStatusMessage('進行歷史資料確認...');
+                    this.initYearList(response.data);
+                    this.updateStatusMessage('歷史資料確認完畢，準備進入作業程式...');
+                    this.redirectUser(this.role);
+                }).catch((error) => {
+                    this.updateStatusMessage(`登入初始化發生錯誤，請向IT反應 (錯誤: ${error})。請重新登入...`);
+                    this.resetStore();
                 });
             }
         }

@@ -1,6 +1,3 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-Vue.use(VueResource);
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 import { store } from '../store/store.js';
@@ -60,16 +57,16 @@ export let shipmentTable = {
     },
     methods: {
         ...mapActions({
-            updatePlanSchedule: 'updatePlanSchedule',
+            initPlanSchedule: 'initPlanSchedule',
             cancelShipment: 'cancelShipment',
             reviseReqQty: 'reviseReqQty'
         }),
         ...mapMutations({ updateStatusMessage: 'updateStatusMessage' })
     },
     created: function() {
-        this.updateStatusMessage('讀取當月進貨資料...');
-        this.updatePlanSchedule({
-            type: 'updatePlanSchedule',
+        this.updateStatusMessage(`讀取 ${this.selectedYear} 年 ${this.selectedMonth} 月份進貨資料...`);
+        this.initPlanSchedule({
+            type: 'initPlanSchedule',
             selectedYear: this.selectedYear,
             selectedMonth: this.selectedMonth
         });

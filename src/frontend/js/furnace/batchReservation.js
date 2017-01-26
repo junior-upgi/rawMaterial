@@ -1,10 +1,10 @@
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
-import reservationButton from './reservationButton.js';
+import reservationButton from './batchResButton.js';
 
 export default {
     name: 'batchReservation',
-    components: { 'reservation-button': reservationButton },
+    components: { 'batch-res-button': reservationButton },
     props: ['selectedYear', 'selectedMonth'],
     data: function() {
         return {
@@ -12,12 +12,20 @@ export default {
         };
     },
     computed: {
-        ...mapGetters({ relevantSchedule: 'getRelevantSchedule' }),
+        ...mapGetters({
+            relevantSchedule: 'getRelevantSchedule',
+            batchReservationQueue: 'getBatchReservationQueue'
+        }),
         daysInMonth: function() {
             return new Date(this.selectedYear, this.selectedMonth + 1, 0).getDate();
+        },
+        disallowBatchReservationCommit: function() {
+            return this.batchReservationQueue.length === 0 ? true : false;
         }
     },
     methods: {
+        ...mapMutations({ resetBatchReservationQueue: 'resetBatchReservationQueue' }),
+        ...mapActions({ commitBatchReservation: 'commitBatchReservation' }),
         dateLabel: function(datePart) {
             let date = new Date(`${this.selectedYear.toString()}-${(this.selectedMonth + 1).toString()}-${datePart.toString()}`);
             return `${date.getMonth() + 1}/${date.getDate()}`;
@@ -30,6 +38,16 @@ export default {
                 return true;
             } else {
                 return false;
+            }
+        },
+        triggerBatchReservation: function() {
+            if (confirm(`請確認進行 ${this.selectedYear} 年 ${this.selectedMonth + 1} 月份批次預約`)) {
+                this.commitBatchReservation({
+                    type: 'commitBatchReservation',
+                    batchReservationQueue: this.batchReservationQueue,
+                    selectedYear: this.selectedYear,
+                    selectedMonth: this.selectedMonth
+                });
             }
         }
     },
@@ -47,20 +65,25 @@ export default {
                     </thead>
                     <tbody>
                         <tr v-for="weekIndex in 5">
-                            <td v-for="weekdayIndex in 7" class="text-center" style="border:1px sold black;">
-                                <reservation-button
+                            <td v-for="weekdayIndex in 7" class="text-center">
+                                <batch-res-button
                                     v-for="dayInMonthIndex in daysInMonth"
                                     v-if="dateMatching(weekIndex,weekdayIndex,dayInMonthIndex)"
                                     :day-in-month-index="dayInMonthIndex">
-                                </reservation-button>
+                                </batch-res-button>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td class="row text-center" colspan="7">
-                                <button type="button" class="btn btn-primary btn-md">預約</button>
-                                <button type="button" class="btn btn-danger btn-md">取消</button>
+                                <button
+                                    type="button" class="btn btn-primary btn-md"
+                                    :disabled="disallowBatchReservationCommit"
+                                    @click="triggerBatchReservation">
+                                    預約
+                                </button>
+                                <button type="button" class="btn btn-danger btn-md" @click="resetBatchReservationQueue">取消</button>
                             </td>
                         </tr>
                     </tfoot>

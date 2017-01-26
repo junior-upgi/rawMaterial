@@ -1,8 +1,5 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { store } from '../store/store.js';
-Vue.use(VueResource);
 
 export let monthlyMemoBulletin = {
     name: 'monthlyMemoBulletin',
@@ -77,6 +74,7 @@ export let monthlyMemoBulletin = {
         }
     },
     created: function() {
+        this.updateStatusMessage(`${this.selectedYear} 年 ${this.selectedMonth + 1} 月份留言板初始化...`);
         this.initMonthlyMemo({
             type: 'initMonthlyMemo',
             selectedYear: this.selectedYear,

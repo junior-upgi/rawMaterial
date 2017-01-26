@@ -3,33 +3,34 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 Vue.use(Vuex);
 
+import actions from './actions.js';
 import getters from './getters';
 import mutations from './mutations.js';
-import actions from './actions.js';
 
 export const store = new Vuex.Store({
-    state: {
-        activeView: 'login',
-        token: null,
-        loginId: null,
-        role: null,
-        accessExp: moment(new Date().getTime()).format('HH:mm'),
-        planSchedule: [],
-        rawMatList: [],
-        yearSelected: new Date().getFullYear(),
-        monthSelected: new Date().getMonth(),
-        selectedRawMatIndex: -1, // this is selection value (should be typed as string and not number)
-        CUS_NO: null,
-        PRD_NO: null,
-        typeId: null,
-        showRevision: false,
-        enableBatchReservation: false,
-        batchReservationQueue: [],
-        monthlyMemo: null,
-        monthlyMemoLoaded: false,
-        lastStatusMessage: '程式初始化...'
-    },
+    actions: actions,
     getters: getters,
     mutations: mutations,
-    actions: actions
+    state: {
+        accessExp: moment(new Date().getTime()).format('HH:mm'),
+        activeView: 'login',
+        batchReservationQueue: [],
+        CUS_NO: null,
+        enableBatchReservation: false,
+        lastStatusMessage: '程式初始化...',
+        loginId: null,
+        monthlyMemo: null,
+        monthlyMemoLoaded: false,
+        monthSelected: new Date().getMonth(),
+        planSchedule: [],
+        PRD_NO: null,
+        rawMatList: [],
+        role: null,
+        selectedRawMatIndex: -1,
+        showRevision: false,
+        token: null,
+        typeId: null,
+        yearList: [],
+        yearSelected: new Date().getFullYear()
+    }
 });

@@ -1,11 +1,8 @@
 import moment from 'moment-timezone';
 import numeral from 'numeral';
-import Vue from 'vue';
-import VueResource from 'vue-resource';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 import { store } from '../store/store.js';
-Vue.use(VueResource);
 
 export let reservationForm = {
     name: 'reservationForm',
@@ -15,7 +12,8 @@ export let reservationForm = {
             selectedYear: 'getSelectedYear',
             selectedMonth: 'getSelectedMonth',
             showRevision: 'getShowRevision',
-            rawMatList: 'getRawMatList'
+            rawMatList: 'getRawMatList',
+            planSchedule: 'getPlanSchedule'
         }),
         firstDateOfCurrentMonth() {
             let firstDateOfCurrentMonth = new Date().setDate(1);
@@ -31,6 +29,26 @@ export let reservationForm = {
             } else {
                 return false;
             }
+        },
+        relevantSchedule: function() {
+            if ((this.requestDate === null) || (this.requestDate === '') || (parseInt(this.selectedRawMatIndex) === -1)) {
+                return null;
+            } else {
+                return this.planSchedule
+                    .filter((shipment) => {
+                        return ((shipment.CUS_NO === this.rawMatList[this.selectedRawMatIndex].CUS_NO) &&
+                            (shipment.PRD_NO === this.rawMatList[this.selectedRawMatIndex].PRD_NO) &&
+                            (shipment.typeId === this.rawMatList[this.selectedRawMatIndex].typeId) &&
+                            (shipment.requestDate === this.requestDate) &&
+                            (!shipment.deprecated));
+                    }).length;
+            }
+        },
+        disallowReservation: function() {
+            return ((parseInt(this.selectedRawMatIndex) === -1) ||
+                (!this.requestDate) ||
+                (!this.quantity) ||
+                (this.relevantSchedule !== 0)) ? true : false;
         }
     },
     data: function() {
@@ -40,15 +58,15 @@ export let reservationForm = {
             requestDate: null
         };
     },
-    created: function() { this.updateRawMatList(); },
+    created: function() { this.initRawMatList(); },
     methods: {
         ...mapMutations({
             rawMatSelected: 'rawMatSelected',
             toggleEnableBatchReservation: 'toggleEnableBatchReservation'
         }),
         ...mapActions({
-            updateRawMatList: 'updateRawMatList',
-            scheduleNewShipment: 'scheduleNewShipment'
+            initRawMatList: 'initRawMatList',
+            scheduleShipment: 'scheduleShipment'
         }),
         checkDateValidity: function() {
             let limit = moment(moment(), 'YYYY-MM-DD HH:mm:ss').subtract(1, 'days');
@@ -60,9 +78,9 @@ export let reservationForm = {
         },
         makeReservation: function() {
             if (document.getElementById('reservationForm').checkValidity()) {
-                if (this.selectedRawMatIndex > -1) {
-                    this.scheduleNewShipment({
-                        type: 'scheduleNewShipment',
+                if (this.selectedRawMatIndex > -1) { // prevent the -1 valued 'general selection' from being submitted
+                    this.scheduleShipment({
+                        type: 'scheduleShipment',
                         requestDate: this.requestDate,
                         CUS_NO: this.rawMatList[this.selectedRawMatIndex].CUS_NO,
                         PRD_NO: this.rawMatList[this.selectedRawMatIndex].PRD_NO,
@@ -92,7 +110,13 @@ export let reservationForm = {
             </select>
             <input style="font-size:6px;" type="date" class="form-control" required v-model="requestDate" @change="checkDateValidity" required />
             <input style="font-size:6px;width:70px;" type="number" class="form-control text-center" placeholder="數量" min="1" v-model="quantity" required />
-            <button style="font-size:6px;" type="submit" class="btn btn-default" @click="makeReservation">預約</button>
+            <button
+                type="submit" class="btn btn-default"
+                @click="makeReservation"
+                :disabled="disallowReservation"
+                style="font-size:6px;">
+                預約
+            </button>
             <button
                 type="button" class="btn btn-default"
                 style="font-size:6px;"

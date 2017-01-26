@@ -1,7 +1,4 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
 import { mapGetters, mapMutations } from 'vuex';
-Vue.use(VueResource);
 
 import { store } from '../store/store.js';
 

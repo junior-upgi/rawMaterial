@@ -1,8 +1,5 @@
 import moment from 'moment-timezone';
 import numeral from 'numeral';
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-Vue.use(VueResource);
 import { mapActions } from 'vuex';
 
 import { store } from '../store/store.js';
@@ -49,7 +46,7 @@ export let shipmentEntry = {
     methods: {
         ...mapActions({
             cancelShipment: 'cancelShipment',
-            updateRecord: 'updateRecord'
+            updateShipment: 'updateShipment'
         }),
         restoreRecord: function() {
             this.tempRecord.quantity = this.shipment.quantity;
@@ -118,7 +115,7 @@ export let shipmentEntry = {
             let confirmationMessage = `請確認是否修改 ${this.shipment.requestDate} ${this.shipment.PRDT_SNM} 的進貨預約資料`;
             if (confirm(confirmationMessage)) {
                 let payload = {
-                    type: 'updateRecord',
+                    type: 'updateShipment',
                     original: this.shipment,
                     updated: {
                         quantity: this.tempRecord.quantity,
@@ -129,7 +126,13 @@ export let shipmentEntry = {
                         note: this.tempRecord.note
                     }
                 };
-                this.updateRecord(payload);
+                this.updateShipment(payload);
+            }
+        },
+        confirmShipmentCancellation: function(shipment) {
+            let confirmationMessage = `請確認是否取消 ${shipment.requestDate} 【${shipment.CUS_SNM}】 進貨 ${shipment.PRDT_SNM}`;
+            if (confirm(confirmationMessage)) {
+                this.cancelShipment({ type: 'cancelShipment', shipment: shipment });
             }
         }
     },
@@ -150,7 +153,10 @@ export let shipmentEntry = {
         <tr class="row" :class="{'bg-danger':isWeekend,'bg-primary':isToday}">
             <!-- cancel buttons -->
             <td class="text-center">
-                <button v-if="(!shipment.deprecated)&&(!shipment.finalized)" type="button" class="btn btn-danger btn-sm" @click="cancelShipment({type:'cancelShipment',shipment:shipment})">
+                <button
+                    type="button" class="btn btn-danger btn-sm"
+                    v-if="(!shipment.deprecated)&&(!shipment.finalized)"
+                    @click="confirmShipmentCancellation(shipment)">
                     <span class="glyphicon glyphicon-trash"></span>&nbsp;<small>取消</small>
                 </button>
                 <template v-else-if="!shipment.finalized"><span class="glyphicon glyphicon-trash"></span>&nbsp;<b><small>取消</small></b></template>
