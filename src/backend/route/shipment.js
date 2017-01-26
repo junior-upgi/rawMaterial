@@ -28,7 +28,7 @@ router.route('/data/restful/planSchedule')
     .post(function(request, response, next) {
         shipment.table
             .create(request.body.fieldList)
-            .then(function(recordset) {
+            .then(function() {
                 return response.status(200).end();
             }).catch(function(error) {
                 utility.logger.error(error.name);
@@ -39,7 +39,7 @@ router.route('/data/restful/planSchedule')
     .put(function(request, response, next) {
         shipment.table
             .update(request.body.fieldList, { where: request.body.conditionList })
-            .then(function(recordset) {
+            .then(function() {
                 return response.status(200).end();
             }).catch(function(error) {
                 utility.logger.error(error.name);
@@ -48,9 +48,10 @@ router.route('/data/restful/planSchedule')
             });
     })
     .delete(function(request, response, next) {
+        let currentDatetime = moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
         shipment.table
-            .destroy({ where: request.body.condition })
-            .then(function(recordset) {
+            .update({ deprecated: currentDatetime }, { where: request.body.condition })
+            .then(function() {
                 return response.status(200).end();
             }).catch(function(error) {
                 utility.logger.error(error.name);
