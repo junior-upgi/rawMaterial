@@ -150,7 +150,7 @@ export let shipmentEntry = {
         }
     },
     template: `
-        <tr class="row" :class="{'bg-danger':isWeekend,'bg-primary':isToday}">
+        <tr class="row" :class="{'bg-danger':isWeekend,'bg-info':isToday}">
             <!-- cancel buttons -->
             <td class="text-center">
                 <button

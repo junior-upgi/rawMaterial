@@ -47,7 +47,9 @@ export let monthlyMemoBulletin = {
             if (this.monthlyMemoStatus) {
                 this.currentContent = value;
                 let monthlyMemoBulletin = document.getElementById('monthlyMemoBulletin');
-                monthlyMemoBulletin.scrollTop = monthlyMemoBulletin.scrollHeight;
+                if (monthlyMemoBulletin) {
+                    monthlyMemoBulletin.scrollTop = monthlyMemoBulletin.scrollHeight;
+                }
             }
         },
         monthlyMemoStatus: function(loadingStatus) {
@@ -84,7 +86,9 @@ export let monthlyMemoBulletin = {
     },
     updated: function() { // keeps the textarea to always scroll to bottom at refresh
         let monthlyMemoBulletin = document.getElementById('monthlyMemoBulletin');
-        monthlyMemoBulletin.scrollTop = monthlyMemoBulletin.scrollHeight;
+        if (monthlyMemoBulletin) {
+            monthlyMemoBulletin.scrollTop = monthlyMemoBulletin.scrollHeight;
+        }
     },
     template: `
         <footer class="navbar-fixed-bottom">
@@ -100,6 +104,7 @@ export let monthlyMemoBulletin = {
                 <div class="panel-body">
                     <textarea
                         id="monthlyMemoBulletin" placeholder="請輸入備忘項目"
+                        v-if="!minimizedState"
                         style="width:100%;border:none;resize:none;"
                         class="form-control"
                         :rows="memoSize"
