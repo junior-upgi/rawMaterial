@@ -27,7 +27,7 @@ router.route('/data/restful/planSchedule')
     .post(function(request, response, next) {
         utility.logger.info('POST /data/restful/planSchedule invoked...');
         shipment.table
-            .create(request.body.fieldList)
+            .create(request.body)
             .then(function() {
                 utility.logger.info('record inserted');
                 return response.status(200).end();
@@ -54,8 +54,9 @@ router.route('/data/restful/planSchedule')
         utility.logger.info('DELETE /data/restful/planSchedule invoked...');
         let currentDatetime = moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
         shipment.table
-            .update({ deprecated: currentDatetime }, { where: request.body.condition })
-            .then(function() {
+            .update({ deprecated: currentDatetime }, {
+                where: { id: request.body.id }
+            }).then(function() {
                 utility.logger.info('record deprecated');
                 return response.status(200).end();
             }).catch(function(error) {

@@ -78,8 +78,14 @@ export default {
     initPlanSchedule(state, planScheduleData) {
         state.planSchedule = planScheduleData.slice();
     },
-    newYearSelection(state, newYearSelection) { state.yearSelected = newYearSelection; },
-    newMonthSelection(state, newMonthSelection) { state.monthSelected = newMonthSelection; },
+    newYearSelection(state, newYearSelection) {
+        state.yearSelected = newYearSelection;
+        state.batchReservationQueue = [];
+    },
+    newMonthSelection(state, newMonthSelection) {
+        state.monthSelected = newMonthSelection;
+        state.batchReservationQueue = [];
+    },
     initRawMatList(state, rawMatListData) { state.rawMatList = rawMatListData.slice(); },
     rawMatSelected(state, rawMatSelection) {
         if (parseInt(rawMatSelection) > -1) {

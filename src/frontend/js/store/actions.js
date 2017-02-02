@@ -145,13 +145,41 @@ export default {
             });
     },
     commitBatchReservation: function(context, payload) {
-        console.log(payload);
-        context.commit('resetBatchReservationQueue');
-        /*
-        context.commit('newYearSelection', new Date(payload.requestDate).getFullYear());
-        context.commit('newMonthSelection', new Date(payload.requestDate).getMonth());
-        alert('批次進貨預約成功');
-        alert('implement broadcast');
-        */
+        let processingQueue = [];
+        let requestOption = {
+            method: null,
+            url: `${serverUrl}/data/restful/planSchedule`,
+            data: {},
+            headers: { 'x-access-token': sessionStorage.token }
+        };
+        payload.batchReservationQueue.forEach((reservation) => {
+            requestOption.method = reservation.action;
+            for (let propIndex in reservation.shipment) {
+                requestOption.data[propIndex] = reservation.shipment[propIndex];
+            }
+            processingQueue.push(axios(requestOption));
+            requestOption.method = null;
+            requestOption.data = {};
+        });
+        Promise.all(processingQueue)
+            .then(() => {
+                context.commit('resetBatchReservationQueue');
+                context.commit('newYearSelection', payload.selectedYear);
+                context.commit('newMonthSelection', payload.selectedMonth);
+                delete requestOption.data;
+                requestOption.method = 'get';
+                requestOption.params = {
+                    year: payload.selectedYear,
+                    month: payload.selectedMonth
+                };
+                return axios(requestOption);
+            })
+            .then((response) => {
+                context.commit('initPlanSchedule', response.data);
+                context.commit('updateStatusMessage', `${payload.selectedYear} 年 ${payload.selectedMonth + 1} 月份原料進廠批次預約成功`);
+            })
+            .catch((error) => {
+                errorHandler(context, `原料進廠批次預約失敗 (錯誤: ${error})。請重新登入系統`);
+            });
     }
 };

@@ -10,7 +10,6 @@ export default {
             selectedYear: 'getSelectedYear',
             selectedMonth: 'getSelectedMonth',
             relevantSchedule: 'getRelevantSchedule',
-            relevantShipment: 'getRelevantShipment',
             CUS_NO: 'getSupplierErpId',
             PRD_NO: 'getRawMatErpId',
             typeId: 'getTypeId'
@@ -31,8 +30,8 @@ export default {
         scheduled: function() { // return true or false by checking if the template button is associated with an existing schedule shipment
             let scheduled = false;
             let date = this.date;
-            this.relevantSchedule.forEach(function(relevantShipment) {
-                if ((relevantShipment.requestDate === date.format('YYYY-MM-DD')) && !relevantShipment.deprecated) {
+            this.relevantSchedule.forEach(function(shipment) {
+                if ((shipment.requestDate === date.format('YYYY-MM-DD')) && !shipment.deprecated) {
                     scheduled = true;
                 }
             });
@@ -48,20 +47,27 @@ export default {
                 this.pushBatchReservation({
                     type: 'pushBatchReservation',
                     action: 'delete',
-                    shipment: this.relevantShipment
+                    shipment: this.relevantShipment()
                 });
             } else { // if it's not scheduled yet, push a new object on to the batchReservationQueue in the store
                 this.pushBatchReservation({
                     type: 'pushBatchReservation',
                     action: 'post',
-                    requestDate: this.date.format('YYYY-MM-DD'),
-                    CUS_NO: this.CUS_NO,
-                    PRD_NO: this.PRD_NO,
-                    typeId: this.typeId,
-                    quantity: 1
+                    shipment: {
+                        requestDate: this.date.format('YYYY-MM-DD'),
+                        CUS_NO: this.CUS_NO,
+                        PRD_NO: this.PRD_NO,
+                        typeId: this.typeId,
+                        quantity: 1
+                    }
                 });
             }
             this.modified = true;
+        },
+        relevantShipment: function() {
+            return this.relevantSchedule.filter((shipment) => {
+                return ((shipment.requestDate === this.date.format('YYYY-MM-DD')) && (!shipment.deprecated));
+            })[0];
         }
     },
     template: `

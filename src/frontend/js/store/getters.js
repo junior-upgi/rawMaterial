@@ -43,14 +43,6 @@ export default {
         });
         return relevantSchedule;
     },
-    getRelevantShipment: function(state) {
-        let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
-        return state.planSchedule.filter(function(shipment) {
-            return (shipment.CUS_NO === selectedRawMaterial.CUS_NO) &&
-                (shipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
-                (shipment.typeId === selectedRawMaterial.typeId);
-        })[0];
-    },
     getBatchReservationQueue: function(state) {
         return state.batchReservationQueue;
     },
