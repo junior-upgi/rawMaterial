@@ -1,9 +1,7 @@
 const gulp = require('gulp');
-// const merge = require('merge-stream');
 const requireDir = require('require-dir');
 
 const browsersync = require('browser-sync');
-// const runSequence = require('run-sequence');
 const $ = require('gulp-load-plugins')({ lazy: true, camelize: true });
 
 const serverConfig = require('./src/backend/module/serverConfig.js');

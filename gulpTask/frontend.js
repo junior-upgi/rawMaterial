@@ -2,7 +2,6 @@ const browsersync = require('browser-sync');
 const del = require('del');
 const gulp = require('gulp');
 const merge = require('merge-stream');
-// const runSequence = require('run-sequence');
 const yargs = require('yargs').argv;
 
 // transpiling and concatnation specific
@@ -46,18 +45,23 @@ gulp.task('transpileFrontendFiles', ['removeFrontendScriptDir', 'lintFrontendFil
     let destDir = './public/js';
     let taskList = entryPointList.map(function(entryPoint) {
         return browserify(entryPoint, { debug: true })
-            .transform(babelify, { presets: [
+            .transform(babelify, {
+                presets: [
                     ['es2015'],
                     ['stage-2']
-                ], sourceMaps: true })
+                ],
+                sourceMaps: true
+            })
             .bundle()
             .on('error', function(error) { console.error(error); })
             .pipe(source(entryPoint.slice(18)))
             .pipe($.rename({ extname: '.bundle.js' }))
             .pipe(buffer())
+            /*
             .pipe($.sourcemaps.init({ loadMaps: true }))
             .pipe($.uglify({ mangle: false, compress: { sequences: false } }))
             .pipe($.sourcemaps.write('./', { sourceRoot: './src/frontend' }))
+            */
             .pipe(gulp.dest(destDir))
             .pipe(browsersync.stream());
     });
