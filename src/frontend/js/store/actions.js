@@ -116,9 +116,10 @@ export default {
         };
         axios(requestOption)
             .then((response) => {
+                console.log(payload.requestDate);
                 context.commit('initPlanSchedule', response.data);
-                context.commit('newYearSelection', new Date(payload.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(payload.requestDate).getMonth());
+                context.commit('newYearSelection', new Date(payload.shipment.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.shipment.requestDate).getMonth());
                 context.commit('updateStatusMessage', '取消原料進廠預約成功');
             }).catch((error) => {
                 errorHandler(context, `取消原料進貨預約失敗 (錯誤: ${error})。請重新登入系統`);
@@ -137,8 +138,8 @@ export default {
         axios(requestOption)
             .then((response) => {
                 context.commit('initPlanSchedule', response.data);
-                context.commit('newYearSelection', new Date(payload.requestDate).getFullYear());
-                context.commit('newMonthSelection', new Date(payload.requestDate).getMonth());
+                context.commit('newYearSelection', new Date(payload.original.requestDate).getFullYear());
+                context.commit('newMonthSelection', new Date(payload.original.requestDate).getMonth());
                 context.commit('updateStatusMessage', '原料進廠預約修改成功');
             }).catch((error) => {
                 errorHandler(context, `原料進廠預約修改失敗 (錯誤: ${error})。請重新登入系統`);
