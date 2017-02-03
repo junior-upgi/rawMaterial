@@ -7,6 +7,7 @@ import { store } from './store/store.js';
 import loginComponent from './login.js';
 import statusComponent from './status.js';
 import furnaceComponent from './furnace/entry.js';
+import purchasingComponent from './purchasing/entry.js';
 
 window.onload = function() {
     new Vue({
@@ -15,6 +16,7 @@ window.onload = function() {
         components: {
             'login': loginComponent,
             'furnace': furnaceComponent,
+            'purchasing': purchasingComponent,
             'status': statusComponent
         },
         computed: {
