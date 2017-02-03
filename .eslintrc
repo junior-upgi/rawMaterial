@@ -25,6 +25,7 @@
         "new-cap": ["error", { "capIsNewExceptions": ["Router"], "newIsCapExceptions": [] }],
         "newline-after-var": "off",
         "no-console": "off",
+        "no-extra-semi": "error",
         "no-invalid-this": "off",
         "no-undef": "warn",
         "no-unused-vars": "warn",

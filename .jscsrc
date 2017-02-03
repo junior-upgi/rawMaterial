@@ -1,16 +1,14 @@
 {
     "preset": "google",
-    "fileExtensions": [
-        ".js"
-    ],
-    "extract": [
-        "*.html"
-    ],
+    "fileExtensions": [".js"],
+    "extract": ["*.html"],
     "excludeFiles": [
-        "node_modules/**",
         "bower_components/**",
+        "build/**",
+        "deprecated/**",
+        "node_modules/**",
         "public/**",
-        "build/**"
+        "src/**/*.vue"
     ],
     "maxErrors": 10,
     "disallowSpacesInsideArrayBrackets": false,
