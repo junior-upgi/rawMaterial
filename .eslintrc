@@ -1,16 +1,17 @@
 {
     "extends": ["eslint:recommended", "eslint-config-google"],
-    "root": true,
-    "parser": "babel-eslint",
-    "parserOptions": { "sourceType": "module" },
+    "plugins": ["html"],
     "env": {
         "browser": true,
         "node": true,
         "commonjs": true,
         "jquery": true,
-        "es6": true
+        "es6": true,
+        "jasmine": true
     },
-    "plugins": ["html"],
+    "root": true,
+    "parser": "babel-eslint",
+    "parserOptions": { "sourceType": "module" },
     "rules": {
         "array-bracket-spacing": ["error", "never", { "singleValue": false, "arraysInArrays": false, "objectsInArrays": false }],
         "block-spacing": ["warn", "always"],
