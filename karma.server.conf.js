@@ -6,9 +6,9 @@ module.exports = function(config) {
             'PhantomJS'
         ],
         frameworks: ['browserify', 'mocha'],
-        files: ['src/**/*.test.js'],
+        files: ['src/backend/**/*.test.js'],
         reporters: ['spec'],
-        preprocessors: { 'src/**/*.test.js': ['browserify'] },
+        preprocessors: { 'src/backend/**/*.test.js': ['browserify'] },
         browserify: {
             debug: true,
             // needed to enable mocks
@@ -16,8 +16,8 @@ module.exports = function(config) {
         },
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_INFO,
-        autoWatch: false,
-        singleRun: true,
+        autoWatch: true,
+        singleRun: false,
         concurrency: Infinity
     });
 };
