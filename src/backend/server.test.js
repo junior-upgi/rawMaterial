@@ -1,5 +1,4 @@
-import chai from 'chai';
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
 
 chai.should();
 

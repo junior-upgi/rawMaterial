@@ -1,12 +1,11 @@
-import chai from 'chai';
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
 import Vue from 'vue';
 
 import Hello from './Hello.vue';
 
 chai.should();
 
-describe.skip('vue test', () => {
+describe('vue test', () => {
     it('should render correct contents', () => {
         const vm = new Vue({
             el: document.createElement('div'),

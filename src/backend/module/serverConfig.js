@@ -1,6 +1,5 @@
 const systemReference = 'rawMaterial';
 const development = true;
-const serverHostname = 'svd13216pwb';
 
 // broadcasting configuration
 const botAPIUrl = 'https://api.telegram.org/bot';
@@ -77,7 +76,6 @@ module.exports = {
     passphrase: passphrase(),
     publicServerUrl: publicServerUrl(),
     serverHost: serverHost,
-    serverHostname: serverHostname,
     serverPort: serverPort,
     serverUrl: `${serverHost}:${serverPort}`,
     smtpTransportAccount: smtpTransportAccount,
