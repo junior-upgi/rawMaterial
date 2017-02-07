@@ -16,8 +16,7 @@ main.use(morgan('dev'));
 main.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
 main.use(bodyParser.json()); // parse application/json
 
-// static routes
-main.use('/', express.static(path.join(__dirname + '/../public')));
+main.use('/', express.static(path.join(__dirname + '/../public'))); // frontend client server route
 
 // available routes
 main.use('/', require('./route/utility/status.js')); // serve system status

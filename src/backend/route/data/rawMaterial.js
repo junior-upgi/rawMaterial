@@ -1,3 +1,4 @@
+/*
 const express = require('express');
 const serverConfig = require('../../module/serverConfig.js');
 const knex = require('knex')(serverConfig.mssqlConfig);
@@ -17,3 +18,4 @@ router.get('/data/rawMaterial/Basic', function(request, response) {
         .finally(() => { knex.destroy(); });
 });
 module.exports = router;
+*/

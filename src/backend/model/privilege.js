@@ -4,28 +4,24 @@ const previligeList = [
     { erpId: '09100001', role: 'furnace' }
 ];
 
-function checkMembership(loginId) {
-    let foundMatch = false;
-    previligeList.forEach(function(privilegeObject) {
-        if (privilegeObject.erpId === loginId) {
-            foundMatch = true;
-        }
-    });
-    return foundMatch;
-}
-
-function getRole(loginId) {
-    let role = '';
-    previligeList.forEach(function(privilegeObject) {
-        if (privilegeObject.erpId === loginId) {
-            role = privilegeObject.role;
-        }
-    });
-    return role;
-}
-
 module.exports = {
-    checkMembership: checkMembership,
-    getRole: getRole,
-    previligeList: previligeList
+    previligeList: previligeList,
+    checkMembership: function(loginId) {
+        let foundMatch = false;
+        previligeList.forEach(function(privilegeObject) {
+            if (privilegeObject.erpId === loginId) {
+                foundMatch = true;
+            }
+        });
+        return foundMatch;
+    },
+    getRole: function(loginId) {
+        let role = '';
+        previligeList.forEach(function(privilegeObject) {
+            if (privilegeObject.erpId === loginId) {
+                role = privilegeObject.role;
+            }
+        });
+        return role;
+    }
 };
