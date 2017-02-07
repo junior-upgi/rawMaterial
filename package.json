@@ -115,7 +115,8 @@
         "server:watch:restart": "nodemon --watch build --exec \"node build/server.js\"",
         "client:watch:hmr": "watchify -vd -p browserify-hmr -e src/frontend/main.js -o public/main.js",
         "browser:start": "start %npm_package_config_appurl%",
-        "start:dev:plain": "npm-run-all --parallel server:start client:watch:hmr browser:start",
+        "start:dev:server": "npm-run-all --parallel server:start client:watch:hmr browser:start",
+        "start:dev:support": "npm-run-all --parallel server:watch:relint server:watch:retest client:watch:relint client:watch:retest",
 
         "server:watch:relint": "nodemon --ext js,json --watch src/backend --on-change-only --exec \"npm run server:lint\"",
         "server:watch:retest": "karma start karma.server.conf.js",
