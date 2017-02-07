@@ -65,6 +65,14 @@ module.exports = {
     ldapServerUrl: ldapServerUrl,
     logDir: 'log',
     mssqlConfig: {
+        client: 'mssql',
+        connection: {
+            server: mssqlServerHost().slice(7),
+            user: upgiSystemAccount,
+            password: upgiSystemPassword,
+            port: mssqlServerPort
+        },
+        debug: true,
         server: mssqlServerHost().slice(7),
         user: upgiSystemAccount,
         password: upgiSystemPassword,

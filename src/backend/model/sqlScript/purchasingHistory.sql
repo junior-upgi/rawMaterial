@@ -1,0 +1,25 @@
+SELECT
+	a.LZ_ID
+	,a.LZ_NO
+	,b.ITM
+	,CONVERT(char(10),a.LZ_DD,126) AS LZ_DD
+	,a.CUS_NO
+	,c.SNM AS CUST_SNM
+	,b.PS_NO
+	,b.AMTN_NET
+	,b.TAX
+	,b.PRD_NO
+	,d.SNM AS PRDT_SNM
+	,b.EST_ITM
+	,b.TAX_RTO
+	,b.QTY
+	,b.UP
+	,b.UNIT
+FROM DB_U105.dbo.MF_LZ1 a
+	INNER JOIN DB_U105.dbo.TF_LZ1 b ON a.LZ_NO=b.LZ_NO
+	INNER JOIN DB_U105.dbo.CUST c ON a.CUS_NO=c.CUS_NO
+	INNER JOIN DB_U105.dbo.PRDT d ON b.PRD_NO=d.PRD_NO
+WHERE
+	b.PRD_NO IN (SELECT PRD_NO FROM rawMaterial.dbo.knownRawMatId)
+	AND
+	a.LZ_DD>='2016-01-01';
