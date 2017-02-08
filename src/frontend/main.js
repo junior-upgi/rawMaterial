@@ -2,9 +2,10 @@
 // so you don't have to do: import Vue from 'vue/dist/vue'
 // This is done with the browser options. For the config, see package.json
 import Vue from 'vue';
-import App from './component/App.vue';
+
+import app from './component/App.vue';
 
 new Vue({ // eslint-disable-line no-new
     el: '#app',
-    render: (h) => h(App)
+    render: (h) => h(app)
 });

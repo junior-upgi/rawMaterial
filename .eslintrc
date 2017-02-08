@@ -20,7 +20,11 @@
     },
     "root": true,
     "parser": "babel-eslint",
-    "parserOptions": { "sourceType": "module" },
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "ecmaFeatures": { "experimentalObjectRestSpread": true },
+        "sourceType": "module"
+    },
     "rules": {
         "array-bracket-spacing": ["error", "never", { "singleValue": false, "arraysInArrays": false, "objectsInArrays": false }],
         "block-spacing": ["warn", "always"],

@@ -1,12 +1,12 @@
-import chai from 'chai';
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import 'es6-promise/auto';
 
-import App from './App.vue';
+import app from './app.vue';
 
 chai.should();
 
 describe('App component test', () => {
     it('check if it has correct name set', () => {
-        expect(App.name).to.be.eql('app');
+        expect(app.name).to.be.eql('app');
     });
 });

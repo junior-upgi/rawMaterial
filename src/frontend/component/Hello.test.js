@@ -1,7 +1,8 @@
 import chai, { expect } from 'chai';
+import 'es6-promise/auto';
 import Vue from 'vue';
 
-import Hello from './Hello.vue';
+import hello from './hello.vue';
 
 chai.should();
 
@@ -9,7 +10,7 @@ describe('vue test', () => {
     it('should render correct contents', () => {
         const vm = new Vue({
             el: document.createElement('div'),
-            render: (h) => h(Hello)
+            render: (h) => h(hello)
         });
         expect(vm.$el.querySelector('h1').textContent).to.be.eql('Welcome to Your Vue.js App');
     });
