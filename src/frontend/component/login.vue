@@ -39,12 +39,21 @@
 </script>
 
 <template>
-    <div class="container">
-        <form id="loginForm" v-on:submit.prevent>
-            <input name="loginId" type="text" placeholder="使用者帳號" v-model="loginId" required />
-            <input name="password" type="password" placeholder="密碼" v-model="password" required />
-            <button type="submit" v-on:click="login">登入</button>
-            <button type="reset">重設</button>
-        </form>
-    </div>
+    <form id="loginForm" v-on:submit.prevent>
+        <div class="form-group">
+            <input class="form-control" name="loginId" type="text" placeholder="使用者帳號" v-model="loginId" required />
+        </div>
+        <div class="form-group">
+            <input class="form-control"  name="password" type="password" placeholder="密碼" v-model="password" required />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg" type="submit" v-on:click="login">登入</button>
+            <button class="btn btn-lg" type="btn btn-lg reset">重設</button>
+        </div>
+    </form>
 </template>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

@@ -2,7 +2,7 @@
     "beautify.language": {
         "js": {
             "type": [],
-            "filename": [".jshintrc", ".jsbeautify"]
+            "filename": [".jsbeautify"]
         },
         "css": ["css", "scss"],
         "html": ["htm", "html", "hbs"]

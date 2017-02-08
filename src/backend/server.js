@@ -17,6 +17,7 @@ main.use(bodyParser.urlencoded({ extended: true })); // parse application/x-www-
 main.use(bodyParser.json()); // parse application/json
 
 main.use('/', express.static(path.join(__dirname + '/../public'))); // frontend client server route
+main.use('/bower_components', express.static(path.join(__dirname + '/../bower_components'))); // serve bower packages
 
 // available routes
 main.use('/', require('./route/utility/status.js')); // serve system status

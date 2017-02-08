@@ -6,7 +6,7 @@ import hello from './hello.vue';
 
 chai.should();
 
-describe('vue test', () => {
+describe.skip('vue test', () => {
     it('should render correct contents', () => {
         const vm = new Vue({
             el: document.createElement('div'),

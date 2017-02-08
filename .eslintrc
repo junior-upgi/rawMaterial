@@ -6,7 +6,7 @@
     ],
     "plugins": ["html", "json", "node"],
     "settings": {
-        "html/html-extensions": [".html", ".vue"],
+        "html/html-extensions": [".html", "vue"],
         "html/indent": "+4",
         "html/report-bad-indent": "error"
     },

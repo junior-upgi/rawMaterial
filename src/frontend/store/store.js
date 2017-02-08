@@ -11,6 +11,6 @@ export const store = new Vuex.Store({
     getters: getters,
     mutations: mutations,
     state: {
-        activeView: 'login'
+        activeView: 'loginView'
     }
 });
