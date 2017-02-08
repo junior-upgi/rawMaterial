@@ -20,7 +20,8 @@ main.use('/', express.static(path.join(__dirname + '/../public'))); // frontend 
 main.use('/bower_components', express.static(path.join(__dirname + '/../bower_components'))); // serve bower packages
 
 // available routes
-main.use('/', require('./route/utility/status.js')); // serve system status
+main.use('/', require('./route/utility/login.js'));
+main.use('/', require('./route/utility/status.js'));
 
 // initiate server script
 if (!module.parent) {

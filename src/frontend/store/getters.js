@@ -3,7 +3,13 @@ export default {
         if (state.activeView) {
             return state.activeView;
         } else {
-            return 'Login';
+            return 'login';
         }
+    },
+    getRole: function(state) {
+        return state.role;
+    },
+    getUserName: function(state) {
+        return state.userName;
     }
 };
