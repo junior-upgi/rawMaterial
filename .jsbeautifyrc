@@ -4,8 +4,7 @@
             "type": [],
             "filename": [".jsbeautify"]
         },
-        "css": ["css", "scss"],
-        "html": ["htm", "html", "hbs"]
+        "css": ["css", "scss"]
     },
     "brace_style": "collapse,preserve-inline",
     "end_with_newline": true

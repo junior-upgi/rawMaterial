@@ -81,9 +81,9 @@
                 <template>
                     <component :is="activeView"></component>
                 </template>
-</div>
-</div>
-</div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style>
