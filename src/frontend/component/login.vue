@@ -1,6 +1,6 @@
 <script>
     import axios from 'axios';
-    import { mapActions, mapGetters, mapMutations } from 'vuex';
+    import { mapActions, mapMutations } from 'vuex';
     import { store } from '../store/store.js';
 
     import { serverUrl } from '../clientConfig.js';
