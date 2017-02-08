@@ -8,17 +8,11 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+# start dev server with hot reload at localhost:9006
+npm run start:dev:server
 
-# build for production with minification
-npm run build
+# (development) relint on save
+npm run start:dev:lint
 
-# lint all *.js and *.vue files
-npm run lint
-
-# run unit tests
-npm test
-```
-
-For more information see the [docs for vueify](https://github.com/vuejs/vueify).
+# (development) retest on save
+npm run start:dev:test
