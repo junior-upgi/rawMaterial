@@ -10,6 +10,6 @@ export default {
         return state.role;
     },
     getUserName: function(state) {
-        return state.userName;
+        return state.userData.NAME;
     }
 };

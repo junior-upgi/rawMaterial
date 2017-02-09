@@ -19,9 +19,12 @@ main.use(bodyParser.json()); // parse application/json
 main.use('/', express.static(path.join(__dirname + '/../public'))); // frontend client server route
 main.use('/bower_components', express.static(path.join(__dirname + '/../bower_components'))); // serve bower packages
 
-// available routes
+// utility routes
 main.use('/', require('./route/utility/login.js'));
 main.use('/', require('./route/utility/status.js'));
+// data routes
+main.use('/', require('./route/data/rawMaterial.js'));
+main.use('/', require('./route/data/shipment.js'));
 
 // initiate server script
 if (!module.parent) {

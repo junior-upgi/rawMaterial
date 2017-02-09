@@ -15,9 +15,19 @@ export const store = new Vuex.Store({
     state: {
         accessExp: currentDatetime().format('HH:mm'),
         activeView: 'login',
-        loginId: null, // same as SAL_NO
+        loginId: null, // same as userData.SAL_NO
         role: null, // 'admin', 'furnace', 'purchasing', 'supplier'
         token: null, // jwt token
         userData: null // used to hold the user information returned from the authentication process
     }
 });
+
+if (module.hot) {
+    module.hot.accept(['./getters', './actions', './mutations'], () => {
+        store.hotUpdate({
+            getters: require('./getters'),
+            actions: require('./actions'),
+            mutations: require('./mutations')
+        });
+    });
+}

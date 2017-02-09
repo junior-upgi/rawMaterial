@@ -12,15 +12,15 @@ function currentDatetimeString() { return moment(moment(), 'YYYY-MM-DD HH:mm:ss'
 
 // logging utility
 if (!fs.existsSync(serverConfig.logDir)) { fs.mkdirSync(serverConfig.logDir); } // Create the log directory if it does not exist
-const logger = new(winston.Logger)({
+const logger = new (winston.Logger)({
     transports: [
         // colorize the output to the console
-        new(winston.transports.Console)({
+        new (winston.transports.Console)({
             timestamp: currentDatetimeString(),
             colorize: true,
             level: 'debug'
         }),
-        new(winston.transports.File)({
+        new (winston.transports.File)({
             filename: `${serverConfig.logDir}/results.log`,
             timestamp: currentDatetimeString(),
             level: serverConfig.development ? 'debug' : 'info'
@@ -35,11 +35,11 @@ let statusReport = cron.schedule('0 0 8,22 * * *', function() {
     let message = `${issuedDatetime} ${serverConfig.systemReference} server reporting in from ${os.hostname()}`;
     httpRequest({
         method: 'post',
-        uri: serverConfig.botAPIUrl + telegram.getToken('upgiITBot') + '/sendMessage',
+        uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiITBot') + '/sendMessage',
         body: {
-            chat_id: telegram.getUserID('蔡佳佑'),
+            chat_id: 241630569,
             text: `${message}`,
-            token: telegram.getToken('upgiITBot')
+            token: telegram.getBotToken('upgiITBot')
         },
         json: true
     }).then(function(response) {
@@ -55,32 +55,64 @@ let statusReport = cron.schedule('0 0 8,22 * * *', function() {
 function alertSystemError(functionRef, message) {
     httpRequest({ // broadcast alert heading
         method: 'post',
-        uri: serverConfig.botAPIUrl + telegram.getToken('upgiITBot') + '/sendMessage',
+        uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiITBot') + '/sendMessage',
         body: {
-            chat_id: telegram.getUserID('蔡佳佑'),
+            chat_id: 241630569,
             text: `error encountered while executing [${serverConfig.systemReference}][${functionRef}] @ ${currentDatetimeString()}`,
-            token: telegram.getToken('upgiITBot')
+            token: telegram.getBotToken('upgiITBot')
         },
         json: true
     }).then(function(response) {
         return httpRequest({ // broadcast alert body message
             method: 'post',
-            uri: serverConfig.botAPIUrl + telegram.getToken('upgiITBot') + '/sendMessage',
+            uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiITBot') + '/sendMessage',
             form: {
-                chat_id: telegram.getUserID('蔡佳佑'),
+                chat_id: 241630569,
                 text: `error message: ${message}`,
-                token: telegram.getToken('upgiITBot')
+                token: telegram.getBotToken('upgiITBot')
             }
         });
     }).then(function(response) {
-        return logger.info(`${serverConfig.systemReference} ${functionRef} alert sent`);
+        return logger.info(`${serverConfig.systemReference} alert sent`);
     }).catch(function(error) {
-        return logger.error(`${serverConfig.systemReference} ${functionRef} failure: ${error}`);
+        return logger.error(`${serverConfig.systemReference} failure: ${error}`);
     });
+}
+
+function sendMobileMessage(recipientIDList, messageList, botName) {
+    recipientIDList.forEach(function(recipientID) {
+        messageList.forEach(function(message) {
+            httpRequest({
+                method: 'post',
+                uri: serverConfig.botAPIUrl + telegram.getBotToken(botName) + '/sendMessage',
+                form: {
+                    chat_id: recipientID,
+                    text: message,
+                    token: telegram.getBotToken(botName)
+                }
+            }).then(function(response) {
+                logger.info('message sent');
+            }).catch(function(error) {
+                logger.error('messaging failure');
+            });
+        });
+    });
+    return;
+}
+
+function endpointErrorHandler(method, originalUrl, errorMessage) {
+    let errorString = `${method} ${originalUrl} route failure: ${errorMessage}`;
+    logger.error(errorString);
+    logger.info(alertSystemError(serverConfig.systemReference, errorString));
+    return {
+        errorMessage: errorString
+    };
 }
 
 module.exports = {
     alertSystemError: alertSystemError,
+    endpointErrorHandler: endpointErrorHandler,
     logger: logger,
+    sendMobileMessage: sendMobileMessage,
     statusReport: statusReport
 };

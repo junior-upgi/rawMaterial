@@ -1,6 +1,6 @@
 <script>
     import axios from 'axios';
-    import { mapActions, mapMutations } from 'vuex';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
     import { store } from '../store/store.js';
 
     import { serverUrl } from '../clientConfig.js';
@@ -8,7 +8,7 @@
     export default {
         name: 'login',
         store: store,
-        computed: {},
+        computed: { ...mapGetters({ userName: 'getUserName' }) },
         data: function() {
             return {
                 loginId: '',
@@ -23,7 +23,7 @@
                 resetStore: 'resetStore',
                 restoreToken: 'restoreToken'
             }),
-            login() {
+            login: function() {
                 if (document.getElementById('loginForm').checkValidity()) {
                     axios.post(`${serverUrl}/login`, {
                         loginId: this.loginId,
@@ -32,9 +32,14 @@
                         this.password = '';
                         sessionStorage.token = response.data.token;
                         this.restoreToken(sessionStorage.token);
-                        alert('登入成功，確認後將轉向作業程式模組...');
-                        this.initData();
-                        this.redirectUser();
+                        alert(`歡迎 ${this.userName} 登入，確認後將轉向作業程式模組...`);
+                        this.initData()
+                            .then(() => {
+                                this.redirectUser();
+                            })
+                            .catch((error) => {
+                                console.log(error.errorMessage);
+                            });
                     }).catch((error) => {
                         this.password = '';
                         this.resetStore();
@@ -42,8 +47,7 @@
                         alert('登入失敗，請檢查帳號密碼是否正確並重新登入...');
                     });
                 }
-            },
-            initData
+            }
         }
     };
 

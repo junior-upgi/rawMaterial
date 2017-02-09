@@ -1,5 +1,5 @@
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
 
     import { store } from '../store/store.js';
 
@@ -31,17 +31,26 @@
         computed: {
             ...mapGetters({
                 activeView: 'getActiveView',
-                role: 'getRole'
+                role: 'getRole',
+                userName: 'getUserName'
             })
         },
         created: function() {
             // if jwt token exists in the sessionStorage
             if ((sessionStorage.token !== undefined) && (sessionStorage.token !== null) && (sessionStorage.token !== '')) {
                 this.restoreToken(sessionStorage.token); // restore token from session storage
-                this.redirectUser(this.getRole); // cause router action (redirect) by setting the role property
+                alert(`歡迎 ${this.userName} 登入，確認後將轉向作業程式模組...`);
+                this.initData()
+                    .then(() => {
+                        this.redirectUser();
+                    })
+                    .catch((error) => {
+                        console.log(error.errorMessage);
+                    });
             }
         },
         methods: {
+            ...mapActions({ initData: 'initData' }),
             ...mapMutations({
                 redirectUser: 'redirectUser',
                 restoreToken: 'restoreToken',

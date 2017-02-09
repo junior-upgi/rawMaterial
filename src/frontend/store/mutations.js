@@ -4,6 +4,10 @@ import { currentDatetime } from '../utility.js';
 
 export default {
     forceViewChange: function(state, role) { state.activeView = role; },
+    buildData: function(state, dataObject) {
+        console.log('building store data');
+        console.log(dataObject);
+    },
     redirectUser: function(state) { state.activeView = state.role; },
     resetStore: function(state) {
         sessionStorage.clear();
