@@ -32,13 +32,8 @@
                         this.password = '';
                         sessionStorage.token = response.data.token;
                         this.restoreToken(sessionStorage.token);
-                        alert('登入成功，確認後將轉向作業程式...');
-                        return this.initData({
-                            type: 'initData',
-                            role: this.role,
-                            CUS_NO: null // todo if logged in on a supplier account, a CUS_NO has to be returned prior
-                        });
-                    }).then(function() {
+                        alert('登入成功，確認後將轉向作業程式模組...');
+                        this.initData();
                         this.redirectUser();
                     }).catch((error) => {
                         this.password = '';
@@ -47,7 +42,8 @@
                         alert('登入失敗，請檢查帳號密碼是否正確並重新登入...');
                     });
                 }
-            }
+            },
+            initData
         }
     };
 
@@ -61,7 +57,7 @@
                 <input class="form-control col-3" name="loginId" type="text" placeholder="使用者帳號" v-model="loginId" required />
             </div>
             <div class="form-group">
-                <input class="form-control col-3"  name="password" type="password" placeholder="密碼" v-model="password" required />
+                <input class="form-control col-3" name="password" type="password" placeholder="密碼" v-model="password" required />
             </div>
             <div class="form-group">
                 <button class="btn btn-lg" type="submit" v-on:click="login">登入</button>

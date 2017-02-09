@@ -7,17 +7,16 @@ SELECT
 	,b.PRDT_SNM
 	,a.typeId
 	,b.specification
+    ,b.qtyPerShipment
 	,a.quantity
-    ,b.unitPerTruck*a.quantity AS estWeight
+    ,b.qtyPerShipment*a.quantity AS estWeight
     ,b.UT
     ,CONVERT(char(10),a.arrivalDate,126) AS arrivalDate
     ,a.supplierWeight
-    ,a.fullWeight
-    ,a.emptyWeight
+    ,a.actualWeight
 	,a.note
-    ,a.finalized
     ,a.created
     ,a.modified
     ,a.deprecated
-FROM rawMaterial.dbo.shipment a
-	INNER JOIN rawMaterial.dbo.rawMaterialSpecDetail b ON a.CUS_NO=b.CUS_NO AND a.PRD_NO=b.PRD_NO AND a.typeId=b.typeId;
+FROM rawMaterial.dbo.shipmentRequest a
+	INNER JOIN rawMaterial.dbo.rawMatSpecDetail b ON a.CUS_NO=b.CUS_NO AND a.PRD_NO=b.PRD_NO AND a.typeId=b.typeId;

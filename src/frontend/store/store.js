@@ -15,9 +15,9 @@ export const store = new Vuex.Store({
     state: {
         accessExp: currentDatetime().format('HH:mm'),
         activeView: 'login',
-        loginId: null,
-        role: null,
-        token: null,
-        userName: null
+        loginId: null, // same as SAL_NO
+        role: null, // 'admin', 'furnace', 'purchasing', 'supplier'
+        token: null, // jwt token
+        userData: null // used to hold the user information returned from the authentication process
     }
 });

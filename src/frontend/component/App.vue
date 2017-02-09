@@ -48,7 +48,7 @@
                 resetStore: 'resetStore'
             }),
             changeView: function(role) {
-                this.$store.commit('forceView', role);
+                this.$store.commit('forceViewChange', role);
             },
             logout: function() {
                 if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
