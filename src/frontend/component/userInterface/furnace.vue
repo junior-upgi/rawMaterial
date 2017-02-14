@@ -1,21 +1,34 @@
 <template>
-    <div>
-        <div>furnace view loaded</div>
-        <button type="button" @click="logout">登出</button>
+    <div class="text-center">
+        <div class="row">
+            <h3>窯爐模組</h3>
+            <raw-material-selector></raw-material-selector>
+        </div>
+        <div class="row">
+            <batch-reservation></batch-reservation>
+        </div>
+        <div class="row">
+            <h4>本月原料預約/進場狀況</h4>
+            <shipment-schedule></shipment-schedule>
+        </div>
     </div>
 </template>
+
 <script>
-    import { mapMutations } from 'vuex';
+    import { mapGetters } from 'vuex';
+    import shipmentSchedule from './shipmentSchedule.vue';
+    import batchReservation from './batchReservation.vue';
+    import rawMaterialSelector from './rawMaterialSelector.vue';
 
     export default {
         name: 'furnace',
-        methods: {
-            ...mapMutations({ resetStore: 'resetStore' }),
-            logout: function() {
-                if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
-                    this.resetStore();
-                }
-            }
+        components: {
+            batchReservation,
+            rawMaterialSelector,
+            shipmentSchedule
+        },
+        computed: {
+            ...mapGetters({ selectedRawMatIndex: 'getSelectedRawMatIndex' })
         }
     };
 

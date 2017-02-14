@@ -32,14 +32,10 @@
                         this.password = '';
                         sessionStorage.token = response.data.token;
                         this.restoreToken(sessionStorage.token);
-                        alert(`歡迎 ${this.userName} 登入，確認後將轉向作業程式模組...`);
+                        alert(`${this.userName}，歡迎登入，確認後將進入作業程式模組...`);
                         this.initData()
-                            .then(() => {
-                                this.redirectUser();
-                            })
-                            .catch((error) => {
-                                console.log(error.errorMessage);
-                            });
+                            .then(() => { this.redirectUser(); })
+                            .catch((error) => { console.log(error.errorMessage); });
                     }).catch((error) => {
                         this.password = '';
                         this.resetStore();
@@ -54,19 +50,16 @@
 </script>
 
 <template>
-    <div>
-        <br>
-        <form id="loginForm" v-on:submit.prevent>
+    <div class="row col-xs-10 col-sm-4">
+        <form id="loginForm" class="form" v-on:submit.prevent>
             <div class="form-group">
-                <input class="form-control col-3" name="loginId" type="text" placeholder="使用者帳號" v-model="loginId" required />
+                <input class="form-control" name="loginId" type="text" placeholder="使用者帳號" v-model="loginId" required />
             </div>
             <div class="form-group">
-                <input class="form-control col-3" name="password" type="password" placeholder="密碼" v-model="password" required />
+                <input class="form-control" name="password" type="password" placeholder="密碼" v-model="password" required />
             </div>
-            <div class="form-group">
-                <button class="btn btn-lg" type="submit" v-on:click="login">登入</button>
-                <button class="btn btn-lg" type="btn btn-lg reset">重設</button>
-            </div>
+            <button class="btn btn-lg" type="submit" v-on:click="login">登入</button>
+            <button class="btn btn-lg" type="reset">重設</button>
         </form>
     </div>
 </template>

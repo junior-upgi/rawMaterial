@@ -5,19 +5,26 @@ import { serverUrl } from '../clientConfig.js';
 export default {
     initData: function(context) {
         let state = context.state;
-        let dataObject = {
-            rawMatList: null
-        };
+        let optionList = [{
+            method: 'get',
+            url: `${serverUrl}/data/rawMaterial`,
+            headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
+            url: `${serverUrl}/data/rawMaterial/knownList`,
+            headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
+            url: `${serverUrl}/data/shipment`,
+            headers: { 'x-access-token': sessionStorage.token }
+        }];
         if ((state.loginId !== null) && (state.loginId === state.userData.SAL_NO)) {
-            let requestOption = {
-                method: 'get',
-                url: `${serverUrl}/data/rawMaterial`,
-                headers: { 'x-access-token': sessionStorage.token }
-            };
-            axios(requestOption)
-                .then((response) => {
-                    dataObject.rawMatList = response.data;
-                    // TODO make calls to backend API to get initialization data
+            Promise.all(optionList.map(axios))
+                .then(function(responseList) {
+                    let dataObject = {};
+                    responseList.forEach((response) => {
+                        Object.assign(dataObject, response.data);
+                    });
                     context.commit('buildData', dataObject);
                     return Promise.resolve();
                 }).catch((error) => {

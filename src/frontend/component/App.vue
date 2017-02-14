@@ -1,19 +1,21 @@
 <script>
     import { mapActions, mapGetters, mapMutations } from 'vuex';
-
     import { store } from '../store/store.js';
 
     import login from './login.vue';
     import admin from './userInterface/admin.vue';
     import furnace from './userInterface/furnace.vue';
     import purchasing from './userInterface/purchasing.vue';
+    import sidebar from './userInterface/sidebar.vue';
     import supplier from './userInterface/supplier.vue';
 
     const titleComponent = {
         name: 'title',
         template: `
-            <div class="page-header">
-                <h3>統義玻璃股份有限公司&nbsp;<small>玻璃原物料進貨管控系統</small></h3>
+            <div class="row" style="margin-left:10px;">
+                <div class="page-header">
+                    <h2>統義玻璃股份有限公司 <small style="white-space:nowrap;">玻璃原物料進貨管控系統</small></h2>
+                </div>
             </div>`
     };
 
@@ -22,6 +24,7 @@
         store: store,
         components: {
             'heading': titleComponent,
+            sidebar,
             login,
             admin,
             furnace,
@@ -30,39 +33,23 @@
         },
         computed: {
             ...mapGetters({
-                activeView: 'getActiveView',
-                role: 'getRole',
-                userName: 'getUserName'
+                activeView: 'getActiveView'
+            })
+        },
+        methods: {
+            ...mapActions({ initData: 'initData' }),
+            ...mapMutations({
+                redirectUser: 'redirectUser',
+                restoreToken: 'restoreToken'
             })
         },
         created: function() {
             // if jwt token exists in the sessionStorage
             if ((sessionStorage.token !== undefined) && (sessionStorage.token !== null) && (sessionStorage.token !== '')) {
                 this.restoreToken(sessionStorage.token); // restore token from session storage
-                alert(`歡迎 ${this.userName} 登入，確認後將轉向作業程式模組...`);
                 this.initData()
-                    .then(() => {
-                        this.redirectUser();
-                    })
-                    .catch((error) => {
-                        console.log(error.errorMessage);
-                    });
-            }
-        },
-        methods: {
-            ...mapActions({ initData: 'initData' }),
-            ...mapMutations({
-                redirectUser: 'redirectUser',
-                restoreToken: 'restoreToken',
-                resetStore: 'resetStore'
-            }),
-            changeView: function(role) {
-                this.$store.commit('forceViewChange', role);
-            },
-            logout: function() {
-                if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
-                    this.resetStore();
-                }
+                    .then(() => { this.redirectUser(); })
+                    .catch((error) => { console.log(error.errorMessage); });
             }
         }
     };
@@ -76,19 +63,10 @@
             <heading></heading>
         </div>
         <div class="row">
-            <br>
-            <div v-if="activeView !== 'login'" class="col-2">
-                <button v-if="role==='admin'" type="button" class="btn btn-outline-danger btn-block" @click="changeView('furnace')">窯爐模組</button>
-                <button v-if="role==='admin'" type="button" class="btn btn-outline-danger btn-block" @click="changeView('purchasing')">採購模組</button>
-                <button v-if="role==='admin'" type="button" class="btn btn-outline-danger btn-block" @click="changeView('supplier')">廠商模組</button>
-                <button type="button" class="btn btn-outline-info btn-block">reserved</button>
-                <button type="button" class="btn btn-outline-info btn-block">for</button>
-                <button type="button" class="btn btn-outline-info btn-block" disabled>sidebar</button>
-                <button type="button" class="btn btn-outline-primary btn-block" :disabled="activeView==='login'?true:false" @click="logout">登出</button>
-            </div>
-            <div :class="{'col':activeView==='login','col-10':activeView!=='login'}">
+            <sidebar v-if="activeView!=='login'" class="col-lg-2 col-sm-3 col-xs-12"></sidebar>
+            <div :class="{'col-sm-12':activeView==='login','col-lg-10 col-sm-9 col-xs-12':activeView!=='login'}">
                 <template>
-                    <component :is="activeView"></component>
+                    <component :is="activeView "></component>
                 </template>
             </div>
         </div>

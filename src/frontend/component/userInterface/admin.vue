@@ -1,22 +1,22 @@
 <template>
-    <div>
-        <div>admin view loaded</div>
-        <button type="button" @click="logout">登出</button>
+    <div class="text-center">
+        <div class="row">
+            <h3>管理模組</h3>
+        </div>
+        <div class="row">
+            <known-raw-material></known-raw-material>
+        </div>
     </div>
 </template>
+
 <script>
-    import { mapMutations } from 'vuex';
+    import { store } from '../../store/store.js';
+    import knownRawMaterial from './knownRawMaterial.vue';
 
     export default {
         name: 'admin',
-        methods: {
-            ...mapMutations({ resetStore: 'resetStore' }),
-            logout: function() {
-                if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
-                    this.resetStore();
-                }
-            }
-        }
+        store: store,
+        components: { knownRawMaterial }
     };
 
 </script>
