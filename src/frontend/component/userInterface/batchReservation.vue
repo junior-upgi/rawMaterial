@@ -69,7 +69,11 @@
                 <tbody>
                     <tr v-for="weekIndex in weekCount">
                         <td v-for="weekdayIndex in 7">
-                            <reservation-cell v-if="visible(weekIndex,weekdayIndex)" :cell-date-string="cellDate(weekIndex,weekdayIndex)" :shipment="releventShipmentFilter(weekIndex,weekdayIndex)"></reservation-cell>
+                            <reservation-cell
+                                v-if="visible(weekIndex,weekdayIndex)"
+                                :cell-date-string="cellDate(weekIndex,weekdayIndex)"
+                                :shipment="releventShipmentFilter(weekIndex,weekdayIndex)">
+                            </reservation-cell>
                         </td>
                     </tr>
                 </tbody>

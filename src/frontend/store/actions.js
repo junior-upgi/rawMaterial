@@ -26,8 +26,10 @@ export default {
                         Object.assign(dataObject, response.data);
                     });
                     context.commit('buildData', dataObject);
+                    console.log('GOT HERE SUCCESS...');
                     return Promise.resolve();
                 }).catch((error) => {
+                    console.log('GOT HERE ERROR...');
                     return Promise.reject({ errorMessage: `initData action failure: ${error}` });
                 });
         } else if ((state.loginId !== null) && (state.userData.CUS_NO !== null)) {

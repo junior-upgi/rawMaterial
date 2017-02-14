@@ -33,13 +33,13 @@
                         sessionStorage.token = response.data.token;
                         this.restoreToken(sessionStorage.token);
                         alert(`${this.userName}，歡迎登入，確認後將進入作業程式模組...`);
-                        this.initData()
-                            .then(() => { this.redirectUser(); })
-                            .catch((error) => { console.log(error.errorMessage); });
+                        return this.initData();
+                    }).then(() => {
+                        this.redirectUser();
                     }).catch((error) => {
                         this.password = '';
                         this.resetStore();
-                        // console.log(error);
+                        // console.log(error.errorMessage);
                         alert('登入失敗，請檢查帳號密碼是否正確並重新登入...');
                     });
                 }

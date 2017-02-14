@@ -10,15 +10,18 @@ export default {
     getRawMaterialTypeList: function(state) { return state.rawMatTypeList; },
     getRole: function(state) { return state.role; },
     getReleventShipmentSchedule: function(state) {
-        let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
-        let releventShipmentSchedule = state.shipmentSchedule.filter((shipment) => {
-            return (
-                (shipment.CUS_NO === selectedRawMaterial.CUS_NO) &&
-                (shipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
-                (shipment.typeId === selectedRawMaterial.typeId)
-            );
-        });
-        return releventShipmentSchedule;
+        if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
+            let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
+            let releventShipmentSchedule = state.shipmentSchedule.filter((shipment) => {
+                return (
+                    (shipment.CUS_NO === selectedRawMaterial.CUS_NO) &&
+                    (shipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
+                    (shipment.typeId === selectedRawMaterial.typeId)
+                );
+            });
+            return releventShipmentSchedule;
+        }
+        return [];
     },
     getSelectedRawMat: function(state) { return state.rawMatList[state.selectedRawMatIndex]; },
     getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
