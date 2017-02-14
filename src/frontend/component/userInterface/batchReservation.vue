@@ -10,7 +10,8 @@
         computed: {
             ...mapGetters({
                 rawMatList: 'getRawMatList',
-                releventShipmentSchedule: 'getReleventShipmentSchedule'
+                releventShipmentSchedule: 'getReleventShipmentSchedule',
+                selectedRawMat: 'getSelectedRawMat'
             }),
             weekCount: function() {
                 let firstOfMonth = new Date(this.workingYear, this.workingMonth - 1, 1);
@@ -58,7 +59,7 @@
 
 <template>
     <div>
-        <h4>{{workingYear}} 年 {{workingMonth}} 月份批次預約</h4>
+        <h4>{{workingYear}} 年 {{workingMonth}} 月份批次預約 【{{selectedRawMat.CUS_SNM}}】{{selectedRawMat.PRDT_SNM}} - {{selectedRawMat.specification}}</h4>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
