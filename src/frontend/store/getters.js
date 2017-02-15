@@ -9,9 +9,28 @@ export default {
             return 'login';
         }
     },
+    getDailyShipmentScheduleSummary: function(state) { return state.dailyShipmentScheduleSummary; },
     getRawMatList: function(state) { return state.rawMatList; },
     getRawMaterialTypeList: function(state) { return state.rawMatTypeList; },
     getRole: function(state) { return state.role; },
+    getReleventDailyShipmentScheduleSummary: function(state) {
+        if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
+            let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
+            let eleventDailyShipmentScheduleSummary = state.dailyShipmentScheduleSummary.filter((dailyShipment) => {
+                let scheduledYear = parseInt(moment(dailyShipment.requestDate).format('YYYY'));
+                let scheduledMonth = parseInt(moment(dailyShipment.requestDate).format('M'));
+                return (
+                    (dailyShipment.CUS_NO === selectedRawMaterial.CUS_NO) &&
+                    (dailyShipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
+                    (dailyShipment.typeId === selectedRawMaterial.typeId) &&
+                    (scheduledMonth === state.workingMonth) &&
+                    (scheduledYear === state.workingYear)
+                );
+            });
+            return eleventDailyShipmentScheduleSummary;
+        }
+        return [];
+    },
     getReleventShipmentSchedule: function(state) {
         if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
             let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];

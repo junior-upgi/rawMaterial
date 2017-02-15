@@ -13,7 +13,7 @@
         computed: {
             ...mapGetters({
                 rawMatList: 'getRawMatList',
-                releventShipmentSchedule: 'getReleventShipmentSchedule',
+                releventDailyShipmentScheduleSummary: 'getReleventDailyShipmentScheduleSummary',
                 selectedRawMat: 'getSelectedRawMat',
                 workingMonth: 'getWorkingMonth',
                 workingYear: 'getWorkingYear'
@@ -40,11 +40,11 @@
             cellIndex: function(weekIndex, weekdayIndex) {
                 return (parseInt(weekIndex) - 1) * 7 + parseInt(weekdayIndex);
             },
-            releventShipmentFilter: function(weekIndex, weekdayIndex) {
-                let releventShipment = this.releventShipmentSchedule.filter((shipment) => {
-                    return shipment.requestDate === this.cellDate(weekIndex, weekdayIndex);
+            releventDailyShipmentSummaryFilter: function(weekIndex, weekdayIndex) {
+                let releventDailyShipmentSummary = this.releventDailyShipmentScheduleSummary.filter((dailyShipment) => {
+                    return dailyShipment.requestDate === this.cellDate(weekIndex, weekdayIndex);
                 });
-                return releventShipment[0];
+                return releventDailyShipmentSummary[0];
             },
             lastOfMonth: function() {
                 return parseInt(moment(new Date(this.workingYear, this.workingMonth - 1, 1)).add(1, 'month').subtract(1, 'day').format('D'));
@@ -90,7 +90,7 @@
                             <reservation-cell
                                 v-if="visible(weekIndex,weekdayIndex)"
                                 :cell-date-string="cellDate(weekIndex,weekdayIndex)"
-                                :shipment="releventShipmentFilter(weekIndex,weekdayIndex)">
+                                :dailyShipment="releventDailyShipmentSummaryFilter(weekIndex,weekdayIndex)">
                             </reservation-cell>
                         </td>
                     </tr>

@@ -25,13 +25,12 @@
                         <th class="text-left">規格</th>
                         <th class="text-center">車次</th>
                         <th class="text-center">重量</th>
-                        <th class="text-left">備註</th>
                     </tr>
                 </thead>
                 <tbody>
                     <daily-shipment-record
-                        v-for="dailyShipment in releventShipmentSchedule"
-                        :dailyShipment="dailyShipment">
+                        v-for="dailyShipmentSummary in releventDailyShipmentScheduleSummary"
+                        :dailyShipmentSummary="dailyShipmentSummary">
                     </daily-shipment-record>
                 </tbody>
             </table>
@@ -55,8 +54,7 @@
         store: store,
         computed: {
             ...mapGetters({
-                releventShipmentSchedule: 'getReleventShipmentSchedule',
-                shipmentSchedule: 'getShipmentSchedule',
+                releventDailyShipmentScheduleSummary: 'getReleventDailyShipmentScheduleSummary',
                 workingMonth: 'getWorkingMonth',
                 workingYear: 'getWorkingYear'
             })

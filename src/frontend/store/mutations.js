@@ -6,6 +6,7 @@ export default {
     forceViewChange: function(state, role) { state.activeView = role; },
     buildData: function(state, dataObject) {
         for (let objectIndex in dataObject) {
+            state[objectIndex] = null;
             state[objectIndex] = dataObject[objectIndex];
         }
     },
@@ -27,6 +28,7 @@ export default {
         sessionStorage.clear();
         state.accessExp = currentDatetime().format('HH:mm');
         state.activeView = 'login';
+        state.dailyShipmentScheduleSummary = [];
         state.loginId = null;
         state.processingData = false;
         state.rawMatList = null;

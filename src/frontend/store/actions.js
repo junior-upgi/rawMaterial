@@ -18,11 +18,16 @@ export default {
         };
         return axios(requestOption);
     },
-    cancelShipment: function(context, id) {
+    cancelShipment: function(context, payload) {
         let requestOption = {
             method: 'delete',
             url: `${serverUrl}/data/shipment`,
-            data: { 'id': id },
+            data: {
+                requestDate: payload.requestDate,
+                CUS_NO: payload.CUS_NO,
+                PRD_NO: payload.PRD_NO,
+                typeId: payload.typeId
+            },
             headers: { 'x-access-token': sessionStorage.token }
         };
         return axios(requestOption);
@@ -40,6 +45,10 @@ export default {
         }, {
             method: 'get',
             url: `${serverUrl}/data/shipment`,
+            headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
+            url: `${serverUrl}/data/shipment/dailySummary`,
             headers: { 'x-access-token': sessionStorage.token }
         }];
         if ((state.loginId !== null) && (state.loginId === state.userData.SAL_NO)) {

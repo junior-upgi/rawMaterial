@@ -2,13 +2,13 @@
     <div>
         <div>{{cellDate.format('M/D')}}</div>
         <br>
-        <div v-if="shipment!==undefined">
+        <div v-if="dailyShipment!==undefined">
             <button
                 type="button"
                 class="btn btn-danger btn-xs"
                 @click="cancelReservation"
                 :disabled="processingData?true:false">
-                <strong>取消預約</strong>:&nbsp;&nbsp;<span class="badge">{{shipment.quantity}}</span>
+                <strong>取消預約</strong>:&nbsp;&nbsp;<span class="badge">{{dailyShipment.quantity}}</span>
             </button>
         </div>
         <div v-else>
@@ -34,7 +34,7 @@
         store: store,
         props: [
             'cellDateString',
-            'shipment'
+            'dailyShipment'
         ],
         computed: {
             ...mapGetters({
@@ -70,7 +70,12 @@
             }),
             cancelReservation: function() {
                 this.processingDataSwitch(true);
-                this.cancelShipment(this.shipment.id)
+                this.cancelShipment({
+                        requestDate: this.cellDateString,
+                        CUS_NO: this.selectedRawMat.CUS_NO,
+                        PRD_NO: this.selectedRawMat.PRD_NO,
+                        typeId: this.selectedRawMat.typeId
+                    })
                     .then((resultset) => {
                         this.buildData(resultset.data);
                         this.processingDataSwitch(false);
