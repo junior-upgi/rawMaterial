@@ -16,6 +16,7 @@ export const store = new Vuex.Store({
         accessExp: currentDatetime().format('HH:mm'),
         activeView: 'login',
         loginId: null, // same as userData.SAL_NO
+        processingData: false, // flag to signal if program is processing data
         rawMatList: null, // list of raw material with details
         rawMatTypeList: null, // list of known raw material in the ERP system
         role: null, // 'admin', 'furnace', 'purchasing', 'supplier'

@@ -9,12 +9,16 @@ export default {
             state[objectIndex] = dataObject[objectIndex];
         }
     },
+    processingDataSwitch: function(state, onOffSwitch) {
+        state.processingData = onOffSwitch;
+    },
     redirectUser: function(state) { state.activeView = state.role; },
     resetStore: function(state) {
         sessionStorage.clear();
         state.accessExp = currentDatetime().format('HH:mm');
         state.activeView = 'login';
         state.loginId = null;
+        state.processingData = false;
         state.rawMatList = null;
         state.rawMatTypeList = null;
         state.role = null;

@@ -39,7 +39,6 @@
                     }).catch((error) => {
                         this.password = '';
                         this.resetStore();
-                        // console.log(error.errorMessage);
                         alert('登入失敗，請檢查帳號密碼是否正確並重新登入...');
                     });
                 }

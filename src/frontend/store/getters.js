@@ -1,4 +1,5 @@
 export default {
+    checkDataProcessingState: function(state) { return state.processingData; },
     getActiveView: function(state) {
         if (state.activeView) {
             return state.activeView;

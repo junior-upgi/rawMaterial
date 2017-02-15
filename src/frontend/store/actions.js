@@ -3,6 +3,30 @@ import axios from 'axios';
 import { serverUrl } from '../clientConfig.js';
 
 export default {
+    bookShipment: function(context, payload) {
+        let requestOption = {
+            method: 'post',
+            url: `${serverUrl}/data/shipment`,
+            data: {
+                requestDate: payload.requestDate,
+                CUS_NO: payload.CUS_NO,
+                PRD_NO: payload.PRD_NO,
+                typeId: payload.typeId,
+                quantity: payload.quantity
+            },
+            headers: { 'x-access-token': sessionStorage.token }
+        };
+        return axios(requestOption);
+    },
+    cancelShipment: function(context, id) {
+        let requestOption = {
+            method: 'delete',
+            url: `${serverUrl}/data/shipment`,
+            data: { 'id': id },
+            headers: { 'x-access-token': sessionStorage.token }
+        };
+        return axios(requestOption);
+    },
     initData: function(context) {
         let state = context.state;
         let optionList = [{

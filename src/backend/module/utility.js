@@ -12,15 +12,15 @@ function currentDatetimeString() { return moment(moment(), 'YYYY-MM-DD HH:mm:ss'
 
 // logging utility
 if (!fs.existsSync(serverConfig.logDir)) { fs.mkdirSync(serverConfig.logDir); } // Create the log directory if it does not exist
-const logger = new (winston.Logger)({
+const logger = new(winston.Logger)({
     transports: [
         // colorize the output to the console
-        new (winston.transports.Console)({
+        new(winston.transports.Console)({
             timestamp: currentDatetimeString(),
             colorize: true,
             level: 'debug'
         }),
-        new (winston.transports.File)({
+        new(winston.transports.File)({
             filename: `${serverConfig.logDir}/results.log`,
             timestamp: currentDatetimeString(),
             level: serverConfig.development ? 'debug' : 'info'
@@ -111,6 +111,7 @@ function endpointErrorHandler(method, originalUrl, errorMessage) {
 
 module.exports = {
     alertSystemError: alertSystemError,
+    currentDatetimeString: currentDatetimeString,
     endpointErrorHandler: endpointErrorHandler,
     logger: logger,
     sendMobileMessage: sendMobileMessage,

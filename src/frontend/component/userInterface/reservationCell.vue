@@ -3,7 +3,11 @@
         <div>{{cellDate.format('M/D')}}</div>
         <br>
         <div v-if="shipment!==undefined">
-            <button type="button" class="btn btn-danger btn-xs">
+            <button
+                type="button"
+                class="btn btn-danger btn-xs"
+                @click="cancelReservation"
+                :disabled="processingData?true:false">
                 取消預約: <span class="badge">{{shipment.quantity}}</span>
             </button>
         </div>
@@ -13,19 +17,30 @@
                 min="1"
                 class="form-control input-sm col-sm-2 text-center"
                 v-model="quantity"
-                @change="processReservation" />
+                @change="processReservation"
+                :disabled="processingData?true:false" />
         </div>
     </div>
 </template>
 
 <script>
     import moment from 'moment-timezone';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
+    import store from '../../store/store.js';
+
     export default {
         name: 'reservationCell',
+        store: store,
         props: [
             'cellDateString',
             'shipment'
         ],
+        computed: {
+            ...mapGetters({
+                processingData: 'checkDataProcessingState',
+                selectedRawMat: 'getSelectedRawMat'
+            })
+        },
         data: function() {
             return {
                 cellDate: moment(this.cellDateString),
@@ -40,8 +55,45 @@
             }
         },
         methods: {
+            ...mapActions({
+                bookShipment: 'bookShipment',
+                cancelShipment: 'cancelShipment'
+            }),
+            ...mapMutations({
+                buildData: 'buildData',
+                processingDataSwitch: 'processingDataSwitch',
+                resetStore: 'resetStore'
+            }),
+            cancelReservation: function() {
+                this.processingDataSwitch(true);
+                this.cancelShipment(this.shipment.id)
+                    .then((resultset) => {
+                        this.buildData(resultset.data);
+                        this.processingDataSwitch(false);
+                    })
+                    .catch((error) => {
+                        alert(`預約刪除作業發生錯誤，系統即將重置: ${error}`);
+                        this.resetStore();
+                    });
+            },
             processReservation: function() {
-                console.log('new res');
+                this.processingDataSwitch(true);
+                this.bookShipment({
+                        requestDate: this.cellDateString,
+                        CUS_NO: this.selectedRawMat.CUS_NO,
+                        PRD_NO: this.selectedRawMat.PRD_NO,
+                        typeId: this.selectedRawMat.typeId,
+                        quantity: this.quantity
+                    })
+                    .then((resultset) => {
+                        this.buildData(resultset.data);
+                        this.quantity = null;
+                        this.processingDataSwitch(false);
+                    })
+                    .catch((error) => {
+                        alert(`預約進貨作業發生錯誤，系統即將重置: ${error}`);
+                        this.resetStore();
+                    });
             }
         }
     };
