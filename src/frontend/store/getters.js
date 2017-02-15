@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 export default {
     checkDataProcessingState: function(state) { return state.processingData; },
     getActiveView: function(state) {
@@ -14,18 +16,29 @@ export default {
         if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
             let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
             let releventShipmentSchedule = state.shipmentSchedule.filter((shipment) => {
+                let scheduledYear = parseInt(moment(shipment.requestDate).format('YYYY'));
+                let scheduledMonth = parseInt(moment(shipment.requestDate).format('M'));
                 return (
                     (shipment.CUS_NO === selectedRawMaterial.CUS_NO) &&
                     (shipment.PRD_NO === selectedRawMaterial.PRD_NO) &&
-                    (shipment.typeId === selectedRawMaterial.typeId)
+                    (shipment.typeId === selectedRawMaterial.typeId) &&
+                    (scheduledMonth === state.workingMonth) &&
+                    (scheduledYear === state.workingYear)
                 );
             });
             return releventShipmentSchedule;
         }
         return [];
     },
-    getSelectedRawMat: function(state) { return state.rawMatList[state.selectedRawMatIndex]; },
+    getSelectedRawMat: function(state) {
+        if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
+            return state.rawMatList[state.selectedRawMatIndex];
+        }
+        return {};
+    },
     getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
     getShipmentSchedule: function(state) { return state.shipmentSchedule; },
-    getUserName: function(state) { return state.userData.NAME; }
+    getUserName: function(state) { return state.userData.NAME; },
+    getWorkingMonth: function(state) { return state.workingMonth; },
+    getWorkingYear: function(state) { return state.workingYear; }
 };

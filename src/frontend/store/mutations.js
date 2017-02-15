@@ -9,6 +9,16 @@ export default {
             state[objectIndex] = dataObject[objectIndex];
         }
     },
+    nextWorkingMonth: function(state) {
+        let workingDate = moment(new Date(state.workingYear, state.workingMonth - 1, 1)).add(1, 'month');
+        state.workingYear = parseInt(workingDate.format('YYYY'));
+        state.workingMonth = parseInt(workingDate.format('M'));
+    },
+    prevWorkingMonth: function(state) {
+        let workingDate = moment(new Date(state.workingYear, state.workingMonth - 1, 1)).subtract(1, 'month');
+        state.workingYear = parseInt(workingDate.format('YYYY'));
+        state.workingMonth = parseInt(workingDate.format('M'));
+    },
     processingDataSwitch: function(state, onOffSwitch) {
         state.processingData = onOffSwitch;
     },
@@ -26,6 +36,8 @@ export default {
         state.shipmentSchedule = null;
         state.token = null;
         state.userData = null;
+        state.workingMonth = parseInt(currentDatetime().format('M'));
+        state.workingYear = parseInt(currentDatetime().format('YYYY'));
     },
     restoreToken: function(state, token) {
         state.accessExp = moment.unix(decode(token).exp).format('HH:mm');

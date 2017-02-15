@@ -1,9 +1,9 @@
 <template>
-    <div class="col-md-offset-3 col-md-6 col-xs-12">
-        <select class="form-control" v-model="selectedIndex" @change="selectRawMaterial(selectedIndex)">
-            <option v-for="(rawMat,index) in rawMatList" :value="index">{{rawMat.PRDT_SNM}} - {{rawMat.specification}}【{{rawMat.CUS_SNM}}】</option>
-        </select>
-    </div>
+    <select class="form-control" v-model="selectedIndex" @change="selectRawMaterial(selectedIndex)">
+        <option v-for="(rawMat,index) in rawMatList" :value="index">
+            【{{rawMat.CUS_SNM}}】{{rawMat.PRDT_SNM}} - {{rawMat.specification}}
+        </option>
+    </select>
 </template>
 
 <script>
@@ -13,7 +13,10 @@
         name: 'rawMaterialSelector',
         store: store,
         computed: {
-            ...mapGetters({ rawMatList: 'getRawMatList' })
+            ...mapGetters({
+                rawMatList: 'getRawMatList',
+                selectedRawMatIndex: 'getSelectedRawMatIndex'
+            })
         },
         data: function() {
             return {
@@ -24,6 +27,11 @@
             ...mapMutations({
                 selectRawMaterial: 'selectRawMaterial'
             })
+        },
+        watch: {
+            selectedRawMatIndex: function(newValue) {
+                this.selectedIndex = newValue;
+            }
         },
         mounted: function() {
             this.selectRawMaterial(this.selectedIndex);

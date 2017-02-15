@@ -23,7 +23,9 @@ export const store = new Vuex.Store({
         selectedRawMatIndex: 0, // raw material selected
         shipmentSchedule: null, // list of current shipment schedule with details
         token: null, // jwt token
-        userData: null // used to hold the user information returned from the authentication process
+        userData: null, // used to hold the user information returned from the authentication process,
+        workingMonth: parseInt(currentDatetime().format('M')),
+        workingYear: parseInt(currentDatetime().format('YYYY'))
     }
 });
 

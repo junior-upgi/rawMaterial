@@ -8,14 +8,15 @@
                 class="btn btn-danger btn-xs"
                 @click="cancelReservation"
                 :disabled="processingData?true:false">
-                取消預約: <span class="badge">{{shipment.quantity}}</span>
+                <strong>取消預約</strong>:&nbsp;&nbsp;<span class="badge">{{shipment.quantity}}</span>
             </button>
         </div>
-        <div v-else class="">
+        <div v-else>
             <input
                 type="number"
                 min="1"
-                class="form-control input-sm col-sm-2 text-center"
+                placeholder="輸入預約車趟"
+                class="form-control input-sm text-center"
                 v-model="quantity"
                 @change="processReservation"
                 :disabled="processingData?true:false" />
@@ -48,6 +49,9 @@
             };
         },
         watch: {
+            cellDateString: function(newDate) {
+                this.cellDate = moment(newDate);
+            },
             quantity: function(newValue) {
                 if (newValue === '') {
                     this.quantity = null;

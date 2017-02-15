@@ -1,6 +1,6 @@
 <template>
     <div class="text-center">
-        <h3>廠商模組</h3>
+        <h2>廠商模組</h2>
     </div>
 </template>
 

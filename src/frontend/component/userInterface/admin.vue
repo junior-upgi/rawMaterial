@@ -1,7 +1,7 @@
 <template>
     <div class="text-center">
         <div class="row">
-            <h3>管理模組</h3>
+            <h2>管理模組</h2>
         </div>
         <div class="row">
             <known-raw-material></known-raw-material>

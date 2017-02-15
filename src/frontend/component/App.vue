@@ -57,7 +57,7 @@
 </script>
 
 <template>
-    <div id="app" class="container">
+    <div id="app" class="container-fluid">
         <br>
         <div class="row">
             <heading></heading>
@@ -68,9 +68,9 @@
                 <template>
                     <component :is="activeView "></component>
                 </template>
-            </div>
-        </div>
-    </div>
+</div>
+</div>
+</div>
 </template>
 
 <style>

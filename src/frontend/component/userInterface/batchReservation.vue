@@ -1,17 +1,22 @@
 <script>
     import moment from 'moment-timezone';
-    import { mapGetters } from 'vuex';
-    import { currentDatetime } from '../../utility.js';
+    import { mapGetters, mapMutations } from 'vuex';
+    import rawMaterialSelector from './rawMaterialSelector.vue';
     import reservationCell from './reservationCell.vue';
 
     export default {
         name: 'batchReservation',
-        components: { reservationCell },
+        components: {
+            rawMaterialSelector,
+            reservationCell
+        },
         computed: {
             ...mapGetters({
                 rawMatList: 'getRawMatList',
                 releventShipmentSchedule: 'getReleventShipmentSchedule',
-                selectedRawMat: 'getSelectedRawMat'
+                selectedRawMat: 'getSelectedRawMat',
+                workingMonth: 'getWorkingMonth',
+                workingYear: 'getWorkingYear'
             }),
             weekCount: function() {
                 let firstOfMonth = new Date(this.workingYear, this.workingMonth - 1, 1);
@@ -21,16 +26,14 @@
         },
         data: function() {
             return {
-                workingYear: parseInt(currentDatetime().format('YYYY')),
-                workingMonth: parseInt(currentDatetime().format('M')),
                 weekdayList: ['週日', '週一', '週二', '週三', '週四', '週五', '週六']
             };
         },
-        updated: function() {
-            this.workingYear = parseInt(currentDatetime().format('YYYY'));
-            this.workingMonth = parseInt(currentDatetime().format('M'));
-        },
         methods: {
+            ...mapMutations({
+                nextWorkingMonth: 'nextWorkingMonth',
+                prevWorkingMonth: 'prevWorkingMonth'
+            }),
             cellDate: function(weekIndex, weekdayIndex) {
                 return moment(new Date(this.workingYear, parseInt(this.workingMonth) - 1, this.cellIndex(weekIndex, weekdayIndex) - this.weekdayOfFirst())).format('YYYY-MM-DD');
             },
@@ -58,12 +61,26 @@
 </script>
 
 <template>
-    <div>
-        <h4>{{workingYear}} 年 {{workingMonth}} 月份批次預約 【{{selectedRawMat.CUS_SNM}}】{{selectedRawMat.PRDT_SNM}} - {{selectedRawMat.specification}}</h4>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4>
+                <button class="btn btn-primary" style="border:0px;" @click="prevWorkingMonth">
+                    <span class="glyphicon glyphicon-triangle-left"></span>
+                </button>
+                &nbsp;{{workingYear}} 年 {{workingMonth}} 月份&nbsp;
+                <button class="btn btn-primary" style="border:0px;" @click="nextWorkingMonth">
+                    <span class="glyphicon glyphicon-triangle-right"></span>
+                </button>
+                &nbsp;進廠預約作業
+            </h4>
+        </div>
+        <div class="panel-body">
+            <raw-material-selector></raw-material-selector>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
-                    <tr class="success">
+                    <tr class="info">
                         <td v-for="weekdayIndex in 7" class="text-center">{{weekdayList[weekdayIndex-1]}}</td>
                     </tr>
                 </thead>
