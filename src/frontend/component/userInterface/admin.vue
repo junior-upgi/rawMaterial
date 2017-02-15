@@ -3,9 +3,7 @@
         <div class="row">
             <h2>管理模組</h2>
         </div>
-        <div class="row">
-            <known-raw-material></known-raw-material>
-        </div>
+        <known-raw-material></known-raw-material>
     </div>
 </template>
 

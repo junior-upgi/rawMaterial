@@ -75,5 +75,8 @@
 
 <style>
     @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+    body {
+        overflow-x: hidden;
+    }
 
 </style>
