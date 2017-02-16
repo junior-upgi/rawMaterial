@@ -12,7 +12,7 @@ router.get('/data/shipment/dailySummary', tokenValidation, function(request, res
     knex.select('*')
         .from('rawMaterial.dbo.dailyPlanScheduleSummary')
         .then((resultset) => {
-            return response.status(200).json({ dailyShipmentScheduleSummary: resultset });
+            return response.status(200).json({ scheduleSummary: resultset });
         })
         .catch((error) => {
             return response.status(500).json(
@@ -53,7 +53,7 @@ router.route('/data/shipment')
     .post(function(request, response, next) {
         let responseObject = {
             shipmentSchedule: null,
-            dailyShipmentScheduleSummary: null
+            scheduleSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         let requestList = [];
@@ -82,7 +82,7 @@ router.route('/data/shipment')
                 return knex.select('*').from('rawMaterial.dbo.dailyPlanScheduleSummary');
             })
             .then((resultset) => {
-                responseObject.dailyShipmentScheduleSummary = resultset;
+                responseObject.scheduleSummary = resultset;
                 knex.destroy();
                 return response.status(200).json(responseObject);
             })
@@ -98,7 +98,7 @@ router.route('/data/shipment')
     .delete(function(request, response, next) {
         let responseObject = {
             shipmentSchedule: null,
-            dailyShipmentScheduleSummary: null
+            scheduleSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.shipmentRequest')
@@ -121,7 +121,7 @@ router.route('/data/shipment')
                 return knex.select('*').from('rawMaterial.dbo.dailyPlanScheduleSummary');
             })
             .then((resultset) => {
-                responseObject.dailyShipmentScheduleSummary = resultset;
+                responseObject.scheduleSummary = resultset;
                 return response.status(200).json(responseObject);
             })
             .catch((error) => {

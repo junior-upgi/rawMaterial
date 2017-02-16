@@ -28,55 +28,62 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <daily-shipment-record
-                        v-for="dailyShipmentSummary in releventDailyShipmentScheduleSummary"
-                        :dailyShipmentSummary="dailyShipmentSummary">
-                    </daily-shipment-record>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                    <template v-for="dailyShipmentSummary in monthlyScheduleSummary">
+                        <daily-shipment-record
+                            :dailyShipmentSummary="dailyShipmentSummary">
+                        </daily-shipment-record>
+                        <edit-pane
+                             v-if="inEditMode(dailyShipmentSummary.requestDate)"
+                            :paneDateString="dailyShipmentSummary.requestDate">
+                        </edit-pane>
+                    </template>
+</tbody>
+</table>
+</div>
+</div>
 </template>
 
 <script>
     import { mapGetters, mapMutations } from 'vuex';
-    import { serverUrl } from '../../clientConfig.js';
     import dailyShipmentRecord from './dailyShipmentRecord.vue';
     import rawMaterialSelector from './rawMaterialSelector.vue';
+    import editPane from './editPane.vue';
     import { store } from '../../store/store.js';
 
     export default {
         name: 'scheduleTable',
         components: {
             dailyShipmentRecord,
+            editPane,
             rawMaterialSelector
         },
         store: store,
         computed: {
             ...mapGetters({
-                releventDailyShipmentScheduleSummary: 'getReleventDailyShipmentScheduleSummary',
+                dateInEditMode: 'checkDateInEditMode',
+                monthlyScheduleSummary: 'getMonthlyScheduleSummary',
                 workingMonth: 'getWorkingMonth',
                 workingYear: 'getWorkingYear'
             })
         },
-        data: function() {
-            return {
-                apiUrl: `${serverUrl}/data/shipment`,
-                fieldList: [
-                    'requestData',
-                    'CUS_SNM',
-                    'PRDT_SNM',
-                    'specification',
-                    'quantity',
-                    'note'
-                ]
-            };
-        },
         methods: {
             ...mapMutations({
                 nextWorkingMonth: 'nextWorkingMonth',
-                prevWorkingMonth: 'prevWorkingMonth'
-            })
+                prevWorkingMonth: 'prevWorkingMonth',
+                switchDateInEditMode: 'switchDateInEditMode',
+                turnOffEditMode: 'turnOffEditMode'
+
+            }),
+            captureEditEvent: function(date, switchState) {
+                if (switchState === true) {
+                    this.switchDateInEditMode(date);
+                } else {
+                    this.turnOffEditMode();
+                }
+            },
+            inEditMode: function(date) {
+                return date === this.dateInEditMode ? true : false;
+            }
         }
     };
 

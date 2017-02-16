@@ -23,16 +23,6 @@
         store: store,
         computed: {
             ...mapGetters({ rawMaterialTypeList: 'getRawMaterialTypeList' })
-        },
-        data: () => {
-            return {
-                knownRatMatList: [
-                    { PRD_NO: 'MROPA001', SNM: '石英砂1', UT: '公斤' },
-                    { PRD_NO: 'MROPA002', SNM: '石英砂2', UT: '公斤' },
-                    { PRD_NO: 'MROPA003', SNM: '石英砂3', UT: '公斤' },
-                    { PRD_NO: 'MROPA004', SNM: '石英砂4', UT: '公斤' }
-                ]
-            };
         }
     };
 

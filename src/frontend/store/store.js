@@ -15,7 +15,8 @@ export const store = new Vuex.Store({
     state: {
         accessExp: currentDatetime().format('HH:mm'),
         activeView: 'login',
-        dailyShipmentScheduleSummary: [],
+        scheduleSummary: [],
+        dateInEditMode: null,
         loginId: null, // same as userData.SAL_NO
         processingData: false, // flag to signal if program is processing data
         rawMatList: null, // list of raw material with details

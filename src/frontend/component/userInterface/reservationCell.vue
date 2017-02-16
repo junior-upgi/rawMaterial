@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div>{{cellDate.format('M/D')}}</div>
+        <div>
+            <span class="badge">{{cellDate.format('M/D')}}</span>
+        </div>
         <br>
         <div v-if="dailyShipment!==undefined">
             <button
@@ -8,14 +10,14 @@
                 class="btn btn-danger btn-xs"
                 @click="cancelReservation"
                 :disabled="processingData?true:false">
-                <strong>取消預約</strong>:&nbsp;&nbsp;<span class="badge">{{dailyShipment.quantity}}</span>
+                <strong>取消預約</strong>:&nbsp;&nbsp;
+                <span class="badge">{{dailyShipment.quantity}}</span>
             </button>
         </div>
         <div v-else>
             <input
                 type="number"
                 min="1"
-                placeholder="輸入預約車趟"
                 class="form-control input-sm text-center"
                 v-model="quantity"
                 @change="processReservation"

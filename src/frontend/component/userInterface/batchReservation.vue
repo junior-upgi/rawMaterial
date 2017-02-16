@@ -13,7 +13,7 @@
         computed: {
             ...mapGetters({
                 rawMatList: 'getRawMatList',
-                releventDailyShipmentScheduleSummary: 'getReleventDailyShipmentScheduleSummary',
+                monthlyScheduleSummary: 'getMonthlyScheduleSummary',
                 selectedRawMat: 'getSelectedRawMat',
                 workingMonth: 'getWorkingMonth',
                 workingYear: 'getWorkingYear'
@@ -35,25 +35,47 @@
                 prevWorkingMonth: 'prevWorkingMonth'
             }),
             cellDate: function(weekIndex, weekdayIndex) {
-                return moment(new Date(this.workingYear, parseInt(this.workingMonth) - 1, this.cellIndex(weekIndex, weekdayIndex) - this.weekdayOfFirst())).format('YYYY-MM-DD');
+                return moment(
+                    new Date(
+                        this.workingYear,
+                        parseInt(this.workingMonth) - 1,
+                        this.cellIndex(weekIndex, weekdayIndex) - this.weekdayOfFirst()
+                    )
+                ).format('YYYY-MM-DD');
             },
             cellIndex: function(weekIndex, weekdayIndex) {
                 return (parseInt(weekIndex) - 1) * 7 + parseInt(weekdayIndex);
             },
-            releventDailyShipmentSummaryFilter: function(weekIndex, weekdayIndex) {
-                let releventDailyShipmentSummary = this.releventDailyShipmentScheduleSummary.filter((dailyShipment) => {
-                    return dailyShipment.requestDate === this.cellDate(weekIndex, weekdayIndex);
-                });
-                return releventDailyShipmentSummary[0];
+            dailyShipmentFilter: function(weekIndex, weekdayIndex) {
+                return this.monthlyScheduleSummary.filter((dailyShipmentSummary) => {
+                    return dailyShipmentSummary.requestDate === this.cellDate(weekIndex, weekdayIndex);
+                })[0];
             },
             lastOfMonth: function() {
-                return parseInt(moment(new Date(this.workingYear, this.workingMonth - 1, 1)).add(1, 'month').subtract(1, 'day').format('D'));
+                return parseInt(
+                    moment(
+                        new Date(
+                            this.workingYear,
+                            this.workingMonth - 1,
+                            1)
+                    )
+                    .add(1, 'month')
+                    .subtract(1, 'day')
+                    .format('D'));
             },
             visible: function(weekIndex, weekdayIndex) {
-                return (this.cellIndex(weekIndex, weekdayIndex) > this.weekdayOfFirst()) && ((this.cellIndex(weekIndex, weekdayIndex) - this.weekdayOfFirst()) <= this.lastOfMonth());
+                let cellIndex = this.cellIndex(weekIndex, weekdayIndex);
+                return (
+                    (cellIndex > this.weekdayOfFirst()) &&
+                    (cellIndex - this.weekdayOfFirst()) <= this.lastOfMonth()
+                );
             },
             weekdayOfFirst: function() {
-                return new Date(this.workingYear, this.workingMonth - 1, 1).getDay();
+                return new Date(
+                        this.workingYear,
+                        this.workingMonth - 1,
+                        1)
+                    .getDay();
             }
         }
     };
@@ -81,7 +103,10 @@
             <table class="table table-bordered">
                 <thead>
                     <tr class="info">
-                        <td v-for="weekdayIndex in 7" class="text-center">{{weekdayList[weekdayIndex-1]}}</td>
+                        <td v-for="weekdayIndex in 7"
+                            class="text-center">
+                            {{weekdayList[weekdayIndex-1]}}
+                        </td>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,8 +114,8 @@
                         <td v-for="weekdayIndex in 7">
                             <reservation-cell
                                 v-if="visible(weekIndex,weekdayIndex)"
-                                :cell-date-string="cellDate(weekIndex,weekdayIndex)"
-                                :dailyShipment="releventDailyShipmentSummaryFilter(weekIndex,weekdayIndex)">
+                                :cellDateString="cellDate(weekIndex,weekdayIndex)"
+                                :dailyShipment="dailyShipmentFilter(weekIndex,weekdayIndex)">
                             </reservation-cell>
                         </td>
                     </tr>
