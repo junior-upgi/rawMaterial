@@ -135,6 +135,47 @@ router.route('/data/shipment')
             .finally(() => {
                 knex.destroy();
             });
+    })
+    .put(function(request, response, next) {
+        let responseObject = {
+            shipmentSchedule: null,
+            scheduleSummary: null
+        };
+        let knex = require('knex')(serverConfig.mssqlConfig);
+        knex('rawMaterial.dbo.shipmentRequest')
+            .update({
+                arrivalDate: request.body.arrivalDate,
+                actualWeight: request.body.actualWeight,
+                supplierWeight: request.body.supplierWeight,
+                note: request.body.note,
+                modified: utility.currentDatetimeString()
+            })
+            .where('id', '=', request.body.id)
+            .then(() => {
+                return knex.select('*')
+                    .from('rawMaterial.dbo.planSchedule')
+                    .where('deprecated', null)
+                    .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('requestDate');
+            })
+            .then((resultset) => {
+                responseObject.shipmentSchedule = resultset;
+                return knex.select('*').from('rawMaterial.dbo.dailyPlanScheduleSummary');
+            })
+            .then((resultset) => {
+                responseObject.scheduleSummary = resultset;
+                return response.status(200).json(responseObject);
+            })
+            .catch((error) => {
+                return response.status(500).json(
+                    utility.endpointErrorHandler(
+                        request.method,
+                        request.originalUrl,
+                        `原料進廠資料寫入發生錯誤: ${error}`)
+                );
+            })
+            .finally(() => {
+                knex.destroy();
+            });
     });
 
 module.exports = router;

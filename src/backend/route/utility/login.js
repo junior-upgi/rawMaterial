@@ -34,7 +34,7 @@ router.post('/login', function(request, response) {
                         utility.logger.info(`${request.body.loginId} ${serverConfig.systemReference} access privilege validated`);
                         let payload = resultset[0];
                         payload.loginId = request.body.loginId;
-                        let token = jwt.sign(payload, serverConfig.passphrase, { expiresIn: 3600 });
+                        let token = jwt.sign(payload, serverConfig.passphrase, { expiresIn: 7200 });
                         utility.logger.info(`${request.body.loginId} login procedure completed`);
                         return response.status(200).json({ token: token });
                     }

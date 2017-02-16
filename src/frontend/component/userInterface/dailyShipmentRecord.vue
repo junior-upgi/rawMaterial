@@ -3,7 +3,7 @@
         <td>{{dailyShipmentSummary.requestDate}}</td>
         <td>{{dailyShipmentSummary.CUS_SNM}}</td>
         <td>{{dailyShipmentSummary.PRDT_SNM}}</td>
-        <td class="text-left">{{dailyShipmentSummary.specification}}</td>
+        <td>{{dailyShipmentSummary.specification}}</td>
         <td>{{dailyShipmentSummary.quantity}}</td>
         <td>{{dailyShipmentSummary.estWeight|tonnage(dailyShipmentSummary.quantity)}}</td>
     </tr>

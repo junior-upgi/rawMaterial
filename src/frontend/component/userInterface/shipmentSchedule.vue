@@ -19,12 +19,12 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr class="info">
-                        <th class="text-center">日期</th>
+                        <th class="text-center">預約日期</th>
                         <th class="text-center">廠商</th>
-                        <th class="text-center">項目</th>
-                        <th class="text-left">規格</th>
-                        <th class="text-center">車次</th>
-                        <th class="text-center">重量</th>
+                        <th class="text-center">原料項目</th>
+                        <th class="text-center">規格</th>
+                        <th class="text-center">預約車次</th>
+                        <th class="text-center">預估重量</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                             :dailyShipmentSummary="dailyShipmentSummary">
                         </daily-shipment-record>
                         <edit-pane
-                             v-if="inEditMode(dailyShipmentSummary.requestDate)"
+                            v-if="inEditMode(dailyShipmentSummary.requestDate)"
                             :paneDateString="dailyShipmentSummary.requestDate">
                         </edit-pane>
                     </template>

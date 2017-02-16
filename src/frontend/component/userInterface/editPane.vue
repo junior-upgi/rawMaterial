@@ -8,12 +8,12 @@
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th class="text-center">#</th>
+                                    <th class="text-center">車次</th>
                                     <th class="text-center">實際入廠日期</th>
                                     <th class="text-center">廠商宣稱重量</th>
                                     <th class="text-center">實際磅單重量</th>
-                                    <th class="text-center">備註</th>
-                                    <th class="text-center"></th>
+                                    <th>備註</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,17 +57,9 @@
                 });
             }
         },
-        beforeCreate: function() { console.log('beforeCreate' + ' ' + this.paneDateString); },
         created: function() {
             this.editPaneHeading = `${this.paneDateString}【${this.selectedRawMat.CUS_SNM}】${this.selectedRawMat.PRDT_SNM} - ${this.selectedRawMat.specification}進廠資料編輯`;
-            console.log('created' + ' ' + this.paneDateString);
-        },
-        beforeMount: function() { console.log('beforeMount' + ' ' + this.paneDateString); },
-        mounted: function() { console.log('mounted' + ' ' + this.paneDateString); },
-        beforeUpdate: function() { console.log('beforeUpdate' + ' ' + this.paneDateString); },
-        updated: function() { console.log('updated' + ' ' + this.paneDateString); },
-        beforeDestroy: function() { console.log('beforeDestroy' + ' ' + this.paneDateString); },
-        destroyed: function() { console.log('destroyed' + ' ' + this.paneDateString); }
+        }
     };
 
 </script>

@@ -18,9 +18,9 @@
             <input
                 type="number"
                 min="1"
-                class="form-control input-sm text-center"
-                v-model="quantity"
-                @change="processReservation"
+                step="1"
+                class="form-control input-sm text-center reservationInput"
+                v-model.lazy.number="quantity"
                 :disabled="processingData?true:false" />
         </div>
     </div>
@@ -55,8 +55,14 @@
                 this.cellDate = moment(newDate);
             },
             quantity: function(newValue) {
-                if (newValue === '') {
+                if (
+                    (newValue === '') ||
+                    ((newValue < 1) && (newValue > 10)) ||
+                    (!Number.isInteger(newValue))
+                ) {
                     this.quantity = null;
+                } else {
+                    this.processReservation();
                 }
             }
         },
@@ -73,11 +79,11 @@
             cancelReservation: function() {
                 this.processingDataSwitch(true);
                 this.cancelShipment({
-                        requestDate: this.cellDateString,
-                        CUS_NO: this.selectedRawMat.CUS_NO,
-                        PRD_NO: this.selectedRawMat.PRD_NO,
-                        typeId: this.selectedRawMat.typeId
-                    })
+                    requestDate: this.cellDateString,
+                    CUS_NO: this.selectedRawMat.CUS_NO,
+                    PRD_NO: this.selectedRawMat.PRD_NO,
+                    typeId: this.selectedRawMat.typeId
+                })
                     .then((resultset) => {
                         this.buildData(resultset.data);
                         this.processingDataSwitch(false);
@@ -90,12 +96,12 @@
             processReservation: function() {
                 this.processingDataSwitch(true);
                 this.bookShipment({
-                        requestDate: this.cellDateString,
-                        CUS_NO: this.selectedRawMat.CUS_NO,
-                        PRD_NO: this.selectedRawMat.PRD_NO,
-                        typeId: this.selectedRawMat.typeId,
-                        quantity: this.quantity
-                    })
+                    requestDate: this.cellDateString,
+                    CUS_NO: this.selectedRawMat.CUS_NO,
+                    PRD_NO: this.selectedRawMat.PRD_NO,
+                    typeId: this.selectedRawMat.typeId,
+                    quantity: this.quantity
+                })
                     .then((resultset) => {
                         this.buildData(resultset.data);
                         this.quantity = null;
@@ -112,8 +118,8 @@
 </script>
 
 <style>
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
+    input.reservationInput::-webkit-inner-spin-button,
+    input.reservationInput::-webkit-outer-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
