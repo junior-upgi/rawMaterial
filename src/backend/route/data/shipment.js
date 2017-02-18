@@ -7,10 +7,7 @@ const utility = require('../../module/utility.js');
 const router = express.Router();
 router.use(bodyParser.json());
 
-/*
-router.get('/data/shipment/overview', tokenValidation, function(request, response, next) {
-    let workingMonth = request.body.workingMonth;
-    let workingYear = request.body.workingYear;
+router.get('/data/shipment/overview', tokenValidation, function(request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
         .from('rawMaterial.dbo.shipmentOverview')
@@ -18,22 +15,24 @@ router.get('/data/shipment/overview', tokenValidation, function(request, respons
             workingYear: request.query.workingYear,
             workingMonth: request.query.workingMonth
         })
+        .orderBy('CUS_NO')
+        .orderBy('PRDT_SNM')
+        .orderBy('workingDate')
         .then((resultset) => {
-            return response.status(200).json({ scheduleSummary: resultset });
+            return response.status(200).json({ shipmentOverview: resultset });
         })
         .catch((error) => {
             return response.status(500).json(
                 utility.endpointErrorHandler(
                     request.method,
                     request.originalUrl,
-                    `原料每日進貨預約相關資料讀取發生錯誤: ${error}`)
+                    `原料進貨概況相關資料讀取發生錯誤: ${error}`)
             );
         })
         .finally(() => {
             knex.destroy();
         });
 });
-*/
 
 function dailyPlanScheduleSummary(knexObj, workingYear, workingMonth) {
     return knexObj.select('*')
@@ -58,7 +57,7 @@ function planSchedule(knexObj, workingYear, workingMonth) {
         .orderBy('requestDate');
 }
 
-router.get('/data/shipment/dailySummary', tokenValidation, function(request, response, next) {
+router.get('/data/shipment/dailySummary', tokenValidation, function(request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     dailyPlanScheduleSummary(knex, request.query.workingYear, request.query.workingMonth)
         .then((resultset) => {
@@ -140,9 +139,6 @@ router.route('/data/shipment')
             });
     })
     .delete(function(request, response, next) {
-        console.log('-----------------------------------');
-        console.log(request.body.id);
-        console.log('-----------------------------------');
         let responseObject = {
             shipmentSchedule: null,
             scheduleSummary: null
@@ -160,9 +156,6 @@ router.route('/data/shipment')
             actualWeight: null,
             deprecated: null
         };
-        console.log('-----------------------------------');
-        console.log(condition);
-        console.log('-----------------------------------');
         knex('rawMaterial.dbo.shipmentRequest')
             .update({
                 modified: utility.currentDatetimeString(),

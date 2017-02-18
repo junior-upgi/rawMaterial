@@ -2,19 +2,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>
-                <button
-                    class="btn btn-primary"
-                    style="border:0px;"
-                    @click="prevWorkingMonth">
-                    <span class="glyphicon glyphicon-triangle-left"></span>
-                </button>
-                &nbsp;{{workingYear}} 年 {{workingMonth}} 月份&nbsp;
-                <button
-                    class="btn btn-primary"
-                    style="border:0px;"
-                    @click="nextWorkingMonth">
-                    <span class="glyphicon glyphicon-triangle-right"></span>
-                </button>
+                <workingTimeSelector></workingTimeSelector>
                 &nbsp;進廠預約作業
             </h4>
         </div>
@@ -48,15 +36,17 @@
 
 <script>
     import moment from 'moment-timezone';
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapGetters } from 'vuex';
     import rawMaterialSelector from './rawMaterialSelector.vue';
     import reservationCell from './reservationCell.vue';
+    import workingTimeSelector from './workingTimeSelector.vue';
 
     export default {
         name: 'batchReservation',
         components: {
             rawMaterialSelector,
-            reservationCell
+            reservationCell,
+            workingTimeSelector
         },
         computed: {
             ...mapGetters({
@@ -78,10 +68,6 @@
             };
         },
         methods: {
-            ...mapMutations({
-                nextWorkingMonth: 'nextWorkingMonth',
-                prevWorkingMonth: 'prevWorkingMonth'
-            }),
             cellDate: function(weekIndex, weekdayIndex) {
                 return moment(
                     new Date(

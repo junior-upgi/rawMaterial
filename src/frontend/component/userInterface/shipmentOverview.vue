@@ -1,33 +1,62 @@
 <template>
-    <div>
-        <div class="row">
-            <h3>{{workingYear}} 年 {{workingMonth}} 月份原料進廠概況</h3>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4>
+                <workingTimeSelector></workingTimeSelector>
+                &nbsp;原料進廠概況
+            </h4>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th class="text-center">項目</th>
-                    <th class="text-center">日期</th>
-                    <th class="text-center">廠商</th>
-                    <th class="text-center">重量</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot></tfoot>
-        </table>
+        <div class="table-responsive">
+            <table
+                class="table table-striped"
+                :class="{'table-hover':dateInEditMode===null}">
+                <thead>
+                    <tr>
+                        <th class="text-left">項目</th>
+                        <th class="text-center">日期</th>
+                        <th class="text-center">廠商</th>
+                        <th class="text-center">重量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <working-supplier-record
+                        v-for="supplier in workingSupplier"
+                        :supplier="supplier"
+                        :dateList=filterShipmentOverviewData(supplier.CUS_NO,supplier.PRD_NO)>
+                    </working-supplier-record>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script>
+    import workingSupplierRecord from './workingSupplierRecord.vue';
+    import workingTimeSelector from './workingTimeSelector.vue';
     import { mapGetters } from 'vuex';
 
     export default {
         name: 'shipmentOverview',
+        components: {
+            workingSupplierRecord,
+            workingTimeSelector
+        },
         computed: {
             ...mapGetters({
-                workingMonth: 'getWorkingMonth',
-                workingYear: 'getWorkingYear'
+                shipmentOverview: 'getShipmentOverview',
+                workingSupplier: 'getWorkingSupplier'
             })
+        },
+        methods: {
+            filterShipmentOverviewData: function(CUS_NO, PRD_NO) {
+                let dateList = [];
+                this.shipmentOverview.forEach((shipment) => {
+                    if ((shipment.CUS_NO === CUS_NO) && (shipment.PRD_NO = PRD_NO)) {
+                        dateList.push(shipment.workingDay);
+                    }
+                });
+                return dateList;
+            }
         }
     };
 

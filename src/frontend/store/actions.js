@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment-timezone';
 
 import { serverUrl } from '../clientConfig.js';
 
@@ -62,8 +63,46 @@ export default {
                 workingMonth: context.state.workingMonth
             },
             headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
+            url: `${serverUrl}/data/shipment/overview`,
+            params: {
+                workingYear: context.state.workingYear,
+                workingMonth: context.state.workingMonth
+            },
+            headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
+            url: `${serverUrl}/data/supplier/workingSupplier`,
+            params: {
+                workingYear: context.state.workingYear,
+                workingMonth: context.state.workingMonth
+            },
+            headers: { 'x-access-token': sessionStorage.token }
         }];
         return Promise.all(optionList.map(axios));
+    },
+    nextWorkingMonth: function(context) {
+        let workingMonth = context.state.workingMonth;
+        let workingYear = context.state.workingYear;
+        let workingDate = moment(new Date(workingYear, workingMonth - 1, 1)).add(1, 'month');
+        context.commit({
+            type: 'setWorkingTime',
+            workingMonth: parseInt(workingDate.format('M')),
+            workingYear: parseInt(workingDate.format('YYYY'))
+        });
+        return context.dispatch({ type: 'initData' });
+    },
+    prevWorkingMonth: function(context) {
+        let workingMonth = context.state.workingMonth;
+        let workingYear = context.state.workingYear;
+        let workingDate = moment(new Date(workingYear, workingMonth - 1, 1)).subtract(1, 'month');
+        context.commit({
+            type: 'setWorkingTime',
+            workingMonth: parseInt(workingDate.format('M')),
+            workingYear: parseInt(workingDate.format('YYYY'))
+        });
+        return context.dispatch({ type: 'initData' });
     },
     updateShipment: function(context, payload) {
         let requestOption = {
@@ -83,26 +122,3 @@ export default {
         return axios(requestOption);
     }
 };
-
-/*
-if ((state.loginId !== null) && (state.loginId === state.userData.SAL_NO)) {
-
-} else if ((state.loginId !== null) && (state.userData.CUS_NO !== null)) {
-    // supplier modules are not implemented yet, reset and return a rejected promise
-    context.commit('resetStore');
-    return Promise.reject({ errorMessage: 'supplier modules are not implemented yet' });
-} else {
-    return Promise.reject({ errorMessage: 'initData action: user state undetermined' });
-}
-
-.then(function(responseList) {
-    let dataObject = {};
-    responseList.forEach((response) => {
-        Object.assign(dataObject, response.data);
-    });
-    context.commit('buildData', dataObject);
-    return Promise.resolve();
-}).catch((error) => {
-    return Promise.reject({ errorMessage: `initData action failure: ${error}` });
-});
-*/

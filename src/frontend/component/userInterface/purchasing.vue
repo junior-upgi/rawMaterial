@@ -2,7 +2,8 @@
     <div class="text-center">
         <h2>採購模組</h2>
         <div class="row">
-            <div class="col-md-9" is="shipment-overview">
+            <div class="col-md-9">
+                <shipment-overview></shipment-overview>
             </div>
             <div class="col-md-3">
                 聯絡人資料

@@ -2,13 +2,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>
-                <button class="btn btn-primary" style="border:0px;" @click="prevWorkingMonth">
-                    <span class="glyphicon glyphicon-triangle-left"></span>
-                </button>
-                &nbsp;{{workingYear}} 年 {{workingMonth}} 月份&nbsp;
-                <button class="btn btn-primary" style="border:0px;" @click="nextWorkingMonth">
-                    <span class="glyphicon glyphicon-triangle-right"></span>
-                </button>
+                <workingTimeSelector></workingTimeSelector>
                 &nbsp;原料進場狀況
             </h4>
         </div>
@@ -49,31 +43,29 @@
 
 <script>
     import { mapGetters, mapMutations } from 'vuex';
-    import dailyShipmentRecord from './dailyShipmentRecord.vue';
-    import rawMaterialSelector from './rawMaterialSelector.vue';
-    import editPane from './editPane.vue';
     import { store } from '../../store/store.js';
+    import dailyShipmentRecord from './dailyShipmentRecord.vue';
+    import editPane from './editPane.vue';
+    import rawMaterialSelector from './rawMaterialSelector.vue';
+    import workingTimeSelector from './workingTimeSelector.vue';
 
     export default {
         name: 'scheduleTable',
         components: {
             dailyShipmentRecord,
             editPane,
-            rawMaterialSelector
+            rawMaterialSelector,
+            workingTimeSelector
         },
         store: store,
         computed: {
             ...mapGetters({
                 dateInEditMode: 'checkDateInEditMode',
-                monthlyScheduleSummary: 'getMonthlyScheduleSummary',
-                workingMonth: 'getWorkingMonth',
-                workingYear: 'getWorkingYear'
+                monthlyScheduleSummary: 'getMonthlyScheduleSummary'
             })
         },
         methods: {
             ...mapMutations({
-                nextWorkingMonth: 'nextWorkingMonth',
-                prevWorkingMonth: 'prevWorkingMonth',
                 switchDateInEditMode: 'switchDateInEditMode',
                 turnOffEditMode: 'turnOffEditMode'
 

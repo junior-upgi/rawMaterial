@@ -15,10 +15,12 @@ export default {
         state.rawMatTypeList = [];
         state.role = null;
         state.selectedRawMatIndex = 0;
+        state.shipmentOverview = [];
         state.shipmentSchedule = [];
         state.token = null;
         state.userData = {};
         state.workingMonth = parseInt(currentDatetime().format('M'));
+        state.workingSupplier = [];
         state.workingYear = parseInt(currentDatetime().format('YYYY'));
     },
     // applies to multiple properties
@@ -50,15 +52,9 @@ export default {
         state.processingData = onOffSwitch;
     },
     // workingMonth and workingYear specific
-    nextWorkingMonth: function(state) {
-        let workingDate = moment(new Date(state.workingYear, state.workingMonth - 1, 1)).add(1, 'month');
-        state.workingYear = parseInt(workingDate.format('YYYY'));
-        state.workingMonth = parseInt(workingDate.format('M'));
-    },
-    prevWorkingMonth: function(state) {
-        let workingDate = moment(new Date(state.workingYear, state.workingMonth - 1, 1)).subtract(1, 'month');
-        state.workingYear = parseInt(workingDate.format('YYYY'));
-        state.workingMonth = parseInt(workingDate.format('M'));
+    setWorkingTime: function(state, payload) {
+        state.workingMonth = payload.workingMonth;
+        state.workingYear = payload.workingYear;
     },
     // selectedRawMatIndex specific
     selectRawMaterial: function(state, selectedIndex) {
