@@ -1,6 +1,11 @@
 <template>
-    <tr @click="switchEditModeDate()" :class="{danger:checkInEditMode()}">
-        <td>{{dailyShipmentSummary.requestDate}}</td>
+    <tr @click="switchEditModeDate()"
+        :class="{'danger':checkInEditMode()}">
+        <td v-if="dailyShipmentSummary.received===1">
+            <span class="glyphicon glyphicon-ok-circle"></span> 已進場
+        </td>
+        <td v-else>待進場</td>
+        <td>{{dailyShipmentSummary.workingDate}}</td>
         <td>{{dailyShipmentSummary.CUS_SNM}}</td>
         <td>{{dailyShipmentSummary.PRDT_SNM}}</td>
         <td>{{dailyShipmentSummary.specification}}</td>
@@ -30,7 +35,7 @@
                 turnOffEditMode: 'turnOffEditMode'
             }),
             checkInEditMode: function() {
-                if ((this.dateInEditMode === null) || (this.dateInEditMode !== this.dailyShipmentSummary.requestDate)) {
+                if ((this.dateInEditMode === null) || (this.dateInEditMode !== this.dailyShipmentSummary.workingDate)) {
                     return false;
                 } else {
                     return true;
@@ -40,10 +45,15 @@
                 if (this.checkInEditMode()) {
                     this.turnOffEditMode();
                 } else {
-                    this.switchDateInEditMode(this.dailyShipmentSummary.requestDate);
+                    this.switchDateInEditMode(this.dailyShipmentSummary.workingDate);
                 }
             }
         }
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

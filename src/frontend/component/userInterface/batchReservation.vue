@@ -1,3 +1,51 @@
+<template>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4>
+                <button
+                    class="btn btn-primary"
+                    style="border:0px;"
+                    @click="prevWorkingMonth">
+                    <span class="glyphicon glyphicon-triangle-left"></span>
+                </button>
+                &nbsp;{{workingYear}} 年 {{workingMonth}} 月份&nbsp;
+                <button
+                    class="btn btn-primary"
+                    style="border:0px;"
+                    @click="nextWorkingMonth">
+                    <span class="glyphicon glyphicon-triangle-right"></span>
+                </button>
+                &nbsp;進廠預約作業
+            </h4>
+        </div>
+        <div class="panel-body">
+            <raw-material-selector></raw-material-selector>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="info">
+                        <td v-for="weekdayIndex in 7" class="text-center">
+                            <span class="badge">{{weekdayList[weekdayIndex-1]}}<span>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="weekIndex in weekCount">
+                        <td v-for="weekdayIndex in 7">
+                            <reservation-cell
+                                v-if="visible(weekIndex,weekdayIndex)"
+                                :cellDateString="cellDate(weekIndex,weekdayIndex)"
+                                :dailyShipmentList="dailyShipmentFilter(weekIndex,weekdayIndex)">
+                            </reservation-cell>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
 <script>
     import moment from 'moment-timezone';
     import { mapGetters, mapMutations } from 'vuex';
@@ -48,8 +96,8 @@
             },
             dailyShipmentFilter: function(weekIndex, weekdayIndex) {
                 return this.monthlyScheduleSummary.filter((dailyShipmentSummary) => {
-                    return dailyShipmentSummary.requestDate === this.cellDate(weekIndex, weekdayIndex);
-                })[0];
+                    return dailyShipmentSummary.workingDate === this.cellDate(weekIndex, weekdayIndex);
+                });
             },
             lastOfMonth: function() {
                 return parseInt(
@@ -82,45 +130,7 @@
 
 </script>
 
-<template>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h4>
-                <button class="btn btn-primary" style="border:0px;" @click="prevWorkingMonth">
-                    <span class="glyphicon glyphicon-triangle-left"></span>
-                </button>
-                &nbsp;{{workingYear}} 年 {{workingMonth}} 月份&nbsp;
-                <button class="btn btn-primary" style="border:0px;" @click="nextWorkingMonth">
-                    <span class="glyphicon glyphicon-triangle-right"></span>
-                </button>
-                &nbsp;進廠預約作業
-            </h4>
-        </div>
-        <div class="panel-body">
-            <raw-material-selector></raw-material-selector>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr class="info">
-                        <td v-for="weekdayIndex in 7"
-                            class="text-center">
-                            {{weekdayList[weekdayIndex-1]}}
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="weekIndex in weekCount">
-                        <td v-for="weekdayIndex in 7">
-                            <reservation-cell
-                                v-if="visible(weekIndex,weekdayIndex)"
-                                :cellDateString="cellDate(weekIndex,weekdayIndex)"
-                                :dailyShipment="dailyShipmentFilter(weekIndex,weekdayIndex)">
-                            </reservation-cell>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</template>
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

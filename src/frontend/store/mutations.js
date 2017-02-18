@@ -8,21 +8,32 @@ export default {
         state.accessExp = currentDatetime().format('HH:mm');
         state.activeView = 'login';
         state.scheduleSummary = [];
-        state.dateInEditMode = null;
+        state.dateInEditMode = false;
         state.loginId = null;
         state.processingData = false;
-        state.rawMatList = null;
-        state.rawMatTypeList = null;
+        state.rawMatList = [];
+        state.rawMatTypeList = [];
         state.role = null;
         state.selectedRawMatIndex = 0;
-        state.shipmentSchedule = null;
+        state.shipmentSchedule = [];
         state.token = null;
-        state.userData = null;
+        state.userData = {};
         state.workingMonth = parseInt(currentDatetime().format('M'));
         state.workingYear = parseInt(currentDatetime().format('YYYY'));
     },
     // applies to multiple properties
-    buildData: function(state, dataObject) {
+    dataInitialization: function(state, responseList) {
+        let dataObject = {};
+        responseList.forEach((response) => {
+            Object.assign(dataObject, response.data);
+        });
+        for (let objectIndex in dataObject) {
+            state[objectIndex] = null;
+            state[objectIndex] = dataObject[objectIndex];
+        }
+    },
+    // applies to multiple properties
+    rebuildData: function(state, dataObject) {
         for (let objectIndex in dataObject) {
             state[objectIndex] = null;
             state[objectIndex] = dataObject[objectIndex];
@@ -60,5 +71,6 @@ export default {
         state.role = decode(token, { complete: true }).payload.role;
         state.token = token;
         state.userData = decode(token, { complete: true }).payload;
+        state.activeView = state.role;
     }
 };

@@ -1,34 +1,36 @@
 <template>
     <tr class="danger">
-        <td colspan="6" class="danger">
-            <div class="col-xs-offset-1 col-xs-11 bg-danger">
+        <td colspan="7">
+            <div class="col-xs-offset-1 col-xs-11">
                 <div class="panel panel-default">
                     <div class="panel-heading">{{editPaneHeading}}</div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover">
+                        <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th class="text-center">車次</th>
-                                    <th class="text-center">實際入廠日期</th>
+                                    <th class="text-center">入廠日期</th>
                                     <th class="text-center">廠商宣稱重量</th>
                                     <th class="text-center">實際磅單重量</th>
-                                    <th>備註</th>
+                                    <th class="text-center">備註</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <shipment-editor
-                                    v-for="(shipment,index) in shipmentFilter()"
-                                    :shipment="shipment"
-                                    :index="index">
-                                </shipment-editor>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </td>
-    </tr>
+                                <template v-for="(shipment,index) in shipmentFilter()">
+                                    <shipment-editor
+                                        v-if="shipment.received===received"
+                                        :shipment="shipment"
+                                        :index="index">
+                                    </shipment-editor>
+                                </template>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</td>
+</tr>
 </template>
 
 <script>
@@ -38,7 +40,7 @@
     export default {
         name: 'editPane',
         components: { shipmentEditor },
-        props: ['paneDateString'],
+        props: ['paneDateString', 'received'],
         computed: {
             ...mapGetters({
                 monthlySchedule: 'getMonthlySchedule',
@@ -53,7 +55,7 @@
         methods: {
             shipmentFilter: function() {
                 return this.monthlySchedule.filter((shipment) => {
-                    return shipment.requestDate === this.paneDateString;
+                    return shipment.workingDate === this.paneDateString;
                 });
             }
         },
@@ -63,3 +65,8 @@
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

@@ -31,25 +31,31 @@
             purchasing,
             supplier
         },
-        computed: {
-            ...mapGetters({
-                activeView: 'getActiveView'
-            })
-        },
+        computed: { ...mapGetters({ activeView: 'getActiveView' }) },
         methods: {
             ...mapActions({ initData: 'initData' }),
             ...mapMutations({
+                dataInitialization: 'dataInitialization',
                 redirectUser: 'redirectUser',
                 restoreToken: 'restoreToken'
             })
         },
         created: function() {
             // if jwt token exists in the sessionStorage
-            if ((sessionStorage.token !== undefined) && (sessionStorage.token !== null) && (sessionStorage.token !== '')) {
+            if (
+                (sessionStorage.token !== undefined) &&
+                (sessionStorage.token !== null) &&
+                (sessionStorage.token !== '')
+            ) {
                 this.restoreToken(sessionStorage.token); // restore token from session storage
                 this.initData()
-                    .then(() => { this.redirectUser(); })
-                    .catch((error) => { console.log(error.errorMessage); });
+                    .then((responseList) => {
+                        this.dataInitialization(responseList);
+                        this.redirectUser();
+                    })
+                    .catch((error) => {
+                        console.log(error.errorMessage);
+                    });
             }
         }
     };
@@ -59,18 +65,15 @@
 <template>
     <div id="app" class="container-fluid">
         <br>
+        <heading></heading>
         <div class="row">
-            <heading></heading>
+            <sidebar v-if="activeView!=='login'" class="col-lg-2 col-sm-2 col-xs-12"></sidebar>
+            <div
+                :class="{'col-sm-8 col-md-4':activeView==='login','col-lg-10 col-sm-9 col-xs-12':activeView!=='login'}"
+                :is="activeView">
+            </div>
         </div>
-        <div class="row">
-            <sidebar v-if="activeView!=='login'" class="col-lg-2 col-sm-3 col-xs-12"></sidebar>
-            <div :class="{'col-sm-12':activeView==='login','col-lg-10 col-sm-9 col-xs-12':activeView!=='login'}">
-                <template>
-                    <component :is="activeView "></component>
-                </template>
-</div>
-</div>
-</div>
+    </div>
 </template>
 
 <style>

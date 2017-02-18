@@ -4,7 +4,8 @@ SELECT
 	,b.ITM
 	,CONVERT(char(10),a.LZ_DD,126) AS LZ_DD
 	,a.CUS_NO
-	,c.SNM AS CUST_SNM
+	,e.SNM AS CUST_SNM
+    ,e.NAME AS CUST_NAME
 	,b.PS_NO
 	,b.AMTN_NET
 	,b.TAX
@@ -19,6 +20,7 @@ FROM DB_U105.dbo.MF_LZ1 a
 	INNER JOIN DB_U105.dbo.TF_LZ1 b ON a.LZ_NO=b.LZ_NO
 	INNER JOIN DB_U105.dbo.CUST c ON a.CUS_NO=c.CUS_NO
 	INNER JOIN DB_U105.dbo.PRDT d ON b.PRD_NO=d.PRD_NO
+    LEFT JOIN rawMaterial.dbo.CUST e ON a.CUS_NO=e.CUS_NO
 WHERE
 	b.PRD_NO IN (SELECT PRD_NO FROM rawMaterial.dbo.knownRawMatId)
 	AND

@@ -7,10 +7,60 @@ const utility = require('../../module/utility.js');
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.get('/data/shipment/dailySummary', tokenValidation, function(request, response, next) {
+/*
+router.get('/data/shipment/overview', tokenValidation, function(request, response, next) {
+    let workingMonth = request.body.workingMonth;
+    let workingYear = request.body.workingYear;
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
+        .from('rawMaterial.dbo.shipmentOverview')
+        .where({
+            workingYear: request.query.workingYear,
+            workingMonth: request.query.workingMonth
+        })
+        .then((resultset) => {
+            return response.status(200).json({ scheduleSummary: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `原料每日進貨預約相關資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+*/
+
+function dailyPlanScheduleSummary(knexObj, workingYear, workingMonth) {
+    return knexObj.select('*')
         .from('rawMaterial.dbo.dailyPlanScheduleSummary')
+        .where({
+            workingYear: workingYear,
+            workingMonth: workingMonth
+        })
+        .orderBy('workingDate')
+        .orderBy('received', 'DESC');
+}
+
+function planSchedule(knexObj, workingYear, workingMonth) {
+    return knexObj.select('*')
+        .from('rawMaterial.dbo.planSchedule')
+        .where({
+            workingYear: workingYear,
+            workingMonth: workingMonth
+        })
+        .orderBy('PRD_NO')
+        .orderBy('CUS_NO')
+        .orderBy('requestDate');
+}
+
+router.get('/data/shipment/dailySummary', tokenValidation, function(request, response, next) {
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    dailyPlanScheduleSummary(knex, request.query.workingYear, request.query.workingMonth)
         .then((resultset) => {
             return response.status(200).json({ scheduleSummary: resultset });
         })
@@ -31,10 +81,7 @@ router.route('/data/shipment')
     .all(tokenValidation)
     .get(function(request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
-        knex.select('*')
-            .from('rawMaterial.dbo.planSchedule')
-            .where('deprecated', null)
-            .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('requestDate')
+        planSchedule(knex, request.query.workingYear, request.query.workingMonth)
             .then((resultset) => {
                 return response.status(200).json({ shipmentSchedule: resultset });
             })
@@ -72,14 +119,11 @@ router.route('/data/shipment')
         }
         Promise.all(requestList)
             .then(() => {
-                return knex.select('*')
-                    .from('rawMaterial.dbo.planSchedule')
-                    .where('deprecated', null)
-                    .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('requestDate');
+                return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.shipmentSchedule = resultset;
-                return knex.select('*').from('rawMaterial.dbo.dailyPlanScheduleSummary');
+                return dailyPlanScheduleSummary(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.scheduleSummary = resultset;
@@ -96,29 +140,41 @@ router.route('/data/shipment')
             });
     })
     .delete(function(request, response, next) {
+        console.log('-----------------------------------');
+        console.log(request.body.id);
+        console.log('-----------------------------------');
         let responseObject = {
             shipmentSchedule: null,
             scheduleSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
+        let condition = request.body.id !== null ? {
+            id: request.body.id
+        } : {
+            requestDate: request.body.requestDate,
+            CUS_NO: request.body.CUS_NO,
+            PRD_NO: request.body.PRD_NO,
+            typeId: request.body.typeId,
+            arrivalDate: null,
+            supplierWeight: null,
+            actualWeight: null,
+            deprecated: null
+        };
+        console.log('-----------------------------------');
+        console.log(condition);
+        console.log('-----------------------------------');
         knex('rawMaterial.dbo.shipmentRequest')
             .update({
                 modified: utility.currentDatetimeString(),
                 deprecated: utility.currentDatetimeString()
             })
-            .where('requestDate', '=', request.body.requestDate)
-            .andWhere('CUS_NO', '=', request.body.CUS_NO)
-            .andWhere('PRD_NO', '=', request.body.PRD_NO)
-            .andWhere('typeId', '=', request.body.typeId)
+            .where(condition)
             .then(() => {
-                return knex.select('*')
-                    .from('rawMaterial.dbo.planSchedule')
-                    .where('deprecated', null)
-                    .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('requestDate');
+                return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.shipmentSchedule = resultset;
-                return knex.select('*').from('rawMaterial.dbo.dailyPlanScheduleSummary');
+                return dailyPlanScheduleSummary(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.scheduleSummary = resultset;
@@ -150,16 +206,13 @@ router.route('/data/shipment')
                 note: request.body.note,
                 modified: utility.currentDatetimeString()
             })
-            .where('id', '=', request.body.id)
+            .where({ id: request.body.id })
             .then(() => {
-                return knex.select('*')
-                    .from('rawMaterial.dbo.planSchedule')
-                    .where('deprecated', null)
-                    .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('requestDate');
+                return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.shipmentSchedule = resultset;
-                return knex.select('*').from('rawMaterial.dbo.dailyPlanScheduleSummary');
+                return dailyPlanScheduleSummary(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.scheduleSummary = resultset;

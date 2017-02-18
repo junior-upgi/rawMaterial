@@ -1,23 +1,23 @@
 <template>
     <div>
         <!-- admin -->
-        <button v-if="role==='admin'" type="button" class="btn btn-danger btn-block" @click="changeView('admin')">
-            <span v-if="activeView==='admin'" class="glyphicon glyphicon-ok"></span> <strong>管理模組</strong>
+        <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" @click="changeView('admin')">
+            <span v-if="activeView==='admin'" class="glyphicon glyphicon-ok"></span> 管理模組
         </button>
         <!-- furnace -->
-        <button v-if="role==='admin'" type="button" class="btn btn-success btn-block" @click="changeView('furnace')">
-            <span v-if="activeView==='furnace'" class="glyphicon glyphicon-ok"></span> <strong>窯爐模組</strong>
+        <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" @click="changeView('furnace')">
+            <span v-if="activeView==='furnace'" class="glyphicon glyphicon-ok"></span> 窯爐模組
         </button>
         <!-- purchasing -->
-        <button v-if="role==='admin'" type="button" class="btn btn-info btn-block" @click="changeView('purchasing')">
-            <span v-if="activeView==='purchasing'" class="glyphicon glyphicon-ok"></span> <strong>採購模組</strong>
+        <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" @click="changeView('purchasing')">
+            <span v-if="activeView==='purchasing'" class="glyphicon glyphicon-ok"></span> 採購模組
         </button>
         <!-- supplier -->
-        <button v-if="role==='admin'" type="button" class="btn btn-warning btn-block" @click="changeView('supplier')">
-            <span v-if="activeView==='supplier'" class="glyphicon glyphicon-ok"></span> <strong>廠商模組</strong>
+        <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" @click="changeView('supplier')">
+            <span v-if="activeView==='supplier'" class="glyphicon glyphicon-ok"></span> 廠商模組
         </button>
-        <button type="button" class="btn btn-primary btn-block" :disabled="activeView==='login'?true:false" @click="logout">
-            <strong>登出</strong>
+        <button type="button" class="btn btn-default btn-block" :disabled="activeView==='login'?true:false" @click="logout">
+            登出
         </button>
     </div>
 </template>
@@ -35,11 +35,12 @@
         },
         methods: {
             ...mapMutations({
+                forceViewChange: 'forceViewChange',
                 redirectUser: 'redirectUser',
                 resetStore: 'resetStore'
             }),
             changeView: function(role) {
-                this.$store.commit('forceViewChange', role);
+                this.forceViewChange(role);
             },
             logout: function() {
                 if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
@@ -50,3 +51,8 @@
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

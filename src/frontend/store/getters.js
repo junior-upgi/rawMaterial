@@ -31,7 +31,7 @@ export default {
     getMonthlyScheduleSummary: function(state) {
         if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
             let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
-            let eleventscheduleSummary = state.scheduleSummary.filter((dailyShipment) => {
+            let releventscheduleSummary = state.scheduleSummary.filter((dailyShipment) => {
                 let scheduledYear = parseInt(moment(dailyShipment.requestDate).format('YYYY'));
                 let scheduledMonth = parseInt(moment(dailyShipment.requestDate).format('M'));
                 return (
@@ -42,7 +42,7 @@ export default {
                     (scheduledYear === state.workingYear)
                 );
             });
-            return eleventscheduleSummary;
+            return releventscheduleSummary;
         }
         return [];
     },

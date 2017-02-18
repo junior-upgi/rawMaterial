@@ -39,3 +39,8 @@
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

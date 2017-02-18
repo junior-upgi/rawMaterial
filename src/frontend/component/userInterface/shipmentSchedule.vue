@@ -15,10 +15,13 @@
         <div class="panel-body">
             <raw-material-selector></raw-material-selector>
         </div>
-        <div class="table-responsive" style="height:480px;overflow:auto;">
-            <table class="table table-striped table-hover">
+        <div class="table-responsive" style="height:700px;overflow:auto;">
+            <table
+                class="table table-striped"
+                :class="{'table-hover':dateInEditMode===null}">
                 <thead>
                     <tr class="info">
+                        <th class="text-center">狀態</th>
                         <th class="text-center">預約日期</th>
                         <th class="text-center">廠商</th>
                         <th class="text-center">原料項目</th>
@@ -33,8 +36,9 @@
                             :dailyShipmentSummary="dailyShipmentSummary">
                         </daily-shipment-record>
                         <edit-pane
-                            v-if="inEditMode(dailyShipmentSummary.requestDate)"
-                            :paneDateString="dailyShipmentSummary.requestDate">
+                            v-if="inEditMode(dailyShipmentSummary.workingDate)"
+                            :paneDateString="dailyShipmentSummary.workingDate"
+                            :received="dailyShipmentSummary.received">
                         </edit-pane>
                     </template>
 </tbody>
@@ -88,3 +92,8 @@
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>
