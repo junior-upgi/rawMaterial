@@ -1,8 +1,8 @@
-import moment from 'moment-timezone';
-
 export default {
     checkDataProcessingState: function(state) { return state.processingData; },
     checkDateInEditMode: function(state) { return state.dateInEditMode; },
+    checkPOPrintMode: function(state) { return state.pOPrintMode; },
+    checkPOViewMode: function(state) { return state.pOViewMode; },
     getActiveView: function(state) {
         if (state.activeView) {
             return state.activeView;
@@ -51,6 +51,7 @@ export default {
     getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
     getShipmentOverview: function(state) { return state.shipmentOverview; },
     getShipmentSchedule: function(state) { return state.shipmentSchedule; },
+    getTonnageSummary: function(state) { return state.tonnageSummary; },
     getUserName: function(state) { return state.userData.NAME; },
     getWorkingMonth: function(state) { return state.workingMonth; },
     getWorkingSupplier: function(state) { return state.workingSupplier; },

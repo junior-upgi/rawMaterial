@@ -8,13 +8,13 @@
         </div>
         <div class="table-responsive">
             <table
-                class="table table-striped"
+                class="table table-striped table-bordered table-condensed table-hover"
                 :class="{'table-hover':dateInEditMode===null}">
                 <thead>
                     <tr>
-                        <th class="text-left">項目</th>
-                        <th class="text-center">日期</th>
                         <th class="text-center">廠商</th>
+                        <th class="text-center">項目</th>
+                        <th class="text-center">日期</th>
                         <th class="text-center">重量</th>
                     </tr>
                 </thead>

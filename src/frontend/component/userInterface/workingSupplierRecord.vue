@@ -1,17 +1,22 @@
 <template>
     <tr>
-        <td class="text-left">{{supplier.PRDT_SNM}}</td>
+        <td style="white-space:nowrap;">{{supplier.CUS_SNM}}</td>
+        <td class="text-centered" style="white-space:nowrap;">{{supplier.PRDT_SNM}}</td>
         <td class="text-left">
             <shipping-date-list
                 :dateList="dateList">
             </shipping-date-list>
         </td>
-        <td>{{supplier.CUS_SNM}}</td>
-        <td></td>
+        <tonnage-display
+            :CUS_NO="supplier.CUS_NO"
+            :PRD_NO="supplier.PRD_NO">
+        </tonnage-display>
     </tr>
 </template>
 
 <script>
+    import tonnageDisplay from './tonnageDisplay.vue';
+
     const shippingDateList = {
         name: 'shippingDateList',
         props: ['dateList'],
@@ -30,7 +35,15 @@
             'dateList',
             'supplier'
         ],
-        components: { shippingDateList }
+        components: {
+            shippingDateList,
+            tonnageDisplay
+        }
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

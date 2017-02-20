@@ -10,8 +10,9 @@
                         v-show="isFutureDate()||role==='admin'"
                         type="number"
                         min="1"
+                        max="5"
                         step="1"
-                        placeholder="輸入預約車趟"
+                        placeholder="預約車趟"
                         class="form-control text-center input-sm reservationInput"
                         v-model.lazy.number="userInputValue"
                         :disabled="processingData?true:false" />
@@ -82,7 +83,7 @@
             userInputValue: function(newValue) {
                 if (
                     (newValue === '') ||
-                    ((newValue < 1) && (newValue > 10)) ||
+                    ((newValue < 1) || (newValue > 10)) ||
                     (!Number.isInteger(newValue))
                 ) {
                     this.userInputValue = null;
@@ -119,14 +120,10 @@
             },
             isFutureDate: function() {
                 let today = new Date();
-                let indexedDate = new Date(this.cellDateString);
+                let referenceDate = new Date(this.cellDateString);
                 today.setHours(0, 0, 0, 0);
-                indexedDate.setHours(0, 0, 0, 0);
-                if (indexedDate >= today) {
-                    return true;
-                } else {
-                    return false;
-                }
+                referenceDate.setHours(0, 0, 0, 0);
+                return (referenceDate >= today) ? true : false;
             },
             processReservation: function() {
                 this.processingDataSwitch(true);

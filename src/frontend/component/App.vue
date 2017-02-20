@@ -1,3 +1,17 @@
+<template>
+    <div id="app" class="container-fluid">
+        <br v-if="pOPrintMode!==true">
+        <heading v-if="pOPrintMode!==true"></heading>
+        <div class="row">
+            <sidebar v-if="(activeView!=='login')&&(pOPrintMode!==true)" class="col-lg-2 col-sm-2 col-xs-12"></sidebar>
+            <div
+                :class="{'col-sm-8 col-md-4':activeView==='login','col-lg-10 col-sm-9 col-xs-12':((activeView!=='login')&&(pOPrintMode!==true)),'col-xs-12':pOPrintMode===true}"
+                :is="activeView">
+            </div>
+        </div>
+    </div>
+</template>
+
 <script>
     import { mapActions, mapGetters, mapMutations } from 'vuex';
     import { store } from '../store/store.js';
@@ -9,8 +23,15 @@
     import sidebar from './userInterface/sidebar.vue';
     import supplier from './userInterface/supplier.vue';
 
+    import pOTemplate from './userInterface/purchaseOrder/pOTemplate.vue';
+
     const titleComponent = {
         name: 'title',
+        computed: {
+            ...mapGetters({
+                pOPrintMode: 'checkPOPrintMode'
+            })
+        },
         template: `
             <div class="row" style="margin-left:10px;">
                 <div class="page-header">
@@ -29,9 +50,15 @@
             admin,
             furnace,
             purchasing,
-            supplier
+            supplier,
+            pOTemplate
         },
-        computed: { ...mapGetters({ activeView: 'getActiveView' }) },
+        computed: {
+            ...mapGetters({
+                activeView: 'getActiveView',
+                pOPrintMode: 'checkPOPrintMode'
+            })
+        },
         methods: {
             ...mapActions({ initData: 'initData' }),
             ...mapMutations({
@@ -61,20 +88,6 @@
     };
 
 </script>
-
-<template>
-    <div id="app" class="container-fluid">
-        <br>
-        <heading></heading>
-        <div class="row">
-            <sidebar v-if="activeView!=='login'" class="col-lg-2 col-sm-2 col-xs-12"></sidebar>
-            <div
-                :class="{'col-sm-8 col-md-4':activeView==='login','col-lg-10 col-sm-9 col-xs-12':activeView!=='login'}"
-                :is="activeView">
-            </div>
-        </div>
-    </div>
-</template>
 
 <style>
     @import './bower_components/bootstrap/dist/css/bootstrap.min.css';

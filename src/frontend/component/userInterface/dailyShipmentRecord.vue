@@ -10,7 +10,7 @@
         <td>{{dailyShipmentSummary.PRDT_SNM}}</td>
         <td>{{dailyShipmentSummary.specification}}</td>
         <td>{{dailyShipmentSummary.quantity}}</td>
-        <td>{{dailyShipmentSummary.estWeight|tonnage(dailyShipmentSummary.quantity)}}</td>
+        <td>{{dailyShipmentSummary.workingWeight|tonnage(dailyShipmentSummary.quantity)}}</td>
     </tr>
 </template>
 
@@ -26,7 +26,7 @@
         },
         filters: {
             tonnage: function(value) {
-                return `${numeral(Math.round((value) / 1000)).format('0,0.0')} 噸`;
+                return `${numeral(Math.round((value) / 100)).format('0,0.0') / 10} 噸`;
             }
         },
         methods: {

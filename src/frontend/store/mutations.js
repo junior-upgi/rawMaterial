@@ -10,6 +10,8 @@ export default {
         state.scheduleSummary = [];
         state.dateInEditMode = false;
         state.loginId = null;
+        state.pOPrintMode = false;
+        state.pOViewMode = false;
         state.processingData = false;
         state.rawMatList = [];
         state.rawMatTypeList = [];
@@ -18,6 +20,7 @@ export default {
         state.shipmentOverview = [];
         state.shipmentSchedule = [];
         state.token = null;
+        state.tonnageSummary = [];
         state.userData = {};
         state.workingMonth = parseInt(currentDatetime().format('M'));
         state.workingSupplier = [];
@@ -33,6 +36,15 @@ export default {
             state[objectIndex] = null;
             state[objectIndex] = dataObject[objectIndex];
         }
+    },
+    // deals with purchase order operation
+    changePOMode: function(state, modeObj) {
+        state.pOPrintMode = modeObj.pOPrintMode;
+        state.pOViewMode = modeObj.pOViewMode;
+        setTimeout(function() {
+            state.pOPrintMode = false;
+            state.pOViewMode = true;
+        }, 5000);
     },
     // applies to multiple properties
     rebuildData: function(state, dataObject) {

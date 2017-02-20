@@ -19,6 +19,8 @@ export const store = new Vuex.Store({
         dateInEditMode: false,
         loginId: null, // same as userData.SAL_NO
         processingData: false, // flag to signal if program is processing data
+        pOPrintMode: false,
+        pOViewMode: false,
         rawMatList: [], // list of raw material with details
         rawMatTypeList: [], // list of known raw material in the ERP system
         role: null, // 'admin', 'furnace', 'purchasing', 'supplier'
@@ -26,6 +28,7 @@ export const store = new Vuex.Store({
         shipmentOverview: [], // list of shipment overview data
         shipmentSchedule: [], // list of current shipment schedule with details
         token: null, // jwt token
+        tonnageSummary: [],
         userData: {}, // used to hold the user information returned from the authentication process,
         workingMonth: parseInt(currentDatetime().format('M')),
         workingSupplier: [], // a list of suppliers supplying raw material for the particular month

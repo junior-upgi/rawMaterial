@@ -8,6 +8,7 @@
                 type="date"
                 class="form-control input-sm text-center"
                 style="border:0px;"
+                :disabled="dataProcessingState?true:false"
                 v-model.lazy="workingDate" />
         </td>
         <td>
@@ -18,6 +19,7 @@
                 min="1000"
                 max="99999"
                 step="1"
+                :disabled="!isPastDate()||dataProcessingState?true:false"
                 v-model.lazy.number="supplierWeight" />
         </td>
         <td>
@@ -29,6 +31,7 @@
                 min="1000"
                 max="99999"
                 step="1"
+                :disabled="!isPastDate()||dataProcessingState?true:false"
                 v-model.lazy.number="actualWeight" />
         </td>
         <td>
@@ -36,49 +39,28 @@
                 type="text"
                 class="form-control input-sm"
                 style="border:0px;"
-                v-model.trim="note" />
+                :disabled="dataProcessingState?true:false"
+                v-model.lazy.trim="note" />
         </td>
-        <td>
-            <button
-                v-if="dataModified"
-                type="button"
-                class="btn btn-info btn-sm"
-                @click="modifyData()">
-                <span class="glyphicon glyphicon-pencil"></span> 修改
-            </button>
-            <button
-                v-if="dataExist"
-                type="button"
-                class="btn btn-danger btn-sm"
-                @click="removeData()">
-                <span class="glyphicon glyphicon-remove"></span> 清除
-            </button>
-            <button
-                v-if="readyToSubmit && shipment.received===0"
-                type="button"
-                class="btn btn-primary btn-sm"
-                @click="modifyData()">
-                <span class="glyphicon glyphicon-floppy-disk"></span> 儲存
-            </button>
-            <button
-                v-if="!dataExist"
-                type="button"
-                class="btn btn-warning btn-sm"
-                @click="cancelSingleShipment()">
-                <span class="glyphicon glyphicon-repeat"></span> 取消
-            </button>
-        </td>
+        <submit-control
+            :pristine="pristine"
+            :shipped="shipped"
+            :weightDataReady="weightDataReady"
+            :workingDateReady="workingDateReady"
+            @cancel="cancelShipment()"
+            @update="updateShipment()">
+        </submit-control>
     </tr>
 </template>
 
 <script>
-    import { mapActions, mapMutations } from 'vuex';
+    import { mapGetters, mapActions, mapMutations } from 'vuex';
+    import submitControl from './submitControl.vue';
+
     export default {
         name: 'shipmentEditor',
-        props: [
-            'index',
-            'shipment'
-        ],
+        components: { submitControl },
+        props: ['index', 'shipment'],
         data: function() {
             return {
                 requestDate: null,
@@ -90,48 +72,37 @@
             };
         },
         computed: {
-            dataModified: function() {
-                if (
-                    (this.dataExist && this.readyToSubmit) &&
-                    (
-                        (this.shipment.workingDate !== this.workingDate) ||
-                        (this.shipment.actualWeight !== this.actualWeight) ||
-                        (this.shipment.supplierWeight !== this.supplierWeight) ||
-                        (this.shipment.note !== this.note)
-                    )
-                ) {
-                    return true;
-                } else {
-                    return false;
-                }
+            ...mapGetters({ dataProcessingState: 'checkDataProcessingState' }),
+            pristine: function() {
+                return (
+                    (this.shipment.workingDate === this.workingDate) &&
+                    (this.shipment.supplierWeight === this.supplierWeight) &&
+                    (this.shipment.actualWeight === this.actualWeight)
+                ) ? true : false;
             },
-            dataExist: function() {
-                return (this.shipment.workingDate && this.shipment.actualWeight && this.shipment.supplierWeight) ? true : false;
+            shipped: function() {
+                return this.shipment.received ? true : false;
             },
-            readyToSubmit: function() {
-                return (this.workingDate && this.actualWeight && this.supplierWeight) ? true : false;
+            weightDataReady: function() {
+                return ((this.supplierWeight !== null) === (this.actualWeight !== null));
+            },
+            workingDateReady: function() {
+                return this.workingDate !== null;
             }
         },
         watch: {
-            workingDate: function(newDate) {
-                if (newDate === '') {
-                    this.workingDate = null;
-                }
+            actualWeight: function(newValue) {
+                if ((newValue === '') || (newValue <= 1000) || (newValue > 99999)) { this.actualWeight = null; }
             },
             note: function(newNoteText) {
-                if (newNoteText === '') {
-                    this.note = null;
-                }
-            },
-            actualWeight: function(newValue) {
-                if ((newValue === '') || (newValue <= 1000) || (newValue > 99999)) {
-                    this.actualWeight = null;
-                }
+                if (newNoteText === '') { this.note = null; }
+                this.updateNote();
             },
             supplierWeight: function(newValue) {
-                if ((newValue === '') || (newValue <= 1000) || (newValue > 99999)) {
-                    this.supplierWeight = null;
-                }
+                if ((newValue === '') || (newValue <= 1000) || (newValue > 99999)) { this.supplierWeight = null; }
+            },
+            workingDate: function(newDate) {
+                if (newDate === '') { this.workingDate = null; }
             }
         },
         created: function() {
@@ -144,17 +115,17 @@
         },
         methods: {
             ...mapActions({
-                updateShipment: 'updateShipment',
-                cancelShipment: 'cancelShipment'
+                updateShipmentAction: 'updateShipment',
+                cancelShipmentAction: 'cancelShipment'
             }),
             ...mapMutations({
                 rebuildData: 'rebuildData',
                 processingDataSwitch: 'processingDataSwitch',
                 resetStore: 'resetStore'
             }),
-            cancelSingleShipment: function() {
+            cancelShipment: function() {
                 this.processingDataSwitch(true);
-                this.cancelShipment({
+                this.cancelShipmentAction({
                     id: this.shipment.id
                 }).then((resultset) => {
                     this.rebuildData(resultset.data);
@@ -164,9 +135,29 @@
                     this.resetStore();
                 });
             },
-            modifyData: function() {
+            isPastDate: function() {
+                let today = new Date();
+                let referenceDate = new Date(this.workingDate);
+                today.setHours(0, 0, 0, 0);
+                referenceDate.setHours(0, 0, 0, 0);
+                return (referenceDate <= today) ? true : false;
+            },
+            updateNote: function() {
                 this.processingDataSwitch(true);
-                this.updateShipment({
+                this.updateShipmentAction({
+                    id: this.shipment.id,
+                    note: this.note
+                }).then((resultset) => {
+                    this.rebuildData(resultset.data);
+                    this.processingDataSwitch(false);
+                }).catch((error) => {
+                    alert(`進貨備註資料寫入發生錯誤，系統即將重置: ${error}`);
+                    this.resetStore();
+                });
+            },
+            updateShipment: function() {
+                this.processingDataSwitch(true);
+                this.updateShipmentAction({
                     id: this.shipment.id,
                     workingDate: this.workingDate,
                     supplierWeight: this.supplierWeight,
@@ -176,12 +167,16 @@
                     this.rebuildData(resultset.data);
                     this.processingDataSwitch(false);
                 }).catch((error) => {
-                    alert(`進貨資料登入發生錯誤，系統即將重置: ${error}`);
+                    alert(`進貨資料寫入發生錯誤，系統即將重置: ${error}`);
                     this.resetStore();
                 });
             },
             removeData: function() {
                 this.processingDataSwitch(true);
+                this.workingDate = this.shipment.workingDate;
+                this.supplierWeight = null;
+                this.actualWeight = null;
+                this.note = null;
                 this.updateShipment({
                     id: this.shipment.id,
                     workingDate: null,

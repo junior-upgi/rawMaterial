@@ -7,6 +7,32 @@ const utility = require('../../module/utility.js');
 const router = express.Router();
 router.use(bodyParser.json());
 
+router.get('/data/shipment/tonnageSummary', tokenValidation, function(request, response) {
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    knex.select('*')
+        .from('rawMaterial.dbo.tonnageSummary')
+        .where({
+            workingYear: request.query.workingYear,
+            workingMonth: request.query.workingMonth
+        })
+        .orderBy('CUS_NO')
+        .orderBy('PRD_NO')
+        .then((resultset) => {
+            return response.status(200).json({ tonnageSummary: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `原料進貨重量概況相關資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+
 router.get('/data/shipment/overview', tokenValidation, function(request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')

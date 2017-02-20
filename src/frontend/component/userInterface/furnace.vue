@@ -1,8 +1,7 @@
 <template>
     <div class="text-center">
-        <div class="row">
-            <h2>窯爐模組</h2>
-        </div>
+        <h2>窯爐模組</h2>
+        <br>
         <batch-reservation></batch-reservation>
         <shipment-schedule></shipment-schedule>
     </div>

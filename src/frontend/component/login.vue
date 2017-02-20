@@ -1,3 +1,16 @@
+<template>
+    <form id="loginForm" class="form" v-on:submit.prevent>
+        <div class="form-group">
+            <input class="form-control" name="loginId" type="text" placeholder="使用者帳號" v-model="loginId" required />
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="password" type="password" placeholder="密碼" v-model="password" required />
+        </div>
+        <button class="btn btn-lg" type="submit" v-on:click="login">登入</button>
+        <button class="btn btn-lg" type="reset">重設</button>
+    </form>
+</template>
+
 <script>
     import axios from 'axios';
     import { mapActions, mapGetters, mapMutations } from 'vuex';
@@ -48,19 +61,6 @@
     };
 
 </script>
-
-<template>
-    <form id="loginForm" class="form" v-on:submit.prevent>
-        <div class="form-group">
-            <input class="form-control" name="loginId" type="text" placeholder="使用者帳號" v-model="loginId" required />
-        </div>
-        <div class="form-group">
-            <input class="form-control" name="password" type="password" placeholder="密碼" v-model="password" required />
-        </div>
-        <button class="btn btn-lg" type="submit" v-on:click="login">登入</button>
-        <button class="btn btn-lg" type="reset">重設</button>
-    </form>
-</template>
 
 <style>
     @import './bower_components/bootstrap/dist/css/bootstrap.min.css';

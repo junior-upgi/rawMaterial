@@ -73,6 +73,14 @@ export default {
             headers: { 'x-access-token': sessionStorage.token }
         }, {
             method: 'get',
+            url: `${serverUrl}/data/shipment/tonnageSummary`,
+            params: {
+                workingYear: context.state.workingYear,
+                workingMonth: context.state.workingMonth
+            },
+            headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
             url: `${serverUrl}/data/supplier/workingSupplier`,
             params: {
                 workingYear: context.state.workingYear,
@@ -105,18 +113,23 @@ export default {
         return context.dispatch({ type: 'initData' });
     },
     updateShipment: function(context, payload) {
+        let recordData = {
+            id: payload.id,
+            supplierWeight: payload.supplierWeight,
+            actualWeight: payload.actualWeight,
+            note: payload.note,
+            workingMonth: context.state.workingMonth,
+            workingYear: context.state.workingYear
+        };
+        if (recordData.supplierWeight && recordData.actualWeight) {
+            recordData.arrivalDate = payload.workingDate;
+        } else {
+            recordData.requestDate = payload.workingDate;
+        }
         let requestOption = {
             method: 'put',
             url: `${serverUrl}/data/shipment`,
-            data: {
-                id: payload.id,
-                arrivalDate: payload.workingDate,
-                supplierWeight: payload.supplierWeight,
-                actualWeight: payload.actualWeight,
-                note: payload.note,
-                workingMonth: context.state.workingMonth,
-                workingYear: context.state.workingYear
-            },
+            data: recordData,
             headers: { 'x-access-token': sessionStorage.token }
         };
         return axios(requestOption);
