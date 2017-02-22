@@ -2,29 +2,142 @@ import { decode } from 'jsonwebtoken';
 import moment from 'moment-timezone';
 import { currentDatetime } from '../utility.js';
 
+function emptyStoreValue(state) {
+    state.accessExp = currentDatetime().format('HH:mm');
+    state.activeView = 'login';
+    state.scheduleSummary = [];
+    state.dateInEditMode = false;
+    state.loginId = null;
+    state.pOPrintMode = false;
+    state.pOShipmentList = [];
+    state.pOShipmentSummary = [];
+    state.pOViewMode = false;
+    state.pOWorkingSupplier = null;
+    state.processingData = false;
+    state.rawMatList = [];
+    state.rawMatTypeList = [];
+    state.role = null;
+    state.selectedRawMatIndex = 0;
+    state.shipmentOverview = [];
+    state.shipmentSchedule = [];
+    state.supplierList = [];
+    state.supplyingSpecList = [];
+    state.token = null;
+    state.tonnageSummary = [];
+    state.userData = {};
+    state.workingMonth = parseInt(currentDatetime().format('M'));
+    state.workingSupplier = [];
+    state.workingYear = parseInt(currentDatetime().format('YYYY'));
+}
+
 export default {
     resetStore: function(state) {
         sessionStorage.clear();
-        state.accessExp = currentDatetime().format('HH:mm');
-        state.activeView = 'login';
-        state.scheduleSummary = [];
-        state.dateInEditMode = false;
-        state.loginId = null;
-        state.pOPrintMode = false;
-        state.pOViewMode = false;
-        state.processingData = false;
-        state.rawMatList = [];
-        state.rawMatTypeList = [];
-        state.role = null;
-        state.selectedRawMatIndex = 0;
-        state.shipmentOverview = [];
-        state.shipmentSchedule = [];
-        state.token = null;
-        state.tonnageSummary = [];
-        state.userData = {};
-        state.workingMonth = parseInt(currentDatetime().format('M'));
-        state.workingSupplier = [];
-        state.workingYear = parseInt(currentDatetime().format('YYYY'));
+        emptyStoreValue(state);
+    },
+    // deals with purchase order operation
+    changePOMode: function(state, modeObj) {
+        state.pOPrintMode = modeObj.pOPrintMode;
+        state.pOViewMode = modeObj.pOViewMode;
+        /*
+        setTimeout(function() {
+            state.pOPrintMode = false;
+            state.pOViewMode = true;
+        }, 5000);
+        */
+    },
+    addToPOShipmentSummary: function(state, shipment) {
+        state.pOShipmentList.forEach((pOShipment) => {
+            if (pOShipment.id === shipment.id) {
+                pOShipment.selected = true;
+            }
+        });
+        if (state.pOShipmentSummary.length > 0) {
+            let summaryItem = state.pOShipmentSummary.filter((summaryItem) => {
+                return (
+                    (summaryItem.CUS_NO === shipment.CUS_NO) &&
+                    (summaryItem.PRD_NO === shipment.PRD_NO) &&
+                    (summaryItem.typeId === shipment.typeId) &&
+                    (summaryItem.unitPrice === shipment.unitPrice)
+                );
+            });
+            if (summaryItem[0] !== undefined) {
+                summaryItem[0].workingWeight += shipment.workingWeight;
+                summaryItem[0].summarizedEntryCount++;
+            } else {
+                state.pOShipmentSummary.push({
+                    CUS_NO: shipment.CUS_NO,
+                    PRD_NO: shipment.PRD_NO,
+                    PRDT_SNM: shipment.PRDT_SNM,
+                    typeId: shipment.typeId,
+                    specification: shipment.specification,
+                    unitPrice: shipment.unitPrice,
+                    workingWeight: shipment.workingWeight,
+                    UT: shipment.UT,
+                    summarizedEntryCount: 1
+                });
+            }
+        } else {
+            state.pOShipmentSummary.push({
+                CUS_NO: shipment.CUS_NO,
+                PRD_NO: shipment.PRD_NO,
+                PRDT_SNM: shipment.PRDT_SNM,
+                typeId: shipment.typeId,
+                specification: shipment.specification,
+                unitPrice: shipment.unitPrice,
+                workingWeight: shipment.workingWeight,
+                UT: shipment.UT,
+                summarizedEntryCount: 1
+            });
+        }
+    },
+    removeFromPOShipmentSummary: (state, shipment) => {
+        state.pOShipmentList.forEach((pOShipment) => {
+            if (pOShipment.id === shipment.id) {
+                pOShipment.selected = false;
+            }
+        });
+        let summaryItem = state.pOShipmentSummary.filter((summaryItem) => {
+            return (
+                (summaryItem.CUS_NO === shipment.CUS_NO) &&
+                (summaryItem.PRD_NO === shipment.PRD_NO) &&
+                (summaryItem.typeId === shipment.typeId) &&
+                (summaryItem.unitPrice === shipment.unitPrice)
+            );
+        });
+        if (summaryItem[0] === undefined) {
+            alert('訂單進貨合計資料內容讀取錯誤');
+            sessionStorage.clear();
+            emptyStoreValue(state);
+        } else {
+            summaryItem[0].workingWeight -= shipment.workingWeight;
+            summaryItem[0].summarizedEntryCount--;
+            let emptyItemList = [];
+            state.pOShipmentSummary.forEach((summaryItem, index) => {
+                if (summaryItem.summarizedEntryCount === 0) {
+                    emptyItemList.push(index);
+                }
+            });
+            emptyItemList.reverse();
+            emptyItemList.forEach((itemIndex) => {
+                state.pOShipmentSummary.splice(itemIndex, 1);
+            });
+        }
+    },
+    resetPOShipmentSummary: function(state) {
+        state.pOShipmentSummary = [];
+    },
+    resetPOShipmentList: function(state) {
+        state.pOShipmentSummary = [];
+        state.pOShipmentList = [];
+    },
+    switchPOWorkingSupplier: function(state, CUS_NO) {
+        state.pOWorkingSupplier = CUS_NO;
+    },
+    updatePOShipmentList: function(state, pOShipmentList) {
+        state.pOShipmentSummary = [];
+        state.pOShipmentList = null;
+        state.pOShipmentList = pOShipmentList;
     },
     // applies to multiple properties
     dataInitialization: function(state, responseList) {
@@ -36,15 +149,6 @@ export default {
             state[objectIndex] = null;
             state[objectIndex] = dataObject[objectIndex];
         }
-    },
-    // deals with purchase order operation
-    changePOMode: function(state, modeObj) {
-        state.pOPrintMode = modeObj.pOPrintMode;
-        state.pOViewMode = modeObj.pOViewMode;
-        setTimeout(function() {
-            state.pOPrintMode = false;
-            state.pOViewMode = true;
-        }, 5000);
     },
     // applies to multiple properties
     rebuildData: function(state, dataObject) {

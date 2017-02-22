@@ -2,6 +2,7 @@ SELECT
 	a.CUS_NO
 	,a.NAME
 	,a.SNM
+    ,a.contractType
 	,b.BOS_NM
 	,b.CNT_MAN1
 	,b.CNT_MAN2

@@ -38,6 +38,9 @@ export default {
         }
         return [];
     },
+    getPOShipmentList: function(state) { return state.pOShipmentList; },
+    getPOShipmentSummary: function(state) { return state.pOShipmentSummary; },
+    getPOWorkingSupplier: function(state) { return state.pOWorkingSupplier; },
     getRawMatList: function(state) { return state.rawMatList; },
     getRawMaterialTypeList: function(state) { return state.rawMatTypeList; },
     getRole: function(state) { return state.role; },
@@ -51,8 +54,11 @@ export default {
     getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
     getShipmentOverview: function(state) { return state.shipmentOverview; },
     getShipmentSchedule: function(state) { return state.shipmentSchedule; },
+    getSupplierList: function(state) { return state.supplierList; },
+    getSupplyingSpecList: function(state) { return state.supplyingSpecList; },
     getTonnageSummary: function(state) { return state.tonnageSummary; },
     getUserName: function(state) { return state.userData.NAME; },
+    getUserData: function(state) { return state.userData; },
     getWorkingMonth: function(state) { return state.workingMonth; },
     getWorkingSupplier: function(state) { return state.workingSupplier; },
     getWorkingYear: function(state) { return state.workingYear; }

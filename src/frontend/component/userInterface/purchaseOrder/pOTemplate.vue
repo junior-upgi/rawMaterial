@@ -1,130 +1,219 @@
 <template>
     <div class="container text-center">
-        <div class="row">
-            <h1 style="margin-top:20px;">{{NAME}}</h1>
+        <div class="row" v-if="checkPOPrintMode!==true">
+            <supplier-selector @supplierSwitched="refreshPOListing"></supplier-selector>
         </div>
-        <div class="row">
-            <h4 style="margin-top:0px;">{{CMP_ADR}} TEL:{{TEL1}} FAX:{{TEL3}}</h4>
-        </div>
-        <div class="row">
-            <h2 style="margin-top:0px;">
-                <span>訂</span>
-                <span style="margin-left:30px;margin-right:30px;">購</span>
-                <span>單</span>
-            </h2>
-        </div>
-        <div class="row table-responsive">
-            <table class="table table-bordered table-condensed">
-                <tbody>
-                    <tr>
-                        <td>廠商名稱</td>
-                        <td>東碱股份有限公司</td>
-                        <td>訂單編號</td>
-                        <td>106012501</td>
-                    </tr>
-                    <tr>
-                        <td>業務聯絡人</td>
-                        <td>歐先生/王小姐</td>
-                        <td>訂貨日期</td>
-                        <td>2017-01-25</td>
-                    </tr>
-                    <tr>
-                        <td>聯絡電話</td>
-                        <td>(02)2704-7272 分機:258/254</td>
-                        <td>修改日期</td>
-                        <td>2017-02-16 (修訂版本: XX)</td>
-                    </tr>
-                    <tr>
-                        <td>傳真電話</td>
-                        <td>(02)2709-9640</td>
-                        <td>採購經辦</td>
-                        <td>陳連虹貞 分機:166</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="row table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">項次</th>
-                        <th class="text-center">品名</th>
-                        <th class="text-center">規格</th>
-                        <th class="text-center">數量</th>
-                        <th class="text-center">單位</th>
-                        <th class="text-center">單價</th>
-                        <th class="text-center">合計</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="index in 3">
-                        <td>{{index}}</td>
-                        <td>品項 {{index}}</td>
-                        <td>規格敘述 {{index}}</td>
-                        <td>120,000</td>
-                        <td>公斤</td>
-                        <td>$8.70</td>
-                        <td>$1,044,000</td>
-                    </tr>
-                    <tr>
-                        <td class="text-left" colspan="7">
-                            <div style="margin:0px;padding:0px;">
-                                <div contenteditable>
-                                    <div>送貨日期: 2017-02-03 (週X)</div>
-                                    <div>訂單請蓋章回傳</div>
-                                    <div>發票請附最後一車的檢驗成分表(COA)，謝謝！</div>
+        <document-heading :documentTitle="documentTitle"></document-heading>
+        <general-section
+            :supplier="supplier"
+            :userInfo="userInfo"
+            :pONumber="pONumber"
+            :pODate="pODate"
+            :revisionNumber="revisionNumber">
+        </general-section>
+        <div class="container">
+            <div v-if="supplier" class="row table-responsive">
+                <table class="table table-bordered table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="text-center">項次</th>
+                            <th class="text-center">品名</th>
+                            <th class="text-center">規格</th>
+                            <th class="text-center">數量</th>
+                            <th class="text-center">單位</th>
+                            <th class="text-center">單價</th>
+                            <th class="text-center">合計</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <summary-entry
+                            v-for="(summaryItem,index) in pOShipmentSummary"
+                            :summaryItem="summaryItem"
+                            :index="index">
+                        </summary-entry>
+                    </tbody>
+                    <tbody>
+                        <tr v-if="checkPOPrintMode!==true">
+                            <td colspan="7">
+                                <div class="list-group" style="height:300px;overflow-y:auto;">
+                                    <shipment-entry
+                                        v-for="(shipment,index) in pOShipmentList"
+                                        :shipment="shipment"
+                                        :index="index"
+                                        @shipmentSelection="addToSummary($event)"
+                                        @shipmentDeselection="removeFromSummary($event)">
+                                    </shipment-entry>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">
-                            <div style="margin:0px;padding:0px;">
-
-                            </div>
-                        </td>
-                        <td colspan="2">
-                            abc
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <shipping-date-display></shipping-date-display>
+                    <tbody>
+                        <tr>
+                            <td class="text-left" colspan="7">
+                                <div style="margin:0px;padding-left:10px;">
+                                    <h4>
+                                        <div style="padding-top:5px;padding-bottom:5px;">訂單請蓋章回傳</div>
+                                        <div style="padding-top:5px;padding-bottom:5px;">發票請附最後一車的檢驗成分表(COA)，謝謝！</div>
+                                        <div style="padding-top:5px;padding-bottom:5px;">請勿使用老舊太空袋，避免我司高空作業造成危險狀況</div>
+                                    </h4>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td colspan="5">
+                                <h4>
+                                    <div class="text-left" style="margin:0px;padding-left:10px;">
+                                        <span>備註：</span>
+                                        <ol style="margin-top:5px;">
+                                            <li style="padding-top:5px;padding-bottom:5px;">請於送貨單上註明訂單編號</li>
+                                            <li style="padding-top:5px;padding-bottom:5px;">請回覆訂單以確定交貨期</li>
+                                            <li style="padding-top:5px;padding-bottom:5px;">付款方式：月結3個月電匯</li>
+                                            <li style="padding-top:5px;padding-bottom:5px;">統一編號：{{UNI_NO}}</li>
+                                            <li style="padding-top:5px;padding-bottom:5px;">送貨地點：{{CMP_ADR}}</li>
+                                        </ol>
+                                    </div>
+                                </h4>
+                            </td>
+                            <td colspan="2">
+                                <div class="container-fluid">
+                                    <h4>
+                                        <div class="row" style="padding-bottom:20px;">
+                                            <div class="col-xs-7 text-left">金額</div>
+                                            <div class="col-xs-5 text-right">{{pOSummaryNet|formatCurrency}}</div>
+                                        </div>
+                                        <div class="row" style="padding-bottom:20px;">
+                                            <div class="col-xs-7 text-left">稅金 5%</div>
+                                            <div class="col-xs-5 text-right">{{pOSummaryTax|formatCurrency}}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-7 text-left">總計</div>
+                                            <div class="col-xs-5 text-right">{{pOSummaryGross|formatCurrency}}</div>
+                                        </div>
+                                    </h4>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td colspan="2">
+                                <div style="padding-top:40px;padding-bottom:40px;">
+                                    <h3>回覆確認</h3>
+                                </div>
+                            </td>
+                            <td colspan="5"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import moment from 'moment-timezone';
+    import numeral from 'numeral';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
+    import supplierSelector from '../supplierSelector.vue';
+    import documentHeading from '../documentHeading.vue';
+    import generalSection from './generalSection.vue';
+    import summaryEntry from './summaryEntry.vue';
+    import shipmentEntry from './shipmentEntry.vue';
+    import shippingDateDisplay from './shippingDateDisplay.vue';
+
     export default {
         name: 'pOTemplate',
+        components: {
+            supplierSelector,
+            documentHeading,
+            generalSection,
+            summaryEntry,
+            shipmentEntry,
+            shippingDateDisplay
+        },
         data: function() {
             return {
-                NAME: '統 義 玻 璃 工 業 股 份 有 限 公 司',
                 CMP_ADR: '台南市新營區新工路36號',
-                TEL1: '06-6536281',
-                TEL3: '06-6532530',
+                documentTitle: '訂購單',
                 UNI_NO: '70752833',
                 isoCode: 'R7-03-02A',
-
-                shippingDateHistory: `2017-02-02 測試測試測試
-                    2017-02-03 測試測試測試`
+                revisionNumber: 1,
+                taxRate: 0.05
             };
         },
-        components: {
+        computed: {
             ...mapGetters({
-                checkPOPrintMode: 'pOPrintMode',
-                checkPOViewMode: 'pOViewMode'
-            })
+                pOShipmentList: 'getPOShipmentList',
+                pOShipmentSummary: 'getPOShipmentSummary',
+                pOWorkingSupplier: 'getPOWorkingSupplier',
+                checkPOPrintMode: 'checkPOPrintMode',
+                checkPOViewMode: 'checkPOViewMode',
+                shipmentOverview: 'getShipmentOverview',
+                supplierList: 'getSupplierList',
+                userInfo: 'getUserData',
+                workingMonth: 'getWorkingMonth',
+                workingYear: 'getWorkingYear'
+            }),
+            pODate: function() {
+                return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+            },
+            pONumber: function() {
+                let yearPartString = (new Date().getFullYear() - 1911).toString();
+                let datePartString = moment(new Date(), 'YYYY-MM-DD HH:MM:ss').format('MMDD');
+                return `${yearPartString}${datePartString}${('0' + this.revisionNumber).slice(-2)}`;
+            },
+            pOSummaryGross: function() {
+                return this.pOSummaryNet + this.pOSummaryTax;
+            },
+            pOSummaryNet: function() {
+                let amount = 0;
+                this.pOShipmentSummary.forEach((summaryItem) => {
+                    amount += summaryItem.unitPrice * summaryItem.workingWeight;
+                });
+                return amount;
+            },
+            pOSummaryTax: function() {
+                let amount = 0;
+                this.pOShipmentSummary.forEach((summaryItem) => {
+                    amount += summaryItem.unitPrice * summaryItem.workingWeight * this.taxRate;
+                });
+                return amount;
+            },
+            supplier: function() {
+                if (this.pOWorkingSupplier !== null) {
+                    return this.supplierList.filter((supplier) => {
+                        return supplier.CUS_NO === this.pOWorkingSupplier;
+                    })[0];
+                } else {
+                    return null;
+                }
+            }
         },
         methods: {
+            ...mapActions({ refreshPOListing: 'refreshPOListing' }),
             ...mapMutations({
-                changePOMode: 'changePOMode'
-            })
-        },
-        beforeCreate: function() {
-            $(function() {
-                $('[data-toggle="tooltip"]').tooltip();
-            });
+                addToSummary: 'addToPOShipmentSummary',
+                removeFromSummary: 'removeFromPOShipmentSummary',
+                changePOMode: 'changePOMode',
+                resetPOShipmentList: 'resetPOShipmentList',
+                resetStore: 'resetStore'
+            }),
+            filterPOShipmentData: function(summaryItem) {
+                let shipmentList = [];
+                this.pOShipmentList.forEach((shipment) => {
+                    if (
+                        (shipment.CUS_NO === summaryItem.CUS_NO) &&
+                        (shipment.PRD_NO === summaryItem.PRD_NO) &&
+                        (shipment.typeId === summaryItem.typeId)
+                    ) {
+                        shipmentList.push(shipment);
+                    }
+                });
+                return shipmentList;
+            }
         },
         created: function() {
             this.changePOMode({
@@ -133,11 +222,23 @@
             });
         },
         destroyed: function() {
+            this.resetPOShipmentList();
+            this.shipmentSummary = [];
             this.changePOMode({
                 pOViewMode: false,
                 pOPrintMode: false
             });
+        },
+        filters: {
+            formatCurrency: function(amount) {
+                return '$' + numeral(amount).format('0,0.00');
+            }
         }
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

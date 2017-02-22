@@ -17,13 +17,13 @@
             type="button"
             class="btn btn-default btn-block"
             @click="changeView('pOTemplate')">
-            <span v-if="activeView==='pOTemplate'" class="glyphicon glyphicon-ok"></span> 訂購單
+            <span v-if="activeView==='pOTemplate'" class="glyphicon glyphicon-ok"></span> 開立訂單
         </button>
         <button
             v-if="(role==='admin'||role==='purchasing') && activeView==='pOTemplate'"
             type="button"
             class="btn btn-default btn-block"
-            @click="changePOMode({pOPrintMode:true,pOViewMode:false})">
+            @click="printPO">
             訂單列印
         </button>
         <!-- supplier -->
@@ -45,21 +45,31 @@
             ...mapGetters({
                 activeView: 'getActiveView',
                 pOPrintMode: 'checkPOPrintMode',
+                pOWorkingSupplier: 'getPOWorkingSupplier',
                 role: 'getRole'
             })
         },
         methods: {
-            ...mapActions({ initData: 'initData' }),
+            ...mapActions({
+                initData: 'initData',
+                refreshPOListing: 'refreshPOListing'
+            }),
             ...mapMutations({
                 changePOMode: 'changePOMode',
                 dataInitialization: 'dataInitialization',
                 forceViewChange: 'forceViewChange',
                 redirectUser: 'redirectUser',
-                resetStore: 'resetStore'
+                resetStore: 'resetStore',
+                restoreToken: 'restoreToken',
+                switchPOWorkingSupplier: 'switchPOWorkingSupplier'
             }),
             changeView: function(view) {
                 this.initData()
                     .then((responseList) => {
+                        let token = sessionStorage.token;
+                        this.resetStore();
+                        sessionStorage.token = token;
+                        this.restoreToken(sessionStorage.token);
                         this.dataInitialization(responseList);
                         this.forceViewChange(view);
                     }).catch((error) => {
@@ -71,6 +81,18 @@
                 if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
                     this.resetStore();
                 }
+            },
+            printPO: function() {
+                this.changePOMode({ pOPrintMode: true, pOViewMode: false });
+                setTimeout(() => {
+                    if (confirm('print?')) {
+                        print();
+                        this.changePOMode({ pOPrintMode: false, pOViewMode: true });
+                        this.refreshPOListing();
+                        this.switchPOWorkingSupplier(this.pOWorkingSupplier);
+                        this.forceViewChange('pOTemplate');
+                    }
+                }, 500);
             }
         }
     };

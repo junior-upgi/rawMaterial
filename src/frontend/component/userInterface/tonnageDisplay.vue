@@ -1,7 +1,7 @@
 <template>
     <td>
-        <div id="received" class="bg-primary">{{receivedTonnage|tonnage}} 已入廠</div>
-        <div id="pending" class="bg-info">{{pendingTonnage|tonnage}} 待入廠</div>
+        <div id="received" class="bg-primary">{{receivedTonnage|tonnage}}已入廠</div>
+        <div id="pending" class="bg-danger">{{pendingTonnage|tonnage}}待入廠</div>
     </td>
 </template>
 
@@ -45,7 +45,7 @@
         },
         filters: {
             tonnage: function(value) {
-                return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 頓`;
+                return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
             }
         }
     };

@@ -2,7 +2,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>
-                <workingTimeSelector></workingTimeSelector>
+                <working-time-selector></working-time-selector>
                 &nbsp;原料進廠概況
             </h4>
         </div>

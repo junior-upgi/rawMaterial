@@ -81,6 +81,18 @@ export default {
             headers: { 'x-access-token': sessionStorage.token }
         }, {
             method: 'get',
+            url: `${serverUrl}/data/rawMaterial/supplyingSpecList`,
+            params: {
+                workingYear: context.state.workingYear,
+                workingMonth: context.state.workingMonth
+            },
+            headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
+            url: `${serverUrl}/data/supplier`,
+            headers: { 'x-access-token': sessionStorage.token }
+        }, {
+            method: 'get',
             url: `${serverUrl}/data/supplier/workingSupplier`,
             params: {
                 workingYear: context.state.workingYear,
@@ -89,6 +101,67 @@ export default {
             headers: { 'x-access-token': sessionStorage.token }
         }];
         return Promise.all(optionList.map(axios));
+    },
+    refreshPOListing: function(context) {
+        context.commit('resetPOShipmentList');
+        context.commit('resetPOShipmentSummary');
+        let workingMonth = context.state.workingMonth;
+        let workingYear = context.state.workingYear;
+        let pOWorkingSupplier = context.state.pOWorkingSupplier;
+
+        function startingDate(contractType) {
+            switch (contractType) {
+                case 'annual':
+                    return moment(new Date(workingYear, 0, 1)).format('YYYY-MM-DD');
+                case 'monthly':
+                    return moment(new Date(workingYear, workingMonth - 1, 1)).format('YYYY-MM-DD');
+                case 'oneTime':
+                    return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+                default:
+                    return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+            }
+        }
+
+        function endDate(contractType) {
+            switch (contractType) {
+                case 'annual':
+                    return moment(new Date(workingYear, 11, 31)).format('YYYY-MM-DD');
+                case 'monthly':
+                    return moment(new Date(workingYear, workingMonth, 0)).format('YYYY-MM-DD');
+                case 'oneTime':
+                    return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+                default:
+                    return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+            }
+        }
+
+        if (pOWorkingSupplier !== null) {
+            let supplierObject = context.state.supplierList.filter((supplier) => {
+                return supplier.CUS_NO === pOWorkingSupplier;
+            })[0];
+            let requestOption = {
+                method: 'get',
+                url: `${serverUrl}/data/shipment/newPOListing`,
+                params: {
+                    startingDate: startingDate(supplierObject.contractType),
+                    endDate: endDate(supplierObject.contractType),
+                    contractType: supplierObject.contractType,
+                    CUS_NO: pOWorkingSupplier
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            };
+            axios(requestOption)
+                .then((resultset) => {
+                    resultset.data.forEach((result) => {
+                        result.selected = false;
+                    });
+                    context.commit('updatePOShipmentList', resultset.data);
+                })
+                .catch((error) => {
+                    alert(`下單資料讀取發生錯誤 ${error}`);
+                    this.resetStore();
+                });
+        }
     },
     nextWorkingMonth: function(context) {
         let workingMonth = context.state.workingMonth;
@@ -114,13 +187,12 @@ export default {
     },
     updateShipment: function(context, payload) {
         let recordData = {
-            id: payload.id,
-            supplierWeight: payload.supplierWeight,
-            actualWeight: payload.actualWeight,
-            note: payload.note,
             workingMonth: context.state.workingMonth,
             workingYear: context.state.workingYear
         };
+        for (let index in payload) {
+            recordData[index] = payload[index];
+        }
         if (recordData.supplierWeight && recordData.actualWeight) {
             recordData.arrivalDate = payload.workingDate;
         } else {

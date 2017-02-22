@@ -7,6 +7,37 @@ const utility = require('../../module/utility.js');
 const router = express.Router();
 router.use(bodyParser.json());
 
+router.get('/data/shipment/newPOListing', tokenValidation, function(request, response) {
+    let contractType = request.query.contractType;
+    let startingDate = request.query.startingDate;
+    let endDate = request.query.endDate;
+    let CUS_NO = request.query.CUS_NO;
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    let query = knex.select('*')
+        .from('rawMaterial.dbo.newPOListing')
+        .where({ CUS_NO: CUS_NO });
+    if (contractType !== 'oneTime') {
+        query.whereBetween('workingDate', [startingDate, endDate]);
+    }
+    query.orderBy('PRD_NO')
+        .orderBy('typeId')
+        .orderBy('workingDate');
+    query.then((resultset) => {
+            return response.status(200).json(resultset);
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `新增訂單進貨資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+
 router.get('/data/shipment/tonnageSummary', tokenValidation, function(request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
