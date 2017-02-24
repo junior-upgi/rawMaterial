@@ -3,6 +3,8 @@ export default {
     checkDateInEditMode: function(state) { return state.dateInEditMode; },
     checkPOPrintMode: function(state) { return state.pOPrintMode; },
     checkPOViewMode: function(state) { return state.pOViewMode; },
+    checkPOCreateMode: function(state) { return state.pOCreateMode; },
+    checkPOEditMode: function(state) { return state.pOEditMode; },
     getActiveView: function(state) {
         if (state.activeView) {
             return state.activeView;
@@ -38,6 +40,7 @@ export default {
         }
         return [];
     },
+    getPONoticeArray: function(state) { return state.pONoticeArray; },
     getPOShipmentList: function(state) { return state.pOShipmentList; },
     getPOShipmentSummary: function(state) { return state.pOShipmentSummary; },
     getPOWorkingSupplier: function(state) { return state.pOWorkingSupplier; },
@@ -60,6 +63,12 @@ export default {
     getUserName: function(state) { return state.userData.NAME; },
     getUserData: function(state) { return state.userData; },
     getWorkingMonth: function(state) { return state.workingMonth; },
-    getWorkingSupplier: function(state) { return state.workingSupplier; },
-    getWorkingYear: function(state) { return state.workingYear; }
+    getWorkingMaterial: function(state) { return state.workingMaterial; },
+    getWorkingYear: function(state) { return state.workingYear; },
+
+    // working time period
+    workingMonth: function(state) { return state.workingMonth; },
+    workingYear: function(state) { return state.workingYear; },
+    // purchase order
+    pOList: function(state) { return state.pOList; }
 };

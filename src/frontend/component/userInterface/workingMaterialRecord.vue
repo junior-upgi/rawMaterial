@@ -1,15 +1,15 @@
 <template>
     <tr>
-        <td style="white-space:nowrap;">{{supplier.CUS_SNM}}</td>
-        <td class="text-centered" style="white-space:nowrap;">{{supplier.PRDT_SNM}}</td>
-        <td class="text-left">
+        <td style="white-space:nowrap;">{{material.CUS_SNM}}</td>
+        <td class="text-centered" style="white-space:nowrap;">{{material.PRDT_SNM}}</td>
+        <td class="text-left" style="padding-left:10px;">
             <shipping-date-list
                 :dateList="dateList">
             </shipping-date-list>
         </td>
         <tonnage-display
-            :CUS_NO="supplier.CUS_NO"
-            :PRD_NO="supplier.PRD_NO">
+            :CUS_NO="material.CUS_NO"
+            :PRD_NO="material.PRD_NO">
         </tonnage-display>
     </tr>
 </template>
@@ -30,10 +30,10 @@
     };
 
     export default {
-        name: 'workingSupplier',
+        name: 'workingMaterialRecord',
         props: [
             'dateList',
-            'supplier'
+            'material'
         ],
         components: {
             shippingDateList,

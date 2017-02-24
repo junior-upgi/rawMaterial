@@ -9,7 +9,7 @@
             <span v-if="activeView==='furnace'" class="glyphicon glyphicon-ok"></span> 窯爐模組
         </button>
         <!-- purchasing -->
-        <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" @click="changeView('purchasing')">
+        <button v-if="role==='admin'||role==='purchasing'" type="button" class="btn btn-default btn-block" @click="changeView('purchasing')">
             <span v-if="activeView==='purchasing'" class="glyphicon glyphicon-ok"></span> 採購模組
         </button>
         <button
@@ -20,7 +20,7 @@
             <span v-if="activeView==='pOTemplate'" class="glyphicon glyphicon-ok"></span> 開立訂單
         </button>
         <button
-            v-if="(role==='admin'||role==='purchasing') && activeView==='pOTemplate'"
+            v-if="(role==='admin'||role==='purchasing') && activeView==='pOTemplate' && pOWorkingSupplier!==null"
             type="button"
             class="btn btn-default btn-block"
             @click="printPO">
@@ -52,7 +52,8 @@
         methods: {
             ...mapActions({
                 initData: 'initData',
-                refreshPOListing: 'refreshPOListing'
+                refreshPOShipmentListing: 'refreshPOShipmentListing',
+                savePOData: 'savePOData'
             }),
             ...mapMutations({
                 changePOMode: 'changePOMode',
@@ -64,18 +65,20 @@
                 switchPOWorkingSupplier: 'switchPOWorkingSupplier'
             }),
             changeView: function(view) {
-                this.initData()
-                    .then((responseList) => {
-                        let token = sessionStorage.token;
-                        this.resetStore();
-                        sessionStorage.token = token;
-                        this.restoreToken(sessionStorage.token);
-                        this.dataInitialization(responseList);
-                        this.forceViewChange(view);
-                    }).catch((error) => {
-                        alert('操作模組變更發生錯誤...');
-                        this.resetStore();
-                    });
+                if (this.activeView !== view) {
+                    this.initData()
+                        .then((responseList) => {
+                            let token = sessionStorage.token;
+                            this.resetStore();
+                            sessionStorage.token = token;
+                            this.restoreToken(sessionStorage.token);
+                            this.dataInitialization(responseList);
+                            this.forceViewChange(view);
+                        }).catch((error) => {
+                            alert('操作模組變更發生錯誤...');
+                            this.resetStore();
+                        });
+                }
             },
             logout: function() {
                 if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
@@ -85,10 +88,26 @@
             printPO: function() {
                 this.changePOMode({ pOPrintMode: true, pOViewMode: false });
                 setTimeout(() => {
-                    if (confirm('print?')) {
-                        print();
+                    if (confirm('請確認是否儲存訂單資料並產生正式訂單?')) {
+                        this.savePOData()
+                            .then(() => {
+                                print();
+                                setTimeout(() => {
+                                    this.changePOMode({ pOPrintMode: false, pOViewMode: true });
+                                    this.refreshPOShipmentListing();
+                                    this.switchPOWorkingSupplier(this.pOWorkingSupplier);
+                                    this.forceViewChange('pOTemplate');
+                                }, 500);
+                            }).catch((error) => {
+                                console.log(`訂單儲存發生錯誤: ${error}`);
+                                this.changePOMode({ pOPrintMode: false, pOViewMode: true });
+                                this.refreshPOShipmentListing();
+                                this.switchPOWorkingSupplier(this.pOWorkingSupplier);
+                                this.forceViewChange('pOTemplate');
+                            });
+                    } else {
                         this.changePOMode({ pOPrintMode: false, pOViewMode: true });
-                        this.refreshPOListing();
+                        this.refreshPOShipmentListing();
                         this.switchPOWorkingSupplier(this.pOWorkingSupplier);
                         this.forceViewChange('pOTemplate');
                     }

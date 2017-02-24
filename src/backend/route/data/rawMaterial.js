@@ -9,7 +9,7 @@ router.route('/data/rawMaterial')
     .all(tokenValidation)
     .get(function(request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
-        knex.select('*').from('rawMaterial.dbo.rawMatSpecDetail').orderBy('sequentialIndex')
+        knex.select('*').from('rawMaterial.dbo.rawMatSpecDetail').orderBy('sequentialIndex').debug(false)
             .then((resultset) => {
                 return response.status(200).json({ rawMatList: resultset });
             })
@@ -37,6 +37,7 @@ router.get('/data/rawMaterial/supplyingSpecList', tokenValidation, function(requ
         .orderBy('CUS_NO')
         .orderBy('PRD_NO')
         .orderBy('typeId')
+        .debug(false)
         .then((resultset) => {
             return response.status(200).json({ supplyingSpecList: resultset });
         })
@@ -57,11 +58,10 @@ router.route('/data/rawMaterial/knownList')
     .all(tokenValidation)
     .get(function(request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
-        knex.select('*').from('rawMaterial.dbo.knownRawMatDetail')
+        knex.select('*').from('rawMaterial.dbo.knownRawMatDetail').debug(false)
             .then((resultset) => {
                 return response.status(200).json({ rawMatTypeList: resultset });
-            })
-            .catch((error) => {
+            }).catch((error) => {
                 return response.status(500).json(
                     utility.endpointErrorHandler(
                         request.method,

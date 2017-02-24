@@ -8,6 +8,10 @@ function emptyStoreValue(state) {
     state.scheduleSummary = [];
     state.dateInEditMode = false;
     state.loginId = null;
+    state.pOCreateMode = false;
+    state.pOEditMode = false;
+    state.pOList = [];
+    state.pONoticeArray = [];
     state.pOPrintMode = false;
     state.pOShipmentList = [];
     state.pOShipmentSummary = [];
@@ -26,7 +30,7 @@ function emptyStoreValue(state) {
     state.tonnageSummary = [];
     state.userData = {};
     state.workingMonth = parseInt(currentDatetime().format('M'));
-    state.workingSupplier = [];
+    state.workingMaterial = [];
     state.workingYear = parseInt(currentDatetime().format('YYYY'));
 }
 
@@ -37,14 +41,19 @@ export default {
     },
     // deals with purchase order operation
     changePOMode: function(state, modeObj) {
+        state.pOCreateMode = modeObj.pOCreateMode;
+        state.pOEditMode = modeObj.pOEditMode;
         state.pOPrintMode = modeObj.pOPrintMode;
         state.pOViewMode = modeObj.pOViewMode;
-        /*
-        setTimeout(function() {
-            state.pOPrintMode = false;
-            state.pOViewMode = true;
-        }, 5000);
-        */
+    },
+    resetPONoticeArray: function(state) {
+        state.pONoticeArray = [];
+    },
+    updatePONoticeArray: function(state, pONoticeArray) {
+        state.pONoticeArray = [];
+        pONoticeArray.forEach(function(noticeMessage) {
+            state.pONoticeArray.push(noticeMessage.string);
+        });
     },
     addToPOShipmentSummary: function(state, shipment) {
         state.pOShipmentList.forEach((pOShipment) => {

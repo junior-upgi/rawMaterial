@@ -28,6 +28,7 @@ if (process.env.NODE_ENV === 'development') {
 main.use('/', require('./route/utility/login.js'));
 main.use('/', require('./route/utility/status.js'));
 // data routes
+main.use('/', require('./route/data/purchaseOrder.js'));
 main.use('/', require('./route/data/rawMaterial.js'));
 main.use('/', require('./route/data/shipment.js'));
 main.use('/', require('./route/data/supplier.js'));

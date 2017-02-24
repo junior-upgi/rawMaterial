@@ -1,5 +1,6 @@
 SELECT
 	a.id
+    ,a.pOId
 	,CONVERT(char(10),a.requestDate,126) AS requestDate
 	,CONVERT(char(10),a.arrivalDate,126) AS arrivalDate
 	,CASE

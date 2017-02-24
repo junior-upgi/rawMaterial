@@ -1,18 +1,27 @@
 <template>
-    <tbody>
-        <tr><td colspan="7" class="text-left">送貨日期</td></tr>
+    <tbody :style="{border:printingBorder}">
+        <tr>
+            <td colspan="7" class="text-left" style="padding-left:15px;">
+                <h4 style="margin-bottom:0px;"><strong>送貨日期</strong></h4>
+            </td>
+        </tr>
         <tr v-for="(summaryArray,summaryIndex) in filterPOShipmentData">
-            <td colspan="7" class="text-left" style="padding-left:40px;">
-                <div>
-                    {{pOShipmentSummary[summaryIndex].PRDT_SNM}} {{pOShipmentSummary[summaryIndex].specification}}
+            <td colspan="7" class="text-left">
+                <div style="padding-left:20px;">
+                    <h4>
+                        {{pOShipmentSummary[summaryIndex].PRDT_SNM}}
+                        {{pOShipmentSummary[summaryIndex].specification}}
+                    </h4>
                 </div>
-                <div>
-                    <span
-                        v-for="shipment in summaryArray"
-                        v-if="shipment.selected===true">
-                        【{{shipment.workingMonth}}/{{shipment.workingDay}}】
-                    </span>
-                </div>
+                <h4 style="padding-left:40px;">
+                    <div>
+                        <span
+                            v-for="shipment in summaryArray"
+                            v-if="shipment.selected===true">
+                            【{{shipment.workingMonth}}/{{shipment.workingDay}}】
+                        </span>
+                    </div>
+                </h4>
             </td>
         </tr>
     </tbody>
@@ -25,6 +34,7 @@
         name: 'shippingDateDisplay',
         computed: {
             ...mapGetters({
+                pOPrintMode: 'checkPOPrintMode',
                 pOShipmentList: 'getPOShipmentList',
                 pOShipmentSummary: 'getPOShipmentSummary'
             }),
@@ -43,6 +53,13 @@
                     });
                 });
                 return shipmentArrayList;
+            },
+            printingBorder: function() {
+                if (this.pOPrintMode) {
+                    return '2px solid black !important';
+                } else {
+                    return null;
+                }
             }
         }
     };

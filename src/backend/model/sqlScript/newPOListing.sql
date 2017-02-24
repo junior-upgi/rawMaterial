@@ -1,6 +1,6 @@
 SELECT
 	a.id
-	,a.purchaseOrderId
+	,a.pOId
 	,CONVERT(char(10),a.requestDate,126) AS requestDate
 	,CONVERT(char(10),a.arrivalDate,126) AS arrivalDate
 	,CASE
@@ -51,6 +51,6 @@ FROM rawMaterial.dbo.shipmentRequest a
 	LEFT JOIN rawMaterial.dbo.CUST b ON a.CUS_NO=b.CUS_NO
 	LEFT JOIN rawMaterial.dbo.rawMatSpecDetail c ON a.PRD_NO=c.PRD_NO AND a.typeId=c.typeId
 WHERE
-	((a.purchaseOrderId IS NOT NULL) OR
-	(a.purchaseOrderId iS NULL AND a.deprecated IS NULL)) AND
+	((a.pOId IS NOT NULL) OR
+	(a.pOId iS NULL AND a.deprecated IS NULL)) AND
 	(a.concluded='false');

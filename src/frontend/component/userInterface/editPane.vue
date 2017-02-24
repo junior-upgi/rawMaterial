@@ -8,6 +8,7 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th class="text-center">車次</th>
                                     <th class="text-center">入廠日期</th>
                                     <th class="text-center">廠商宣稱重量</th>
@@ -17,20 +18,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-for="(shipment,index) in shipmentFilter()">
-                                    <shipment-editor
-                                        v-if="shipment.received===received"
-                                        :shipment="shipment"
-                                        :index="index">
-                                    </shipment-editor>
-                                </template>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</td>
-</tr>
+                                <shipment-editor
+                                    v-for="(shipment,index) in shipmentFilter()"
+                                    v-if="shipment.received===received"
+                                    :shipment="shipment"
+                                    :index="index">
+                                </shipment-editor>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
 </template>
 
 <script>

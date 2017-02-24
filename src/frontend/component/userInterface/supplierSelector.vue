@@ -26,13 +26,13 @@
         computed: {
             ...mapGetters({
                 pOWorkingSupplier: 'getPOWorkingSupplier',
-                workingSupplier: 'getWorkingSupplier'
+                workingMaterial: 'getWorkingMaterial'
             }),
             uniqueSupplierObjList: function() {
                 let uniqueList = [];
                 let lookup = {};
-                for (let index in this.workingSupplier) {
-                    lookup[this.workingSupplier[index]['CUS_NO']] = this.workingSupplier[index];
+                for (let index in this.workingMaterial) {
+                    lookup[this.workingMaterial[index]['CUS_NO']] = this.workingMaterial[index];
                 }
                 for (let index in lookup) {
                     uniqueList.push(lookup[index]);

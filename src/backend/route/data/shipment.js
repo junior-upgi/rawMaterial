@@ -22,18 +22,17 @@ router.get('/data/shipment/newPOListing', tokenValidation, function(request, res
     query.orderBy('PRD_NO')
         .orderBy('typeId')
         .orderBy('workingDate');
-    query.then((resultset) => {
+    query.debug(false)
+        .then((resultset) => {
             return response.status(200).json(resultset);
-        })
-        .catch((error) => {
+        }).catch((error) => {
             return response.status(500).json(
                 utility.endpointErrorHandler(
                     request.method,
                     request.originalUrl,
                     `新增訂單進貨資料讀取發生錯誤: ${error}`)
             );
-        })
-        .finally(() => {
+        }).finally(() => {
             knex.destroy();
         });
 });
@@ -48,6 +47,7 @@ router.get('/data/shipment/tonnageSummary', tokenValidation, function(request, r
         })
         .orderBy('CUS_NO')
         .orderBy('PRD_NO')
+        .debug(false)
         .then((resultset) => {
             return response.status(200).json({ tonnageSummary: resultset });
         })
@@ -75,6 +75,7 @@ router.get('/data/shipment/overview', tokenValidation, function(request, respons
         .orderBy('CUS_NO')
         .orderBy('PRDT_SNM')
         .orderBy('workingDate')
+        .debug(false)
         .then((resultset) => {
             return response.status(200).json({ shipmentOverview: resultset });
         })
@@ -117,6 +118,7 @@ function planSchedule(knexObj, workingYear, workingMonth) {
 router.get('/data/shipment/dailySummary', tokenValidation, function(request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     dailyPlanScheduleSummary(knex, request.query.workingYear, request.query.workingMonth)
+        .debug(false)
         .then((resultset) => {
             return response.status(200).json({ scheduleSummary: resultset });
         })
@@ -138,6 +140,7 @@ router.route('/data/shipment')
     .get(function(request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
         planSchedule(knex, request.query.workingYear, request.query.workingMonth)
+            .debug(false)
             .then((resultset) => {
                 return response.status(200).json({ shipmentSchedule: resultset });
             })
@@ -170,7 +173,7 @@ router.route('/data/shipment')
                     quantity: 1,
                     created: utility.currentDatetimeString(),
                     modified: utility.currentDatetimeString()
-                })
+                }).debug(false)
             );
         }
         Promise.all(requestList)
@@ -219,6 +222,7 @@ router.route('/data/shipment')
                 deprecated: utility.currentDatetimeString()
             })
             .where(condition)
+            .debug(false)
             .then(() => {
                 return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })
@@ -257,6 +261,7 @@ router.route('/data/shipment')
                 modified: utility.currentDatetimeString()
             })
             .where({ id: request.body.id })
+            .debug(false)
             .then(() => {
                 return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })

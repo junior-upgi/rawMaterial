@@ -14,7 +14,6 @@ router.post('/login', function(request, response) {
     let loginId = request.body.loginId;
     let method = request.method;
     let url = request.originalUrl;
-    utility.logger.info(`received login request from ${loginId}`);
     let ldapClient = ldap.createClient({ url: serverConfig.ldapServerUrl });
     ldapClient.bind(`uid=${loginId},ou=user,dc=upgi,dc=ddns,dc=net`, request.body.password, function(error) {
         if (error) {

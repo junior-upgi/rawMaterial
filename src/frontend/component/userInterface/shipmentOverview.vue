@@ -2,7 +2,7 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>
-                <working-time-selector></working-time-selector>
+                <workingTimeSelector></workingTimeSelector>
                 &nbsp;原料進廠概況
             </h4>
         </div>
@@ -19,11 +19,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <working-supplier-record
-                        v-for="supplier in workingSupplier"
-                        :supplier="supplier"
-                        :dateList=filterShipmentOverviewData(supplier.CUS_NO,supplier.PRD_NO)>
-                    </working-supplier-record>
+                    <workingMaterialRecord
+                        v-for="material in workingMaterial"
+                        :material="material"
+                        :dateList=filterShipmentOverviewData(material.CUS_NO,material.PRD_NO)>
+                    </workingMaterialRecord>
                 </tbody>
             </table>
         </div>
@@ -31,21 +31,19 @@
 </template>
 
 <script>
-    import workingSupplierRecord from './workingSupplierRecord.vue';
+    import workingMaterialRecord from './workingMaterialRecord.vue';
     import workingTimeSelector from './workingTimeSelector.vue';
     import { mapGetters } from 'vuex';
 
     export default {
         name: 'shipmentOverview',
         components: {
-            workingSupplierRecord,
+            workingMaterialRecord,
             workingTimeSelector
         },
+        props: ['workingMaterial'],
         computed: {
-            ...mapGetters({
-                shipmentOverview: 'getShipmentOverview',
-                workingSupplier: 'getWorkingSupplier'
-            })
+            ...mapGetters({ shipmentOverview: 'getShipmentOverview' })
         },
         methods: {
             filterShipmentOverviewData: function(CUS_NO, PRD_NO) {

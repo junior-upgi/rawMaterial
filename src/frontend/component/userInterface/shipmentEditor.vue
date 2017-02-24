@@ -1,8 +1,12 @@
 <template>
     <tr>
         <td>
-            <span class="badge">{{index+1}}</span>
+            <span v-if="shipment.pOId!==null" class="glyphicon glyphicon-ok-sign"></span>
+            <span v-if="shipment.pOId!==null">已下單</span>
+            <span v-if="shipment.pOId===null" class="glyphicon glyphicon-question-sign"></span>
+            <span v-if="shipment.pOId===null">未下單</span>
         </td>
+        <td><span class="badge">{{index+1}}</span></td>
         <td>
             <input
                 type="date"
