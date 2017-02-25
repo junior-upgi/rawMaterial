@@ -1,6 +1,7 @@
 <template>
     <a
         class="list-group-item text-left"
+        style="border:2px white solid"
         :class="{active:activeState}"
         @click.self="switchActiveState()">
         項次：{{index+1}}&nbsp;
