@@ -217,9 +217,14 @@ export default {
             recordData[index] = payload[index];
         }
         if (recordData.supplierWeight && recordData.actualWeight) {
+            // establish the arrival date when a shipment's receiving quantity is fulfilled
             recordData.arrivalDate = payload.workingDate;
         } else {
             recordData.requestDate = payload.workingDate;
+            // make sure the shipment's 'arrived' status is revoked when user removes existing receiving quantity
+            recordData.arrivalDate = null;
+            recordData.supplierWeight = null;
+            recordData.actualWeight = null;
         }
         let requestOption = {
             method: 'put',

@@ -32,6 +32,7 @@ main.use('/', require('./route/data/purchaseOrder.js'));
 main.use('/', require('./route/data/rawMaterial.js'));
 main.use('/', require('./route/data/shipment.js'));
 main.use('/', require('./route/data/supplier.js'));
+main.use('/', require('./route/data/erp.js'));
 
 // initiate server script
 if (!module.parent) {
