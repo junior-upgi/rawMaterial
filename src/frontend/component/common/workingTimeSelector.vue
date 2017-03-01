@@ -16,8 +16,8 @@
         name: 'workingTimeSelector',
         computed: {
             ...mapGetters({
-                workingMonth: 'getWorkingMonth',
-                workingYear: 'getWorkingYear'
+                workingMonth: 'workingMonth',
+                workingYear: 'workingYear'
             })
         },
         methods: {
@@ -25,28 +25,33 @@
                 nextWorkingMonth: 'nextWorkingMonth',
                 prevWorkingMonth: 'prevWorkingMonth'
             }),
-            ...mapMutations({
-                dataInitialization: 'dataInitialization'
-            }),
+            ...mapMutations({ buildStore: 'buildStore' }),
             nextMonth: function() {
                 this.nextWorkingMonth()
                     .then((responseList) => {
-                        this.dataInitialization(responseList);
+                        this.buildStore(responseList);
+                        this.$emit('workingTimeChange');
                     })
                     .catch((error) => {
-                        console.log(error.errorMessage);
+                        alert(`作業月份選擇發生錯誤，請重新載入...\n${error.errorMessage}`);
                     });
             },
             prevMonth: function() {
                 this.prevWorkingMonth()
                     .then((responseList) => {
-                        this.dataInitialization(responseList);
+                        this.buildStore(responseList);
+                        this.$emit('workingTimeChange');
                     })
                     .catch((error) => {
-                        console.log(error.errorMessage);
+                        alert(`作業月份選擇發生錯誤，請重新載入...\n${error.errorMessage}`);
                     });
             }
         }
     };
 
 </script>
+
+<style>
+    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+
+</style>

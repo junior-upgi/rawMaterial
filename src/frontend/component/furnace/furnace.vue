@@ -3,25 +3,19 @@
         <h2>窯爐模組</h2>
         <br>
         <batch-reservation></batch-reservation>
-        <shipment-schedule></shipment-schedule>
+        <shipmentSchedule></shipmentSchedule>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import shipmentSchedule from './shipmentSchedule.vue';
-    import batchReservation from './batchReservation.vue';
-    import rawMaterialSelector from './rawMaterialSelector.vue';
+    import shipmentSchedule from './shipmentSchedule/shipmentSchedule.vue';
+    import batchReservation from './batchReservation/batchReservation.vue';
 
     export default {
         name: 'furnace',
         components: {
             batchReservation,
-            rawMaterialSelector,
             shipmentSchedule
-        },
-        computed: {
-            ...mapGetters({ selectedRawMatIndex: 'getSelectedRawMatIndex' })
         }
     };
 

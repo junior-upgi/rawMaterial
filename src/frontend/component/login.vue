@@ -13,7 +13,7 @@
 
 <script>
     import axios from 'axios';
-    import { mapActions, mapGetters, mapMutations } from 'vuex';
+    import { mapActions, mapMutations } from 'vuex';
     import { store } from '../store/store.js';
 
     import { serverUrl } from '../clientConfig.js';
@@ -21,7 +21,6 @@
     export default {
         name: 'login',
         store: store,
-        computed: { ...mapGetters({ userName: 'getUserName' }) },
         data: function() {
             return {
                 loginId: '',
@@ -32,7 +31,7 @@
         methods: {
             ...mapActions({ initData: 'initData' }),
             ...mapMutations({
-                dataInitialization: 'dataInitialization',
+                buildStore: 'buildStore',
                 redirectUser: 'redirectUser',
                 resetStore: 'resetStore',
                 restoreToken: 'restoreToken'
@@ -48,9 +47,10 @@
                         this.restoreToken(sessionStorage.token);
                         return this.initData();
                     }).then((responseList) => {
-                        this.dataInitialization(responseList);
+                        this.buildStore(responseList);
                         this.redirectUser();
                     }).catch((error) => {
+                        console.log(error);
                         this.password = '';
                         alert('登入失敗，請檢查帳號密碼是否正確並重新登入...');
                         this.resetStore();

@@ -8,8 +8,6 @@ const winston = require('winston');
 const serverConfig = require('./serverConfig.js');
 const telegram = require('../model/telegram.js');
 
-function currentDatetimeString() { return moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'); }
-
 // logging utility
 if (!fs.existsSync(serverConfig.logDir)) { fs.mkdirSync(serverConfig.logDir); } // Create the log directory if it does not exist
 const logger = new(winston.Logger)({
@@ -109,11 +107,27 @@ function endpointErrorHandler(method, originalUrl, errorMessage) {
     };
 }
 
+// date and time utility
+function currentDatetimeString() {
+    return moment(moment(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+}
+
+function firstOfMonthString(year, month) {
+    return moment(new Date(year, month - 1, 1), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+}
+
+function todayDateString() {
+    return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+}
+
 module.exports = {
     alertSystemError: alertSystemError,
-    currentDatetimeString: currentDatetimeString,
     endpointErrorHandler: endpointErrorHandler,
     logger: logger,
     sendMobileMessage: sendMobileMessage,
-    statusReport: statusReport
+    statusReport: statusReport,
+    // date and time utility
+    currentDatetimeString: currentDatetimeString,
+    firstOfMonthString: firstOfMonthString,
+    todayDateString: todayDateString
 };

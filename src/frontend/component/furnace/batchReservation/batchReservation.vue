@@ -2,30 +2,35 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>
-                <workingTimeSelector></workingTimeSelector>
+                <workingTimeSelector
+                    @workingTimeChange="dateInEditMode=null">
+                </workingTimeSelector>
                 &nbsp;進廠預約作業
             </h4>
         </div>
         <div class="panel-body">
-            <raw-material-selector></raw-material-selector>
+            <workingMaterialSelector
+                @workingMaterialChange="dateInEditMode=null">
+            </workingMaterialSelector>
         </div>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr class="info">
                         <td v-for="weekdayIndex in 7" class="text-center">
-                            <span class="badge">{{weekdayList[weekdayIndex-1]}}<span>
+                            <span class="label label-primary">{{weekdayList[weekdayIndex-1]}}</span>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="weekIndex in weekCount">
                         <td v-for="weekdayIndex in 7">
-                            <reservation-cell
+                            <reservationCell
                                 v-if="visible(weekIndex,weekdayIndex)"
                                 :cellDateString="cellDate(weekIndex,weekdayIndex)"
-                                :dailyShipmentList="dailyShipmentFilter(weekIndex,weekdayIndex)">
-                            </reservation-cell>
+                                :shipmentSchedule="filterShipmentSchedule(cellDate(weekIndex,weekdayIndex))"
+                                :shipmentSummary="filterShipmentSummary(weekIndex,weekdayIndex)">
+                            </reservationCell>
                         </td>
                     </tr>
                 </tbody>
@@ -37,24 +42,30 @@
 <script>
     import moment from 'moment-timezone';
     import { mapGetters } from 'vuex';
-    import rawMaterialSelector from './rawMaterialSelector.vue';
+    import workingTimeSelector from '../../common/workingTimeSelector.vue';
+    import workingMaterialSelector from '../../common/workingMaterialSelector.vue';
     import reservationCell from './reservationCell.vue';
-    import workingTimeSelector from './workingTimeSelector.vue';
 
     export default {
         name: 'batchReservation',
         components: {
-            rawMaterialSelector,
-            reservationCell,
-            workingTimeSelector
+            workingMaterialSelector,
+            workingTimeSelector,
+            reservationCell
+        },
+        data: function() {
+            return {
+                weekdayList: ['週日', '週一', '週二', '週三', '週四', '週五', '週六']
+            };
         },
         computed: {
             ...mapGetters({
-                rawMatList: 'getRawMatList',
-                monthlyScheduleSummary: 'getMonthlyScheduleSummary',
-                selectedRawMat: 'getSelectedRawMat',
-                workingMonth: 'getWorkingMonth',
-                workingYear: 'getWorkingYear'
+                rawMaterialList: 'rawMaterialList',
+                shipmentSchedule: 'filteredShipmentSchedule',
+                shipmentSummary: 'filteredShipmentSummary',
+                selectedRawMaterial: 'selectedRawMaterial',
+                workingMonth: 'workingMonth',
+                workingYear: 'workingYear'
             }),
             weekCount: function() {
                 let firstOfMonth = new Date(this.workingYear, this.workingMonth - 1, 1);
@@ -62,17 +73,12 @@
                 return Math.ceil((firstOfMonth.getDay() + 1 + (lastOfMonth.getDate() - firstOfMonth.getDate())) / 7);
             }
         },
-        data: function() {
-            return {
-                weekdayList: ['週日', '週一', '週二', '週三', '週四', '週五', '週六']
-            };
-        },
         methods: {
             cellDate: function(weekIndex, weekdayIndex) {
                 return moment(
                     new Date(
                         this.workingYear,
-                        parseInt(this.workingMonth) - 1,
+                        this.workingMonth - 1,
                         this.cellIndex(weekIndex, weekdayIndex) - this.weekdayOfFirst()
                     )
                 ).format('YYYY-MM-DD');
@@ -80,19 +86,19 @@
             cellIndex: function(weekIndex, weekdayIndex) {
                 return (parseInt(weekIndex) - 1) * 7 + parseInt(weekdayIndex);
             },
-            dailyShipmentFilter: function(weekIndex, weekdayIndex) {
-                return this.monthlyScheduleSummary.filter((dailyShipmentSummary) => {
-                    return dailyShipmentSummary.workingDate === this.cellDate(weekIndex, weekdayIndex);
+            filterShipmentSchedule: function(dateString) {
+                return this.shipmentSchedule.filter((shipment) => {
+                    return shipment.workingDate === dateString;
+                });
+            },
+            filterShipmentSummary: function(weekIndex, weekdayIndex) {
+                return this.shipmentSummary.filter((shipmentSummaryItem) => {
+                    return shipmentSummaryItem.workingDate === this.cellDate(weekIndex, weekdayIndex);
                 });
             },
             lastOfMonth: function() {
                 return parseInt(
-                    moment(
-                        new Date(
-                            this.workingYear,
-                            this.workingMonth - 1,
-                            1)
-                    )
+                    moment(new Date(this.workingYear, this.workingMonth - 1, 1))
                     .add(1, 'month')
                     .subtract(1, 'day')
                     .format('D'));
@@ -105,11 +111,7 @@
                 );
             },
             weekdayOfFirst: function() {
-                return new Date(
-                        this.workingYear,
-                        this.workingMonth - 1,
-                        1)
-                    .getDay();
+                return new Date(this.workingYear, this.workingMonth - 1, 1).getDay();
             }
         }
     };

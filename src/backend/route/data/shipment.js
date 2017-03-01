@@ -92,35 +92,34 @@ router.get('/data/shipment/overview', tokenValidation, function(request, respons
         });
 });
 
-function dailyPlanScheduleSummary(knexObj, workingYear, workingMonth) {
+function shipmentSummary(knexObj, workingYear, workingMonth) {
     return knexObj.select('*')
-        .from('rawMaterial.dbo.dailyPlanScheduleSummary')
+        .from('rawMaterial.dbo.shipmentSummary')
         .where({
             workingYear: workingYear,
             workingMonth: workingMonth
         })
-        .orderBy('workingDate')
-        .orderBy('received', 'DESC');
+        .orderBy('workingDate');
 }
 
-function planSchedule(knexObj, workingYear, workingMonth) {
+function shipmentSchedule(knexObj, workingYear, workingMonth) {
     return knexObj.select('*')
-        .from('rawMaterial.dbo.planSchedule')
+        .from('rawMaterial.dbo.shipmentSchedule')
         .where({
             workingYear: workingYear,
             workingMonth: workingMonth
         })
         .orderBy('PRD_NO')
         .orderBy('CUS_NO')
-        .orderBy('requestDate');
+        .orderBy('workingDate');
 }
 
-router.get('/data/shipment/dailySummary', tokenValidation, function(request, response) {
+router.get('/data/shipment/summary', tokenValidation, function(request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
-    dailyPlanScheduleSummary(knex, request.query.workingYear, request.query.workingMonth)
+    shipmentSummary(knex, request.query.workingYear, request.query.workingMonth)
         .debug(false)
         .then((resultset) => {
-            return response.status(200).json({ scheduleSummary: resultset });
+            return response.status(200).json({ shipmentSummary: resultset });
         })
         .catch((error) => {
             return response.status(500).json(
@@ -139,7 +138,7 @@ router.route('/data/shipment')
     .all(tokenValidation)
     .get(function(request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
-        planSchedule(knex, request.query.workingYear, request.query.workingMonth)
+        shipmentSchedule(knex, request.query.workingYear, request.query.workingMonth)
             .debug(false)
             .then((resultset) => {
                 return response.status(200).json({ shipmentSchedule: resultset });
@@ -159,7 +158,7 @@ router.route('/data/shipment')
     .post(function(request, response, next) {
         let responseObject = {
             shipmentSchedule: null,
-            scheduleSummary: null
+            shipmentSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         let requestList = [];
@@ -178,14 +177,14 @@ router.route('/data/shipment')
         }
         Promise.all(requestList)
             .then(() => {
-                return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
+                return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.shipmentSchedule = resultset;
-                return dailyPlanScheduleSummary(knex, request.body.workingYear, request.body.workingMonth);
+                return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
-                responseObject.scheduleSummary = resultset;
+                responseObject.shipmentSummary = resultset;
                 knex.destroy();
                 return response.status(200).json(responseObject);
             })
@@ -201,7 +200,7 @@ router.route('/data/shipment')
     .delete(function(request, response, next) {
         let responseObject = {
             shipmentSchedule: null,
-            scheduleSummary: null
+            shipmentSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         let condition = request.body.id !== null ? {
@@ -224,14 +223,14 @@ router.route('/data/shipment')
             .where(condition)
             .debug(false)
             .then(() => {
-                return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
+                return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.shipmentSchedule = resultset;
-                return dailyPlanScheduleSummary(knex, request.body.workingYear, request.body.workingMonth);
+                return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
-                responseObject.scheduleSummary = resultset;
+                responseObject.shipmentSummary = resultset;
                 return response.status(200).json(responseObject);
             })
             .catch((error) => {
@@ -249,7 +248,7 @@ router.route('/data/shipment')
     .put(function(request, response, next) {
         let responseObject = {
             shipmentSchedule: null,
-            scheduleSummary: null
+            shipmentSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.shipmentRequest')
@@ -263,14 +262,14 @@ router.route('/data/shipment')
             .where({ id: request.body.id })
             .debug(false)
             .then(() => {
-                return planSchedule(knex, request.body.workingYear, request.body.workingMonth);
+                return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
                 responseObject.shipmentSchedule = resultset;
-                return dailyPlanScheduleSummary(knex, request.body.workingYear, request.body.workingMonth);
+                return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
             })
             .then((resultset) => {
-                responseObject.scheduleSummary = resultset;
+                responseObject.shipmentSummary = resultset;
                 return response.status(200).json(responseObject);
             })
             .catch((error) => {

@@ -32,7 +32,7 @@
 
 <script>
     import workingMaterialRecord from './workingMaterialRecord.vue';
-    import workingTimeSelector from './workingTimeSelector.vue';
+    import workingTimeSelector from '../common/workingTimeSelector.vue';
     import { mapGetters } from 'vuex';
 
     export default {

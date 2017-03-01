@@ -46,7 +46,7 @@
                 activeView: 'getActiveView',
                 pOPrintMode: 'checkPOPrintMode',
                 pOWorkingSupplier: 'getPOWorkingSupplier',
-                role: 'getRole'
+                role: 'role'
             })
         },
         methods: {
@@ -57,7 +57,7 @@
             }),
             ...mapMutations({
                 changePOMode: 'changePOMode',
-                dataInitialization: 'dataInitialization',
+                buildStore: 'buildStore',
                 forceViewChange: 'forceViewChange',
                 redirectUser: 'redirectUser',
                 resetStore: 'resetStore',
@@ -72,7 +72,7 @@
                             this.resetStore();
                             sessionStorage.token = token;
                             this.restoreToken(sessionStorage.token);
-                            this.dataInitialization(responseList);
+                            this.buildStore(responseList);
                             this.forceViewChange(view);
                         }).catch((error) => {
                             alert('操作模組變更發生錯誤...');

@@ -5,8 +5,8 @@ SELECT
     ,b.UT
 	,a.unitPrice
 	,a.CUS_NO
-	,d.SNM AS CUS_SNM
-	,d.NAME AS CUS_NAME
+	,d.SNM AS CUST_SNM
+	,d.NAME AS CUST_NAME
 	,a.specification
     ,a.qtyPerShipment
 	,a.sequentialIndex

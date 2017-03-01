@@ -9,7 +9,7 @@ router.route('/data/rawMaterial')
     .all(tokenValidation)
     .get(function(request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
-        knex.select('*').from('rawMaterial.dbo.rawMatSpecDetail').orderBy('sequentialIndex').debug(false)
+        knex.select('*').from('rawMaterial.dbo.rawMaterialSpecDetail').orderBy('sequentialIndex').debug(false)
             .then((resultset) => {
                 return response.status(200).json({ rawMatList: resultset });
             })

@@ -4,6 +4,81 @@ import moment from 'moment-timezone';
 import { serverUrl } from '../clientConfig.js';
 
 export default {
+    initData: function(context) {
+        let optionList = [{
+                method: 'get',
+                url: `${serverUrl}/data/rawMaterial`,
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/rawMaterial/knownList`,
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/shipment`,
+                params: {
+                    workingYear: context.state.workingYear,
+                    workingMonth: context.state.workingMonth
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/shipment/summary`,
+                params: {
+                    workingYear: context.state.workingYear,
+                    workingMonth: context.state.workingMonth
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }
+            /* , {
+                method: 'get',
+                url: `${serverUrl}/data/shipment/overview`,
+                params: {
+                    workingYear: context.state.workingYear,
+                    workingMonth: context.state.workingMonth
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/shipment/tonnageSummary`,
+                params: {
+                    workingYear: context.state.workingYear,
+                    workingMonth: context.state.workingMonth
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/rawMaterial/supplyingSpecList`,
+                params: {
+                    workingYear: context.state.workingYear,
+                    workingMonth: context.state.workingMonth
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/supplier`,
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/supplier/workingMaterial`,
+                params: {
+                    workingYear: context.state.workingYear,
+                    workingMonth: context.state.workingMonth
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/purchaseOrder`,
+                params: {
+                    workingMonth: context.state.workingMonth,
+                    workingYear: context.state.workingYear
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }
+            */
+        ];
+        return Promise.all(optionList.map(axios));
+    },
     bookShipment: function(context, payload) {
         let requestOption = {
             method: 'post',
@@ -37,78 +112,6 @@ export default {
             headers: { 'x-access-token': sessionStorage.token }
         };
         return axios(requestOption);
-    },
-    initData: function(context) {
-        let optionList = [{
-            method: 'get',
-            url: `${serverUrl}/data/rawMaterial`,
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/rawMaterial/knownList`,
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/shipment`,
-            params: {
-                workingYear: context.state.workingYear,
-                workingMonth: context.state.workingMonth
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/shipment/dailySummary`,
-            params: {
-                workingYear: context.state.workingYear,
-                workingMonth: context.state.workingMonth
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/shipment/overview`,
-            params: {
-                workingYear: context.state.workingYear,
-                workingMonth: context.state.workingMonth
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/shipment/tonnageSummary`,
-            params: {
-                workingYear: context.state.workingYear,
-                workingMonth: context.state.workingMonth
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/rawMaterial/supplyingSpecList`,
-            params: {
-                workingYear: context.state.workingYear,
-                workingMonth: context.state.workingMonth
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/supplier`,
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/supplier/workingMaterial`,
-            params: {
-                workingYear: context.state.workingYear,
-                workingMonth: context.state.workingMonth
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        }, {
-            method: 'get',
-            url: `${serverUrl}/data/purchaseOrder`,
-            params: {
-                workingMonth: context.state.workingMonth,
-                workingYear: context.state.workingYear
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        }];
-        return Promise.all(optionList.map(axios));
     },
     nextWorkingMonth: function(context) {
         let workingMonth = context.state.workingMonth;

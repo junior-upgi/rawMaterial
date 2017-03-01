@@ -32,7 +32,7 @@
 
 <script>
     import { mapActions, mapGetters, mapMutations } from 'vuex';
-    import workingTimeSelector from '../workingTimeSelector.vue';
+    import workingTimeSelector from '../../common/workingTimeSelector.vue';
     import pOOverviewRecord from './pOOverviewRecord.vue';
 
     export default {

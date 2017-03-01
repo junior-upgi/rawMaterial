@@ -1,6 +1,29 @@
 <template>
     <tr>
         <td>
+            <span class="label label-default" v-if="finalized">已結案</span>
+            <span class="label label-primary" v-if="received && !finalized">已入廠</span>
+            <span class="label label-success" v-if="confirmed && !received">訂單確認</span>
+            <span class="label label-info" v-if="ordered && !confirmed">已下單</span>
+            <span class="label label-warning" v-if="requested && !ordered && !confirmed">未下單</span>
+            <span class="label label-danger" v-if="pending">異常</span>
+        </td>
+        <td>{{index}}</td>
+        <workingDateCell
+            :workingDate="shipment.workingDate">
+        </workingDateCell>
+        <supplierWeightCell
+            :supplierWeight="shipment.supplierWeight">
+        </supplierWeightCell>
+        <actualWeightCell
+            :actualWeight="shipment.actualWeight">
+        </actualWeightCell>
+        <noteCell
+            :note="shipment.note">
+        </noteCell>
+        <td></td>
+        <!--
+        <td>
             <span v-if="shipment.pOId!==null" class="glyphicon glyphicon-ok-sign"></span>
             <span v-if="shipment.pOId!==null">已下單</span>
             <span v-if="shipment.pOId===null" class="glyphicon glyphicon-question-sign"></span>
@@ -54,27 +77,71 @@
             @cancel="cancelShipment()"
             @update="updateShipment()">
         </submit-control>
+        -->
     </tr>
 </template>
 
 <script>
-    import { mapGetters, mapActions, mapMutations } from 'vuex';
-    import submitControl from './submitControl.vue';
+    import workingDateCell from './workingDateCell.vue';
+    import supplierWeightCell from './supplierWeightCell.vue';
+    import actualWeightCell from './actualWeightCell.vue';
+    import noteCell from './noteCell.vue';
+    // import { mapGetters, mapActions, mapMutations } from 'vuex';
+    // import submitControl from './submitControl.vue';
 
     export default {
         name: 'shipmentEditor',
-        components: { submitControl },
+        components: {
+            workingDateCell,
+            supplierWeightCell,
+            actualWeightCell,
+            noteCell
+        },
         props: ['index', 'shipment'],
         data: function() {
             return {
-                requestDate: null,
-                arrivalDate: null,
                 workingDate: null,
                 actualWeight: null,
                 supplierWeight: null,
                 note: null
             };
         },
+        computed: {
+            finalized: function() { return this.shipment.LZ_CLS_ID === 'T' ? true : false; },
+            received: function() {
+                if (
+                    (this.shipment.actualWeight && this.shipment.supplierWeight) &&
+                    (
+                        (this.shipment.actualWeight === this.shipment.PS_QTY) ||
+                        (this.shipment.supplierWeight === this.shipment.PS_QTY)
+                    )
+                ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            confirmed: function() { return ((this.shipment.OS_NO !== null) && (this.shipment.PRE_ID === 'T')) ? true : false; },
+            ordered: function() { return ((this.shipment.OS_NO !== null) && (this.shipment.PRE_ID !== 'T')) ? true : false; },
+            requested: function() { return this.shipment.SQ_NO !== null ? true : false; },
+            pending: function() {
+                if (
+                    (!this.finalized) &&
+                    (!(this.received && !this.finalized)) &&
+                    (!(this.confirmed && !this.received)) &&
+                    (!(this.ordered && !this.confirmed)) &&
+                    (!(this.requested && !this.ordered && !this.confirmed))
+                ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+
+        /* ,
+        components: { submitControl },
         computed: {
             ...mapGetters({ dataProcessingState: 'checkDataProcessingState' }),
             pristine: function() {
@@ -196,6 +263,7 @@
                 });
             }
         }
+        */
     };
 
 </script>
