@@ -19,7 +19,6 @@ export const store = new Vuex.Store({
         shipmentOverview: [], // list of shipment overview data
 
         // basic data
-        supplierList: [],
         supplyingSpecList: [],
 
         // purchase order
@@ -54,6 +53,7 @@ export const store = new Vuex.Store({
         // basic working data
         rawMatList: [], // list of raw material with details
         rawMatTypeList: [], // list of known raw material in the ERP system
+        supplierList: [],
 
         // shipment schedule
         shipmentSchedule: [], // list of current shipment schedule with details
@@ -61,6 +61,7 @@ export const store = new Vuex.Store({
     }
 });
 
+/*
 if (module.hot) {
     module.hot.accept(['./getters', './actions', './mutations'], () => {
         store.hotUpdate({
@@ -70,3 +71,4 @@ if (module.hot) {
         });
     });
 }
+*/

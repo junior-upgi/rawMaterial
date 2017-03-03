@@ -43,7 +43,7 @@
         name: 'sidebar',
         computed: {
             ...mapGetters({
-                activeView: 'getActiveView',
+                activeView: 'activeView',
                 pOPrintMode: 'checkPOPrintMode',
                 pOWorkingSupplier: 'getPOWorkingSupplier',
                 role: 'role'

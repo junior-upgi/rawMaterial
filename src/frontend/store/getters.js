@@ -4,13 +4,6 @@ export default {
     checkPOViewMode: function(state) { return state.pOViewMode; },
     checkPOCreateMode: function(state) { return state.pOCreateMode; },
     checkPOEditMode: function(state) { return state.pOEditMode; },
-    getActiveView: function(state) {
-        if (state.activeView) {
-            return state.activeView;
-        } else {
-            return 'login';
-        }
-    },
     getPONoticeArray: function(state) { return state.pONoticeArray; },
     getPOShipmentList: function(state) { return state.pOShipmentList; },
     getPOShipmentSummary: function(state) { return state.pOShipmentSummary; },
@@ -19,11 +12,9 @@ export default {
     getRawMaterialTypeList: function(state) { return state.rawMatTypeList; },
     getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
     getShipmentOverview: function(state) { return state.shipmentOverview; },
-    getSupplierList: function(state) { return state.supplierList; },
     getSupplyingSpecList: function(state) { return state.supplyingSpecList; },
     getTonnageSummary: function(state) { return state.tonnageSummary; },
     getUserName: function(state) { return state.userData.NAME; },
-    getUserData: function(state) { return state.userData; },
     getWorkingMonth: function(state) { return state.workingMonth; },
     getWorkingMaterial: function(state) { return state.workingMaterial; },
     getWorkingYear: function(state) { return state.workingYear; },
@@ -47,48 +38,70 @@ export default {
     // /////////////////////////////////////////////////////////////
     // application state
     checkDataProcessingState: function(state) { return state.processingData; },
-    // user permission
-    role: function(state) { return state.role; },
-    // working raw material
-    rawMaterialList: function(state) { return state.rawMatList; },
     selectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
     selectedRawMaterial: selectedRawMaterial,
-    // working time period
+    workingSupplierDetail: workingSupplierDetail,
     workingMonth: function(state) { return state.workingMonth; },
     workingYear: function(state) { return state.workingYear; },
+    // user info and permission
+    activeView: activeView,
+    role: function(state) { return state.role; },
+    userData: function(state) { return state.userData; },
+    // basic data set
+    rawMaterialList: function(state) { return state.rawMatList; },
+    supplierList: function(state) { return state.supplierList; },
     // schedule data
+    filteredShipmentScheduleByCusNo: filteredShipmentScheduleByCusNo,
+    filteredShipmentScheduleByPrdNo: filteredShipmentScheduleByPrdNo,
+    filteredShipmentSummaryByPrdNo: filteredShipmentSummaryByPrdNo,
     shipmentSchedule: function(state) { return state.shipmentSchedule; },
-    shipmentSummary: function(state) { return state.shipmentSummary; },
-    filteredShipmentSchedule: filteredShipmentSchedule,
-    filteredShipmentSummary: filteredShipmentSummary
+    shipmentSummary: function(state) { return state.shipmentSummary; }
 };
 
-function filteredShipmentSchedule(state) {
+function activeView(state) {
+    if (state.activeView) {
+        return state.activeView;
+    } else {
+        return 'login';
+    }
+}
+
+function filteredShipmentScheduleByCusNo(state) {
+    let list = state.shipmentSchedule.filter((shipmentScheduleItem) => {
+        return shipmentScheduleItem.CUS_NO === state.rawMatList[state.selectedRawMatIndex].CUS_NO;
+    });
+    return list;
+}
+
+function filteredShipmentScheduleByPrdNo(state) {
     if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
         let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
-        let filteredShipmentSchedule = state.shipmentSchedule.filter((shipmentScheduleItem) => {
+        let list = state.shipmentSchedule.filter((shipmentScheduleItem) => {
             return shipmentScheduleItem.PRD_NO === selectedRawMaterial.PRD_NO;
         });
-        return filteredShipmentSchedule;
+        return list;
     }
     return [];
 }
 
-function filteredShipmentSummary(state) {
+function filteredShipmentSummaryByPrdNo(state) {
     if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
         let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
-        let filteredShipmentSummary = state.shipmentSummary.filter((shipmentSummaryItem) => {
+        let list = state.shipmentSummary.filter((shipmentSummaryItem) => {
             return shipmentSummaryItem.PRD_NO === selectedRawMaterial.PRD_NO;
         });
-        return filteredShipmentSummary;
+        return list;
     }
     return [];
 }
 
 function selectedRawMaterial(state) {
-    if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
-        return state.rawMatList[state.selectedRawMatIndex];
-    } else {
-        return {};
-    }
+    return state.rawMatList[state.selectedRawMatIndex];
+}
+
+function workingSupplierDetail(state) {
+    let workingSupplierDetail = state.supplierList.filter((supplier) => {
+        return supplier.CUS_NO === state.rawMatList[state.selectedRawMatIndex].CUS_NO;
+    });
+    return workingSupplierDetail[0];
 }

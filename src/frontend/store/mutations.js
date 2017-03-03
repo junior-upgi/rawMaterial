@@ -15,7 +15,6 @@ function emptyStoreValue(state) {
     state.pOViewMode = false;
     state.pOWorkingSupplier = null;
     state.shipmentOverview = [];
-    state.supplierList = [];
     state.supplyingSpecList = [];
     state.tonnageSummary = [];
     state.workingMaterial = [];
@@ -38,6 +37,7 @@ function emptyStoreValue(state) {
     // basic working data
     state.rawMatList = [];
     state.rawMatTypeList = [];
+    state.supplierList = [];
 
     // shipment schedule
     state.shipmentSummary = [];
@@ -157,28 +157,20 @@ export default {
     },
     // dateInEditMode specific
     switchDateInEditMode: function(state, date) { state.dateInEditMode = date; },
-    turnOffEditMode: function(state) { state.dateInEditMode = null; },
-    // processingData specific
-    processingDataSwitch: function(state, onOffSwitch) {
-        state.processingData = onOffSwitch;
-    },
-    // applies to multiple properties
-    rebuildData: function(state, dataObject) {
-        for (let objectIndex in dataObject) {
-            state[objectIndex] = null;
-            state[objectIndex] = dataObject[objectIndex];
-        }
-    },
+    turnOffEditMode: function(state) { state.dateInEditMode = null; }
     */
 
     // ////////////////////////////////////////////////////////////
+    // application state control
+    processingDataSwitch: function(state, onOffSwitch) { state.processingData = onOffSwitch; },
     // utility functions
     restoreToken: restoreToken, // restore token if exists
     // activeView specific
-    forceViewChange: function(state, role) { state.activeView = role; },
+    forceViewChange: function(state, view) { state.activeView = view; },
     redirectUser: function(state) { state.activeView = state.role; },
     // general vuex store data manipulation
     buildStore: buildStore, // initialize the store from ajax data
+    rebuildData: rebuildData, // reinitialize the store partially
     resetStore: resetStore, // empty the store with default value
     // working material manipulation
     selectRawMaterial: selectRawMaterial,
@@ -191,6 +183,13 @@ function buildStore(state, responseList) {
     responseList.forEach((response) => {
         Object.assign(dataObject, response.data);
     });
+    for (let objectIndex in dataObject) {
+        state[objectIndex] = null;
+        state[objectIndex] = dataObject[objectIndex];
+    }
+}
+
+function rebuildData(state, dataObject) {
     for (let objectIndex in dataObject) {
         state[objectIndex] = null;
         state[objectIndex] = dataObject[objectIndex];

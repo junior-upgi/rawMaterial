@@ -29,8 +29,8 @@
         props: ['dateInEditMode'],
         computed: {
             ...mapGetters({
-                shipmentSchedule: 'filteredShipmentSchedule',
-                shipmentSummary: 'filteredShipmentSummary'
+                shipmentSchedule: 'filteredShipmentScheduleByPrdNo',
+                shipmentSummary: 'filteredShipmentSummaryByPrdNo'
             })
         },
         methods: {

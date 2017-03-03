@@ -171,7 +171,7 @@
                 checkPOViewMode: 'checkPOViewMode',
                 shipmentOverview: 'getShipmentOverview',
                 supplierList: 'getSupplierList',
-                userInfo: 'getUserData',
+                userInfo: 'userData',
                 workingMonth: 'getWorkingMonth',
                 workingYear: 'getWorkingYear'
             }),

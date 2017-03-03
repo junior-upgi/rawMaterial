@@ -7,10 +7,10 @@
                 {{cellDate.format('M/D')}}
             </span>
             <div class="container-fluid">
-                <reservation
+                <reservationInput
                     v-if="isFutureDate()||role==='admin'"
-                    :cellDateString="this.cellDateString">
-                </reservation>
+                    :cellDateString="cellDateString">
+                </reservationInput>
             </div>
             <span
                 v-if="completedShipmentCount>0"
@@ -29,14 +29,14 @@
 <script>
     import moment from 'moment-timezone';
     import { mapGetters } from 'vuex';
-    import reservation from './reservation.vue';
+    import reservationInput from './reservationInput.vue';
     import cancelReservation from './cancelReservation.vue';
 
     export default {
         name: 'reservationCell',
         components: {
             cancelReservation,
-            reservation
+            reservationInput
         },
         props: [
             'cellDateString',

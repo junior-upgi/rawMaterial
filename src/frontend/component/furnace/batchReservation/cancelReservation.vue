@@ -20,7 +20,7 @@
                 let pendingShipmentCount = 0;
                 this.shipmentSchedule.forEach((shipment) => {
                     if (shipment.PS_DD === null) {
-                        pendingShipmentCount += 1;
+                        pendingShipmentCount += shipment.shipmentCount;
                     }
                 });
                 return pendingShipmentCount;
@@ -28,22 +28,21 @@
         },
         methods: {
             ...mapActions({
-                // cancelShipment: 'cancelShipment'
+                cancelShipment: 'cancelShipment'
             }),
             ...mapMutations({
-                // rebuildData: 'rebuildData',
-                // processingDataSwitch: 'processingDataSwitch',
-                // resetStore: 'resetStore'
+                rebuildData: 'rebuildData',
+                processingDataSwitch: 'processingDataSwitch',
+                resetStore: 'resetStore'
             }),
             cancelReservation: function() {
-                /*
                 this.processingDataSwitch(true);
                 this.cancelShipment({
-                    id: null,
-                    requestDate: this.cellDate,
-                    CUS_NO: this.selectedRawMat.CUS_NO,
-                    PRD_NO: this.selectedRawMat.PRD_NO,
-                    typeId: this.selectedRawMat.typeId
+                    id: this.shipmentSchedule[0].id,
+                    SQ_NO: this.shipmentSchedule[0].SQ_NO,
+                    SQ_ITM: this.shipmentSchedule[0].SQ_ITM,
+                    OS_NO: this.shipmentSchedule[0].OS_NO,
+                    OS_ITM: this.shipmentSchedule[0].OS_ITM
                 }).then((resultset) => {
                     this.rebuildData(resultset.data);
                     this.processingDataSwitch(false);
@@ -51,7 +50,6 @@
                     alert(`預約刪除作業發生錯誤，系統即將重置: ${error}`);
                     this.resetStore();
                 });
-                */
             }
         }
     };

@@ -35,8 +35,8 @@ SELECT
 	,b.unitPrice
 	,b.UT
 	,b.qtyPerShipment
-	,1 AS quantity
-	,b.qtyPerShipment * 1 AS estWeight  -- 預估進廠重量
+	,a.shipmentCount
+	,b.qtyPerShipment * a.shipmentCount AS estWeight  -- 預估進廠重量
     ,a.supplierWeight
     ,a.actualWeight
 	,CASE

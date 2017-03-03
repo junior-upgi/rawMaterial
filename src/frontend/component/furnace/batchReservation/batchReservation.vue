@@ -61,8 +61,8 @@
         computed: {
             ...mapGetters({
                 rawMaterialList: 'rawMaterialList',
-                shipmentSchedule: 'filteredShipmentSchedule',
-                shipmentSummary: 'filteredShipmentSummary',
+                shipmentSchedule: 'filteredShipmentScheduleByPrdNo',
+                shipmentSummary: 'filteredShipmentSummaryByPrdNo',
                 selectedRawMaterial: 'selectedRawMaterial',
                 workingMonth: 'workingMonth',
                 workingYear: 'workingYear'
@@ -88,7 +88,12 @@
             },
             filterShipmentSchedule: function(dateString) {
                 return this.shipmentSchedule.filter((shipment) => {
-                    return shipment.workingDate === dateString;
+                    return (
+                        (shipment.workingDate === dateString) &&
+                        (shipment.CUS_NO === this.selectedRawMaterial.CUS_NO) &&
+                        (shipment.PRD_NO === this.selectedRawMaterial.PRD_NO) &&
+                        (shipment.typeId === this.selectedRawMaterial.typeId)
+                    );
                 });
             },
             filterShipmentSummary: function(weekIndex, weekdayIndex) {
@@ -99,9 +104,9 @@
             lastOfMonth: function() {
                 return parseInt(
                     moment(new Date(this.workingYear, this.workingMonth - 1, 1))
-                    .add(1, 'month')
-                    .subtract(1, 'day')
-                    .format('D'));
+                        .add(1, 'month')
+                        .subtract(1, 'day')
+                        .format('D'));
             },
             visible: function(weekIndex, weekdayIndex) {
                 let cellIndex = this.cellIndex(weekIndex, weekdayIndex);

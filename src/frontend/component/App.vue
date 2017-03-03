@@ -44,7 +44,7 @@
         },
         computed: {
             ...mapGetters({
-                activeView: 'getActiveView',
+                activeView: 'activeView',
                 pOPrintMode: 'checkPOPrintMode'
             })
         },

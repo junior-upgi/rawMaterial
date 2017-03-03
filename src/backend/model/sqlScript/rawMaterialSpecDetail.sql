@@ -4,6 +4,7 @@ SELECT
 	,a.typeId
     ,b.UT
 	,a.unitPrice
+    ,a.currency
 	,a.CUS_NO
 	,d.SNM AS CUST_SNM
 	,d.NAME AS CUST_NAME

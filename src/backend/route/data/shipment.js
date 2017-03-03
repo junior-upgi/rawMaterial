@@ -1,5 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const moment = require('moment-timezone');
+const uuidV4 = require('uuid/v4');
 const serverConfig = require('../../module/serverConfig.js');
 const tokenValidation = require('../../middleware/tokenValidation.js');
 const utility = require('../../module/utility.js');
@@ -156,46 +158,83 @@ router.route('/data/shipment')
             });
     })
     .post(function(request, response, next) {
+        let uuid = uuidV4().toUpperCase();
         let responseObject = {
             shipmentSchedule: null,
             shipmentSummary: null
         };
+        let shipmentTableData = {
+            id: uuid,
+            CUS_NO: request.body.CUS_NO,
+            PRD_NO: request.body.PRD_NO,
+            SQ_NO: request.body.SQ_NO,
+            SQ_ITM: 1,
+            requestDate: request.body.requestDate,
+            shipmentCount: request.body.shipmentCount,
+            typeId: request.body.typeId,
+            workingMonth: request.body.contractType === 'annual' ? null : request.body.workingMonth,
+            workingYear: request.body.contractType === 'oneTime' ? null : request.body.workingYear,
+            note: '批次預約'
+        };
+        let mfsqTableData = {
+            SQ_DD: moment.utc(new Date()).format('YYYY-MM-DD'),
+            SQ_NO: request.body.SQ_NO,
+            DEP: '3F12',
+            CUS_NO: request.body.CUS_NO,
+            SAL_NO: '09100001',
+            INC_ID: 'F',
+            REM: '原料控管資料',
+            USR: '09100001',
+            CHK_MAN: 'ADMIN',
+            PRT_SW: 'N',
+            PO_DEP: '1500',
+            CLS_ID: 'F',
+            EXC_RTO: 1,
+            CLS_DATE: moment.utc(new Date()).format('YYYY-MM-DD'),
+            SYS_DATE: moment.utc(new Date()).format('YYYY-MM-DD HH:mm:ss')
+        };
+        let tfsqTableData = {
+            ITM: 1,
+            PRD_NO: request.body.PRD_NO,
+            PRD_NAME: request.body.PRDT_SNM,
+            WH: '0000',
+            UNIT: '1',
+            QTY: request.body.qtyPerShipment * request.body.shipmentCount,
+            EST_DD: request.body.requestDate,
+            CUS_NO: request.body.CUS_NO,
+            SQ_NO: request.body.SQ_NO,
+            REMARK: '原料控管資料',
+            DEP: '3F12',
+            UNIT_NAME: '公斤',
+            EST_ITM: 1,
+            EXC_RTO: 1
+        };
         let knex = require('knex')(serverConfig.mssqlConfig);
-        let requestList = [];
-        for (let index = 0; index < request.body.quantity; index++) {
-            requestList.push(knex('rawMaterial.dbo.shipmentRequest')
-                .insert({
-                    requestDate: request.body.requestDate,
-                    CUS_NO: request.body.CUS_NO,
-                    PRD_NO: request.body.PRD_NO,
-                    typeId: request.body.typeId,
-                    quantity: 1,
-                    created: utility.currentDatetimeString(),
-                    modified: utility.currentDatetimeString()
-                }).debug(false)
-            );
-        }
-        Promise.all(requestList)
-            .then(() => {
-                return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
-            })
-            .then((resultset) => {
-                responseObject.shipmentSchedule = resultset;
-                return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
-            })
-            .then((resultset) => {
-                responseObject.shipmentSummary = resultset;
-                knex.destroy();
-                return response.status(200).json(responseObject);
-            })
-            .catch((error) => {
-                return response.status(500).json(
-                    utility.endpointErrorHandler(
-                        request.method,
-                        request.originalUrl,
-                        `新增原料進貨預約作業發生錯誤: ${error}`)
-                );
-            });
+        knex.transaction((trx) => {
+            return trx
+                .insert(shipmentTableData)
+                .into('rawMaterial.dbo.shipment').debug(false)
+                .then(() => {
+                    return trx.insert(mfsqTableData).into('DB_1111.dbo.MF_SQ').debug(false);
+                }).then(() => {
+                    return trx.insert(tfsqTableData).into('DB_1111.dbo.TF_SQ').debug(false);
+                });
+        }).then(() => {
+            return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
+        }).then((resultset) => {
+            responseObject.shipmentSchedule = resultset;
+            return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
+        }).then((resultset) => {
+            responseObject.shipmentSummary = resultset;
+            return response.status(200).json(responseObject);
+        }).catch((error) => {
+            return utility.endpointErrorHandler(
+                request.method,
+                request.originalUrl,
+                `新增原料進貨預約作業發生錯誤: ${error}`);
+        }).finally(() => {
+            knex.destroy();
+        });
     })
     .delete(function(request, response, next) {
         let responseObject = {
@@ -203,18 +242,23 @@ router.route('/data/shipment')
             shipmentSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
-        let condition = request.body.id !== null ? {
-            id: request.body.id
-        } : {
-            requestDate: request.body.requestDate,
-            CUS_NO: request.body.CUS_NO,
-            PRD_NO: request.body.PRD_NO,
-            typeId: request.body.typeId,
-            arrivalDate: null,
-            supplierWeight: null,
-            actualWeight: null,
-            deprecated: null
+        let condition = {
+            id: request.body.id,
+            SQ_NO: request.body.SQ_NO,
+            SQ_ITM: request.body.SQ_ITM,
+            OS_NO: request.body.OS_NO,
+            OS_ITM: request.body.OS_ITM
         };
+        // go into transaction mode
+        // ---- delete rawMaterial.dbo.shipment by update the modified and deprecated fields according to the conditions
+        // ---- if OS_NO !== null
+        // ---- ---- delete DB_1111.dbo.TF_POS record accordingly
+        // ---- ---- select query of DB_1111.dbo.TF_POS according to OS_NO
+        // ---- ---- ---- if resultset.length===0, delete DB_1111.dbo.MF_POS record WHERE OS_NO
+        // ---- if SQ_NO !== null
+        // ---- ---- delete DB_1111.dbo.TF_SQ record accordingly SQ_NO,SQ_ITM
+        // ---- ---- select query of DB_1111.dbo.TF_SQ according to SQ_NO
+        // ---- ---- ---- if resultset.length===0, delete DB_1111.dbo.MF_SQ record WHERE SQ_NO
         knex('rawMaterial.dbo.shipmentRequest')
             .update({
                 modified: utility.currentDatetimeString(),

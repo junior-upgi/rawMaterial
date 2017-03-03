@@ -5,7 +5,7 @@
         <td>{{shipmentSummaryItem.CUST_SNM}}</td>
         <td>{{shipmentSummaryItem.PRDT_SNM}}</td>
         <td>{{shipmentSummaryItem.specification}}</td>
-        <td>{{shipmentSummaryItem.totalQuantity}}</td>
+        <td>{{shipmentSummaryItem.totalShipmentCount}}</td>
         <td>{{shipmentSummaryItem.totalWeight|tonnage}}</td>
     </tr>
 </template>
