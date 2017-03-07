@@ -24,7 +24,7 @@
     import sidebar from './sidebar.vue';
     import admin from './userInterface/admin.vue';
     import furnace from './furnace/furnace.vue';
-    import purchasing from './userInterface/purchasing.vue';
+    import purchasing from './purchasing/purchasing.vue';
     import supplier from './userInterface/supplier.vue';
 
     import pOTemplate from './userInterface/purchaseOrder/pOTemplate.vue';

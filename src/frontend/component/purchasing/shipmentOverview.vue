@@ -22,7 +22,7 @@
                     <workingMaterialRecord
                         v-for="material in workingMaterial"
                         :material="material"
-                        :dateList=filterShipmentOverviewData(material.CUS_NO,material.PRD_NO)>
+                        :dateList="filterShipmentOverviewData(material.CUS_NO,material.PRD_NO)">
                     </workingMaterialRecord>
                 </tbody>
             </table>

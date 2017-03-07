@@ -10,6 +10,7 @@ SELECT
 	,a.workingMonth
 	,DATEPART(day,a.workingDate) AS workingDay
     ,SUM(a.shipmentCount) AS totalShipmentCount
+    ,SUM(a.receivedCount) AS totalReceivedCount
 	,SUM(a.workingWeight*a.shipmentCount) AS totalWeight
 FROM rawMaterial.dbo.shipmentSchedule a
 WHERE a.deprecated IS NULL

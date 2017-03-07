@@ -242,52 +242,36 @@ router.route('/data/shipment')
             shipmentSummary: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
-        let condition = {
-            id: request.body.id,
-            SQ_NO: request.body.SQ_NO,
-            SQ_ITM: request.body.SQ_ITM,
-            OS_NO: request.body.OS_NO,
-            OS_ITM: request.body.OS_ITM
-        };
-        // go into transaction mode
-        // ---- delete rawMaterial.dbo.shipment by update the modified and deprecated fields according to the conditions
-        // ---- if OS_NO !== null
-        // ---- ---- delete DB_1111.dbo.TF_POS record accordingly
-        // ---- ---- select query of DB_1111.dbo.TF_POS according to OS_NO
-        // ---- ---- ---- if resultset.length===0, delete DB_1111.dbo.MF_POS record WHERE OS_NO
-        // ---- if SQ_NO !== null
-        // ---- ---- delete DB_1111.dbo.TF_SQ record accordingly SQ_NO,SQ_ITM
-        // ---- ---- select query of DB_1111.dbo.TF_SQ according to SQ_NO
-        // ---- ---- ---- if resultset.length===0, delete DB_1111.dbo.MF_SQ record WHERE SQ_NO
-        knex('rawMaterial.dbo.shipmentRequest')
-            .update({
-                modified: utility.currentDatetimeString(),
-                deprecated: utility.currentDatetimeString()
-            })
-            .where(condition)
-            .debug(false)
-            .then(() => {
-                return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
-            })
-            .then((resultset) => {
-                responseObject.shipmentSchedule = resultset;
-                return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
-            })
-            .then((resultset) => {
-                responseObject.shipmentSummary = resultset;
-                return response.status(200).json(responseObject);
-            })
-            .catch((error) => {
-                return response.status(500).json(
-                    utility.endpointErrorHandler(
-                        request.method,
-                        request.originalUrl,
-                        `取消原料進貨預約作業發生錯誤: ${error}`)
-                );
-            })
-            .finally(() => {
-                knex.destroy();
-            });
+        knex.transaction((trx) => {
+            return trx('rawMaterial.dbo.shipment').delete().where({
+                    id: request.body.id,
+                    SQ_NO: request.body.SQ_NO,
+                    SQ_ITM: request.body.SQ_ITM
+                }).debug(false)
+                .then(() => {
+                    return trx('DB_1111.dbo.TF_SQ').delete().where({
+                        SQ_NO: request.body.SQ_NO,
+                        ITM: request.body.SQ_ITM
+                    }).debug(false);
+                }).then(() => {
+                    return trx.raw('DELETE a FROM DB_1111.dbo.MF_SQ a LEFT JOIN DB_1111.dbo.TF_SQ b ON a.SQ_NO=b.SQ_NO WHERE a.SQ_NO=? AND b.ITM IS NULL;', request.body.SQ_NO);
+                });
+        }).then(() => {
+            return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
+        }).then((resultset) => {
+            responseObject.shipmentSchedule = resultset;
+            return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
+        }).then((resultset) => {
+            responseObject.shipmentSummary = resultset;
+            return response.status(200).json(responseObject);
+        }).catch((error) => {
+            return utility.endpointErrorHandler(
+                request.method,
+                request.originalUrl,
+                `取消預約作業發生錯誤: ${error}`);
+        }).finally(() => {
+            knex.destroy();
+        });
     })
     .put(function(request, response, next) {
         let responseObject = {

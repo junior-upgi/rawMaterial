@@ -36,6 +36,7 @@ SELECT
 	,b.UT
 	,b.qtyPerShipment
 	,a.shipmentCount
+    ,a.receivedCount
 	,b.qtyPerShipment * a.shipmentCount AS estWeight  -- 預估進廠重量
     ,a.supplierWeight
     ,a.actualWeight

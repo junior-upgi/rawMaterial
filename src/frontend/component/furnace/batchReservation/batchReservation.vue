@@ -26,10 +26,9 @@
                     <tr v-for="weekIndex in weekCount">
                         <td v-for="weekdayIndex in 7">
                             <reservationCell
-                                v-if="visible(weekIndex,weekdayIndex)"
+                                v-if="checkVisibility(weekIndex,weekdayIndex)"
                                 :cellDateString="cellDate(weekIndex,weekdayIndex)"
-                                :shipmentSchedule="filterShipmentSchedule(cellDate(weekIndex,weekdayIndex))"
-                                :shipmentSummary="filterShipmentSummary(weekIndex,weekdayIndex)">
+                                :shipment="filterShipmentSchedule(cellDate(weekIndex,weekdayIndex))">
                             </reservationCell>
                         </td>
                     </tr>
@@ -41,7 +40,7 @@
 
 <script>
     import moment from 'moment-timezone';
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters } from 'vuex';
     import workingTimeSelector from '../../common/workingTimeSelector.vue';
     import workingMaterialSelector from '../../common/workingMaterialSelector.vue';
     import reservationCell from './reservationCell.vue';
@@ -60,9 +59,7 @@
         },
         computed: {
             ...mapGetters({
-                rawMaterialList: 'rawMaterialList',
-                shipmentSchedule: 'filteredShipmentScheduleByPrdNo',
-                shipmentSummary: 'filteredShipmentSummaryByPrdNo',
+                shipmentSchedule: 'shipmentSchedule',
                 selectedRawMaterial: 'selectedRawMaterial',
                 workingMonth: 'workingMonth',
                 workingYear: 'workingYear'
@@ -71,23 +68,41 @@
                 let firstOfMonth = new Date(this.workingYear, this.workingMonth - 1, 1);
                 let lastOfMonth = new Date(this.workingYear, this.workingMonth, 0);
                 return Math.ceil((firstOfMonth.getDay() + 1 + (lastOfMonth.getDate() - firstOfMonth.getDate())) / 7);
+            },
+            lastDayOfMonth: function() {
+                return parseInt(
+                    moment(new Date(this.workingYear, this.workingMonth - 1, 1))
+                        .add(1, 'month')
+                        .subtract(1, 'day')
+                        .format('D'));
+            },
+            weekdayOfFirstOfMonth: function() {
+                return new Date(this.workingYear, this.workingMonth - 1, 1).getDay();
             }
         },
         methods: {
+            ...mapActions({ componentErrorHandler: 'componentErrorHandler' }),
+            cellIndex: function(weekIndex, weekdayIndex) {
+                return (parseInt(weekIndex) - 1) * 7 + parseInt(weekdayIndex);
+            },
             cellDate: function(weekIndex, weekdayIndex) {
                 return moment(
                     new Date(
                         this.workingYear,
                         this.workingMonth - 1,
-                        this.cellIndex(weekIndex, weekdayIndex) - this.weekdayOfFirst()
+                        this.cellIndex(weekIndex, weekdayIndex) - this.weekdayOfFirstOfMonth
                     )
                 ).format('YYYY-MM-DD');
             },
-            cellIndex: function(weekIndex, weekdayIndex) {
-                return (parseInt(weekIndex) - 1) * 7 + parseInt(weekdayIndex);
+            checkVisibility: function(weekIndex, weekdayIndex) {
+                let cellIndex = this.cellIndex(weekIndex, weekdayIndex);
+                return (
+                    (cellIndex > this.weekdayOfFirstOfMonth) &&
+                    ((cellIndex - this.weekdayOfFirstOfMonth) <= this.lastDayOfMonth)
+                );
             },
             filterShipmentSchedule: function(dateString) {
-                return this.shipmentSchedule.filter((shipment) => {
+                let filteredShipmentSchedule = this.shipmentSchedule.filter((shipment) => {
                     return (
                         (shipment.workingDate === dateString) &&
                         (shipment.CUS_NO === this.selectedRawMaterial.CUS_NO) &&
@@ -95,28 +110,15 @@
                         (shipment.typeId === this.selectedRawMaterial.typeId)
                     );
                 });
-            },
-            filterShipmentSummary: function(weekIndex, weekdayIndex) {
-                return this.shipmentSummary.filter((shipmentSummaryItem) => {
-                    return shipmentSummaryItem.workingDate === this.cellDate(weekIndex, weekdayIndex);
-                });
-            },
-            lastOfMonth: function() {
-                return parseInt(
-                    moment(new Date(this.workingYear, this.workingMonth - 1, 1))
-                        .add(1, 'month')
-                        .subtract(1, 'day')
-                        .format('D'));
-            },
-            visible: function(weekIndex, weekdayIndex) {
-                let cellIndex = this.cellIndex(weekIndex, weekdayIndex);
-                return (
-                    (cellIndex > this.weekdayOfFirst()) &&
-                    (cellIndex - this.weekdayOfFirst()) <= this.lastOfMonth()
-                );
-            },
-            weekdayOfFirst: function() {
-                return new Date(this.workingYear, this.workingMonth - 1, 1).getDay();
+                if (filteredShipmentSchedule.length <= 1) {
+                    return (filteredShipmentSchedule.length === 1) ? filteredShipmentSchedule[0] : [];
+                } else {
+                    this.componentErrorHandler({
+                        component: 'batchReservation',
+                        method: 'filterShipmentSchedule',
+                        situation: 'filtered result yielded more than one shipment'
+                    });
+                }
             }
         }
     };

@@ -88,7 +88,7 @@ export default {
             workingMonth: parseInt(workingDate.format('M')),
             workingYear: parseInt(workingDate.format('YYYY'))
         });
-        return context.dispatch({ type: 'initData' });
+        return context.dispatch('initData');
     },
     prevWorkingMonth: function(context) {
         let workingMonth = context.state.workingMonth;
@@ -99,7 +99,7 @@ export default {
             workingMonth: parseInt(workingDate.format('M')),
             workingYear: parseInt(workingDate.format('YYYY'))
         });
-        return context.dispatch({ type: 'initData' });
+        return context.dispatch('initData');
     },
     refreshPOShipmentListing: function(context) {
         context.commit('resetPOShipmentList');
@@ -245,15 +245,14 @@ export default {
                 id: payload.id,
                 SQ_NO: payload.SQ_NO,
                 SQ_ITM: payload.SQ_ITM,
-                OS_NO: payload.OS_NO,
-                OS_ITM: payload.OS_ITM,
                 workingMonth: context.state.workingMonth,
                 workingYear: context.state.workingYear
             },
             headers: { 'x-access-token': sessionStorage.token }
         };
         return axios(requestOption);
-    }
+    },
+    componentErrorHandler: componentErrorHandler
 };
 
 function startingDate(contractType, workingYear, workingMonth) {
@@ -280,4 +279,42 @@ function endDate(contractType, workingYear, workingMonth) {
         default:
             return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
     }
+}
+
+function componentErrorHandler(context, errorObject) {
+    console.log('--------------------');
+    console.log('dumping system state');
+    console.log('--------------------');
+    console.log(context.state);
+    console.log('------------------');
+    console.log('end of system dump');
+    console.log('------------------');
+    let token = sessionStorage.token;
+    let activeView = context.state.activeView;
+    context.commit('resetStore');
+    sessionStorage.token = token;
+    context.commit('restoreToken', sessionStorage.token);
+    context.dispatch('initData')
+        .then((responseList) => {
+            context.commit('buildStore', responseList);
+            context.commit('forceViewChange', activeView);
+            alert('發現系統異常，系統已覆歸。請聯繫 IT 檢視狀況。');
+            console.log('----------------------------');
+            console.log('system recovered after error');
+            console.log('----------------------------');
+            for (let index in errorObject) {
+                console.log(`${index}: ${errorObject[index]}`);
+            }
+        }).catch((error) => {
+            alert('發現系統異常，系統覆歸失敗。請聯繫 IT 檢視狀況。');
+            console.log('------------------------------------');
+            console.log('system failed to recover after error');
+            console.log('reason for recovery failure:');
+            console.log(error);
+            console.log('------------------------------------');
+            for (let index in errorObject) {
+                console.log(`${index}: ${errorObject[index]}`);
+            }
+            context.commit('resetStore');
+        });
 }

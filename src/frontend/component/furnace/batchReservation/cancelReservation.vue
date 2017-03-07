@@ -4,7 +4,7 @@
         :disabled="processingData?true:false"
         @click="cancelReservation">
         <strong>
-            待進廠車次: {{pendingShipmentCount}}
+            未下訂車次: {{pendingPurchaseCount}}
         </strong>
     </button>
 </template>
@@ -13,42 +13,42 @@
     import { mapActions, mapGetters, mapMutations } from 'vuex';
     export default {
         name: 'cancelReservation',
-        props: ['shipmentSchedule'],
+        props: ['shipment'],
         computed: {
-            ...mapGetters({ processingData: 'checkDataProcessingState' }),
-            pendingShipmentCount: function() {
-                let pendingShipmentCount = 0;
-                this.shipmentSchedule.forEach((shipment) => {
-                    if (shipment.PS_DD === null) {
-                        pendingShipmentCount += shipment.shipmentCount;
-                    }
-                });
-                return pendingShipmentCount;
+            ...mapGetters({
+                processingData: 'checkDataProcessingState',
+                selectedRawMaterial: 'selectedRawMaterial',
+                workingSupplierDetail: 'workingSupplierDetail'
+            }),
+            pendingPurchaseCount: function() {
+                return this.shipment.OS_NO === null ? this.shipment.shipmentCount - this.shipment.receivedCount : 0;
             }
         },
         methods: {
             ...mapActions({
-                cancelShipment: 'cancelShipment'
+                cancelShipment: 'cancelShipment',
+                componentErrorHandler: 'componentErrorHandler'
             }),
             ...mapMutations({
-                rebuildData: 'rebuildData',
                 processingDataSwitch: 'processingDataSwitch',
-                resetStore: 'resetStore'
+                rebuildData: 'rebuildData'
             }),
             cancelReservation: function() {
                 this.processingDataSwitch(true);
                 this.cancelShipment({
-                    id: this.shipmentSchedule[0].id,
-                    SQ_NO: this.shipmentSchedule[0].SQ_NO,
-                    SQ_ITM: this.shipmentSchedule[0].SQ_ITM,
-                    OS_NO: this.shipmentSchedule[0].OS_NO,
-                    OS_ITM: this.shipmentSchedule[0].OS_ITM
+                    id: this.shipment.id,
+                    SQ_NO: this.shipment.SQ_NO,
+                    SQ_ITM: this.shipment.SQ_ITM
                 }).then((resultset) => {
                     this.rebuildData(resultset.data);
                     this.processingDataSwitch(false);
                 }).catch((error) => {
-                    alert(`預約刪除作業發生錯誤，系統即將重置: ${error}`);
-                    this.resetStore();
+                    this.componentErrorHandler({
+                        component: 'cancelReservation',
+                        method: 'cancelReservation',
+                        situation: '預約刪除作業發生錯誤',
+                        systemErrorMessage: error
+                    });
                 });
             }
         }

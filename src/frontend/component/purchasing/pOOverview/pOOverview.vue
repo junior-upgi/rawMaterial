@@ -10,20 +10,21 @@
             <table class="table table-bordered tabel-hover table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th class="text-center" style="white-space:nowrap;">訂單編號</th>
-                        <th class="text-center">廠商</th>
-                        <th class="text-center">項目</th>
-                        <th class="text-center">規格</th>
-                        <th class="text-center">最新訂單時間點</th>
-                        <th class="text-center">新變更時間點</th>
+                        <th
+                            v-for="thItem in thList"
+                            class="text-center">
+                            {{thItem}}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
+                    <!--
                     <pOOverviewRecord
                         v-for="material in workingMaterial"
                         :material="material"
                         :pOList="filterPOList(material.CUS_NO)">
                     </pOOverviewRecord>
+                    -->
                 </tbody>
             </table>
         </div>
@@ -36,14 +37,18 @@
     import pOOverviewRecord from './pOOverviewRecord.vue';
 
     export default {
-        name: 'purchaseOrderOverview',
-        props: ['workingMaterial'],
+        name: 'pOOverview',
         computed: {
-            ...mapGetters({ pOList: 'pOList' })
+            ...mapGetters({ selectedRawMaterial: 'selectedRawMaterial' })
         },
         components: {
             workingTimeSelector,
             pOOverviewRecord
+        },
+        data: function() {
+            return {
+                thList: ['編號', '年度', '日期', '廠商', '項目', '規格', '車次', '狀態']
+            };
         },
         methods: {
             ...mapActions({ refreshPOShipmentListing: 'refreshPOShipmentListing' }),

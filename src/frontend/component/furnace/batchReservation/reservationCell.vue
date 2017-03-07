@@ -13,14 +13,18 @@
                 </reservationInput>
             </div>
             <span
-                v-if="completedShipmentCount>0"
+                v-if="shipment.receivedCount>0"
                 class="label label-warning col-xs-12"
-                style="padding:10px 0px 10px 0px;">
-                已進廠車次: {{completedShipmentCount}}
+                style="padding:10px 0px 10px 0px;margin-bottom:5px;">
+                已進廠車次: {{shipment.receivedCount}}
             </span>
+            <cancelPO
+                v-if="(shipment.shipmentCount-shipment.receivedCount)>0 && shipment.OS_NO!==null"
+                :shipment="shipment">
+            </cancelPO>
             <cancelReservation
-                v-if="pendingShipmentCount>0"
-                :shipmentSchedule="pendingShipmentSchedule">
+                v-if="(shipment.shipmentCount-shipment.receivedCount)>0 && shipment.OS_NO===null"
+                :shipment="shipment">
             </cancelReservation>
         </div>
     </div>
@@ -30,47 +34,25 @@
     import moment from 'moment-timezone';
     import { mapGetters } from 'vuex';
     import reservationInput from './reservationInput.vue';
+    import cancelPO from './cancelPO.vue';
     import cancelReservation from './cancelReservation.vue';
 
     export default {
         name: 'reservationCell',
         components: {
             cancelReservation,
+            cancelPO,
             reservationInput
         },
         props: [
             'cellDateString',
-            'shipmentSchedule',
-            'shipmentSummary'
+            'shipment'
         ],
         computed: {
             ...mapGetters({
                 processingData: 'checkDataProcessingState',
                 role: 'role'
-            }),
-            completedShipmentCount: function() {
-                let completedShipmentCount = 0;
-                this.shipmentSchedule.forEach((shipment) => {
-                    if (shipment.PS_DD !== null) {
-                        completedShipmentCount += 1;
-                    }
-                });
-                return completedShipmentCount;
-            },
-            pendingShipmentSchedule: function() {
-                return this.shipmentSchedule.filter((shipment) => {
-                    return shipment.PS_DD === null;
-                });
-            },
-            pendingShipmentCount: function() {
-                let pendingShipmentCount = 0;
-                this.shipmentSchedule.forEach((shipment) => {
-                    if (shipment.PS_DD === null) {
-                        pendingShipmentCount += 1;
-                    }
-                });
-                return pendingShipmentCount;
-            }
+            })
         },
         data: function() {
             return {

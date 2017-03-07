@@ -21,7 +21,6 @@
         computed: {
             ...mapGetters({
                 activeView: 'activeView',
-                filteredShipmentScheduleByCusNo: 'filteredShipmentScheduleByCusNo',
                 processingData: 'checkDataProcessingState',
                 selectedRawMaterial: 'selectedRawMaterial',
                 shipmentSchedule: 'shipmentSchedule',
@@ -31,11 +30,8 @@
                 workingYear: 'workingYear'
             }),
             releventShipmentSchedule: function() {
-                let list = this.filteredShipmentScheduleByCusNo.filter((shipment) => {
-                    return (
-                        (shipment.PS_NO === null) &&
-                        (shipment.CUS_NO === this.selectedRawMaterial.CUS_NO)
-                    );
+                let list = this.shipmentSchedule.filter((shipment) => {
+                    return shipment.CUS_NO === this.selectedRawMaterial.CUS_NO;
                 });
                 switch (this.workingSupplierDetail.contractType) {
                     case 'annual':
@@ -70,28 +66,37 @@
                 return releventErpRequestList;
             },
             specificShipmentSchedule: function() {
-                return this.filteredShipmentScheduleByCusNo.filter((shipment) => {
+                let filteredShipmentSchedule = this.shipmentSchedule.filter((shipment) => {
                     return (
-                        (shipment.PS_NO === null) &&
+                        (shipment.shipmentCount > shipment.receivedCount) &&
                         (shipment.workingDate === this.cellDateString) &&
                         (shipment.CUS_NO === this.selectedRawMaterial.CUS_NO) &&
                         (shipment.PRD_NO === this.selectedRawMaterial.PRD_NO) &&
                         (shipment.typeId === this.selectedRawMaterial.typeId)
                     );
                 });
+                if (filteredShipmentSchedule.length <= 1) {
+                    return (filteredShipmentSchedule.length === 1) ? filteredShipmentSchedule[0] : [];
+                } else {
+                    this.componentErrorHandler({
+                        component: 'reservationInput',
+                        function: 'specificShipmentSchedule',
+                        situation: 'filtered result yielded more than one shipment'
+                    });
+                }
             },
             specificRequestList: function() {
                 let flags = [];
-                let releventErpRequestList = [];
+                let specificErpRequestList = [];
                 for (let index = 0; index < this.specificShipmentSchedule.length; index++) {
                     if (flags[this.specificShipmentSchedule[index].id]) {
                         continue;
                     } else {
                         flags[this.specificShipmentSchedule[index].id] = true;
-                        releventErpRequestList.push(this.specificShipmentSchedule[index].id);
+                        specificErpRequestList.push(this.specificShipmentSchedule[index].id);
                     }
                 }
-                return releventErpRequestList;
+                return specificErpRequestList;
             }
         },
         data: function() {
@@ -128,8 +133,9 @@
                 generateSqno: 'generateSqno'
             }),
             ...mapActions({
-                shipmentReservation: 'shipmentReservation',
-                initData: 'initData'
+                componentErrorHandler: 'componentErrorHandler',
+                initData: 'initData',
+                shipmentReservation: 'shipmentReservation'
             }),
             generateSqno: function(reservationType) {
                 let contractType = this.workingSupplierDetail.contractType;
@@ -144,8 +150,11 @@
                 } else if ((reservationType === 'new') && (contractType === 'oneTime')) {
                     return `SQ${oneTimeDatePart}-${CUS_NO}-001`;
                 } else {
-                    alert('產生 SQ_NO 發生錯誤，作業終止。');
-                    this.resetStore();
+                    this.componentErrorHandler({
+                        component: 'reservationInput',
+                        function: 'generateSqno',
+                        situation: '產生 SQ_NO 發生錯誤，作業終止。'
+                    });
                 }
             },
             processReservation: function() {
@@ -173,33 +182,35 @@
                     recordData.workingMonth = this.workingMonth;
                     recordData.workingYear = this.workingYear;
                 } else if (this.specificRequestList.length > 1) {
-                    alert('預約進貨作業發生錯誤，作業終止。請聯絡IT檢視: 單品項同一"日期"存在超過一組預約資料');
+                    this.componentErrorHandler({
+                        component: 'reservationInput',
+                        function: 'processReservation',
+                        situation: '單品項同一"日期"存在超過一組預約資料'
+                    });
                 } else if (this.releventRequestList.length > 1) {
-                    alert('預約進貨作業發生錯誤，作業終止。請聯絡IT檢視: 單品項同一"時期"存在超過一組預約資料');
+                    this.componentErrorHandler({
+                        component: 'reservationInput',
+                        function: 'processReservation',
+                        situation: '單品項同一"時期"存在超過一組預約資料'
+                    });
                 } else {
-                    alert('預約進貨作業發生錯誤，作業終止。請聯絡IT檢視: 資料筆數出現無法偵測異常');
+                    this.componentErrorHandler({
+                        component: 'reservationInput',
+                        function: 'processReservation',
+                        situation: '資料筆數出現無法偵測異常'
+                    });
                 }
                 this.shipmentReservation(recordData)
                     .then((resultset) => {
                         this.rebuildData(resultset.data);
                         this.processingDataSwitch(false);
-                    })
-                    .catch((error) => {
-                        let token = sessionStorage.token;
-                        let activeView = this.activeView;
-                        this.resetStore();
-                        sessionStorage.token = token;
-                        this.restoreToken(sessionStorage.token);
-                        this.initData()
-                            .then((responseList) => {
-                                this.buildStore(responseList);
-                                this.forceViewChange(activeView);
-                                alert(`預約進貨作業發生錯誤，系統還原成功: ${error}`);
-                            })
-                            .catch((error) => {
-                                alert(`預約進貨作業發生錯誤且還原失敗，系統即將重置: ${error}`);
-                                this.resetStore();
-                            });
+                    }).catch((error) => {
+                        this.componentErrorHandler({
+                            component: 'reservationInput',
+                            function: 'shipmentReservation',
+                            situation: '預約作業發生錯誤',
+                            systemErrorMessage: error
+                        });
                     });
             }
         }

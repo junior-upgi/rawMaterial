@@ -7,10 +7,10 @@
                 :dateList="dateList">
             </shipping-date-list>
         </td>
-        <tonnage-display
+        <tonnageDisplay
             :CUS_NO="material.CUS_NO"
             :PRD_NO="material.PRD_NO">
-        </tonnage-display>
+        </tonnageDisplay>
     </tr>
 </template>
 

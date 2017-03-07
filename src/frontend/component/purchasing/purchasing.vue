@@ -2,11 +2,14 @@
     <div class="text-center">
         <h2>採購模組</h2>
         <br>
-        <purchaseOrderOverview :workingMaterial="workingMaterial"></purchaseOrderOverview>
+        <pOOverview></pOOverview>
         <div class="row">
             <div class="col-md-8">
+                <!--
                 <shipmentOverview :workingMaterial="workingMaterial"></shipmentOverview>
+                -->
             </div>
+            <!--
             <div class="col-md-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -34,23 +37,20 @@
                     </div>
                 </div>
             </div>
+            -->
         </div>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import purchaseOrderOverview from './purchaseOrder/purchaseOrderOverview.vue';
-    import shipmentOverview from './shipmentOverview.vue';
+    import pOOverview from './pOOverview/pOOverview.vue';
+    // import shipmentOverview from './shipmentOverview.vue';
 
     export default {
         name: 'purchasing',
         components: {
-            purchaseOrderOverview,
-            shipmentOverview
-        },
-        computed: {
-            ...mapGetters({ workingMaterial: 'getWorkingMaterial' })
+            pOOverview
+            // shipmentOverview
         }
     };
 
