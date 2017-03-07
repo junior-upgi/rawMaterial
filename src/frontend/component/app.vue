@@ -13,13 +13,12 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
     import { store } from '../store/store.js';
     import sidebar from './sidebar.vue';
     import login from './login.vue';
     import admin from './admin/admin.vue';
     /*
-    import { mapActions, mapGetters, mapMutations } from 'vuex';
     import furnace from './furnace/furnace.vue';
     import purchasing from './purchasing/purchasing.vue';
     import supplier from './userInterface/supplier.vue';
@@ -34,8 +33,16 @@
             login,
             admin
         },
-        computed: {...mapGetters({ activeView: 'activeView' })},
-        created: ()=> {
+        computed: { ...mapGetters({ activeView: 'activeView' }) },
+        methods: {
+            ...mapActions({ initData: 'initData' }),
+            ...mapMutations({
+                buildStore: 'buildStore',
+                redirectUser: 'redirectUser',
+                restoreToken: 'restoreToken'
+            })
+        },
+        created: function() {
             // if jwt token exists in the sessionStorage
             if (
                 (sessionStorage.token !== undefined) &&
@@ -69,15 +76,6 @@
             ...mapGetters({
                 activeView: 'activeView',
                 pOPrintMode: 'checkPOPrintMode'
-            })
-        },
-        methods: {
-            ...mapActions({ initData: 'initData' }),
-            ...mapMutations({
-                buildStore: 'buildStore',
-                redirectUser: 'redirectUser',
-                resetStore: 'resetStore',
-                restoreToken: 'restoreToken'
             })
         }
         */

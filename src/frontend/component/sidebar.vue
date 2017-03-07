@@ -1,13 +1,58 @@
 <template>
     <div class="col-xs-12 col-sm-2">
-        <button type="button" class="btn btn-default btn-block">管理模組</button>
-        <button type="button" class="btn btn-default btn-block">窯爐模組</button>
-        <button type="button" class="btn btn-default btn-block">轉入廠單</button>
-        <button type="button" class="btn btn-default btn-block">採購模組</button>
-        <button type="button" class="btn btn-default btn-block">開立訂單</button>
-        <button type="button" class="btn btn-default btn-block">訂單列印</button>
-        <button type="button" class="btn btn-default btn-block">廠商模組</button>
-        <button type="button" class="btn btn-default btn-block">登出系統</button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block"
+            :class="{'btn-danger':role==='admin'}">
+            管理模組
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block"
+            :class="{'btn-danger':role==='furnace'}">
+            窯爐模組
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block">
+            轉入廠單
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block"
+            :class="{'btn-danger':role==='purchasing'}">
+            採購模組
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block">
+            開立訂單
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block">
+            訂單列印
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block"
+            :class="{'btn-danger':role==='supplier'}">
+            廠商模組
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button"
+            class="btn btn-default btn-block"
+            @click="logout">
+            登出系統
+        </button>
         <!--
         <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" @click="changeView('admin')">
             <span v-if="activeView==='admin'" class="glyphicon glyphicon-ok"></span> 管理模組
@@ -48,7 +93,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapMutations } from 'vuex';
 
     export default {
         name: 'sidebar',
@@ -57,6 +102,16 @@
                 activeView: 'activeView',
                 role: 'role'
             })
+        },
+        methods: {
+            ...mapMutations({
+                resetStore: 'resetStore'
+            }),
+            logout: function() {
+                if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
+                    this.resetStore();
+                }
+            }
         }
         /*
         computed: {
@@ -97,12 +152,7 @@
                             this.resetStore();
                         });
                 }
-            },
-            logout: function() {
-                if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
-                    this.resetStore();
-                }
-            },
+            },,
             printPO: function() {
                 this.changePOMode({ pOPrintMode: true, pOViewMode: false });
                 setTimeout(() => {
