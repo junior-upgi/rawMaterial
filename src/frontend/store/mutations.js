@@ -42,6 +42,9 @@ function emptyStoreValue(state) {
     // shipment schedule
     state.shipmentSummary = [];
     state.shipmentSchedule = [];
+
+    // purchase order
+    state.activePOList = [];
 }
 
 export default {

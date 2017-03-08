@@ -55,7 +55,9 @@ export default {
     filteredShipmentScheduleByPrdNo: filteredShipmentScheduleByPrdNo,
     filteredShipmentSummaryByPrdNo: filteredShipmentSummaryByPrdNo,
     shipmentSchedule: function(state) { return state.shipmentSchedule; },
-    shipmentSummary: function(state) { return state.shipmentSummary; }
+    shipmentSummary: function(state) { return state.shipmentSummary; },
+    // purchase order
+    activePOList: function(state) { return state.activePOList; }
 };
 
 function activeView(state) {

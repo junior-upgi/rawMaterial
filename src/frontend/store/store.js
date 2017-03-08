@@ -57,7 +57,10 @@ export const store = new Vuex.Store({
 
         // shipment schedule
         shipmentSchedule: [], // list of current shipment schedule with details
-        shipmentSummary: [] // list of daily summary of current shipment schedule
+        shipmentSummary: [], // list of daily summary of current shipment schedule
+
+        // purchase order
+        activePOList: []
     }
 });
 

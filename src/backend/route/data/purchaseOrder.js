@@ -10,13 +10,11 @@ const router = express.Router();
 
 router.route('/data/purchaseOrder')
     .all(tokenValidation)
-    .get(function(request, response, next) {
+    .get((request, response, next) => {
         const knex = require('knex')(serverConfig.mssqlConfig);
-        knex('rawMaterial.dbo.availablePOList')
+        knex('rawMaterial.dbo.ActivePurchaseOrder')
             .select('*')
             .orderBy('CUS_NO')
-            .orderBy('pONumber')
-            .orderBy('revisionNumber')
             .debug(false)
             .then((resultset) => {
                 const pOList = new Treeize();
@@ -31,7 +29,12 @@ router.route('/data/purchaseOrder')
                     }
                 });
                 pOList.grow(resultset);
-                return response.status(200).json({ pOList: pOList.getData() });
+                const tempList = pOList.getData();
+                tempList.forEach((purchaseOrder, index, array) => {
+                    array[index].supplier = purchaseOrder.suppliers[0];
+                    delete array[index].suppliers;
+                });
+                return response.status(200).json({ activePOList: tempList });
             }).catch((error) => {
                 return response.status(500).json(
                     utility.endpointErrorHandler(

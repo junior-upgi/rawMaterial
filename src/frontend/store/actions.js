@@ -25,6 +25,10 @@ export default {
                     workingMonth: context.state.workingMonth
                 },
                 headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/purchaseOrder`,
+                headers: { 'x-access-token': sessionStorage.token }
             }
             /*
             , {
@@ -65,14 +69,6 @@ export default {
                 params: {
                     workingYear: context.state.workingYear,
                     workingMonth: context.state.workingMonth
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/purchaseOrder`,
-                params: {
-                    workingMonth: context.state.workingMonth,
-                    workingYear: context.state.workingYear
                 },
                 headers: { 'x-access-token': sessionStorage.token }
             }

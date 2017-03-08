@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <h4>
                 <workingTimeSelector></workingTimeSelector>
-                &nbsp;採購訂單狀況
+                &nbsp;原料採購訂單狀況
             </h4>
         </div>
         <div class="table-responsive">
