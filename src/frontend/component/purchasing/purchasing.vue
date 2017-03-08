@@ -1,8 +1,10 @@
 <template>
-    <div class="text-center">
+    <div class="text-center col-xs-12 col-sm-10">
         <h2>採購模組</h2>
         <br>
+        <!--
         <pOOverview></pOOverview>
+        -->
         <div class="row">
             <div class="col-md-8">
                 <!--
@@ -43,13 +45,13 @@
 </template>
 
 <script>
-    import pOOverview from './pOOverview/pOOverview.vue';
+    // import pOOverview from './pOOverview/pOOverview.vue';
     // import shipmentOverview from './shipmentOverview.vue';
 
     export default {
         name: 'purchasing',
         components: {
-            pOOverview
+            // pOOverview
             // shipmentOverview
         }
     };

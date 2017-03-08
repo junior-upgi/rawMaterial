@@ -5,7 +5,7 @@
                 <workingTimeSelector
                     @workingTimeChange="dateInEditMode=null">
                 </workingTimeSelector>
-                &nbsp;進廠預約作業
+                &nbsp;原料批次進廠預約作業
             </h4>
         </div>
         <div class="panel-body">

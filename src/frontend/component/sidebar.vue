@@ -4,37 +4,40 @@
             v-if="role==='admin'"
             type="button"
             class="btn btn-default btn-block"
-            :class="{'btn-danger':role==='admin'}">
+            :class="{'btn-danger':activeView==='admin'}"
+            @click="forceViewChange('admin')">
             管理模組
         </button>
         <button
-            v-if="role==='admin'"
+            v-if="(role==='admin')||(role==='furnace')"
             type="button"
             class="btn btn-default btn-block"
-            :class="{'btn-danger':role==='furnace'}">
+            :class="{'btn-danger':activeView==='furnace'}"
+            @click="forceViewChange('furnace')">
             窯爐模組
         </button>
         <button
-            v-if="role==='admin'"
+            v-if="(role==='admin')||(role==='furnace')"
             type="button"
             class="btn btn-default btn-block">
             轉入廠單
         </button>
         <button
-            v-if="role==='admin'"
+            v-if="(role==='admin')||(role==='purchasing')"
             type="button"
             class="btn btn-default btn-block"
-            :class="{'btn-danger':role==='purchasing'}">
+            :class="{'btn-danger':activeView==='purchasing'}"
+            @click="forceViewChange('purchasing')">
             採購模組
         </button>
         <button
-            v-if="role==='admin'"
+            v-if="(role==='admin')||(role==='purchasing')"
             type="button"
             class="btn btn-default btn-block">
             開立訂單
         </button>
         <button
-            v-if="role==='admin'"
+            v-if="(role==='admin')||(role==='purchasing')"
             type="button"
             class="btn btn-default btn-block">
             訂單列印
@@ -47,7 +50,6 @@
             廠商模組
         </button>
         <button
-            v-if="role==='admin'"
             type="button"
             class="btn btn-default btn-block"
             @click="logout">
@@ -105,6 +107,7 @@
         },
         methods: {
             ...mapMutations({
+                forceViewChange: 'forceViewChange',
                 resetStore: 'resetStore'
             }),
             logout: function() {
@@ -131,7 +134,6 @@
             ...mapMutations({
                 changePOMode: 'changePOMode',
                 buildStore: 'buildStore',
-                forceViewChange: 'forceViewChange',
                 redirectUser: 'redirectUser',
                 resetStore: 'resetStore',
                 restoreToken: 'restoreToken',

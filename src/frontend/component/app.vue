@@ -18,9 +18,9 @@
     import sidebar from './sidebar.vue';
     import login from './login.vue';
     import admin from './admin/admin.vue';
-    /*
     import furnace from './furnace/furnace.vue';
     import purchasing from './purchasing/purchasing.vue';
+    /*
     import supplier from './userInterface/supplier.vue';
     import pOTemplate from './userInterface/purchaseOrder/pOTemplate.vue';
     */
@@ -31,7 +31,9 @@
         components: {
             sidebar,
             login,
-            admin
+            admin,
+            furnace,
+            purchasing
         },
         computed: { ...mapGetters({ activeView: 'activeView' }) },
         methods: {

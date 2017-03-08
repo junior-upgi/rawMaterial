@@ -1,8 +1,7 @@
 <template>
     <div class="text-center col-xs-12 col-sm-10">
-        <div class="row">
-            <h2>管理模組</h2>
-        </div>
+        <h2>管理模組</h2>
+        <br>
         <knownRawMaterial></knownRawMaterial>
     </div>
 </template>
