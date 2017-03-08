@@ -17,9 +17,7 @@ export default {
                 method: 'get',
                 url: `${serverUrl}/data/rawMaterial/knownList`,
                 headers: { 'x-access-token': sessionStorage.token }
-            }
-            /*
-            , {
+            }, {
                 method: 'get',
                 url: `${serverUrl}/data/shipment`,
                 params: {
@@ -27,7 +25,9 @@ export default {
                     workingMonth: context.state.workingMonth
                 },
                 headers: { 'x-access-token': sessionStorage.token }
-            }, {
+            }
+            /*
+            , {
                 method: 'get',
                 url: `${serverUrl}/data/shipment/summary`,
                 params: {
@@ -35,9 +35,7 @@ export default {
                     workingMonth: context.state.workingMonth
                 },
                 headers: { 'x-access-token': sessionStorage.token }
-            }
-            */
-            /* , {
+            }, {
                 method: 'get',
                 url: `${serverUrl}/data/shipment/overview`,
                 params: {

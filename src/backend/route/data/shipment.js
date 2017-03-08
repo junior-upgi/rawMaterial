@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const moment = require('moment-timezone');
+const Treeize = require('treeize');
 const uuidV4 = require('uuid/v4');
 const serverConfig = require('../../serverConfig.js');
 const tokenValidation = require('../../middleware/tokenValidation.js');
@@ -107,10 +108,6 @@ function shipmentSummary(knexObj, workingYear, workingMonth) {
 function shipmentSchedule(knexObj, workingYear, workingMonth) {
     return knexObj.select('*')
         .from('rawMaterial.dbo.shipmentSchedule')
-        .where({
-            workingYear: workingYear,
-            workingMonth: workingMonth
-        })
         .orderBy('PRD_NO')
         .orderBy('CUS_NO')
         .orderBy('workingDate');
@@ -143,7 +140,19 @@ router.route('/data/shipment')
         shipmentSchedule(knex, request.query.workingYear, request.query.workingMonth)
             .debug(false)
             .then((resultset) => {
-                return response.status(200).json({ shipmentSchedule: resultset });
+                const shipmentSchedule = new Treeize();
+                shipmentSchedule.setOptions({
+                    input: {
+                        detectCollection: false,
+                        uniformRows: true
+                    },
+                    output: {
+                        prune: false,
+                        objectOverwrite: false
+                    }
+                });
+                shipmentSchedule.grow(resultset);
+                return response.status(200).json({ shipmentSchedule: shipmentSchedule.getData() });
             })
             .catch((error) => {
                 return response.status(500).json(
@@ -244,10 +253,10 @@ router.route('/data/shipment')
         const knex = require('knex')(serverConfig.mssqlConfig);
         knex.transaction((trx) => {
             return trx('rawMaterial.dbo.shipment').delete().where({
-                id: request.body.id,
-                SQ_NO: request.body.SQ_NO,
-                SQ_ITM: request.body.SQ_ITM
-            }).debug(false)
+                    id: request.body.id,
+                    SQ_NO: request.body.SQ_NO,
+                    SQ_ITM: request.body.SQ_ITM
+                }).debug(false)
                 .then(() => {
                     return trx('DB_1111.dbo.TF_SQ').delete().where({
                         SQ_NO: request.body.SQ_NO,
