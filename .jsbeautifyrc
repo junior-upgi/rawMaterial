@@ -2,7 +2,8 @@
     "beautify.language": {
         "js": {
             "type": ["javascript", "json", "vue"],
-            "filename": [".jsbeautify"]
+            "filename": [".eslintrc", ".jsbeautify"],
+            "ext": ["js", "json", "vue"]
         },
         "css": ["css", "scss"],
         "html": ["htm", "html"]
