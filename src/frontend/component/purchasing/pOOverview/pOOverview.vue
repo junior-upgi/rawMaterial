@@ -3,7 +3,7 @@
         <div class="panel-heading">
             <h4>
                 <workingTimeSelector></workingTimeSelector>
-                &nbsp;原料採購訂單狀況
+                &nbsp;原料採購訂單概況
             </h4>
         </div>
         <div class="table-responsive">
@@ -18,13 +18,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--
                     <pOOverviewRecord
-                        v-for="material in workingMaterial"
-                        :material="material"
-                        :pOList="filterPOList(material.CUS_NO)">
+                        v-for="purchaseOrder in activePOList"
+                        :purchaseOrder="purchaseOrder"
+                        :revokePendingShipmentSchedule="filterRevokePendingSchedule(purchaseOrder.CUS_NO)"
+                        :unattendedShipmentSchedule="filterUnattendedSchedule(purchaseOrder.CUS_NO)">
                     </pOOverviewRecord>
-                    -->
                 </tbody>
             </table>
         </div>
@@ -32,33 +31,54 @@
 </template>
 
 <script>
-    import { mapActions, mapGetters, mapMutations } from 'vuex';
-    import workingTimeSelector from '../../common/workingTimeSelector.vue';
+    import { mapGetters } from 'vuex';
     import pOOverviewRecord from './pOOverviewRecord.vue';
+    import workingTimeSelector from '../../common/workingTimeSelector.vue';
 
     export default {
         name: 'pOOverview',
-        computed: {
-            ...mapGetters({ selectedRawMaterial: 'selectedRawMaterial' })
-        },
         components: {
-            workingTimeSelector,
-            pOOverviewRecord
+            pOOverviewRecord,
+            workingTimeSelector
+        },
+        computed: {
+            ...mapGetters({
+                activePOList: 'activePOList',
+                selectedRawMaterial: 'selectedRawMaterial',
+                shipmentSchedule: 'shipmentSchedule'
+            }),
+            revokePendingShipmentSchedule: function() {
+                return this.shipmentSchedule.filter((shipment) => {
+                    return (
+                        (shipment.deprecated !== null) &&
+                        (shipment.pOId !== null) &&
+                        (shipment.purchaseOrder.deprecated === null)
+                    );
+                });
+            },
+            unattendedShipmentSchedule: function() {
+                return this.shipmentSchedule.filter((shipment) => {
+                    return (
+                        (shipment.deprecated === null) &&
+                        (shipment.pOId === null)
+                    );
+                });
+            }
         },
         data: function() {
             return {
-                thList: ['編號', '年度', '日期', '廠商', '項目', '規格', '車次', '狀態']
+                thList: ['編號', '年度', '月份', '廠商', '規格項目', '狀態']
             };
         },
         methods: {
-            ...mapActions({ refreshPOShipmentListing: 'refreshPOShipmentListing' }),
-            ...mapMutations({
-                forceViewChange: 'forceViewChange',
-                switchPOWorkingSupplier: 'switchPOWorkingSupplier'
-            }),
-            filterPOList: function(CUS_NO) {
-                return this.pOList.filter((pOItem) => {
-                    return pOItem.CUS_NO === CUS_NO;
+            filterRevokePendingSchedule: function(CUS_NO) {
+                return this.revokePendingShipmentSchedule.filter((shipment) => {
+                    return shipment.CUS_NO === CUS_NO;
+                });
+            },
+            filterUnattendedSchedule: function(CUS_NO) {
+                return this.unattendedShipmentSchedule.filter((shipment) => {
+                    return shipment.CUS_NO === CUS_NO;
                 });
             }
         }
