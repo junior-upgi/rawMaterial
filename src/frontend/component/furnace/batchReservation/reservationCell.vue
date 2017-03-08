@@ -13,19 +13,25 @@
                 </reservationInput>
             </div>
             <span
-                v-if="shipment.receivedCount>0"
-                class="label label-warning col-xs-12"
-                style="padding:10px 0px 10px 0px;margin-bottom:5px;">
-                已進廠車次: {{shipment.receivedCount}}
+                v-if="receivedCount>0"
+                class="label label-default col-xs-12"
+                style="padding:5px 0px 5px 0px;margin-bottom:5px;">
+                已進廠車次: {{receivedCount}}
             </span>
-            <cancelPO
-                v-if="(shipment.shipmentCount-shipment.receivedCount)>0 && shipment.OS_NO!==null"
-                :shipment="shipment">
-            </cancelPO>
-            <cancelReservation
-                v-if="(shipment.shipmentCount-shipment.receivedCount)>0 && shipment.OS_NO===null"
-                :shipment="shipment">
-            </cancelReservation>
+            <pendingShipment
+                v-if="pendingShipmentSchedule.length > 0"
+                :shipmentSchedule="pendingShipmentSchedule">
+            </pendingShipment>
+            <pOPendingShipment
+                v-if="pOPendingShipmentSchedule.length > 0"
+                :shipmentSchedule="pOPendingShipmentSchedule">
+            </pOPendingShipment>
+            <span
+                v-if="revokedShipmentSchedule.length>0"
+                class="label label-default col-xs-12"
+                style="padding:5px 0px 5px 0px;">
+                待取消車次: {{revokedShipmentSchedule.length}}
+            </span>
         </div>
     </div>
 </template>
@@ -34,25 +40,94 @@
     import moment from 'moment-timezone';
     import { mapGetters } from 'vuex';
     import reservationInput from './reservationInput.vue';
-    import cancelPO from './cancelPO.vue';
-    import cancelReservation from './cancelReservation.vue';
+    import pendingShipment from './pendingShipment.vue';
+    import pOPendingShipment from './pOPendingShipment.vue';
 
     export default {
         name: 'reservationCell',
         components: {
-            cancelReservation,
-            cancelPO,
-            reservationInput
+            reservationInput,
+            pendingShipment,
+            pOPendingShipment
         },
         props: [
             'cellDateString',
-            'shipment'
+            'shipmentSchedule'
         ],
         computed: {
             ...mapGetters({
-                processingData: 'checkDataProcessingState',
-                role: 'role'
-            })
+                role: 'role',
+                selectedRawMaterial: 'selectedRawMaterial',
+                workingMonth: 'workingMonth',
+                workingYear: 'workingYear'
+            }),
+            receivedCount: function() {
+                let receivedShipmentList = this.shipmentSchedule.filter((shipment) => {
+                    return (
+                        (shipment.receivedDate !== null) &&
+                        (shipment.supplierWeight !== null) &&
+                        (shipment.actualWeight !== null) &&
+                        (this.selectedRawMaterial.CUS_NO === shipment.CUS_NO) &&
+                        (this.selectedRawMaterial.PRD_NO === shipment.PRD_NO) &&
+                        (this.selectedRawMaterial.typeId === shipment.typeId) &&
+                        (this.workingYear === parseInt(moment.utc(new Date(shipment.workingDate)).format('YYYY'))) &&
+                        (this.workingMonth === parseInt(moment.utc(new Date(shipment.workingDate)).format('MM')))
+                    );
+                });
+                return receivedShipmentList.length;
+            },
+            pOPendingShipmentSchedule: function() {
+                let pOPendingList = this.shipmentSchedule.filter((shipment) => {
+                    return (
+                        (shipment.receivedDate === null) &&
+                        (shipment.supplierWeight === null) &&
+                        (shipment.actualWeight === null) &&
+                        (shipment.deprecated === null) &&
+                        (shipment.pOId === null) &&
+                        (this.selectedRawMaterial.CUS_NO === shipment.CUS_NO) &&
+                        (this.selectedRawMaterial.PRD_NO === shipment.PRD_NO) &&
+                        (this.selectedRawMaterial.typeId === shipment.typeId) &&
+                        (this.workingYear === parseInt(moment.utc(new Date(shipment.workingDate)).format('YYYY'))) &&
+                        (this.workingMonth === parseInt(moment.utc(new Date(shipment.workingDate)).format('MM')))
+                    );
+                });
+                return pOPendingList;
+            },
+            pendingShipmentSchedule: function() {
+                let pendingList = this.shipmentSchedule.filter((shipment) => {
+                    return (
+                        (shipment.receivedDate === null) &&
+                        (shipment.supplierWeight === null) &&
+                        (shipment.actualWeight === null) &&
+                        (shipment.deprecated === null) &&
+                        (shipment.pOId !== null) &&
+                        (this.selectedRawMaterial.CUS_NO === shipment.CUS_NO) &&
+                        (this.selectedRawMaterial.PRD_NO === shipment.PRD_NO) &&
+                        (this.selectedRawMaterial.typeId === shipment.typeId) &&
+                        (this.workingYear === parseInt(moment.utc(new Date(shipment.workingDate)).format('YYYY'))) &&
+                        (this.workingMonth === parseInt(moment.utc(new Date(shipment.workingDate)).format('MM')))
+                    );
+                });
+                return pendingList;
+            },
+            revokedShipmentSchedule: function() {
+                let revokedList = this.shipmentSchedule.filter((shipment) => {
+                    return (
+                        (shipment.receivedDate === null) &&
+                        (shipment.supplierWeight === null) &&
+                        (shipment.actualWeight === null) &&
+                        (shipment.deprecated !== null) &&
+                        (shipment.pOId !== null) &&
+                        (shipment.purchaseOrder.deprecated === null) &&
+                        (this.selectedRawMaterial.CUS_NO === shipment.CUS_NO) &&
+                        (this.selectedRawMaterial.PRD_NO === shipment.PRD_NO) &&
+                        (this.selectedRawMaterial.typeId === shipment.typeId) &&
+                        (this.workingYear === parseInt(moment.utc(new Date(shipment.workingDate)).format('YYYY'))) &&
+                        (this.workingMonth === parseInt(moment.utc(new Date(shipment.workingDate)).format('MM')))
+                    );
+                });
+                return revokedList;
+            }
         },
         data: function() {
             return {

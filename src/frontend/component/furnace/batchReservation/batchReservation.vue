@@ -28,7 +28,7 @@
                             <reservationCell
                                 v-if="checkVisibility(weekIndex,weekdayIndex)"
                                 :cellDateString="cellDate(weekIndex,weekdayIndex)"
-                                :shipment="filterShipmentSchedule(cellDate(weekIndex,weekdayIndex))">
+                                :shipmentSchedule="filterShipmentSchedule(cellDate(weekIndex,weekdayIndex))">
                             </reservationCell>
                         </td>
                     </tr>
@@ -102,7 +102,7 @@
                 );
             },
             filterShipmentSchedule: function(dateString) {
-                const filteredShipmentSchedule = this.shipmentSchedule.filter((shipment) => {
+                return this.shipmentSchedule.filter((shipment) => {
                     return (
                         (shipment.workingDate === dateString) &&
                         (shipment.CUS_NO === this.selectedRawMaterial.CUS_NO) &&
@@ -110,15 +110,6 @@
                         (shipment.typeId === this.selectedRawMaterial.typeId)
                     );
                 });
-                if (filteredShipmentSchedule.length <= 1) {
-                    return (filteredShipmentSchedule.length === 1) ? filteredShipmentSchedule[0] : [];
-                } else {
-                    this.componentErrorHandler({
-                        component: 'batchReservation',
-                        method: 'filterShipmentSchedule',
-                        situation: 'filtered result yielded more than one shipment'
-                    });
-                }
             }
         }
     };

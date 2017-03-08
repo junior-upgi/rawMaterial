@@ -46,7 +46,10 @@ SELECT
 FROM rawMaterial.dbo.shipment a
     LEFT JOIN rawMaterial.dbo.purchaseOrder b ON a.pOId=b.id
     LEFT JOIN rawMaterial.dbo.rawMaterialSpecDetail c ON (a.CUS_NO=c.CUS_NO) AND (a.PRD_NO=c.PRD_NO) AND (a.typeId=c.typeId)
-WHERE a.deprecated IS NULL;
+WHERE (
+    (a.deprecated IS NULL) OR
+    ((a.deprecated IS NOT NULL) AND (b.deprecated IS NULL))
+);
 
 /*
 SELECT

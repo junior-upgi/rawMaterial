@@ -3,6 +3,3 @@ build/**
 node_modules/**
 bower_components/**
 deprecated/**
-settings.json
-editor.json
-vscode-extensions.json

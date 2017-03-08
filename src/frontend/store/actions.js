@@ -204,56 +204,9 @@ export default {
         };
         return axios(requestOption);
     },
-    shipmentReservation: function(context, payload) {
-        // console.log(payload);
-        const requestOption = {};
-        const recordData = {};
-        return new Promise(function(resolve, reject) {
-            switch (payload.processType) { // processType valid values: 'new', 'update', 'append'
-                case 'new':
-                    recordData.SQ_NO = payload.SQ_NO;
-                    recordData.contractType = payload.contractType;
-                    recordData.requestDate = payload.requestDate;
-                    recordData.CUS_NO = payload.CUS_NO;
-                    recordData.PRD_NO = payload.PRD_NO;
-                    recordData.typeId = payload.typeId;
-                    recordData.PRDT_SNM = payload.PRDT_SNM;
-                    recordData.qtyPerShipment = payload.qtyPerShipment;
-                    recordData.unitPrice = payload.unitPrice;
-                    recordData.currency = payload.currency;
-                    recordData.shipmentCount = payload.shipmentCount;
-                    recordData.workingMonth = payload.workingMonth;
-                    recordData.workingYear = payload.workingYear;
-                    requestOption.method = 'post';
-                    requestOption.url = `${serverUrl}/data/shipment`;
-                    requestOption.data = recordData;
-                    requestOption.headers = { 'x-access-token': sessionStorage.token };
-                    return resolve(axios(requestOption));
-                case 'update':
-                    return resolve('shipment updated');
-                case 'append':
-                    return resolve('shipment appended');
-                default:
-                    return reject(`進貨作業類型異常${payload.processType}`);
-            }
-        });
-    },
-    cancelShipment: function(context, payload) {
-        const requestOption = {
-            method: 'delete',
-            url: `${serverUrl}/data/shipment`,
-            data: {
-                id: payload.id,
-                SQ_NO: payload.SQ_NO,
-                SQ_ITM: payload.SQ_ITM,
-                workingMonth: context.state.workingMonth,
-                workingYear: context.state.workingYear
-            },
-            headers: { 'x-access-token': sessionStorage.token }
-        };
-        return axios(requestOption);
-    },
-    componentErrorHandler: componentErrorHandler
+    cancelShipment: cancelShipment,
+    componentErrorHandler: componentErrorHandler,
+    shipmentReservation: shipmentReservation
 };
 
 function startingDate(contractType, workingYear, workingMonth) {
@@ -318,4 +271,31 @@ function componentErrorHandler(context, errorObject) {
             }
             context.commit('resetStore');
         });
+}
+
+function shipmentReservation(context, payload) {
+    const requestOption = {
+        method: 'post',
+        url: `${serverUrl}/data/shipment`,
+        data: {
+            requestDate: payload.requestDate,
+            CUS_NO: payload.CUS_NO,
+            PRD_NO: payload.PRD_NO,
+            typeId: payload.typeId,
+            qtyPerShipment: payload.qtyPerShipment,
+            shipmentCount: payload.shipmentCount
+        },
+        headers: { 'x-access-token': sessionStorage.token }
+    };
+    return axios(requestOption);
+}
+
+function cancelShipment(context, payload) {
+    const requestOption = {
+        method: 'delete',
+        url: `${serverUrl}/data/shipment`,
+        data: { targetList: payload.targetList },
+        headers: { 'x-access-token': sessionStorage.token }
+    };
+    return axios(requestOption);
 }

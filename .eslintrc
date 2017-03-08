@@ -4,7 +4,7 @@
         "eslint-config-google",
         "plugin:node/recommended"
     ],
-    "plugins": ["html", "json", "node", "vue"],
+    "plugins": ["html", "node", "vue"],
     "settings": {
         "html/html-extensions": [".html", ".vue"],
         "html/indent": "+4",
