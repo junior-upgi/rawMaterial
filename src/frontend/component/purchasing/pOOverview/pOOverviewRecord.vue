@@ -1,13 +1,24 @@
 <template>
     <tr>
         <td>
-            {{purchaseOrder.pONumber}} 版本: {{purchaseOrder.revisionNumber}}
+            <span style="white-space:nowrap;">{{purchaseOrder.pONumber}} 版本: {{purchaseOrder.revisionNumber}}</span>
             <span v-if="matterPending" class="label label-danger">(需要更新)</span>
+            <span v-if="!matterPending" class="label label-danger">(最新版本)</span>
         </td>
         <td>{{purchaseOrder.workingYear}}</td>
         <td>{{purchaseOrder.workingMonth}}</td>
         <td>{{purchaseOrder.supplier.SNM}}</td>
-        <td></td>
+        <td>
+            <ul class="list-group" style="margin:0px;">
+                <li v-for="(summaryItem,index) in pOContentSummary"
+                    class="list-group-item text-left"
+                    style="border:0px;margin:0px;padding:0px 5px 0px 5px;">
+                    <div style="white-space:nowrap;">{{index+1}}. {{summaryItem.PRDT_SNM}}【{{summaryItem.specification}}】</div>
+                    <div style="white-space:nowrap;">&nbsp;&nbsp;&nbsp;&nbsp;入廠車次： {{summaryItem.requestShipmentCount-summaryItem.pendingShipmentCount}} / {{summaryItem.requestShipmentCount}}</div>
+                    <div style="white-space:nowrap;">&nbsp;&nbsp;&nbsp;&nbsp;進貨重量： {{summaryItem.totalReceivedWeight|tonnage}} / {{summaryItem.totalRequestedWeight|tonnage}}</div>
+                </li>
+            </ul>
+        </td>
         <td>
             <orderStatus
                 :revokePendingShipmentSchedule="filterRevokePendingSchedule(purchaseOrder.workingYear,purchaseOrder.workingMonth)"
@@ -15,28 +26,12 @@
                 @pendingMatterExist="matterPending=true">
             </orderStatus>
         </td>
-        <!--
-        <pODisplayCell :pOList="pOList" :CUS_NO="material.CUS_NO"></pODisplayCell>
-        <td style="white-space:nowrap;">{{material.CUS_SNM}}</td>
-        <td style="white-space:nowrap;">{{material.PRDT_SNM}}</td>
-        <supplyingSpecList :CUS_NO="material.CUS_NO"></supplyingSpecList>
-        <td>
-            <span style="white-space:nowrap;">2017-02-07 08:00</span>
-            <span style="white-space:nowrap;">
-                <span class="glyphicon glyphicon-question-sign">待確認</span>
-                <span class="glyphicon glyphicon-ok-sign">已確認</span>
-            </span>
-        </td>
-        <td>
-            <span style="white-space:nowrap;">2017-02-08 19:30</span>&nbsp;
-            <button class="btn btn-xs btn-danger">修改訂單</button>
-        </td>
-        -->
     </tr>
 </template>
 
 <script>
     import moment from 'moment-timezone';
+    import numeral from 'numeral';
     import orderStatus from './orderStatus.vue';
     // import supplyingSpecList from './supplyingSpecList.vue';
     // import pODisplayCell from './pODisplayCell.vue';
@@ -49,6 +44,7 @@
             // pODisplayCell
         },
         props: [
+            'pOContentSummary',
             'purchaseOrder',
             'revokePendingShipmentSchedule',
             'unattendedShipmentSchedule'
@@ -74,6 +70,11 @@
                         (workingMonth === parseInt(moment.utc(new Date(shipment.workingDate)).format('M')))
                     );
                 });
+            }
+        },
+        filters: {
+            tonnage: function(value) {
+                return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
             }
         }
     };

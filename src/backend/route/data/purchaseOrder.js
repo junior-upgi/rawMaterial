@@ -8,6 +8,23 @@ const tokenValidation = require('../../middleware/tokenValidation.js');
 
 const router = express.Router();
 
+router.get('/data/purchaseOrder/contentSummary', tokenValidation, (request, response, next) => {
+    const knex = require('knex')(serverConfig.mssqlConfig);
+    knex('rawMaterial.dbo.pOContentSummary').select('*').debug(false)
+        .then((resultset) => {
+            return response.status(200).json({ pOContentSummary: resultset });
+        }).catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `訂單預約進貨細節資料讀取發生錯誤: ${error}`)
+            );
+        }).finally(() => {
+            knex.destroy();
+        });
+});
+
 router.route('/data/purchaseOrder')
     .all(tokenValidation)
     .get((request, response, next) => {

@@ -45,6 +45,7 @@ function emptyStoreValue(state) {
 
     // purchase order
     state.activePOList = [];
+    state.pOContentSummary = [];
 }
 
 export default {

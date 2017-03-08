@@ -1,10 +1,12 @@
 <template>
     <ul class="list-group" style="margin:0px;">
-        <li class="list-group-item text-left" style="border:0px;margin:0px;padding:0px 5px 0px 5px;">
-            同期未下單項目<span class="badge">{{unattendedShipmentSchedule.length}}</span>
+        <li class="list-group-item text-left"
+            style="border:0px;margin:0px;padding:0px 5px 0px 5px;white-space:nowrap;">
+            <span class="label label-danger">同期未下單項目: {{unattendedShipmentSchedule.length}}</span>
         </li>
-        <li class="list-group-item text-left" style="border:0px;margin:0px;padding:0px 5px 0px 5px;">
-            同期待取消項目<span class="badge">{{revokePendingShipmentSchedule.length}}</span>
+        <li class="list-group-item text-left"
+            style="border:0px;margin:0px;padding:0px 5px 0px 5px;white-space:nowrap;">
+            <span class="label label-danger">同期待取消項目: {{revokePendingShipmentSchedule.length}}</span>
         </li>
     </ul>
 </template>
@@ -26,6 +28,11 @@
             }
         },
         mounted: function() {
+            if (this.pendingMatterExist) {
+                this.$emit('pendingMatterExist');
+            }
+        },
+        updated: function() {
             if (this.pendingMatterExist) {
                 this.$emit('pendingMatterExist');
             }

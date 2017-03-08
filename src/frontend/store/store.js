@@ -60,7 +60,8 @@ export const store = new Vuex.Store({
         shipmentSummary: [], // list of daily summary of current shipment schedule
 
         // purchase order
-        activePOList: []
+        activePOList: [],
+        pOContentSummary: []
     }
 });
 

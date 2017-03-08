@@ -51,13 +51,14 @@ export default {
     rawMaterialList: function(state) { return state.rawMatList; },
     supplierList: function(state) { return state.supplierList; },
     // schedule data
-    filteredShipmentScheduleByCusNo: filteredShipmentScheduleByCusNo,
-    filteredShipmentScheduleByPrdNo: filteredShipmentScheduleByPrdNo,
-    filteredShipmentSummaryByPrdNo: filteredShipmentSummaryByPrdNo,
+    // filteredShipmentScheduleByCusNo: filteredShipmentScheduleByCusNo,
+    // filteredShipmentScheduleByPrdNo: filteredShipmentScheduleByPrdNo,
+    // filteredShipmentSummaryByPrdNo: filteredShipmentSummaryByPrdNo,
     shipmentSchedule: function(state) { return state.shipmentSchedule; },
     shipmentSummary: function(state) { return state.shipmentSummary; },
     // purchase order
-    activePOList: function(state) { return state.activePOList; }
+    activePOList: function(state) { return state.activePOList; },
+    pOContentSummary: function(state) { return state.pOContentSummary; }
 };
 
 function activeView(state) {
@@ -68,6 +69,18 @@ function activeView(state) {
     }
 }
 
+function selectedRawMaterial(state) {
+    return state.rawMatList[state.selectedRawMatIndex];
+}
+
+function workingSupplierDetail(state) {
+    let workingSupplierDetail = state.supplierList.filter((supplier) => {
+        return supplier.CUS_NO === state.rawMatList[state.selectedRawMatIndex].CUS_NO;
+    });
+    return workingSupplierDetail[0];
+}
+
+/*
 function filteredShipmentScheduleByCusNo(state) {
     let list = state.shipmentSchedule.filter((shipmentScheduleItem) => {
         return shipmentScheduleItem.CUS_NO === state.rawMatList[state.selectedRawMatIndex].CUS_NO;
@@ -96,14 +109,4 @@ function filteredShipmentSummaryByPrdNo(state) {
     }
     return [];
 }
-
-function selectedRawMaterial(state) {
-    return state.rawMatList[state.selectedRawMatIndex];
-}
-
-function workingSupplierDetail(state) {
-    let workingSupplierDetail = state.supplierList.filter((supplier) => {
-        return supplier.CUS_NO === state.rawMatList[state.selectedRawMatIndex].CUS_NO;
-    });
-    return workingSupplierDetail[0];
-}
+*/

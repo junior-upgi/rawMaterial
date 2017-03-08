@@ -50,4 +50,4 @@ FROM rawMaterial.dbo.purchaseOrder a
     LEFT JOIN rawMaterial.dbo.shipment b ON a.id=b.pOId
     LEFT JOIN rawMaterial.dbo.supplier c ON a.CUS_NO=c.CUS_NO
     LEFT JOIN rawMaterial.dbo.rawMaterialSpecDetail d ON (b.CUS_NO=d.CUS_NO) AND (b.PRD_NO=d.PRD_NO) AND (b.typeId=d.typeId)
-WHERE a .deprecated IS NULL;
+WHERE a.deprecated IS NULL;

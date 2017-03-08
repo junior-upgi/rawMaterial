@@ -21,6 +21,7 @@
                     <pOOverviewRecord
                         v-for="purchaseOrder in activePOList"
                         :purchaseOrder="purchaseOrder"
+                        :pOContentSummary="filterPOContentSummary(purchaseOrder.id)"
                         :revokePendingShipmentSchedule="filterRevokePendingSchedule(purchaseOrder.CUS_NO)"
                         :unattendedShipmentSchedule="filterUnattendedSchedule(purchaseOrder.CUS_NO)">
                     </pOOverviewRecord>
@@ -44,6 +45,7 @@
         computed: {
             ...mapGetters({
                 activePOList: 'activePOList',
+                pOContentSummary: 'pOContentSummary',
                 selectedRawMaterial: 'selectedRawMaterial',
                 shipmentSchedule: 'shipmentSchedule'
             }),
@@ -79,6 +81,11 @@
             filterUnattendedSchedule: function(CUS_NO) {
                 return this.unattendedShipmentSchedule.filter((shipment) => {
                     return shipment.CUS_NO === CUS_NO;
+                });
+            },
+            filterPOContentSummary: function(pOId) {
+                return this.pOContentSummary.filter((summaryItem) => {
+                    return summaryItem.pOId === pOId;
                 });
             }
         }

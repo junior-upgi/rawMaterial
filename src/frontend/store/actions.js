@@ -29,6 +29,10 @@ export default {
                 method: 'get',
                 url: `${serverUrl}/data/purchaseOrder`,
                 headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/purchaseOrder/contentSummary`,
+                headers: { 'x-access-token': sessionStorage.token }
             }
             /*
             , {
