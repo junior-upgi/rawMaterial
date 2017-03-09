@@ -2,6 +2,7 @@
     <select
         class="form-control"
         v-model="selectedIndex"
+        :disabled="dataProcessingState?true:false"
         @change="rawMaterialSelected()">
         <option
             v-for="(rawMaterial,index) in rawMaterialList"
@@ -17,6 +18,7 @@
         name: 'workingMaterialSelector',
         computed: {
             ...mapGetters({
+                dataProcessingState: 'checkDataProcessingState',
                 rawMaterialList: 'rawMaterialList',
                 selectedRawMatIndex: 'selectedRawMatIndex'
             })

@@ -1,10 +1,16 @@
 <template>
     <span>
-        <button class="btn btn-primary" style="border:0px;" @click="prevMonth">
+        <button
+            class="btn btn-primary" style="border:0px;"
+            :disabled="dataProcessingState?true:false"
+            @click="prevMonth">
             <span class="glyphicon glyphicon-triangle-left"></span>
         </button>
         &nbsp;{{workingYear}} 年 {{workingMonth}} 月份
-        <button class="btn btn-primary" style="border:0px;" @click="nextMonth">
+        <button
+            class="btn btn-primary" style="border:0px;"
+            :disabled="dataProcessingState?true:false"
+            @click="nextMonth">
             <span class="glyphicon glyphicon-triangle-right"></span>
         </button>
     </span>
@@ -16,6 +22,7 @@
         name: 'workingTimeSelector',
         computed: {
             ...mapGetters({
+                dataProcessingState: 'checkDataProcessingState',
                 workingMonth: 'workingMonth',
                 workingYear: 'workingYear'
             })

@@ -4,6 +4,7 @@
             v-if="role==='admin'"
             type="button"
             class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
             :class="{'btn-danger':activeView==='admin'}"
             @click="forceViewChange('admin')">
             管理模組
@@ -12,6 +13,7 @@
             v-if="(role==='admin')||(role==='furnace')"
             type="button"
             class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
             :class="{'btn-danger':activeView==='furnace'}"
             @click="forceViewChange('furnace')">
             窯爐模組
@@ -19,6 +21,7 @@
         <button
             v-if="(role==='admin')||(role==='furnace')"
             type="button"
+            :disabled="dataProcessingState?true:false"
             class="btn btn-default btn-block">
             轉入廠單
         </button>
@@ -26,6 +29,7 @@
             v-if="(role==='admin')||(role==='purchasing')"
             type="button"
             class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
             :class="{'btn-danger':activeView==='purchasing'}"
             @click="forceViewChange('purchasing')">
             採購模組
@@ -33,18 +37,21 @@
         <button
             v-if="(role==='admin')||(role==='purchasing')"
             type="button"
+            :disabled="dataProcessingState?true:false"
             class="btn btn-default btn-block">
             開立訂單
         </button>
         <button
             v-if="(role==='admin')||(role==='purchasing')"
             type="button"
+            :disabled="dataProcessingState?true:false"
             class="btn btn-default btn-block">
             訂單列印
         </button>
         <button
             v-if="role==='admin'"
             type="button"
+            :disabled="dataProcessingState?true:false"
             class="btn btn-default btn-block"
             :class="{'btn-danger':role==='supplier'}">
             廠商模組
@@ -52,6 +59,7 @@
         <button
             type="button"
             class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
             @click="logout">
             登出系統
         </button>
@@ -102,6 +110,7 @@
         computed: {
             ...mapGetters({
                 activeView: 'activeView',
+                dataProcessingState: 'checkDataProcessingState',
                 role: 'role'
             })
         },

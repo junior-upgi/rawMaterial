@@ -29,7 +29,7 @@ router.post('/login', (request, response) => {
             // continue to check if user has rights to access the website of the system selected
             const knex = require('knex')(serverConfig.mssqlConfig);
             knex.select('*')
-                .from('rawMaterial.dbo.privilegeDetail')
+                .from('rawMaterial.dbo.privilegeDetail').debug(false)
                 .where({ SAL_NO: loginId })
                 .then((resultset) => {
                     if (resultset.length === 0) {
