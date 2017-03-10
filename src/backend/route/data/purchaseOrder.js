@@ -91,7 +91,7 @@ router.route('/data/purchaseOrder')
             return trx.insert(newPOEntry).into('rawMaterial.dbo.purchaseOrder').debug(false)
                 .then(() => {
                     // create by copying valid shipments and attach to the new PO
-                    return trx.raw('INSERT INTO rawMaterial.dbo.shipment (pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated) SELECT ? AS pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated FROM rawMaterial.dbo.shipment WHERE pOId=? AND deprecated IS NULL;', [newPOId, request.body.targetPO.id]);
+                    return trx.raw('INSERT INTO rawMaterial.dbo.shipment (pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated) SELECT ? AS pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated FROM rawMaterial.dbo.shipment WHERE pOId=? AND deprecated IS NULL;', [newPOId, request.body.targetPO.id]).debug(false);
                 }).then(() => {
                     // deprecate the original valid shipment entries
                     return trx('rawMaterial.dbo.shipment')
@@ -102,7 +102,9 @@ router.route('/data/purchaseOrder')
                     let queryList = [];
                     request.body.pendingOrderList.forEach((pendingShipment) => {
                         queryList.push(
-                            trx('rawMaterial.dbo.shipment').update({ pOId: newPOId }).where({ id: pendingShipment.id }).debug(false)
+                            trx('rawMaterial.dbo.shipment')
+                            .update({ pOId: newPOId })
+                            .where({ id: pendingShipment.id }).debug(false)
                         );
                     });
                     return Promise.all(queryList);
@@ -110,7 +112,10 @@ router.route('/data/purchaseOrder')
                     // deprecate the old purchase order
                     return trx('rawMaterial.dbo.purchaseOrder')
                         .update({ deprecated: moment.utc(new Date()).format('YYYY-MM-DD hh:mm:ss') })
-                        .where({ id: request.body.targetPO.id });
+                        .where({ id: request.body.targetPO.id }).debug(false);
+                }).then(() => {
+                    // remove PO that does not have any valid shipment attached (e.g. all shipments were cancelled)
+                    return trx.raw('UPDATE a SET deprecated=? FROM rawMaterial.dbo.purchaseOrder a LEFT JOIN rawMaterial.dbo.shipment b ON a.id=b.pOId WHERE a.deprecated IS NULL AND b.id IS NULL;', [moment.utc(new Date()).format('YYYY-MM-DD hh:mm:ss')]).debug(false);
                 }).then(() => {
                     // get a set of fresh shipment data
                     return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
