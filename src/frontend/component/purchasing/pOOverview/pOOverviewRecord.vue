@@ -7,10 +7,10 @@
                 type="button"
                 class="btn btn-danger btn-xs"
                 :disabled="dataProcessingState?true:false"
-                @click="updatePO(purchaseOrder)">
-                (需要更新)
+                @click="updatePO()">
+                更新訂單
             </button>
-            <span v-if="!matterPending" class="label label-primary">(最新版本)</span>
+            <span v-if="!matterPending">(最新版本)</span>
         </td>
         <td>{{purchaseOrder.workingYear}}</td>
         <td>{{purchaseOrder.workingMonth}}</td>
@@ -21,8 +21,13 @@
                     class="list-group-item text-left"
                     style="border:0px;margin:0px;padding:0px 5px 0px 5px;">
                     <div style="white-space:nowrap;">{{index+1}}. {{summaryItem.PRDT_SNM}}【{{summaryItem.specification}}】</div>
-                    <div style="white-space:nowrap;">&nbsp;&nbsp;&nbsp;&nbsp;入廠車次： {{summaryItem.requestShipmentCount-summaryItem.pendingShipmentCount}} / {{summaryItem.requestShipmentCount}}</div>
-                    <div style="white-space:nowrap;">&nbsp;&nbsp;&nbsp;&nbsp;進貨重量： {{summaryItem.totalReceivedWeight|tonnage}} / {{summaryItem.totalRequestedWeight|tonnage}}</div>
+                    <div style="white-space:nowrap;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;入廠車次：
+                        {{summaryItem.requestShipmentCount - (summaryItem.pendingShipmentCount===null?0:summaryItem.pendingShipmentCount)}} / {{summaryItem.requestShipmentCount}}</div>
+                    <div style="white-space:nowrap;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;進貨重量：
+                        {{summaryItem.totalReceivedWeight|tonnage}} / {{summaryItem.totalRequestedWeight|tonnage}}
+                    </div>
                 </li>
             </ul>
         </td>
@@ -90,15 +95,14 @@
                     );
                 });
             },
-            updatePO: function(poObject) {
+            updatePO: function() {
                 this.processingDataSwitch(true);
-                console.log();
                 this.updatePurchaseOrder({
                         targetPO: this.purchaseOrder,
                         pendingOrderList: this.filterUnattendedSchedule(this.purchaseOrder.workingYear, this.purchaseOrder.workingMonth)
                     }).then((resultset) => {
-                        console.log(resultset.data);
-                        // this.rebuildData(resultset.data);
+                        this.rebuildData(resultset.data);
+                        this.matterPending = false;
                         this.processingDataSwitch(false);
                     }).catch((error) => {
                         this.componentErrorHandler({

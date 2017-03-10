@@ -36,8 +36,7 @@ FROM (
                     END AS 'workingDate'
             FROM rawMaterial.dbo.shipment a
                 LEFT JOIN rawMaterial.dbo.supplier b ON a.CUS_NO=b.CUS_NO
-                LEFT JOIN rawMaterial.dbo.purchaseOrder c ON a.pOId=c.id
-            WHERE a.deprecated IS NULL AND a.receivedDate IS NULL AND c.deprecated IS NULL) d) e
+            WHERE a.pOId IS NULL AND a.deprecated IS NULL AND a.receivedDate IS NULL) d) e
     GROUP BY e.CUS_NO,e.contractType,e.workingYear,e.workingMonth) f
     LEFT JOIN rawMaterial.dbo.CUST g ON f.CUS_NO=g.CUS_NO;
 

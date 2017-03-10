@@ -6,7 +6,7 @@ const utility = require('../../utility.js');
 const router = express.Router();
 
 router.get('/data/rawMaterial', tokenValidation, (request, response) => {
-    const knex = require('knex')(serverConfig.mssqlConfig);
+    let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*').from('rawMaterial.dbo.rawMaterialSpecDetail').orderBy('sequentialIndex').debug(false)
         .then((resultset) => {
             return response.status(200).json({ rawMatList: resultset });
@@ -25,7 +25,7 @@ router.get('/data/rawMaterial', tokenValidation, (request, response) => {
 });
 
 router.get('/data/rawMaterial/knownList', tokenValidation, (request, response) => {
-    const knex = require('knex')(serverConfig.mssqlConfig);
+    let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*').from('rawMaterial.dbo.knownRawMatDetail').debug(false)
         .then((resultset) => {
             return response.status(200).json({ rawMatTypeList: resultset });

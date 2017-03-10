@@ -1,14 +1,16 @@
 <template>
     <td colspan="2" class="text-left">
-        <template v-for="(requestedMaterial,PRD_NO) in requestList">
-            <template v-for="(requestedMatType,typeId) in requestedMaterial">
-                <div>
-                    <span>{{requestedMatType.length}}</span> 車
-                    <span>{{getRawMaterialSNM(PRD_NO)}}</span>
-                    <span>【{{getRawMaterialSpec(requestSummary.CUS_NO,PRD_NO,typeId)}}】</span>
-                </div>
+        <ul style="margin:0px 0px 0px 20px;padding:0px">
+            <template v-for="(requestedMaterial,PRD_NO) in requestList">
+                <template v-for="(requestedMatType,typeId) in requestedMaterial">
+                    <li v-if="requestedMatType.length > 0"
+                        style="margin:0px;padding:0px">
+                        <span>{{requestedMatType.length}} 車{{getRawMaterialSNM(PRD_NO)}}</span>
+                        <span>【{{getRawMaterialSpec(requestSummary.CUS_NO,PRD_NO,typeId)}}】</span>
+                    </li>
+                </template>
             </template>
-        </template>
+        </ul>
     </td>
 </template>
 

@@ -188,6 +188,7 @@ export default {
     componentErrorHandler: componentErrorHandler,
     shipmentReservation: shipmentReservation,
     updatePurchaseOrder: updatePurchaseOrder,
+    createPurchaseOrder: createPurchaseOrder,
     nextWorkingMonth: nextWorkingMonth,
     prevWorkingMonth: prevWorkingMonth,
     setWorkingTime: setWorkingTime
@@ -294,6 +295,16 @@ function cancelShipment(context, payload) {
 function updatePurchaseOrder(context, payload) {
     const requestOption = {
         method: 'put',
+        url: `${serverUrl}/data/purchaseOrder`,
+        data: payload,
+        headers: { 'x-access-token': sessionStorage.token }
+    };
+    return axios(requestOption);
+}
+
+function createPurchaseOrder(context, payload) {
+    const requestOption = {
+        method: 'post',
         url: `${serverUrl}/data/purchaseOrder`,
         data: payload,
         headers: { 'x-access-token': sessionStorage.token }

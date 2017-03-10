@@ -37,7 +37,10 @@
         },
         computed: { ...mapGetters({ activeView: 'activeView' }) },
         methods: {
-            ...mapActions({ initData: 'initData' }),
+            ...mapActions({
+                componentErrorHandler: 'componentErrorHandler',
+                initData: 'initData'
+            }),
             ...mapMutations({
                 buildStore: 'buildStore',
                 redirectUser: 'redirectUser',

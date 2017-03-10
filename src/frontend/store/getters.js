@@ -87,8 +87,7 @@ function newShipmentRequestList(state) {
     return state.shipmentSchedule.filter((shipment) => {
         return (
             (shipment.deprecated === null) &&
-            (shipment.receivedDate === null) &&
-            (shipment.purchaseOrder.deprecated === null)
+            (shipment.pOId === null)
         );
     });
 }

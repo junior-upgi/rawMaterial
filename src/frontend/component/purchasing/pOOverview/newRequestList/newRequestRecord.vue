@@ -1,9 +1,6 @@
 <template>
     <tr>
-        <actionField
-            :CUS_NO="requestSummary.CUS_NO"
-            :workingYear="requestSummary.workingYear"
-            :workingMonth="requestSummary.workingMonth"></actionField>
+        <actionField :requestSummary="requestSummary"></actionField>
         <td>{{requestSummary.workingYear}}</td>
         <td>{{requestSummary.workingMonth}}</td>
         <td>{{requestSummary.CUST_SNM}}</td>

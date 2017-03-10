@@ -9,8 +9,8 @@ const tokenValidation = require('../../middleware/tokenValidation.js');
 const router = express.Router();
 
 router.get('/data/purchaseOrder/contentSummary', tokenValidation, (request, response, next) => {
-    const knex = require('knex')(serverConfig.mssqlConfig);
-    knex('rawMaterial.dbo.pOContentSummary').select('*').debug(true)
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    knex('rawMaterial.dbo.pOContentSummary').select('*').debug(false)
         .then((resultset) => {
             return response.status(200).json({ pOContentSummary: resultset });
         }).catch((error) => {
@@ -28,13 +28,13 @@ router.get('/data/purchaseOrder/contentSummary', tokenValidation, (request, resp
 router.route('/data/purchaseOrder')
     .all(tokenValidation)
     .get((request, response, next) => {
-        const knex = require('knex')(serverConfig.mssqlConfig);
+        let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.ActivePurchaseOrder')
             .select('*')
             .orderBy('CUS_NO')
-            .debug(true)
+            .debug(false)
             .then((resultset) => {
-                const pOList = new Treeize();
+                let pOList = new Treeize();
                 pOList.setOptions({
                     input: {
                         detectCollection: false,
@@ -46,7 +46,7 @@ router.route('/data/purchaseOrder')
                     }
                 });
                 pOList.grow(resultset);
-                const tempList = pOList.getData();
+                let tempList = pOList.getData();
                 tempList.forEach((purchaseOrder, index, array) => {
                     array[index].supplier = purchaseOrder.suppliers[0];
                     delete array[index].suppliers;
@@ -70,7 +70,7 @@ router.route('/data/purchaseOrder')
             activePOList: null,
             pOContentSummary: null
         };
-        // create a new PO entry
+        // create a new PO entry data object
         let newPOId = uuidV4().toUpperCase();
         let newPOEntry = {
             id: newPOId,
@@ -85,33 +85,24 @@ router.route('/data/purchaseOrder')
             endDate: request.body.targetPO.endDate,
             CUS_NO: request.body.targetPO.CUS_NO
         };
-        // create a list holding data of the shipments to be moved to the new pOId
-        let tempArray = request.body.targetPO.shipments.filter((existingShipment) => {
-            return existingShipment.deprecated === null;
-        });
-        let existingValidShipmentArray = [];
-        tempArray.forEach((existingValidShipment) => {
-            existingValidShipmentArray.push(existingValidShipment);
-        });
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex.transaction((trx) => {
             // create a new PO entry
-            return trx.insert(newPOEntry).into('rawMaterial.dbo.purchaseOrder').debug(true)
+            return trx.insert(newPOEntry).into('rawMaterial.dbo.purchaseOrder').debug(false)
                 .then(() => {
                     // create by copying valid shipments and attach to the new PO
-                    return trx.raw('INSERT INTO rawMaterial.dbo.shipment (id,pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated) SELECT ? AS id,pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated FROM rawMaterial.dbo.shipment WHERE id=?;', [newPOId, request.body.targetPO.id]);
-                })
-                .then(() => {
+                    return trx.raw('INSERT INTO rawMaterial.dbo.shipment (pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated) SELECT ? AS pOId,requestDate,CUS_NO,PRD_NO,typeId,unitPrice,requestWeight,receivedDate,supplierWeight,actualWeight,note,created,deprecated FROM rawMaterial.dbo.shipment WHERE pOId=? AND deprecated IS NULL;', [newPOId, request.body.targetPO.id]);
+                }).then(() => {
                     // deprecate the original valid shipment entries
                     return trx('rawMaterial.dbo.shipment')
                         .update({ deprecated: moment.utc(new Date()).format('YYYY-MM-DD hh:mm:ss') })
-                        .where({ pOId: request.body.targetPO.id }).debug(true);
+                        .where({ pOId: request.body.targetPO.id }).debug(false);
                 }).then(() => {
                     // attach pending shipments to the new PO
                     let queryList = [];
                     request.body.pendingOrderList.forEach((pendingShipment) => {
                         queryList.push(
-                            trx('rawMaterial.dbo.shipment').update({ pOId: newPOId }).where({ id: pendingShipment.id }).debug(true)
+                            trx('rawMaterial.dbo.shipment').update({ pOId: newPOId }).where({ id: pendingShipment.id }).debug(false)
                         );
                     });
                     return Promise.all(queryList);
@@ -122,15 +113,30 @@ router.route('/data/purchaseOrder')
                         .where({ id: request.body.targetPO.id });
                 }).then(() => {
                     // get a set of fresh shipment data
-                    return trx.select('*').from('rawMaterial.dbo.shipmentSchedule').orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(true);
+                    return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
+                        .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false);
                 }).then((resultset) => {
-                    responseObject.shipmentSchedule = resultset;
+                    let shipmentSchedule = new Treeize();
+                    shipmentSchedule.setOptions({
+                        input: {
+                            detectCollection: false,
+                            uniformRows: true
+                        },
+                        output: {
+                            prune: false,
+                            objectOverwrite: false
+                        }
+                    });
+                    shipmentSchedule.grow(resultset);
+                    responseObject.shipmentSchedule = shipmentSchedule.getData();
                     // get a set of fresh newRequestSummary data
-                    return trx.select('*').from('rawMaterial.dbo.newRequestSummary').orderBy('CUS_NO').orderBy('workingYear').orderBy('workingMonth').debug(true);
+                    return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
+                        .orderBy('CUS_NO').orderBy('workingYear').orderBy('workingMonth').debug(false);
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data
-                    return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*').orderBy('CUS_NO').debug(true);
+                    return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
+                        .orderBy('CUS_NO').debug(false);
                 }).then((resultset) => {
                     // process active purchase order data
                     let pOList = new Treeize();
@@ -152,7 +158,7 @@ router.route('/data/purchaseOrder')
                     });
                     responseObject.activePOList = tempList;
                     // get a set of fresh contentSummary data
-                    return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(true);
+                    return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
                 });
         }).then((resultset) => {
             responseObject.pOContentSummary = resultset;
@@ -167,15 +173,113 @@ router.route('/data/purchaseOrder')
         }).finally(() => {
             knex.destroy();
         });
-        return response.status(200).json(existingValidShipmentArray);
+    })
+    .post((request, response, next) => {
+        let responseObject = {
+            shipmentSchedule: null,
+            newRequestSummary: null,
+            activePOList: null,
+            pOContentSummary: null
+        };
+        // create a new PO entry data object
+        let newPOId = uuidV4().toUpperCase();
+        let newPOEntry = {
+            contractType: request.body.contractType,
+            CUS_NO: request.body.CUS_NO,
+            documentDate: request.body.documentDate,
+            endDate: request.body.endDate,
+            id: newPOId,
+            originalPOId: newPOId,
+            pONumber: request.body.pONumber,
+            revisionNumber: 0,
+            startingDate: request.body.startingDate,
+            workingMonth: request.body.workingMonth,
+            workingYear: request.body.workingYear
+        };
+        let knex = require('knex')(serverConfig.mssqlConfig);
+        knex.transaction((trx) => {
+            // create a new PO entry
+            return trx.insert(newPOEntry).into('rawMaterial.dbo.purchaseOrder').debug(false)
+                .then(() => {
+                    // attach pending shipments to the new PO
+                    if (request.body.contractType === 'oneTime') { // if contract type is 'oneTime' add everything
+                        return trx('rawMaterial.dbo.shipment')
+                            .update({ pOId: newPOId })
+                            .where({
+                                CUS_NO: request.body.CUS_NO,
+                                pOId: null
+                            }).debug(false);
+                    } else { // if contract type is otherwise filter pending shipment by startingDate and endDate
+                        return trx('rawMaterial.dbo.shipment')
+                            .update({ pOId: newPOId })
+                            .whereBetween('requestDate', [request.body.startingDate, request.body.endDate])
+                            .where({
+                                CUS_NO: request.body.CUS_NO,
+                                pOId: null
+                            }).debug(false);
+                    }
+                }).then(() => {
+                    // get a set of fresh shipment data
+                    return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
+                        .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    let shipmentSchedule = new Treeize();
+                    shipmentSchedule.setOptions({
+                        input: {
+                            detectCollection: false,
+                            uniformRows: true
+                        },
+                        output: {
+                            prune: false,
+                            objectOverwrite: false
+                        }
+                    });
+                    shipmentSchedule.grow(resultset);
+                    responseObject.shipmentSchedule = shipmentSchedule.getData();
+                    // get a set of fresh newRequestSummary data
+                    return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
+                        .orderBy('CUS_NO').orderBy('workingYear').orderBy('workingMonth').debug(false);
+                }).then((resultset) => {
+                    responseObject.newRequestSummary = resultset;
+                    // get a set of fresh purchaseOrder data
+                    return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
+                        .orderBy('CUS_NO').debug(false);
+                }).then((resultset) => {
+                    // process active purchase order data
+                    let pOList = new Treeize();
+                    pOList.setOptions({
+                        input: {
+                            detectCollection: false,
+                            uniformRows: true
+                        },
+                        output: {
+                            prune: false,
+                            objectOverwrite: false
+                        }
+                    });
+                    pOList.grow(resultset);
+                    let tempList = pOList.getData();
+                    tempList.forEach((purchaseOrder, index, array) => {
+                        array[index].supplier = purchaseOrder.suppliers[0];
+                        delete array[index].suppliers;
+                    });
+                    responseObject.activePOList = tempList;
+                    // get a set of fresh contentSummary data
+                    return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+                });
+        }).then((resultset) => {
+            responseObject.pOContentSummary = resultset;
+            return response.status(200).json(responseObject);
+        }).catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `更新訂單資料發生錯誤: ${error}`)
+            );
+        }).finally(() => {
+            knex.destroy();
+        });
     });
-
-/*
-function genNewPONum() {
-    const yearPartString = (new Date().getFullYear() - 1911).toString();
-    const datePartString = moment(new Date(), 'YYYY-MM-DD HH:MM:ss').format('MMDD');
-    return `${yearPartString}${datePartString}01`;
-}
-*/
 
 module.exports = router;

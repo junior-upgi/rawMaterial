@@ -1,5 +1,8 @@
 <template>
     <tbody>
+        <td colspan="6" class="bg-primary">
+            <h4 style="margin:10px;padding:0px;">尚未下單項目列表</h4>
+        </td>
         <newRequestRecord
             v-for="summaryEntry in newRequestSummary"
             v-if="organizedRequestList[summaryEntry.CUS_NO]"

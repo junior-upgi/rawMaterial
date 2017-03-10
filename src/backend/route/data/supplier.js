@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 router.get('/data/supplier', tokenValidation, (request, response) => {
-    const knex = require('knex')(serverConfig.mssqlConfig);
+    let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
         .from('rawMaterial.dbo.supplier')
         .debug(false)
@@ -30,7 +30,7 @@ router.get('/data/supplier', tokenValidation, (request, response) => {
 
 /*
 router.get('/data/supplier/pONotice', tokenValidation, (request, response) => {
-    const knex = require('knex')(serverConfig.mssqlConfig);
+    let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
         .from('rawMaterial.dbo.pONotice')
         .where({ CUS_NO: request.query.CUS_NO })
@@ -54,7 +54,7 @@ router.get('/data/supplier/pONotice', tokenValidation, (request, response) => {
 });
 
 router.get('/data/supplier/workingMaterial', tokenValidation, (request, response) => {
-    const knex = require('knex')(serverConfig.mssqlConfig);
+    let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
         .from('rawMaterial.dbo.workingMaterial')
         .where({
