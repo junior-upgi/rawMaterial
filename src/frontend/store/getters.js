@@ -56,6 +56,8 @@ export default {
     // filteredShipmentSummaryByPrdNo: filteredShipmentSummaryByPrdNo,
     shipmentSchedule: function(state) { return state.shipmentSchedule; },
     shipmentSummary: function(state) { return state.shipmentSummary; },
+    newShipmentRequestList: newShipmentRequestList,
+    newRequestSummary: function(state) { return state.newRequestSummary; },
     // purchase order
     activePOList: function(state) { return state.activePOList; },
     pOContentSummary: function(state) { return state.pOContentSummary; }
@@ -78,6 +80,16 @@ function workingSupplierDetail(state) {
         return supplier.CUS_NO === state.rawMatList[state.selectedRawMatIndex].CUS_NO;
     });
     return workingSupplierDetail[0];
+}
+
+function newShipmentRequestList(state) {
+    return state.shipmentSchedule.filter((shipment) => {
+        return (
+            (shipment.deprecated === null) &&
+            (shipment.receivedDate === null) &&
+            (shipment.purchaseOrder.deprecated === null)
+        );
+    });
 }
 
 /*

@@ -288,3 +288,27 @@ function shipmentSummary(knexObj, workingYear, workingMonth) {
         })
         .orderBy('workingDate');
 }
+
+router.get('/data/shipment/newRequestSummary', tokenValidation, function(request, response) {
+    const knex = require('knex')(serverConfig.mssqlConfig);
+    knex.select('*')
+        .from('rawMaterial.dbo.newRequestSummary')
+        .orderBy('CUS_NO')
+        .orderBy('workingYear')
+        .orderBy('workingMonth')
+        .debug(false)
+        .then((resultset) => {
+            return response.status(200).json({ newRequestSummary: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `新增預約概況資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});

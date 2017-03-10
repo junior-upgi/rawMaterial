@@ -20,10 +20,16 @@ export default {
             }, {
                 method: 'get',
                 url: `${serverUrl}/data/shipment`,
+                /*
                 params: {
                     workingYear: context.state.workingYear,
                     workingMonth: context.state.workingMonth
                 },
+                */
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/shipment/newRequestSummary`,
                 headers: { 'x-access-token': sessionStorage.token }
             }, {
                 method: 'get',

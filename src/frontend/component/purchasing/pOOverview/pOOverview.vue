@@ -1,10 +1,7 @@
 <template>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h4>
-                <workingTimeSelector></workingTimeSelector>
-                &nbsp;原料採購訂單概況
-            </h4>
+            <h4>原料採購訂單概況</h4>
         </div>
         <div class="table-responsive">
             <table class="table table-bordered tabel-hover table-striped table-condensed">
@@ -26,6 +23,7 @@
                         :unattendedShipmentSchedule="filterUnattendedSchedule(purchaseOrder.CUS_NO)">
                     </pOOverviewRecord>
                 </tbody>
+                <newRequestList></newRequestList>
             </table>
         </div>
     </div>
@@ -33,14 +31,14 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import newRequestList from './newRequestList/newRequestList.vue';
     import pOOverviewRecord from './pOOverviewRecord.vue';
-    import workingTimeSelector from '../../common/workingTimeSelector.vue';
 
     export default {
         name: 'pOOverview',
         components: {
-            pOOverviewRecord,
-            workingTimeSelector
+            newRequestList,
+            pOOverviewRecord
         },
         computed: {
             ...mapGetters({

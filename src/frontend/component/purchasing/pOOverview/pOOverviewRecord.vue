@@ -2,8 +2,15 @@
     <tr>
         <td>
             <span style="white-space:nowrap;">{{purchaseOrder.pONumber}} 版本: {{purchaseOrder.revisionNumber}}</span>
-            <span v-if="matterPending" class="label label-danger">(需要更新)</span>
-            <span v-if="!matterPending" class="label label-danger">(最新版本)</span>
+            <button
+                v-if="matterPending"
+                type="button"
+                class="btn btn-danger btn-xs"
+                :disabled="dataProcessingState?true:false"
+                @click="updatePO(purchaseOrder)">
+                (需要更新)
+            </button>
+            <span v-if="!matterPending" class="label label-default">(最新版本)</span>
         </td>
         <td>{{purchaseOrder.workingYear}}</td>
         <td>{{purchaseOrder.workingMonth}}</td>
@@ -32,6 +39,7 @@
 <script>
     import moment from 'moment-timezone';
     import numeral from 'numeral';
+    import { mapGetters, mapMutations } from 'vuex';
     import orderStatus from './orderStatus.vue';
     // import supplyingSpecList from './supplyingSpecList.vue';
     // import pODisplayCell from './pODisplayCell.vue';
@@ -49,12 +57,16 @@
             'revokePendingShipmentSchedule',
             'unattendedShipmentSchedule'
         ],
+        computed: {
+            ...mapGetters({ dataProcessingState: 'checkDataProcessingState' })
+        },
         data: function() {
             return {
                 matterPending: false
             };
         },
         methods: {
+            ...mapMutations({ processingDataSwitch: 'processingDataSwitch' }),
             filterRevokePendingSchedule: function(workingYear, workingMonth) {
                 return this.revokePendingShipmentSchedule.filter((shipment) => {
                     return (
@@ -70,6 +82,11 @@
                         (workingMonth === parseInt(moment.utc(new Date(shipment.workingDate)).format('M')))
                     );
                 });
+            },
+            updatePO: function(poObject) {
+                this.processingDataSwitch(true);
+                this.processingDataSwitch(false);
+                return 1;
             }
         },
         filters: {
