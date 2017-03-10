@@ -49,6 +49,7 @@ export default {
     userData: function(state) { return state.userData; },
     // basic data set
     rawMaterialList: function(state) { return state.rawMatList; },
+    rawMaterialTypeList: function(state) { return state.rawMatTypeList; },
     supplierList: function(state) { return state.supplierList; },
     // schedule data
     // filteredShipmentScheduleByCusNo: filteredShipmentScheduleByCusNo,

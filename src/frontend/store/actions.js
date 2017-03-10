@@ -20,12 +20,6 @@ export default {
             }, {
                 method: 'get',
                 url: `${serverUrl}/data/shipment`,
-                /*
-                params: {
-                    workingYear: context.state.workingYear,
-                    workingMonth: context.state.workingMonth
-                },
-                */
                 headers: { 'x-access-token': sessionStorage.token }
             }, {
                 method: 'get',
@@ -86,28 +80,7 @@ export default {
         ];
         return Promise.all(optionList.map(axios));
     },
-    nextWorkingMonth: function(context) {
-        const workingMonth = context.state.workingMonth;
-        const workingYear = context.state.workingYear;
-        const workingDate = moment(new Date(workingYear, workingMonth - 1, 1)).add(1, 'month');
-        context.commit({
-            type: 'setWorkingTime',
-            workingMonth: parseInt(workingDate.format('M')),
-            workingYear: parseInt(workingDate.format('YYYY'))
-        });
-        return context.dispatch('initData');
-    },
-    prevWorkingMonth: function(context) {
-        const workingMonth = context.state.workingMonth;
-        const workingYear = context.state.workingYear;
-        const workingDate = moment(new Date(workingYear, workingMonth - 1, 1)).subtract(1, 'month');
-        context.commit({
-            type: 'setWorkingTime',
-            workingMonth: parseInt(workingDate.format('M')),
-            workingYear: parseInt(workingDate.format('YYYY'))
-        });
-        return context.dispatch('initData');
-    },
+    /*
     refreshPOShipmentListing: function(context) {
         context.commit('resetPOShipmentList');
         context.commit('resetPOShipmentSummary');
@@ -184,6 +157,7 @@ export default {
             return Promise.reject('下單客戶資料異常');
         }
     },
+    */
     updateShipment: function(context, payload) {
         const recordData = {
             workingMonth: context.state.workingMonth,
@@ -212,33 +186,44 @@ export default {
     },
     cancelShipment: cancelShipment,
     componentErrorHandler: componentErrorHandler,
-    shipmentReservation: shipmentReservation
+    shipmentReservation: shipmentReservation,
+    updatePurchaseOrder: updatePurchaseOrder,
+    nextWorkingMonth: nextWorkingMonth,
+    prevWorkingMonth: prevWorkingMonth,
+    setWorkingTime: setWorkingTime
 };
 
-function startingDate(contractType, workingYear, workingMonth) {
-    switch (contractType) {
-        case 'annual':
-            return moment(new Date(workingYear, 0, 1)).format('YYYY-MM-DD');
-        case 'monthly':
-            return moment(new Date(workingYear, workingMonth - 1, 1)).format('YYYY-MM-DD');
-        case 'oneTime':
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-        default:
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-    }
+function prevWorkingMonth(context) {
+    const workingMonth = context.state.workingMonth;
+    const workingYear = context.state.workingYear;
+    const workingDate = moment(new Date(workingYear, workingMonth - 1, 1)).subtract(1, 'month');
+    context.commit({
+        type: 'setWorkingTime',
+        workingMonth: parseInt(workingDate.format('M')),
+        workingYear: parseInt(workingDate.format('YYYY'))
+    });
+    return context.dispatch('initData');
 }
 
-function endDate(contractType, workingYear, workingMonth) {
-    switch (contractType) {
-        case 'annual':
-            return moment(new Date(workingYear, 11, 31)).format('YYYY-MM-DD');
-        case 'monthly':
-            return moment(new Date(workingYear, workingMonth, 0)).format('YYYY-MM-DD');
-        case 'oneTime':
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-        default:
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-    }
+function nextWorkingMonth(context) {
+    const workingMonth = context.state.workingMonth;
+    const workingYear = context.state.workingYear;
+    const workingDate = moment(new Date(workingYear, workingMonth - 1, 1)).add(1, 'month');
+    context.commit({
+        type: 'setWorkingTime',
+        workingMonth: parseInt(workingDate.format('M')),
+        workingYear: parseInt(workingDate.format('YYYY'))
+    });
+    return context.dispatch('initData');
+}
+
+function setWorkingTime(context, payload) {
+    context.commit({
+        type: 'setWorkingTime',
+        workingMonth: payload.workingYear,
+        workingYear: payload.workingMonth
+    });
+    return context.dispatch('initData');
 }
 
 function componentErrorHandler(context, errorObject) {
@@ -305,3 +290,41 @@ function cancelShipment(context, payload) {
     };
     return axios(requestOption);
 }
+
+function updatePurchaseOrder(context, payload) {
+    const requestOption = {
+        method: 'put',
+        url: `${serverUrl}/data/purchaseOrder`,
+        data: payload,
+        headers: { 'x-access-token': sessionStorage.token }
+    };
+    return axios(requestOption);
+}
+
+/*
+function startingDate(contractType, workingYear, workingMonth) {
+    switch (contractType) {
+        case 'annual':
+            return moment(new Date(workingYear, 0, 1)).format('YYYY-MM-DD');
+        case 'monthly':
+            return moment(new Date(workingYear, workingMonth - 1, 1)).format('YYYY-MM-DD');
+        case 'oneTime':
+            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+        default:
+            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+    }
+}
+
+function endDate(contractType, workingYear, workingMonth) {
+    switch (contractType) {
+        case 'annual':
+            return moment(new Date(workingYear, 11, 31)).format('YYYY-MM-DD');
+        case 'monthly':
+            return moment(new Date(workingYear, workingMonth, 0)).format('YYYY-MM-DD');
+        case 'oneTime':
+            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+        default:
+            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
+    }
+}
+*/

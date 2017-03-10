@@ -30,7 +30,6 @@ export const store = new Vuex.Store({
         pOShipmentList: [],
         pOShipmentSummary: [],
         pOViewMode: false,
-        pOWorkingSupplier: null,
         workingMaterial: [], // a list of suppliers supplying raw material for the particular month
         tonnageSummary: [],
         */
@@ -49,6 +48,7 @@ export const store = new Vuex.Store({
         selectedRawMatIndex: 0, // raw material selected
         workingMonth: parseInt(currentDatetime().format('M')),
         workingYear: parseInt(currentDatetime().format('YYYY')),
+        workingSupplier: null,
 
         // basic working data
         rawMatList: [], // list of raw material with details

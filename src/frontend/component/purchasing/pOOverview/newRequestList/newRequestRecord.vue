@@ -1,23 +1,34 @@
 <template>
-    <tbody>
-        <newRequestRecord
-            v-for="summaryEntry in newRequestSummary"
-            v-if="organizedRequestList[summaryEntry.CUS_NO]"
-            :requestSummary="summaryEntry">
-        </newRequestRecord>
-    </tbody>
+    <tr>
+        <actionField
+            :CUS_NO="requestSummary.CUS_NO"
+            :workingYear="requestSummary.workingYear"
+            :workingMonth="requestSummary.workingMonth"></actionField>
+        <td>{{requestSummary.workingYear}}</td>
+        <td>{{requestSummary.workingMonth}}</td>
+        <td>{{requestSummary.CUST_SNM}}</td>
+        <newRequestSummary
+            :requestList="organizedRequestList[requestSummary.CUS_NO]"
+            :requestSummary="requestSummary">
+        </newRequestSummary>
+    </tr>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
-    import newRequestRecord from './newRequestRecord.vue';
+
+    import actionField from './actionField.vue';
+    import newRequestSummary from './newRequestSummary.vue';
 
     export default {
-        name: 'newRequestList',
-        components: { newRequestRecord },
+        name: 'newRequestRecord',
+        components: {
+            actionField,
+            newRequestSummary
+        },
+        props: ['requestSummary'],
         computed: {
             ...mapGetters({
-                newRequestSummary: 'newRequestSummary',
                 newShipmentRequestList: 'newShipmentRequestList',
                 rawMaterialList: 'rawMaterialList'
             }),
@@ -54,7 +65,6 @@
             }
         }
     };
-
 </script>
 
 <style>

@@ -33,6 +33,7 @@ function emptyStoreValue(state) {
     state.selectedRawMatIndex = 0;
     state.workingMonth = parseInt(currentDatetime().format('M'));
     state.workingYear = parseInt(currentDatetime().format('YYYY'));
+    state.workingSupplier = null;
 
     // basic working data
     state.rawMatList = [];
@@ -168,19 +169,17 @@ export default {
     // ////////////////////////////////////////////////////////////
     // application state control
     processingDataSwitch: function(state, onOffSwitch) { state.processingData = onOffSwitch; },
+    setWorkingTime: setWorkingTime, // workingMonth and workingYear manipulation
+    selectRawMaterial: selectRawMaterial, // to be used by workingMaterialSelector component
+    setWorkingSupplier: setWorkingSupplier,
+    forceViewChange: function(state, view) { state.activeView = view; }, // activeView specific
+    redirectUser: function(state) { state.activeView = state.role; }, // activeView specific
     // utility functions
     restoreToken: restoreToken, // restore token if exists
-    // activeView specific
-    forceViewChange: function(state, view) { state.activeView = view; },
-    redirectUser: function(state) { state.activeView = state.role; },
     // general vuex store data manipulation
     buildStore: buildStore, // initialize the store from ajax data
     rebuildData: rebuildData, // reinitialize the store partially
-    resetStore: resetStore, // empty the store with default value
-    // working material manipulation
-    selectRawMaterial: selectRawMaterial,
-    // workingMonth and workingYear manipulation
-    setWorkingTime: setWorkingTime
+    resetStore: resetStore // empty the store with default value
 };
 
 function buildStore(state, responseList) {
@@ -222,4 +221,8 @@ function selectRawMaterial(state, selectedIndex) {
 function setWorkingTime(state, payload) {
     state.workingMonth = payload.workingMonth;
     state.workingYear = payload.workingYear;
+}
+
+function setWorkingSupplier(state, CUS_NO) {
+    state.workingSupplier = CUS_NO;
 }

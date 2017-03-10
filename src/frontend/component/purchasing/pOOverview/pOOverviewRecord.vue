@@ -10,7 +10,7 @@
                 @click="updatePO(purchaseOrder)">
                 (需要更新)
             </button>
-            <span v-if="!matterPending" class="label label-default">(最新版本)</span>
+            <span v-if="!matterPending" class="label label-primary">(最新版本)</span>
         </td>
         <td>{{purchaseOrder.workingYear}}</td>
         <td>{{purchaseOrder.workingMonth}}</td>
@@ -39,7 +39,7 @@
 <script>
     import moment from 'moment-timezone';
     import numeral from 'numeral';
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
     import orderStatus from './orderStatus.vue';
     // import supplyingSpecList from './supplyingSpecList.vue';
     // import pODisplayCell from './pODisplayCell.vue';
@@ -66,7 +66,14 @@
             };
         },
         methods: {
-            ...mapMutations({ processingDataSwitch: 'processingDataSwitch' }),
+            ...mapActions({
+                componentErrorHandler: 'componentErrorHandler',
+                updatePurchaseOrder: 'updatePurchaseOrder'
+            }),
+            ...mapMutations({
+                processingDataSwitch: 'processingDataSwitch',
+                rebuildData: 'rebuildData'
+            }),
             filterRevokePendingSchedule: function(workingYear, workingMonth) {
                 return this.revokePendingShipmentSchedule.filter((shipment) => {
                     return (
@@ -85,8 +92,22 @@
             },
             updatePO: function(poObject) {
                 this.processingDataSwitch(true);
-                this.processingDataSwitch(false);
-                return 1;
+                console.log();
+                this.updatePurchaseOrder({
+                        targetPO: this.purchaseOrder,
+                        pendingOrderList: this.filterUnattendedSchedule(this.purchaseOrder.workingYear, this.purchaseOrder.workingMonth)
+                    }).then((resultset) => {
+                        console.log(resultset.data);
+                        // this.rebuildData(resultset.data);
+                        this.processingDataSwitch(false);
+                    }).catch((error) => {
+                        this.componentErrorHandler({
+                            component: 'pOOverviewRecord',
+                            method: 'updatePO',
+                            situation: '訂單更新作業發生錯誤',
+                            systemErrorMessage: error
+                        });
+                    });
             }
         },
         filters: {

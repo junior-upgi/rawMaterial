@@ -35,20 +35,6 @@
             採購模組
         </button>
         <button
-            v-if="(role==='admin')||(role==='purchasing')"
-            type="button"
-            :disabled="dataProcessingState?true:false"
-            class="btn btn-default btn-block">
-            開立訂單
-        </button>
-        <button
-            v-if="(role==='admin')||(role==='purchasing')"
-            type="button"
-            :disabled="dataProcessingState?true:false"
-            class="btn btn-default btn-block">
-            訂單列印
-        </button>
-        <button
             v-if="role==='admin'"
             type="button"
             :disabled="dataProcessingState?true:false"
