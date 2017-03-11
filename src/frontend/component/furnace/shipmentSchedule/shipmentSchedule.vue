@@ -1,37 +1,24 @@
 <template>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h4>
-                <workingTimeSelector
-                    @workingTimeChange="dateInEditMode=null">
-                </workingTimeSelector>
-                &nbsp;原料進場狀況
-            </h4>
-        </div>
-        <div class="panel-body">
-            <workingMaterialSelector
-                @workingMaterialChange="dateInEditMode=null">
-            </workingMaterialSelector>
-        </div>
-        <div class="table-responsive" style="height:700px;overflow:auto;">
-            <table
-                class="table table-striped"
-                :class="{'table-hover':dateInEditMode===null}">
-                <thead>
-                    <tr class="info">
-                        <th
-                            v-for="thItem in thList"
-                            class="text-center"
-                            style="padding-top:3px;padding-bottom:3px;margin-top:3px;margin-bottom:3px;">
-                            {{thItem}}
-                        </th>
-                    </tr>
-                </thead>
-                <monthlySummary
-                    :dateInEditMode="dateInEditMode"
-                    @dailySummaryRecordSelected="editModeToggle($event)">
-                </monthlySummary>
-            </table>
+    <div class="panel-group" id="shipmentSchedule" role="tablist">
+        <div class="panel panel-primary">
+            <div class="panel-heading" role="tab" id="heading">
+                <h4 class="panel-title" role="button" data-toggle="collapse" data-parent="#shipmentSchedule" href="#shipmentList">
+                    <workingTimeSelector
+                        @workingTimeChange="dateInEditMode=null">
+                    </workingTimeSelector>
+                    &nbsp;原料進廠明細表
+                </h4>
+            </div>
+            <div class="panel-body">
+                <workingMaterialSelector
+                    @workingMaterialChange="dateInEditMode=null">
+                </workingMaterialSelector>
+            </div>
+            <div id="shipmentList" class="panel-collapse collapse" role="tabpanel">
+                <div class="panel-footer">
+                    <monthlySummary></monthlySummary>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -39,9 +26,8 @@
 <script>
     import workingTimeSelector from '../../common/workingTimeSelector.vue';
     import workingMaterialSelector from '../../common/workingMaterialSelector.vue';
-    import monthlySummary from './monthlySummary.vue';
+    import monthlySummary from './monthlySummary/monthlySummary.vue';
     // import { mapGetters, mapMutations } from 'vuex';
-    // import { store } from '../../store/store.js';
     // import dailyShipmentRecord from './dailyShipmentRecord.vue';
     // import editPane from './editPane.vue';
 
@@ -52,14 +38,9 @@
             workingMaterialSelector,
             monthlySummary
             // dailyShipmentRecord,
-            // editPane,
-        },
-        data: function() {
-            return {
-                dateInEditMode: null,
-                thList: ['狀態', '日期', '廠商', '項目', '規格', '車次', '重量']
-            };
-        },
+            // editPane
+        }
+        /* ,
         methods: {
             editModeToggle: function(dateSelected) {
                 if (dateSelected !== this.dateInEditMode) {
@@ -70,8 +51,6 @@
             }
         },
         created: function() { this.dateInEditMode = null; }
-        /*
-        // store: store,
         computed: {
             ...mapGetters({
                 // dateInEditMode: 'checkDateInEditMode',

@@ -3,14 +3,14 @@
         <button
             class="btn btn-primary" style="border:0px;"
             :disabled="dataProcessingState?true:false"
-            @click="prevMonth">
+            @click.stop="prevMonth">
             <span class="glyphicon glyphicon-triangle-left"></span>
         </button>
         &nbsp;{{workingYear}} 年 {{workingMonth}} 月份
         <button
             class="btn btn-primary" style="border:0px;"
             :disabled="dataProcessingState?true:false"
-            @click="nextMonth">
+            @click.stop="nextMonth">
             <span class="glyphicon glyphicon-triangle-right"></span>
         </button>
     </span>
