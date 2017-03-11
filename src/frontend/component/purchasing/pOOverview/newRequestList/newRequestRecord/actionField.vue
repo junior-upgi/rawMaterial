@@ -1,13 +1,13 @@
 <template>
     <td>
-        <button
+        <span
             v-if="matchingActivePO !== null"
-            type="button" class="btn btn-danger btn-xs">
-            必須更新訂單
-        </button>
+            class="label label-danger label-xs">
+            同期訂單已開立，請更新訂單
+        </span>
         <button
             v-else
-            type="button" class="btn btn-primary btn-xs"
+            type="button" class="btn btn-primary btn-md"
             @click="createNewPO()">
             開立訂單
         </button>
@@ -93,7 +93,6 @@
                         workingMonth: this.requestSummary.workingMonth,
                         workingYear: this.requestSummary.workingYear
                     }).then((resultset) => {
-                        console.log(resultset.data);
                         this.rebuildData(resultset.data);
                         this.processingDataSwitch(false);
                     }).catch((error) => {

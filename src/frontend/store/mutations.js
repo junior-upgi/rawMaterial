@@ -17,7 +17,6 @@ function emptyStoreValue(state) {
     state.shipmentOverview = [];
     state.supplyingSpecList = [];
     state.tonnageSummary = [];
-    state.workingMaterial = [];
     */
     // ////////////////////////////////////////////////
     // user permission control
@@ -39,13 +38,10 @@ function emptyStoreValue(state) {
     state.rawMatList = [];
     state.rawMatTypeList = [];
     state.supplierList = [];
-
-    // shipment schedule
+    state.workingMaterial = [];
     state.shipmentSummary = [];
     state.shipmentSchedule = [];
     state.newRequestSummary = [];
-
-    // purchase order
     state.activePOList = [];
     state.pOContentSummary = [];
 }

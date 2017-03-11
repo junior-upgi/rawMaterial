@@ -5,15 +5,21 @@
         </td>
         <newRequestRecord
             v-for="summaryEntry in newRequestSummary"
+            :requestSummary="summaryEntry">
+        </newRequestRecord>
+        <!--
+        <newRequestRecord
+            v-for="summaryEntry in newRequestSummary"
             v-if="organizedRequestList[summaryEntry.CUS_NO]"
             :requestSummary="summaryEntry">
         </newRequestRecord>
+        -->
     </tbody>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
-    import newRequestRecord from './newRequestRecord.vue';
+    import newRequestRecord from './newRequestRecord/newRequestRecord.vue';
 
     export default {
         name: 'newRequestList',
@@ -23,7 +29,8 @@
                 newRequestSummary: 'newRequestSummary',
                 newShipmentRequestList: 'newShipmentRequestList',
                 rawMaterialList: 'rawMaterialList'
-            }),
+            })
+            /* ,
             organizedRequestList: function() {
                 let organizedRequest = {};
                 this.rawMaterialList.forEach((rawMaterial) => {
@@ -46,7 +53,7 @@
                             array[index].workingMonth = null;
                         } else if (currentItem.contractType === 'monthly') {
                             array[index].workingYear = new Date(currentItem.workingDate).getFullYear();
-                            array[index].workingMonth = new Date(currentItem.workingDate).getMonth();
+                            array[index].workingMonth = new Date(currentItem.workingDate).getMonth() + 1;
                         } else {
                             array[index].workingYear = null;
                             array[index].workingMonth = null;
@@ -55,6 +62,7 @@
                 });
                 return organizedRequest;
             }
+            */
         }
     };
 

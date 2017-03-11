@@ -1,39 +1,56 @@
+-- 將兩個 SUBQUERY 結果結合集結，再帶入各欄位代表之名稱
 SELECT
-    d.pOId
-    ,d.CUS_NO
-    ,f.CUST_SNM
-    ,f.CUST_NAME
-    ,d.PRD_NO
-    ,f.PRDT_SNM
-    ,d.typeId
-    ,f.specification
-    ,d.requestShipmentCount
-    ,e.pendingShipmentCount
-    ,d.totalRequestedWeight
-    ,d.totalReceivedWeight
+    a.pOId
+	,a.CUS_NO
+	,c.CUST_SNM
+	,c.CUST_NAME
+	,a.PRD_NO
+	,c.PRDT_SNM
+	,a.typeId
+	,c.specification
+	,a.requestShipmentCount
+	,a.totalRequestedWeight
+	,b.pendingShipmentCount
+	,a.requestShipmentCount-b.pendingShipmentCount AS receivedShipmentCount
+	,a.totalReceivedWeight
 FROM (
-    -- count shipments attached to valid PO and summarize weight columns
-    SELECT c.pOId ,c.CUS_NO ,c.PRD_NO ,c.typeId
-        ,COUNT(*) AS requestShipmentCount
-        ,SUM(c.requestWeight) AS totalRequestedWeight
-        ,SUM(c.receivedWeight) AS totalReceivedWeight
+	-- 將所有未失效並已下單預約記錄以訂單號與貨品分類集結後，統計預約車次總計、預約總重以及已到貨量總計
+	SELECT c.pOId ,c.CUS_NO ,c.PRD_NO ,c.typeId
+		,COUNT(*) AS requestShipmentCount
+		,SUM(c.requestWeight) AS totalRequestedWeight
+		,SUM(c.receivedWeight) AS totalReceivedWeight
     FROM (
-        -- list shipments attached to valid PO and weight columns
-        SELECT a.pOId ,a.CUS_NO ,a.PRD_NO ,a.typeId ,a.requestWeight
-            ,CASE
-                WHEN (ISNULL(a.supplierWeight,0)<=ISNULL(a.actualWeight,0)) THEN ISNULL(a.supplierWeight,0)
-                ELSE ISNULL(a.actualWeight,0)
-                END AS receivedWeight
-        FROM rawMaterial.dbo.shipment a LEFT JOIN rawMaterial.dbo.purchaseOrder b ON a.pOId=b.id
-        WHERE a.deprecated IS NULL AND a.pOId IS NOT NULL AND b.deprecated IS NULL) AS c
-    GROUP BY c.pOId,c.CUS_NO,c.PRD_NO,c.typeId) AS d
+		-- 由所有未失效並已下單預約記錄，列舉訂單號、貨品編號類別以及要求進貨量與收貨量
+		SELECT a.pOId ,a.CUS_NO ,a.PRD_NO ,a.typeId ,a.requestWeight
+			,CASE
+				-- 若進貨重量已填，取較大者之重量。廠商/地磅秤重皆未填則為0
+				WHEN (ISNULL(a.supplierWeight,0)=ISNULL(a.actualWeight,0)) THEN 0 -- 預防兩者皆未填時，帶null值可能產生未預防之錯誤
+				WHEN a.actualWeight<=a.supplierWeight THEN a.actualWeight
+				ELSE a.supplierWeight
+				END AS receivedWeight
+        FROM rawMaterial.dbo.shipment a
+            LEFT JOIN rawMaterial.dbo.purchaseOrder b ON a.pOId=b.id
+        WHERE
+			a.deprecated IS NULL AND -- 進貨預約未取消
+            a.pOId IS NOT NULL AND -- 進貨預約已下單
+            b.deprecated IS NULL) AS c
+    -- 訂單未失效
+    GROUP BY c.pOId, c.CUS_NO, c.PRD_NO, c.typeId) a
     LEFT JOIN (
-    -- get a pending shipment count grouped by material type on each activePO's
-    SELECT c.pOId ,c.CUS_NO ,c.PRD_NO ,c.typeId ,COUNT(*) AS pendingShipmentCount
-    FROM (
-        -- list pending shipments that's attached to valid PO
-        SELECT a.pOId ,a.CUS_NO ,a.PRD_NO ,a.typeId ,a.receivedDate
-        FROM rawMaterial.dbo.shipment a LEFT JOIN rawMaterial.dbo.purchaseOrder b ON a.pOId=b.id
-        WHERE a.deprecated IS NULL AND a.pOId IS NOT NULL AND b.deprecated IS NULL AND a.receivedDate IS NULL) AS c
-    GROUP BY c.pOId,c.CUS_NO,c.PRD_NO,c.typeId) AS e ON d.pOId=e.pOId
-    LEFT JOIN rawMaterial.dbo.rawMaterialSpecDetail AS f ON (d.CUS_NO=f.CUS_NO) AND (d.PRD_NO=f.PRD_NO) AND (d.typeId=f.typeId);
+	-- 由所有未失效、未進貨並已經下單的預約記錄以訂單號與貨品分類集結，列舉尚未到貨車次總計
+	SELECT
+        a.pOId
+		,a.CUS_NO
+		,a.PRD_NO
+		,a.typeId
+		,COUNT(*) AS pendingShipmentCount
+    FROM rawMaterial.dbo.shipment a
+        LEFT JOIN rawMaterial.dbo.purchaseOrder b ON a.pOId=b.id
+    WHERE
+		a.deprecated IS NULL AND -- 未取消進貨預約
+        a.pOId IS NOT NULL AND -- 已下單
+        b.deprecated IS NULL AND -- 訂單未失效
+        a.receivedDate IS NULL
+    -- 尚未進貨
+    GROUP BY a.pOId, a.CUS_NO, a.PRD_NO, a.typeId) b ON (a.pOId=b.pOId) AND (a.CUS_NO=b.CUS_NO) AND (a.PRD_NO=b.PRD_NO) AND (a.typeId=b.typeId)
+    LEFT JOIN rawMaterial.dbo.rawMaterialSpecDetail AS c ON (a.CUS_NO=c.CUS_NO) AND (a.PRD_NO=c.PRD_NO) AND (a.typeId=c.typeId);

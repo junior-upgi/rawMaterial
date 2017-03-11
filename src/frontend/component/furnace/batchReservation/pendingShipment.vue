@@ -29,23 +29,27 @@
             }),
             revokeReservation: function() {
                 this.processingDataSwitch(true);
-                let targetList = [];
-                this.shipmentSchedule.forEach((shipment) => {
-                    targetList.push(shipment.id);
-                });
-                this.cancelShipment({
-                    targetList: targetList
-                }).then((resultset) => {
-                    this.rebuildData(resultset.data);
-                    this.processingDataSwitch(false);
-                }).catch((error) => {
-                    this.componentErrorHandler({
-                        component: 'pendingShipment',
-                        method: 'revokeReservation',
-                        situation: '待進貨預約取消作業發生錯誤',
-                        systemErrorMessage: error
+                if(confirm('採購已經先行完成下單作業，請確認是否取消！')) {
+                    let targetList = [];
+                    this.shipmentSchedule.forEach((shipment) => {
+                        targetList.push(shipment.id);
                     });
-                });
+                    this.cancelShipment({
+                        targetList: targetList
+                    }).then((resultset) => {
+                        this.rebuildData(resultset.data);
+                        this.processingDataSwitch(false);
+                    }).catch((error) => {
+                        this.componentErrorHandler({
+                            component: 'pendingShipment',
+                            method: 'revokeReservation',
+                            situation: '待進貨預約取消作業發生錯誤',
+                            systemErrorMessage: error
+                        });
+                    });
+                } else {
+                    this.processingDataSwitch(false);
+                }
             }
         }
     };

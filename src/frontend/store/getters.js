@@ -16,7 +16,6 @@ export default {
     getTonnageSummary: function(state) { return state.tonnageSummary; },
     getUserName: function(state) { return state.userData.NAME; },
     getWorkingMonth: function(state) { return state.workingMonth; },
-    getWorkingMaterial: function(state) { return state.workingMaterial; },
     getWorkingYear: function(state) { return state.workingYear; },
     // purchase order
     pOList: function(state) { return state.pOList; },
@@ -51,6 +50,7 @@ export default {
     rawMaterialList: function(state) { return state.rawMatList; },
     rawMaterialTypeList: function(state) { return state.rawMatTypeList; },
     supplierList: function(state) { return state.supplierList; },
+    workingMaterial: function(state) { return state.workingMaterial; },
     // schedule data
     // filteredShipmentScheduleByCusNo: filteredShipmentScheduleByCusNo,
     // filteredShipmentScheduleByPrdNo: filteredShipmentScheduleByPrdNo,

@@ -18,6 +18,7 @@
                         <th class="text-center">重量</th>
                     </tr>
                 </thead>
+                <!--
                 <tbody>
                     <workingMaterialRecord
                         v-for="material in workingMaterial"
@@ -25,20 +26,21 @@
                         :dateList="filterShipmentOverviewData(material.CUS_NO,material.PRD_NO)">
                     </workingMaterialRecord>
                 </tbody>
+                -->
             </table>
         </div>
     </div>
 </template>
 
 <script>
-    import workingMaterialRecord from './workingMaterialRecord.vue';
+    // import workingMaterialRecord from './workingMaterialRecord.vue';
     import workingTimeSelector from '../common/workingTimeSelector.vue';
     import { mapGetters } from 'vuex';
 
     export default {
         name: 'shipmentOverview',
         components: {
-            workingMaterialRecord,
+            // workingMaterialRecord,
             workingTimeSelector
         },
         props: ['workingMaterial'],

@@ -30,7 +30,6 @@ export const store = new Vuex.Store({
         pOShipmentList: [],
         pOShipmentSummary: [],
         pOViewMode: false,
-        workingMaterial: [], // a list of suppliers supplying raw material for the particular month
         tonnageSummary: [],
         */
 
@@ -54,6 +53,7 @@ export const store = new Vuex.Store({
         rawMatList: [], // list of raw material with details
         rawMatTypeList: [], // list of known raw material in the ERP system
         supplierList: [],
+        workingMaterial: [], // a month-by-month list of suppliers and supplied raw material
 
         // shipment schedule
         shipmentSchedule: [], // list of current shipment schedule with details

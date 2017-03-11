@@ -11,6 +11,14 @@ export default {
                 headers: { 'x-access-token': sessionStorage.token }
             }, {
                 method: 'get',
+                url: `${serverUrl}/data/supplier/workingMaterial`,
+                params: {
+                    workingYear: context.state.workingYear,
+                    workingMonth: context.state.workingMonth
+                },
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
                 url: `${serverUrl}/data/rawMaterial`,
                 headers: { 'x-access-token': sessionStorage.token }
             }, {
@@ -62,14 +70,6 @@ export default {
             }, {
                 method: 'get',
                 url: `${serverUrl}/data/rawMaterial/supplyingSpecList`,
-                params: {
-                    workingYear: context.state.workingYear,
-                    workingMonth: context.state.workingMonth
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/supplier/workingMaterial`,
                 params: {
                     workingYear: context.state.workingYear,
                     workingMonth: context.state.workingMonth

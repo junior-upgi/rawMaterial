@@ -1,29 +1,36 @@
 <template>
     <tr>
+        <td></td>
+        <!--
         <actionField :requestSummary="requestSummary"></actionField>
+        -->
         <td>{{requestSummary.workingYear}}</td>
         <td>{{requestSummary.workingMonth}}</td>
         <td>{{requestSummary.CUST_SNM}}</td>
+        <td></td>
+        <!--
         <newRequestSummary
             :requestList="organizedRequestList[requestSummary.CUS_NO]"
             :requestSummary="requestSummary">
         </newRequestSummary>
+        -->
     </tr>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    // import { mapGetters } from 'vuex';
 
-    import actionField from './actionField.vue';
-    import newRequestSummary from './newRequestSummary.vue';
+    // import actionField from './actionField.vue';
+    // import newRequestSummary from './newRequestSummary.vue';
 
     export default {
         name: 'newRequestRecord',
+        props: ['requestSummary']
+        /* ,
         components: {
             actionField,
             newRequestSummary
         },
-        props: ['requestSummary'],
         computed: {
             ...mapGetters({
                 newShipmentRequestList: 'newShipmentRequestList',
@@ -51,7 +58,7 @@
                             array[index].workingMonth = null;
                         } else if (currentItem.contractType === 'monthly') {
                             array[index].workingYear = new Date(currentItem.workingDate).getFullYear();
-                            array[index].workingMonth = new Date(currentItem.workingDate).getMonth();
+                            array[index].workingMonth = new Date(currentItem.workingDate).getMonth() + 1;
                         } else {
                             array[index].workingYear = null;
                             array[index].workingMonth = null;
@@ -61,6 +68,7 @@
                 return organizedRequest;
             }
         }
+        */
     };
 </script>
 

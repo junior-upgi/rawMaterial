@@ -47,9 +47,11 @@
                         this.restoreToken(sessionStorage.token);
                         return this.initData();
                     }).then((responseList) => {
+                        this.password = '';
                         this.buildStore(responseList);
                         this.redirectUser();
                     }).catch((error) => {
+                        this.password = '';
                         this.componentErrorHandler({
                             component: 'login',
                             method: 'login',

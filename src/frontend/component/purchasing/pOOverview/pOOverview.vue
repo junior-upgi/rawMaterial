@@ -7,10 +7,8 @@
             <table class="table table-bordered tabel-hover table-striped table-condensed">
                 <thead>
                     <tr>
-                        <th
-                            v-for="thItem in thList"
-                            class="text-center">
-                            {{thItem}}
+                        <th v-for="thItem in thList" class="text-center">
+                            <strong>{{thItem}}</strong>
                         </th>
                     </tr>
                 </thead>
@@ -19,8 +17,8 @@
                         v-for="purchaseOrder in activePOList"
                         :purchaseOrder="purchaseOrder"
                         :pOContentSummary="filterPOContentSummary(purchaseOrder.id)"
-                        :revokePendingShipmentSchedule="filterRevokePendingSchedule(purchaseOrder.CUS_NO)"
-                        :unattendedShipmentSchedule="filterUnattendedSchedule(purchaseOrder.CUS_NO)">
+                        :revokedPendingShipmentSchedule="revokedPendingShipmentSchedule"
+                        :unattendedShipmentSchedule="unattendedShipmentSchedule">
                     </pOOverviewRecord>
                 </tbody>
                 <newRequestList></newRequestList>
@@ -32,7 +30,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import newRequestList from './newRequestList/newRequestList.vue';
-    import pOOverviewRecord from './pOOverviewRecord.vue';
+    import pOOverviewRecord from './pOOverviewRecord/pOOverviewRecord.vue';
 
     export default {
         name: 'pOOverview',
@@ -44,10 +42,9 @@
             ...mapGetters({
                 activePOList: 'activePOList',
                 pOContentSummary: 'pOContentSummary',
-                selectedRawMaterial: 'selectedRawMaterial',
                 shipmentSchedule: 'shipmentSchedule'
             }),
-            revokePendingShipmentSchedule: function() {
+            revokedPendingShipmentSchedule: function() {
                 return this.shipmentSchedule.filter((shipment) => {
                     return (
                         (shipment.deprecated !== null) &&
@@ -71,16 +68,6 @@
             };
         },
         methods: {
-            filterRevokePendingSchedule: function(CUS_NO) {
-                return this.revokePendingShipmentSchedule.filter((shipment) => {
-                    return shipment.CUS_NO === CUS_NO;
-                });
-            },
-            filterUnattendedSchedule: function(CUS_NO) {
-                return this.unattendedShipmentSchedule.filter((shipment) => {
-                    return shipment.CUS_NO === CUS_NO;
-                });
-            },
             filterPOContentSummary: function(pOId) {
                 return this.pOContentSummary.filter((summaryItem) => {
                     return summaryItem.pOId === pOId;
