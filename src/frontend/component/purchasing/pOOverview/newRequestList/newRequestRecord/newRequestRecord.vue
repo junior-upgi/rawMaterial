@@ -1,41 +1,37 @@
 <template>
     <tr>
-        <td></td>
-        <!--
-        <actionField :requestSummary="requestSummary"></actionField>
-        -->
+        <actionField
+            :requestList="organizedRequestList[requestSummary.CUS_NO]"
+            :requestSummary="requestSummary">
+        </actionField>
         <td>{{requestSummary.workingYear}}</td>
         <td>{{requestSummary.workingMonth}}</td>
         <td>{{requestSummary.CUST_SNM}}</td>
-        <td></td>
-        <!--
         <newRequestSummary
             :requestList="organizedRequestList[requestSummary.CUS_NO]"
             :requestSummary="requestSummary">
         </newRequestSummary>
-        -->
     </tr>
 </template>
 
 <script>
-    // import { mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
 
-    // import actionField from './actionField.vue';
-    // import newRequestSummary from './newRequestSummary.vue';
+    import actionField from './actionField.vue';
+    import newRequestSummary from './newRequestSummary.vue';
 
     export default {
         name: 'newRequestRecord',
-        props: ['requestSummary']
-        /* ,
+        props: [
+            'requestSummary',
+            'newShipmentRequestList'
+        ],
         components: {
             actionField,
             newRequestSummary
         },
         computed: {
-            ...mapGetters({
-                newShipmentRequestList: 'newShipmentRequestList',
-                rawMaterialList: 'rawMaterialList'
-            }),
+            ...mapGetters({ rawMaterialList: 'rawMaterialList' }),
             organizedRequestList: function() {
                 let organizedRequest = {};
                 this.rawMaterialList.forEach((rawMaterial) => {
@@ -68,7 +64,6 @@
                 return organizedRequest;
             }
         }
-        */
     };
 </script>
 

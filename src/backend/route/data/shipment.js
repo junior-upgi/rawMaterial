@@ -14,9 +14,9 @@ router.get('/data/shipment/newRequestSummary', tokenValidation, function(request
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
         .from('rawMaterial.dbo.newRequestSummary')
-        .orderBy('CUS_NO')
         .orderBy('workingYear')
         .orderBy('workingMonth')
+        .orderBy('CUS_NO')
         .debug(false)
         .then((resultset) => {
             return response.status(200).json({ newRequestSummary: resultset });
@@ -109,7 +109,7 @@ router.route('/data/shipment')
                     responseObject.shipmentSchedule = shipmentSchedule.getData();
                     // get a set of fresh newRequestSummary data
                     return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
-                        .orderBy('CUS_NO').orderBy('workingYear').orderBy('workingMonth').debug(false);
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data
@@ -163,9 +163,9 @@ router.route('/data/shipment')
             for (let index = 0; index < request.body.targetList.length; index++) {
                 requestPromiseList.push(
                     trx('rawMaterial.dbo.shipment')
-                    .update({ deprecated: moment.utc(new Date()).format('YYYY-MM-DD HH:mm:ss') })
-                    .where({ id: request.body.targetList[index] })
-                    .debug(false)
+                        .update({ deprecated: moment.utc(new Date()).format('YYYY-MM-DD HH:mm:ss') })
+                        .where({ id: request.body.targetList[index] })
+                        .debug(false)
                 );
             }
             return Promise.all(requestPromiseList)
@@ -189,7 +189,7 @@ router.route('/data/shipment')
                     responseObject.shipmentSchedule = shipmentSchedule.getData();
                     // get a set of fresh newRequestSummary data
                     return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
-                        .orderBy('CUS_NO').orderBy('workingYear').orderBy('workingMonth').debug(false);
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data

@@ -16,11 +16,14 @@
 
 <script>
     import moment from 'moment-timezone';
-    import { mapActions, mapMutations, mapGetters } from 'vuex';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
 
     export default {
         name: 'actionField',
-        props: ['requestSummary'],
+        props: [
+            'requestList',
+            'requestSummary'
+        ],
         computed: {
             ...mapGetters({ activePOList: 'activePOList' }),
             matchingActivePO: function() {

@@ -5,7 +5,8 @@
         </td>
         <newRequestRecord
             v-for="summaryEntry in newRequestSummary"
-            :requestSummary="summaryEntry">
+            :requestSummary="summaryEntry"
+            :newShipmentRequestList="filterNewShipmentRequestList(summaryEntry.CUS_NO, summaryEntry.contractType, summaryEntry.workingYear, summaryEntry.workingMonth)">
         </newRequestRecord>
         <!--
         <newRequestRecord
@@ -63,6 +64,31 @@
                 return organizedRequest;
             }
             */
+        },
+        methods: {
+            filterNewShipmentRequestList: function(CUS_NO, contractType, workingYear, workingMonth) {
+                switch(contractType) {
+                    case 'annual':
+                        return this.newShipmentRequestList.filter((newShipmentRequest) => {
+                            return (
+                                (newShipmentRequest.CUS_NO === CUS_NO) &&
+                                ((new Date(newShipmentRequest.workingDate).getUTCFullYear()) === workingYear)
+                            );
+                        });
+                    case 'monthly':
+                        return this.newShipmentRequestList.filter((newShipmentRequest) => {
+                            return (
+                                (newShipmentRequest.CUS_NO === CUS_NO) &&
+                                ((new Date(newShipmentRequest.workingDate).getUTCFullYear()) === workingYear) &&
+                                ((new Date(newShipmentRequest.workingDate).getMonth() + 1) === workingMonth)
+                            );
+                        });
+                    default:
+                        return this.newShipmentRequestList.filter((newShipmentRequest) => {
+                            return newShipmentRequest.CUS_NO === CUS_NO;
+                        });
+                }
+            }
         }
     };
 

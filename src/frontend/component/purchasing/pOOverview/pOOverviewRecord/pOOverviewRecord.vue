@@ -35,27 +35,30 @@
         },
         props: [
             'pOContentSummary',
-            'purchaseOrder',
             'revokedPendingShipmentSchedule',
-            'unattendedShipmentSchedule'
+            'unattendedShipmentSchedule',
+            'purchaseOrder'
         ],
         computed: {
-            ...mapGetters({ dataProcessingState: 'checkDataProcessingState' }),
+            ...mapGetters({
+                dataProcessingState: 'checkDataProcessingState',
+                shipmentSchedule: 'shipmentSchedule'
+            }),
             releventRevokedPendingShipmentSchedule: function() {
                 switch (this.purchaseOrder.contractType) {
                     case 'annual':
                         return this.revokedPendingShipmentSchedule.filter((shipment) => {
                             return (
                                 (shipment.CUS_NO === this.purchaseOrder.CUS_NO) &&
-                                (shipment.workingYear === this.purchaseOrder.workingYear)
+                                (new Date(shipment.workingDate).getFullYear() === this.purchaseOrder.workingYear)
                             );
                         });
                     case 'monthly':
                         return this.revokedPendingShipmentSchedule.filter((shipment) => {
                             return (
                                 (shipment.CUS_NO === this.purchaseOrder.CUS_NO) &&
-                                (shipment.workingYear === this.purchaseOrder.workingYear) &&
-                                (shipment.workingMonth === this.purchaseOrder.workingMonth)
+                                (new Date(shipment.workingDate).getFullYear() === this.purchaseOrder.workingYear) &&
+                                ((new Date(shipment.workingDate).getMonth() + 1) === this.purchaseOrder.workingMonth)
                             );
                         });
                     default:
@@ -70,15 +73,15 @@
                         return this.unattendedShipmentSchedule.filter((shipment) => {
                             return (
                                 (shipment.CUS_NO === this.purchaseOrder.CUS_NO) &&
-                                (shipment.workingYear === this.purchaseOrder.workingYear)
+                                (new Date(shipment.workingDate).getFullYear() === this.purchaseOrder.workingYear)
                             );
                         });
                     case 'monthly':
                         return this.unattendedShipmentSchedule.filter((shipment) => {
                             return (
                                 (shipment.CUS_NO === this.purchaseOrder.CUS_NO) &&
-                                (shipment.workingYear === this.purchaseOrder.workingYear) &&
-                                (shipment.workingMonth === this.purchaseOrder.workingMonth)
+                                (new Date(shipment.workingDate).getFullYear() === this.purchaseOrder.workingYear) &&
+                                ((new Date(shipment.workingDate).getMonth() + 1) === this.purchaseOrder.workingMonth)
                             );
                         });
                     default:

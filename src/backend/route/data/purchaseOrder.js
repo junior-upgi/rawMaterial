@@ -138,7 +138,7 @@ router.route('/data/purchaseOrder')
                     responseObject.shipmentSchedule = shipmentSchedule.getData();
                     // get a set of fresh newRequestSummary data
                     return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
-                        .orderBy('CUS_NO').orderBy('workingYear').orderBy('workingMonth').debug(false);
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data
@@ -245,7 +245,7 @@ router.route('/data/purchaseOrder')
                     responseObject.shipmentSchedule = shipmentSchedule.getData();
                     // get a set of fresh newRequestSummary data
                     return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
-                        .orderBy('CUS_NO').orderBy('workingYear').orderBy('workingMonth').debug(false);
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data

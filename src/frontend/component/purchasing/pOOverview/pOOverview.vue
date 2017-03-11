@@ -41,8 +41,8 @@
         computed: {
             ...mapGetters({
                 activePOList: 'activePOList',
-                pOContentSummary: 'pOContentSummary',
-                shipmentSchedule: 'shipmentSchedule'
+                shipmentSchedule: 'shipmentSchedule',
+                pOContentSummary: 'pOContentSummary'
             }),
             revokedPendingShipmentSchedule: function() {
                 return this.shipmentSchedule.filter((shipment) => {
