@@ -106,7 +106,9 @@ router.route('/data/purchaseOrder')
                         queryList.push(
                             trx('rawMaterial.dbo.shipment')
                                 .update({ pOId: newPOId })
-                                .where({ id: pendingShipment.id }).debug(false)
+                                .where({
+                                    id: pendingShipment.id
+                                }).debug(false)
                         );
                     });
                     return Promise.all(queryList);
@@ -214,6 +216,7 @@ router.route('/data/purchaseOrder')
                             .update({ pOId: newPOId })
                             .where({
                                 CUS_NO: request.body.CUS_NO,
+                                deprecated: null,
                                 pOId: null
                             }).debug(false);
                     } else { // if contract type is otherwise filter pending shipment by startingDate and endDate
@@ -222,6 +225,7 @@ router.route('/data/purchaseOrder')
                             .whereBetween('requestDate', [request.body.startingDate, request.body.endDate])
                             .where({
                                 CUS_NO: request.body.CUS_NO,
+                                deprecated: null,
                                 pOId: null
                             }).debug(false);
                     }

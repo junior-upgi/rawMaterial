@@ -50,5 +50,5 @@ FROM rawMaterial.dbo.shipment a
     LEFT JOIN rawMaterial.dbo.supplier d ON a.CUS_NO=d.CUS_NO
 WHERE (
     (a.deprecated IS NULL) OR
-    ((a.deprecated IS NOT NULL) AND (b.deprecated IS NULL))
+    ((a.deprecated IS NOT NULL) AND (a.pOId IS NOT NULL) AND (b.deprecated IS NULL))
 );
