@@ -1,7 +1,7 @@
 <template>
     <td>
         <input
-            v-if="!revocationPending && !isFutureDate && !pOClosed"
+            v-if="!revocationPending && !isFutureDate && !pOClosed && !pOPending"
             type="number"
             pattern="[0-9.]+"
             class="form-control input-sm text-center valueInput"
@@ -27,6 +27,7 @@
         props: [
             'isFutureDate',
             'pOClosed',
+            'pOPending',
             'revocationPending',
             'supplierWeight'
         ],
@@ -51,10 +52,9 @@
                     (newValue <= 1000) ||
                     (newValue > 99999)
                 ) {
-                    this.supplierWeightValue = this.supplierWeight;
-                } else {
-                    this.$emit('supplierWeightFieldUpdateEvent', this.supplierWeightValue);
+                    this.supplierWeightValue = null;
                 }
+                this.$emit('supplierWeightFieldUpdateEvent', this.supplierWeightValue);
             }
         }
     };

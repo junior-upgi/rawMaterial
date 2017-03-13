@@ -1,10 +1,10 @@
 <template>
     <td>
         <button
-            v-if="!pristine && workingDateReady && weightDataReady"
+            v-if="(!pristine && workingDateReady && weightDataReady)"
             type="button" class="btn btn-info btn-sm"
             :disabled="dataProcessingState?true:false"
-            @click="$emit('submitRecord')">
+            @click="$emit('submitRecordEvent')">
             <span class="glyphicon glyphicon-ok-sign"></span> 修改
         </button>
         <button
@@ -23,6 +23,7 @@
     export default {
         name: 'submitControl',
         props: [
+            'fulfilled',
             'pristine',
             'weightDataReady',
             'workingDateReady'

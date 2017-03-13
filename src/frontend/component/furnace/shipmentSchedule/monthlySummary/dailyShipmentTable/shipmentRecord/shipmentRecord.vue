@@ -22,16 +22,18 @@
         </td>
         <supplierWeightCell
             :pOClosed="pOClosed"
+            :pOPending="pOPending"
             :revocationPending="revocationPending"
             :isFutureDate="isFutureDate"
-            :supplierWeight="this.supplierWeight"
+            :supplierWeight="supplierWeight"
             @supplierWeightFieldUpdateEvent="processSupplierWeightFieldUpdateEvent($event)">
         </supplierWeightCell>
         <actualWeightCell
             :pOClosed="pOClosed"
+            :pOPending="pOPending"
             :revocationPending="revocationPending"
             :isFutureDate="isFutureDate"
-            :actualWeight="this.actualWeight"
+            :actualWeight="actualWeight"
             @actualWeightFieldUpdateEvent="processActualWeightFieldUpdateEvent($event)">
         </actualWeightCell>
         <noteCell
@@ -45,14 +47,17 @@
         </noteCell>
         <submitControl
             :pristine="pristine"
+            :fulfilled="fulfilled"
             :weightDataReady="weightDataReady"
-            :workingDateReady="workingDateReady">
+            :workingDateReady="workingDateReady"
+            @submitRecordEvent="processSubmitRecordEvent()">
         </submitControl>
     </tr>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapActions, mapGetters, mapMutations } from 'vuex';
+
     import numeral from 'numeral';
     import statusCell from './statusCell.vue';
     import workingDateCell from './workingDateCell.vue';
@@ -74,11 +79,17 @@
         props: ['index', 'shipment'],
         computed: {
             ...mapGetters({ activeShipmentEditorDate: 'activeShipmentEditorDate' }),
+            fulfilled: function() {
+                if (this.recordState.stateCode === 'fulfilled') { return true; } else { return false; }
+            },
             revocationPending: function() {
                 if (this.recordState.stateCode === 'revocationPending') { return true; } else { return false; }
             },
             pOClosed: function() {
                 if (this.recordState.stateCode === 'pOClosed') { return true; } else { return false; }
+            },
+            pOPending: function() {
+                if (this.recordState.stateCode === 'pOPending') { return true; } else { return false; }
             },
             isFutureDate: function() {
                 let today = new Date();
@@ -95,7 +106,7 @@
                 ) ? true : false;
             },
             weightDataReady: function() {
-                return ((this.supplierWeight !== null) && (this.actualWeight !== null));
+                return ((this.supplierWeight !== null) === (this.actualWeight !== null));
             },
             workingDateReady: function() {
                 let today = new Date();
@@ -134,22 +145,22 @@
             }
         },
         methods: {
+            ...mapActions({
+                componentErrorHandler: 'componentErrorHandler',
+                updateShipment: 'updateShipment'
+            }),
+            ...mapMutations({
+                processingDataSwitch: 'processingDataSwitch',
+                rebuildData: 'rebuildData'
+            }),
             processWorkingDateFieldUpdateEvent: function($event) {
                 this.workingDate = $event;
             },
             processSupplierWeightFieldUpdateEvent: function($event) {
-                if (($event === '') || ($event <= 1000) || ($event > 99999)) {
-                    this.supplierWeight = this.shipment.supplierWeight;
-                } else {
-                    this.supplierWeight = $event;
-                }
+                this.supplierWeight = $event;
             },
             processActualWeightFieldUpdateEvent: function($event) {
-                if (($event === '') || ($event <= 1000) || ($event > 99999)) {
-                    this.actualWeight = this.shipment.actualWeight;
-                } else {
-                    this.actualWeight = $event;
-                }
+                this.actualWeight = $event;
             },
             processRecordState: function(recordStateObject) { this.recordState = recordStateObject; },
             processRecordRestoreEvent: function() {
@@ -157,6 +168,25 @@
                 this.supplierWeight = this.shipment.supplierWeight;
                 this.actualWeight = this.shipment.actualWeight;
                 this.note = this.shipment.note;
+            },
+            processSubmitRecordEvent: function() {
+                this.processingDataSwitch(true);
+                this.updateShipment({
+                    id: this.shipment.id,
+                    workingDate: this.workingDate,
+                    supplierWeight: this.supplierWeight,
+                    actualWeight: this.actualWeight
+                }).then((resultset) => {
+                    this.rebuildData(resultset.data);
+                    this.processingDataSwitch(false);
+                }).catch((error) => {
+                    this.componentErrorHandler({
+                        component: 'noteCell',
+                        method: 'processSubmitRecordEvent',
+                        situation: '更新進貨資料錯誤',
+                        systemErrorMessage: error
+                    });
+                });
             }
         }
     };
