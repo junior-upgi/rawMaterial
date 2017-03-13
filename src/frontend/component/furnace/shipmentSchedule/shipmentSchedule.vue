@@ -27,9 +27,6 @@
     import workingTimeSelector from '../../common/workingTimeSelector.vue';
     import workingMaterialSelector from '../../common/workingMaterialSelector.vue';
     import monthlySummary from './monthlySummary/monthlySummary.vue';
-    // import { mapGetters, mapMutations } from 'vuex';
-    // import dailyShipmentRecord from './dailyShipmentRecord.vue';
-    // import editPane from './editPane.vue';
 
     export default {
         name: 'scheduleTable',
@@ -37,44 +34,7 @@
             workingTimeSelector,
             workingMaterialSelector,
             monthlySummary
-            // dailyShipmentRecord,
-            // editPane
         }
-        /* ,
-        methods: {
-            editModeToggle: function(dateSelected) {
-                if (dateSelected !== this.dateInEditMode) {
-                    this.dateInEditMode = dateSelected;
-                } else {
-                    this.dateInEditMode = null;
-                }
-            }
-        },
-        created: function() { this.dateInEditMode = null; }
-        computed: {
-            ...mapGetters({
-                // dateInEditMode: 'checkDateInEditMode',
-                // monthlyScheduleSummary: 'getMonthlyScheduleSummary'
-            })
-        },
-        methods: {
-            ...mapMutations({
-                switchDateInEditMode: 'switchDateInEditMode',
-                turnOffEditMode: 'turnOffEditMode'
-
-            }),
-            captureEditEvent: function(date, switchState) {
-                if (switchState === true) {
-                    this.switchDateInEditMode(date);
-                } else {
-                    this.turnOffEditMode();
-                }
-            },
-            inEditMode: function(date) {
-                return date === this.dateInEditMode ? true : false;
-            }
-        }
-        */
     };
 
 </script>

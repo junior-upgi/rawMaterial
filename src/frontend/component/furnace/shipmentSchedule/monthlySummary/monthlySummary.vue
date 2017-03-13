@@ -11,51 +11,12 @@
         </dailySummaryItem>
     </div>
     <div v-else>尚無下單資料</div>
-    <!--
-    <template v-for="shipmentSummaryItem in shipmentSummary">
-        <dailySummaryRecord
-            :dateInEditMode="dateInEditMode"
-            :shipmentSummaryItem="shipmentSummaryItem"
-            @dailySummaryRecordSelected="$emit('dailySummaryRecordSelected',$event)">
-        </dailySummaryRecord>
-        <editPane
-            v-if="shipmentSummaryItem.workingDate===dateInEditMode"
-            :dateInEditMode="dateInEditMode"
-            :shipmentSchedule="filterShipmentSchedule()">
-        </editPane>
-    </template>
-    -->
-    <!--
-    <div class="table-responsive" style="height:500px;overflow:auto;">
-    <table
-        class="table table-striped"
-        :class="{'table-hover':dateInEditMode===null}">
-        <thead>
-            <tr class="info">
-                <th
-                    v-for="thItem in thList"
-                    class="text-center"
-                    style="padding-top:3px;padding-bottom:3px;margin-top:3px;margin-bottom:3px;">
-                    {{thItem}}
-                </th>
-            </tr>
-        </thead>
-        <monthlySummary
-            :dateInEditMode="dateInEditMode"
-            @dailySummaryRecordSelected="editModeToggle($event)">
-        </monthlySummary>
-    </table>
-    </div>
-    -->
 </template>
 
 <script>
     import moment from 'moment-timezone';
     import { mapGetters } from 'vuex';
     import dailySummaryItem from './dailySummaryItem.vue';
-    /*
-    import editPane from './editPane.vue';
-    */
 
     export default {
         name: 'monthlySummary',
@@ -69,7 +30,6 @@
                 shipmentSchedule: 'shipmentSchedule',
                 workingYear: 'workingYear',
                 workingMonth: 'workingMonth'
-                // shipmentSummary: 'filteredShipmentSummaryByPrdNo'
             }),
             releventShipmentSchedule: function() {
                 return this.shipmentSchedule.filter((shipment) => {
@@ -89,16 +49,6 @@
                 return moment.utc(new Date(this.workingYear, this.workingMonth - 1, workingDay)).format('YYYY-MM-DD');
             }
         }
-        /*
-        props: ['dateInEditMode'],
-        methods: {
-            filterShipmentSchedule: function() {
-                return this.shipmentSchedule.filter((shipment) => {
-                    return shipment.workingDate === this.dateInEditMode;
-                });
-            }
-        }
-        */
     };
 
 </script>

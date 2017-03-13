@@ -9,64 +9,57 @@
             <del v-if="revocationPending" style="white-space:nowrap;">【{{shipment.CUST_SNM}}】{{shipment.PRDT_SNM}} - {{shipment.specification}}</del>
             <span v-else style="white-space:nowrap;">【{{shipment.CUST_SNM}}】{{shipment.PRDT_SNM}} - {{shipment.specification}}</span>
         </td>
-        <td>
-            <span v-if="pOClosed">{{shipment.workingDate}}</span>
-            <del v-else-if="revocationPending">{{shipment.requestDate}}</del>
-            <workingDateCell
-                v-else
-                :workingDateString="this.shipment.workingDate"
-                :recordState="recordState"
-                @workingDateUpdated="getWorkingDateValue($event)">
-            </workingDateCell>
-        </td>
+        <workingDateCell
+            :pOClosed="pOClosed"
+            :revocationPending="revocationPending"
+            :workingDateString="this.workingDate"
+            @workingDateFieldUpdateEvent="processWorkingDateFieldUpdateEvent($event)">
+        </workingDateCell>
         <td>
             <span v-if="pOClosed" style="white-space:nowrap;">{{shipment.workingWeight|tonnage}} (結案)</span>
+            <del v-else-if="revocationPending" style="white-space:nowrap;">{{shipment.requestWeight|tonnage}} (需求)</del>
             <span v-else style="white-space:nowrap;">{{shipment.requestWeight|tonnage}} (需求)</span>
         </td>
-        <td>
-            <supplierWeightCell
-                v-if="!revocationPending && !isFutureDate"
-                :supplierWeight="this.shipment.supplierWeight"
-                :recordState="recordState"
-                @supplierWeightUpdated="getSupplierWeightValue($event)">
-            </supplierWeightCell>
-            <span v-else>{{this.shipment.supplierWeight|tonnage}}</span>
-        </td>
-        <td>
-            <actualWeightCell
-                v-if="!revocationPending && !isFutureDate"
-                :actualWeight="this.shipment.actualWeight"
-                :recordState="recordState"
-                @actualWeightUpdated="getActualWeightValue($event)">
-            </actualWeightCell>
-            <span v-else>{{this.shipment.actualWeight|tonnage}}</span>
-        </td>
-        <td>
-            <span
-                v-if="revocationPending || pOClosed"
-                style="white-space:nowrap;">
-                {{this.shipment.note}}
-            </span>
-            <noteCell
-                v-else
-                :id="this.shipment.id"
-                :workingDate="this.shipment.workingDate"
-                :supplierWeight="this.shipment.supplierWeight"
-                :actualWeight="this.shipment.actualWeight"
-                :note="this.shipment.note">
-            </noteCell>
-        </td>
-        <td></td>
+        <supplierWeightCell
+            :pOClosed="pOClosed"
+            :revocationPending="revocationPending"
+            :isFutureDate="isFutureDate"
+            :supplierWeight="this.supplierWeight"
+            @supplierWeightFieldUpdateEvent="processSupplierWeightFieldUpdateEvent($event)">
+        </supplierWeightCell>
+        <actualWeightCell
+            :pOClosed="pOClosed"
+            :revocationPending="revocationPending"
+            :isFutureDate="isFutureDate"
+            :actualWeight="this.actualWeight"
+            @actualWeightFieldUpdateEvent="processActualWeightFieldUpdateEvent($event)">
+        </actualWeightCell>
+        <noteCell
+            :revocationPending="revocationPending"
+            :pOClosed="pOClosed"
+            :id="this.shipment.id"
+            :workingDate="this.shipment.workingDate"
+            :supplierWeight="this.shipment.supplierWeight"
+            :actualWeight="this.shipment.actualWeight"
+            :note="this.shipment.note">
+        </noteCell>
+        <submitControl
+            :pristine="pristine"
+            :weightDataReady="weightDataReady"
+            :workingDateReady="workingDateReady">
+        </submitControl>
     </tr>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import numeral from 'numeral';
     import statusCell from './statusCell.vue';
     import workingDateCell from './workingDateCell.vue';
     import supplierWeightCell from './supplierWeightCell.vue';
     import actualWeightCell from './actualWeightCell.vue';
     import noteCell from './noteCell.vue';
+    import submitControl from './submitControl.vue';
 
     export default {
         name: 'shipmentRecord',
@@ -75,10 +68,12 @@
             supplierWeightCell,
             actualWeightCell,
             workingDateCell,
-            noteCell
+            noteCell,
+            submitControl
         },
         props: ['index', 'shipment'],
         computed: {
+            ...mapGetters({ activeShipmentEditorDate: 'activeShipmentEditorDate' }),
             revocationPending: function() {
                 if (this.recordState.stateCode === 'revocationPending') { return true; } else { return false; }
             },
@@ -90,7 +85,24 @@
                 let referenceDate = new Date(this.shipment.workingDate);
                 today.setHours(0, 0, 0, 0);
                 referenceDate.setHours(0, 0, 0, 0);
-                return(referenceDate > today) ? true : false;
+                return (referenceDate > today) ? true : false;
+            },
+            pristine: function() {
+                return (
+                    (this.shipment.workingDate === this.workingDate) &&
+                    (this.shipment.supplierWeight === this.supplierWeight) &&
+                    (this.shipment.actualWeight === this.actualWeight)
+                ) ? true : false;
+            },
+            weightDataReady: function() {
+                return ((this.supplierWeight !== null) && (this.actualWeight !== null));
+            },
+            workingDateReady: function() {
+                let today = new Date();
+                let referenceDate = new Date(this.workingDate);
+                today.setHours(0, 0, 0, 0);
+                referenceDate.setHours(0, 0, 0, 0);
+                return ((this.workingDate !== null) && (referenceDate <= today)) ? true : false;
             }
         },
         data: function() {
@@ -108,6 +120,12 @@
         watch: {
             workingDate: function(newDateValue) {
                 if (newDateValue === '') { this.workingDate = null; }
+            },
+            activeShipmentEditorDate: function() {
+                this.workingDate = this.shipment.workingDate;
+                this.supplierWeight = this.shipment.supplierWeight;
+                this.actualWeight = this.shipment.actualWeight;
+                this.note = this.shipment.note;
             }
         },
         filters: {
@@ -116,22 +134,30 @@
             }
         },
         methods: {
-            getWorkingDateValue: function($event) { this.workingDate = $event; },
-            getSupplierWeightValue: function($event) {
+            processWorkingDateFieldUpdateEvent: function($event) {
+                this.workingDate = $event;
+            },
+            processSupplierWeightFieldUpdateEvent: function($event) {
                 if (($event === '') || ($event <= 1000) || ($event > 99999)) {
                     this.supplierWeight = this.shipment.supplierWeight;
                 } else {
                     this.supplierWeight = $event;
                 }
             },
-            getActualWeightValue: function($event) {
+            processActualWeightFieldUpdateEvent: function($event) {
                 if (($event === '') || ($event <= 1000) || ($event > 99999)) {
                     this.actualWeight = this.shipment.actualWeight;
                 } else {
                     this.actualWeight = $event;
                 }
             },
-            processRecordState: function(recordStateObject) { this.recordState = recordStateObject; }
+            processRecordState: function(recordStateObject) { this.recordState = recordStateObject; },
+            processRecordRestoreEvent: function() {
+                this.workingDate = this.shipment.workingDate;
+                this.supplierWeight = this.shipment.supplierWeight;
+                this.actualWeight = this.shipment.actualWeight;
+                this.note = this.shipment.note;
+            }
         }
     };
 </script>

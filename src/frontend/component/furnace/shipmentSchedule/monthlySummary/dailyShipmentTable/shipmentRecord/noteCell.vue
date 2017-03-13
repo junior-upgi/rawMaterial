@@ -1,10 +1,12 @@
 <template>
-    <input
-        type="text"
-        class="form-control input-sm"
-        style="border:0px;"
-        :disabled="dataProcessingDstate ? true : false"
-        v-model.lazy.trim="noteValue" />
+    <td>
+        <span v-if="revocationPending || pOClosed">{{note}}</span>
+        <input
+            v-else
+            type="text" class="form-control input-sm" style="border:0px;"
+            :disabled="dataProcessingState ? true : false"
+            v-model.lazy.trim="noteValue" />
+    </td>
 </template>
 
 <script>
@@ -13,6 +15,8 @@
     export default {
         name: 'noteCell',
         props: [
+            'revocationPending',
+            'pOClosed',
             'id',
             'workingDate',
             'supplierWeight',

@@ -32,7 +32,6 @@
         props: ['shipmentSchedule'],
         data: function() {
             return {
-                // dateInEditMode: null,
                 thList: ['', '狀態', '項目', '日期', '重量', '廠商宣稱重量', '實際磅單重量', '備註', '']
             };
         }
