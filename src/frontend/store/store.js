@@ -15,7 +15,6 @@ export const store = new Vuex.Store({
     state: {
         /*
         // shipment schedule
-        dateInEditMode: false,
         shipmentOverview: [], // list of shipment overview data
 
         // basic data
@@ -48,6 +47,7 @@ export const store = new Vuex.Store({
         workingMonth: parseInt(currentDatetime().format('M')),
         workingYear: parseInt(currentDatetime().format('YYYY')),
         workingSupplier: null,
+        activeShipmentEditorDate: null,
 
         // basic working data
         rawMatList: [], // list of raw material with details

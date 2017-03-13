@@ -42,6 +42,7 @@ export default {
     workingSupplierDetail: workingSupplierDetail,
     workingMonth: function(state) { return state.workingMonth; },
     workingYear: function(state) { return state.workingYear; },
+    activeShipmentEditorDate: function(state) { return state.activeShipmentEditorDate; },
     // user info and permission
     activeView: activeView,
     role: function(state) { return state.role; },

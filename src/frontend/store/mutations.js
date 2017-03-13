@@ -4,7 +4,6 @@ import { currentDatetime } from '../utility.js';
 
 function emptyStoreValue(state) {
     /*
-    state.dateInEditMode = false;
     state.pOCreateMode = false;
     state.pOEditMode = false;
     state.pOList = [];
@@ -33,6 +32,7 @@ function emptyStoreValue(state) {
     state.workingMonth = parseInt(currentDatetime().format('M'));
     state.workingYear = parseInt(currentDatetime().format('YYYY'));
     state.workingSupplier = null;
+    state.activeShipmentEditorDate = null;
 
     // basic working data
     state.rawMatList = [];
@@ -170,6 +170,8 @@ export default {
     setWorkingSupplier: setWorkingSupplier,
     forceViewChange: function(state, view) { state.activeView = view; }, // activeView specific
     redirectUser: function(state) { state.activeView = state.role; }, // activeView specific
+    changeActiveShipmentEditorDate: function(state, newDateString) { state.activeShipmentEditorDate = newDateString; },
+    clearActiveShipmentEditorDate: function(state) { state.activeShipmentEditorDate = null; },
     // utility functions
     restoreToken: restoreToken, // restore token if exists
     // general vuex store data manipulation
@@ -179,6 +181,7 @@ export default {
 };
 
 function buildStore(state, responseList) {
+    state.activeShipmentEditorDate = null;
     let dataObject = {};
     responseList.forEach((response) => {
         Object.assign(dataObject, response.data);
@@ -190,6 +193,7 @@ function buildStore(state, responseList) {
 }
 
 function rebuildData(state, dataObject) {
+    state.activeShipmentEditorDate = null;
     for (let objectIndex in dataObject) {
         state[objectIndex] = null;
         state[objectIndex] = dataObject[objectIndex];

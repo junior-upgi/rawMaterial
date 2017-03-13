@@ -163,9 +163,9 @@ router.route('/data/shipment')
             for (let index = 0; index < request.body.targetList.length; index++) {
                 requestPromiseList.push(
                     trx('rawMaterial.dbo.shipment')
-                        .update({ deprecated: moment.utc(new Date()).format('YYYY-MM-DD HH:mm:ss') })
-                        .where({ id: request.body.targetList[index] })
-                        .debug(false)
+                    .update({ deprecated: moment.utc(new Date()).format('YYYY-MM-DD HH:mm:ss') })
+                    .where({ id: request.body.targetList[index] })
+                    .debug(false)
                 );
             }
             return Promise.all(requestPromiseList)
@@ -231,31 +231,73 @@ router.route('/data/shipment')
         });
     })
     .put((request, response, next) => {
-        return response.status(200).json(request.body);
-        /*
-        const responseObject = {
+        let responseObject = {
             shipmentSchedule: null,
-            shipmentSummary: null
+            newRequestSummary: null,
+            activePOList: null,
+            pOContentSummary: null
         };
-        const knex = require('knex')(serverConfig.mssqlConfig);
-        knex('rawMaterial.dbo.shipmentRequest')
-            .update({
-                arrivalDate: request.body.arrivalDate,
-                actualWeight: request.body.actualWeight,
-                supplierWeight: request.body.supplierWeight,
-                note: request.body.note,
-                modified: utility.currentDatetimeString()
-            })
-            .where({ id: request.body.id })
-            .debug(false)
-            .then(() => {
-                return shipmentSchedule(knex, request.body.workingYear, request.body.workingMonth);
-            })
-            .then((resultset) => {
-                responseObject.shipmentSchedule = resultset;
-                return shipmentSummary(knex, request.body.workingYear, request.body.workingMonth);
-            })
-            .then((resultset) => {
+        let knex = require('knex')(serverConfig.mssqlConfig);
+        knex.transaction((trx) => {
+                return trx('rawMaterial.dbo.shipment')
+                    .update({
+                        receivedDate: request.body.receivedDate,
+                        actualWeight: request.body.actualWeight,
+                        supplierWeight: request.body.supplierWeight,
+                        note: request.body.note
+                    })
+                    .where({ id: request.body.id })
+                    .debug(false)
+                    .then(() => {
+                        // get a set of fresh shipment data
+                        return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
+                            .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false);
+                    }).then((resultset) => {
+                        let shipmentSchedule = new Treeize();
+                        shipmentSchedule.setOptions({
+                            input: {
+                                detectCollection: false,
+                                uniformRows: true
+                            },
+                            output: {
+                                prune: false,
+                                objectOverwrite: false
+                            }
+                        });
+                        shipmentSchedule.grow(resultset);
+                        responseObject.shipmentSchedule = shipmentSchedule.getData();
+                        // get a set of fresh newRequestSummary data
+                        return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
+                            .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
+                    }).then((resultset) => {
+                        responseObject.newRequestSummary = resultset;
+                        // get a set of fresh purchaseOrder data
+                        return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
+                            .orderBy('CUS_NO').debug(false);
+                    }).then((resultset) => {
+                        // process active purchase order data
+                        let pOList = new Treeize();
+                        pOList.setOptions({
+                            input: {
+                                detectCollection: false,
+                                uniformRows: true
+                            },
+                            output: {
+                                prune: false,
+                                objectOverwrite: false
+                            }
+                        });
+                        pOList.grow(resultset);
+                        let tempList = pOList.getData();
+                        tempList.forEach((purchaseOrder, index, array) => {
+                            array[index].supplier = purchaseOrder.suppliers[0];
+                            delete array[index].suppliers;
+                        });
+                        responseObject.activePOList = tempList;
+                        // get a set of fresh contentSummary data
+                        return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+                    });
+            }).then((resultset) => {
                 responseObject.shipmentSummary = resultset;
                 return response.status(200).json(responseObject);
             })
@@ -264,13 +306,12 @@ router.route('/data/shipment')
                     utility.endpointErrorHandler(
                         request.method,
                         request.originalUrl,
-                        `原料進廠資料寫入發生錯誤: ${error}`)
+                        `預約記錄備註資料寫入發生錯誤: ${error}`)
                 );
             })
             .finally(() => {
                 knex.destroy();
             });
-        */
     });
 
 module.exports = router;

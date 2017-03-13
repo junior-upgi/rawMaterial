@@ -158,32 +158,7 @@ export default {
         }
     },
     */
-    updateShipment: function(context, payload) {
-        const recordData = {
-            workingMonth: context.state.workingMonth,
-            workingYear: context.state.workingYear
-        };
-        for (const index in payload) {
-            recordData[index] = payload[index];
-        }
-        if (recordData.supplierWeight && recordData.actualWeight) {
-            // establish the arrival date when a shipment's receiving quantity is fulfilled
-            recordData.arrivalDate = payload.workingDate;
-        } else {
-            recordData.requestDate = payload.workingDate;
-            // make sure the shipment's 'arrived' status is revoked when user removes existing receiving quantity
-            recordData.arrivalDate = null;
-            recordData.supplierWeight = null;
-            recordData.actualWeight = null;
-        }
-        const requestOption = {
-            method: 'put',
-            url: `${serverUrl}/data/shipment`,
-            data: recordData,
-            headers: { 'x-access-token': sessionStorage.token }
-        };
-        return axios(requestOption);
-    },
+    updateShipment: updateShipment,
     cancelShipment: cancelShipment,
     componentErrorHandler: componentErrorHandler,
     shipmentReservation: shipmentReservation,
@@ -277,6 +252,30 @@ function shipmentReservation(context, payload) {
             qtyPerShipment: payload.qtyPerShipment,
             shipmentCount: payload.shipmentCount
         },
+        headers: { 'x-access-token': sessionStorage.token }
+    };
+    return axios(requestOption);
+}
+
+function updateShipment(context, payload) {
+    let recordData = {};
+    for (let objIndex in payload) {
+        recordData[objIndex] = payload[objIndex];
+    }
+    if (recordData.supplierWeight && recordData.actualWeight) {
+        // establish the arrival date when a shipment's receiving quantity is fulfilled
+        recordData.receivedDate = payload.workingDate;
+    } else {
+        recordData.requestDate = payload.workingDate;
+        // make sure the shipment's 'arrived' status is revoked when user removes existing receiving quantity
+        recordData.receivedDate = null;
+        recordData.supplierWeight = null;
+        recordData.actualWeight = null;
+    }
+    const requestOption = {
+        method: 'put',
+        url: `${serverUrl}/data/shipment`,
+        data: recordData,
         headers: { 'x-access-token': sessionStorage.token }
     };
     return axios(requestOption);

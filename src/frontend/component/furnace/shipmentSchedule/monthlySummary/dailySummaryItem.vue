@@ -1,32 +1,22 @@
 <template>
-    <div class="panel panel-success">
+    <div
+        v-if="releventShipmentSchedule.length > 0"
+        class="panel panel-success">
         <div class="panel-heading" role="tab" :id="'dailySummaryRecord' + workingDay">
             <h4 class="panel-title text-left"
                 role="button"
                 data-toggle="collapse"
                 data-parent="#monthlySummary"
-                :href="'#' + workingDay">
-                {{workingDateString}} 原料進貨明細
+                :href="'#' + workingDay"
+                @click="changeActiveShipmentEditorDate(workingDateString)">
+                {{workingDateString}} 【{{selectedRawMaterial.PRDT_SNM}}】 進貨明細
             </h4>
         </div>
         <div :id="workingDay" class="panel-collapse collapse" role="tabpanel">
-            <div class="panel-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>a</th>
-                            <th>b</th>
-                            <th>c</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>a</td>
-                            <td>b</td>
-                            <td>c</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="panel-body" style="font-size:75%;padding:0px;">
+                <dailyShipmentTable
+                    :shipmentSchedule="releventShipmentSchedule">
+                </dailyShipmentTable>
             </div>
         </div>
     </div>
@@ -44,27 +34,41 @@
 </template>
 
 <script>
+    import { mapGetters, mapMutations } from 'vuex';
+    import dailyShipmentTable from './dailyShipmentTable/dailyShipmentTable.vue';
     // import numeral from 'numeral';
-    // import { mapGetters, mapMutations } from 'vuex';
 
     export default {
-        name: 'dailySummaryRecord',
+        name: 'dailySummaryItem',
+        components: { dailyShipmentTable },
         props: [
+            'shipmentSchedule',
             'workingDateString',
             'workingDay'
             // 'dateInEditMode',
             // 'shipmentSummaryItem'
-        ]
+        ],
+        computed: {
+            ...mapGetters({ selectedRawMaterial: 'selectedRawMaterial' }),
+            releventShipmentSchedule: function() {
+                return this.shipmentSchedule.filter((shipment) => {
+                    return shipment.workingDate === this.workingDateString;
+                });
+            }
+            // ...mapGetters({ dateInEditMode: 'checkDateInEditMode' }),
+            /*
+            inEditMode: function() {
+                return this.dateInEditMode === this.shipmentSummaryItem.workingDate ? true : false;
+            }
+            */
+        },
+        methods: {
+            ...mapMutations({ changeActiveShipmentEditorDate: 'changeActiveShipmentEditorDate' })
+        }
         /* ,
         filters: {
             tonnage: function(value) {
                 return `${numeral(Math.round((value) / 100) / 10).format('0,0.0')} 噸`;
-            }
-        },
-        computed: {
-            // ...mapGetters({ dateInEditMode: 'checkDateInEditMode' }),
-            inEditMode: function() {
-                return this.dateInEditMode === this.shipmentSummaryItem.workingDate ? true : false;
             }
         },
         methods: {

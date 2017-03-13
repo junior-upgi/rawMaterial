@@ -6,7 +6,7 @@
                     <workingTimeSelector
                         @workingTimeChange="dateInEditMode=null">
                     </workingTimeSelector>
-                    &nbsp;原料進廠明細表
+                    &nbsp;原料進廠明細表 (點選展開進貨明細編輯表)
                 </h4>
             </div>
             <div class="panel-body">

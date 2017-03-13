@@ -1,11 +1,16 @@
 <template>
-    <div class="panel-group" id="monthlySummary" role="tablist">
-        <dailySummaryRecord
+    <div
+        v-if="releventShipmentSchedule.length > 0"
+        class="panel-group" id="monthlySummary" role="tablist">
+        <dailySummaryItem
             v-for="index in daysInCurrentWorkingMonth"
             :workingDateString="getWorkingDateString(index + 1)"
-            :workingDay="index + 1">
-        </dailySummaryRecord>
+            :workingDay="index + 1"
+            :shipmentSchedule="releventShipmentSchedule"
+            @editModeToggled="editModeToggled($event)">
+        </dailySummaryItem>
     </div>
+    <div v-else>尚無下單資料</div>
     <!--
     <template v-for="shipmentSummaryItem in shipmentSummary">
         <dailySummaryRecord
@@ -41,19 +46,23 @@
         </monthlySummary>
     </table>
     </div>
-        -->
+    -->
 </template>
 
 <script>
     import moment from 'moment-timezone';
     import { mapGetters } from 'vuex';
-    import dailySummaryRecord from './dailySummaryRecord.vue';
+    import dailySummaryItem from './dailySummaryItem.vue';
     /*
     import editPane from './editPane.vue';
     */
 
     export default {
         name: 'monthlySummary',
+        components: {
+            dailySummaryItem
+            // editPane
+        },
         computed: {
             ...mapGetters({
                 selectedRawMaterial: 'selectedRawMaterial',
@@ -75,22 +84,12 @@
                 return new Date(this.workingYear, this.workingMonth, 0).getDate();
             }
         },
-        components: {
-            dailySummaryRecord
-            // editPane
-        },
         methods: {
             getWorkingDateString: function(workingDay) {
                 return moment.utc(new Date(this.workingYear, this.workingMonth - 1, workingDay)).format('YYYY-MM-DD');
             }
         }
-        /* ,
-        data: function() {
-            return {
-                dateInEditMode: null,
-                thList: ['狀態', '日期', '廠商', '項目', '規格', '車次', '重量']
-            };
-        },
+        /*
         props: ['dateInEditMode'],
         methods: {
             filterShipmentSchedule: function() {
