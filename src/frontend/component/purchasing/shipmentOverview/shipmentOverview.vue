@@ -10,10 +10,10 @@
             <table class="table table-striped table-bordered table-condensed table-hover">
                 <thead>
                     <tr>
-                        <th class="text-center">廠商</th>
-                        <th class="text-center">項目</th>
+                        <th class="text-center" style="white-space:nowrap;">廠商</th>
+                        <th class="text-center" style="white-space:nowrap;">項目</th>
                         <th class="text-center">入廠日期</th>
-                        <th class="text-center">車次</th>
+                        <th class="text-center" style="white-space:nowrap;">車次</th>
                         <th class="text-center">重量</th>
                     </tr>
                 </thead>

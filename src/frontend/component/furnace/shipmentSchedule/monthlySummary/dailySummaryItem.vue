@@ -1,7 +1,8 @@
 <template>
     <div
         v-if="releventShipmentSchedule.length > 0"
-        class="panel panel-success">
+        class="panel"
+        :class="{'panel-success':!isWeekend, 'panel-danger':isWeekend}">
         <div class="panel-heading" role="tab" :id="'dailySummaryRecord' + workingDay">
             <h4 class="panel-title text-left"
                 role="button"
@@ -9,7 +10,7 @@
                 data-parent="#monthlySummary"
                 :href="'#' + workingDay"
                 @click="changeActiveShipmentEditorDate(workingDateString)">
-                {{workingDateString}} 【{{selectedRawMaterial.PRDT_SNM}}】 進貨明細
+                {{workingDateString}} ({{weekdayReferenceList[weekday]}}) 【{{selectedRawMaterial.PRDT_SNM}}】 進貨明細
             </h4>
         </div>
         <div :id="workingDay" class="panel-collapse collapse" role="tabpanel">
@@ -40,7 +41,18 @@
                 return this.shipmentSchedule.filter((shipment) => {
                     return shipment.workingDate === this.workingDateString;
                 });
+            },
+            weekday: function() {
+                return new Date(this.workingDateString).getDay();
+            },
+            isWeekend: function() {
+                return ((this.weekday === 0) || (this.weekday === 6)) ? true : false;
             }
+        },
+        data: function() {
+            return {
+                weekdayReferenceList: ['週日', '週一', '週二', '週三', '週四', '週五', '週六']
+            };
         },
         methods: {
             ...mapMutations({ changeActiveShipmentEditorDate: 'changeActiveShipmentEditorDate' })
