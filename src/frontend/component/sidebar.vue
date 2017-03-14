@@ -32,6 +32,14 @@
             採購模組
         </button>
         <button
+            v-if="(role==='admin')||(role==='purchasing')"
+            type="button" class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
+            :class="{'btn-danger':activeView==='pOView'}"
+            @click="changeWorkingView('pOView')">
+            檢視訂單
+        </button>
+        <button
             v-if="role==='admin'"
             type="button" class="btn btn-default btn-block"
             :disabled="dataProcessingState?true:false"

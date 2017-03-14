@@ -46,7 +46,7 @@
         },
         methods: {
             getWorkingDateString: function(workingDay) {
-                return moment.utc(new Date(this.workingYear, this.workingMonth - 1, workingDay)).format('YYYY-MM-DD');
+                return moment(new Date(this.workingYear, this.workingMonth - 1, workingDay)).format('YYYY-MM-DD');
             }
         }
     };

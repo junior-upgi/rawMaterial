@@ -51,11 +51,11 @@
             genStartingDate: function() {
                 switch (this.requestSummary.contractType) {
                     case 'annual':
-                        return moment.utc(new Date(this.requestSummary.workingYear, 0, 1)).format('YYYY-MM-DD');
+                        return moment(new Date(this.requestSummary.workingYear, 0, 1)).format('YYYY-MM-DD');
                     case 'monthly':
-                        return moment.utc(new Date(this.requestSummary.workingYear, this.requestSummary.workingMonth - 1, 1)).format('YYYY-MM-DD');
+                        return moment(new Date(this.requestSummary.workingYear, this.requestSummary.workingMonth - 1, 1)).format('YYYY-MM-DD');
                     case 'oneTime':
-                        return moment.utc(new Date()).format('YYYY-MM-DD');
+                        return moment(new Date()).format('YYYY-MM-DD');
                     default:
                         this.componentErrorHandler({
                             component: 'actionField',
@@ -67,11 +67,11 @@
             genEndDate: function() {
                 switch (this.requestSummary.contractType) {
                     case 'annual':
-                        return moment.utc(new Date(this.requestSummary.workingYear, 11, 31)).format('YYYY-MM-DD');
+                        return moment(new Date(this.requestSummary.workingYear, 11, 31)).format('YYYY-MM-DD');
                     case 'monthly':
-                        return moment.utc(new Date(this.requestSummary.workingYear, this.requestSummary.workingMonth, 0)).format('YYYY-MM-DD');
+                        return moment(new Date(this.requestSummary.workingYear, this.requestSummary.workingMonth, 0)).format('YYYY-MM-DD');
                     case 'oneTime':
-                        return moment.utc(new Date()).format('YYYY-MM-DD');
+                        return moment(new Date()).format('YYYY-MM-DD');
                     default:
                         this.componentErrorHandler({
                             component: 'actionField',
@@ -81,7 +81,7 @@
                 }
             },
             genPONumber: function() {
-                let dateString = moment.utc(new Date()).format('YYYYMMDD');
+                let dateString = moment(new Date()).format('YYYYMMDD');
                 return `${this.requestSummary.CUS_NO}-${dateString}`;
             },
             createNewPO: function() {
@@ -89,7 +89,7 @@
                 this.createPurchaseOrder({
                         contractType: this.requestSummary.contractType,
                         CUS_NO: this.requestSummary.CUS_NO,
-                        documentDate: moment.utc(new Date()).format('YYYY-MM-DD'),
+                        documentDate: moment(new Date()).format('YYYY-MM-DD'),
                         endDate: this.genEndDate(),
                         pONumber: this.genPONumber(),
                         startingDate: this.genStartingDate(),

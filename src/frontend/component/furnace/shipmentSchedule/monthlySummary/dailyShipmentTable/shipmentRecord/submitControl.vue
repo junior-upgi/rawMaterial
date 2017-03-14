@@ -40,7 +40,7 @@
                 changeActiveShipmentEditorDate: 'changeActiveShipmentEditorDate'
             }),
             restoreRecordData: function() {
-                let tempDate = moment.utc(new Date(this.activeShipmentEditorDate)).add(1, 'day').format('YYYY-MM-DD');
+                let tempDate = moment(new Date(this.activeShipmentEditorDate)).add(1, 'day').format('YYYY-MM-DD');
                 let currentActiveShipmentEditorDate = this.activeShipmentEditorDate;
                 this.changeActiveShipmentEditorDate(tempDate);
                 setTimeout(() => {

@@ -28,14 +28,14 @@
         },
         data: function() {
             return {
-                cellDate: moment.utc(new Date(this.cellDateString)),
+                cellDate: moment(new Date(this.cellDateString)),
                 maxUserInputValueAllowed: 5,
                 userInputValue: null
             };
         },
         watch: {
             cellDateString: function(newDate) {
-                this.cellDate = moment.utc(new Date(newDate));
+                this.cellDate = moment(new Date(newDate));
             },
             userInputValue: function(newValue) {
                 if (

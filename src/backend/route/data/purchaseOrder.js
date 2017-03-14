@@ -82,7 +82,7 @@ router.route('/data/purchaseOrder')
             originalPOId: request.body.targetPO.originalPOId,
             pONumber: request.body.targetPO.pONumber,
             contractType: request.body.targetPO.contractType,
-            documentDate: moment.utc(new Date()).format('YYYY-MM-DD'),
+            documentDate: moment(new Date()).format('YYYY-MM-DD'),
             workingYear: request.body.targetPO.workingYear,
             workingMonth: request.body.targetPO.workingMonth,
             startingDate: request.body.targetPO.startingDate,

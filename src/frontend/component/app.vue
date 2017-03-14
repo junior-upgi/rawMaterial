@@ -20,6 +20,7 @@
     import admin from './admin/admin.vue';
     import furnace from './furnace/furnace.vue';
     import purchasing from './purchasing/purchasing.vue';
+    import pOView from './purchasing/purchaseOrder/pOView.vue';
     /*
     import supplier from './userInterface/supplier.vue';
     import pOTemplate from './userInterface/purchaseOrder/pOTemplate.vue';
@@ -33,7 +34,8 @@
             login,
             admin,
             furnace,
-            purchasing
+            purchasing,
+            pOView
         },
         computed: { ...mapGetters({ activeView: 'activeView' }) },
         methods: {
