@@ -8,13 +8,6 @@
             :requestSummary="summaryEntry"
             :newShipmentRequestList="filterNewShipmentRequestList(summaryEntry.CUS_NO, summaryEntry.contractType, summaryEntry.workingYear, summaryEntry.workingMonth)">
         </newRequestRecord>
-        <!--
-        <newRequestRecord
-            v-for="summaryEntry in newRequestSummary"
-            v-if="organizedRequestList[summaryEntry.CUS_NO]"
-            :requestSummary="summaryEntry">
-        </newRequestRecord>
-        -->
     </tbody>
 </template>
 

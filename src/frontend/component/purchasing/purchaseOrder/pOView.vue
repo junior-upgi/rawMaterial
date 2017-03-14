@@ -2,14 +2,20 @@
     <div class="text-center col-xs-12 col-sm-10">
         <h2>訂單檢視模組</h2>
         <br>
-        <select
-            class="form-control"
-            v-model="selectedIndex">
-            <option v-for="(activePO,index) in activePOList" :value="index">
-                【{{activePO.supplier.SNM}}】{{activePO.pONumber}} - {{activePO.revisionNumber}}
-                {{activePO.contractType}} {{activePO.startingDate}} - {{activePO.endDate}}
-            </option>
-        </select>
+        <div class="panel-group" id="shipmentSchedule" role="tablist">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <select
+                        class="form-control"
+                        v-model="selectedIndex">
+                        <option v-for="(activePO,index) in activePOList" :value="index">
+                            【{{activePO.supplier.SNM}}】 訂單編號：{{activePO.pONumber}} - {{activePO.revisionNumber}}
+                            訂單類別：{{activePO.contractType}} 起訖時間：{{activePO.startingDate}} - {{activePO.endDate}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
