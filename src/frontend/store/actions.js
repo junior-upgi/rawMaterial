@@ -35,6 +35,14 @@ export default {
                 headers: { 'x-access-token': sessionStorage.token }
             }, {
                 method: 'get',
+                url: `${serverUrl}/data/shipment/receivingRecord`,
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
+                url: `${serverUrl}/data/shipment/monthlyOverview`,
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
                 url: `${serverUrl}/data/purchaseOrder`,
                 headers: { 'x-access-token': sessionStorage.token }
             }, {
@@ -42,24 +50,7 @@ export default {
                 url: `${serverUrl}/data/purchaseOrder/contentSummary`,
                 headers: { 'x-access-token': sessionStorage.token }
             }
-            /*
-            , {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/summary`,
-                params: {
-                    workingYear: context.state.workingYear,
-                    workingMonth: context.state.workingMonth
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/overview`,
-                params: {
-                    workingYear: context.state.workingYear,
-                    workingMonth: context.state.workingMonth
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
+            /* , {
                 method: 'get',
                 url: `${serverUrl}/data/shipment/tonnageSummary`,
                 params: {

@@ -1,15 +1,15 @@
 <template>
-    <td>
+    <td style="white-space:nowrap;">
         <button
             v-if="(!pristine && workingDateReady && weightDataReady)"
-            type="button" class="btn btn-info btn-sm"
+            type="button" class="btn btn-primary btn-sm"
             :disabled="dataProcessingState?true:false"
             @click="$emit('submitRecordEvent')">
             <span class="glyphicon glyphicon-ok-sign"></span> 修改
         </button>
         <button
             v-if="!pristine"
-            type="button" class="btn btn-warning btn-sm"
+            type="button" class="btn btn-danger btn-sm"
             :disabled="dataProcessingState ? true : false"
             @click="restoreRecordData()">
             <span class="glyphicon glyphicon-remove-sign"></span> 取消

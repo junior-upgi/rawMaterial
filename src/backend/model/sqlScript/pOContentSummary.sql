@@ -10,8 +10,8 @@ SELECT
 	,c.specification
 	,a.requestShipmentCount
 	,a.totalRequestedWeight
-	,b.pendingShipmentCount
-	,a.requestShipmentCount-b.pendingShipmentCount AS receivedShipmentCount
+	,ISNULL(b.pendingShipmentCount,0) AS pendingShipmentCount
+	,a.requestShipmentCount-ISNULL(b.pendingShipmentCount,0) AS receivedShipmentCount
 	,a.totalReceivedWeight
 FROM (
 	-- 將所有未失效並已下單預約記錄以訂單號與貨品分類集結後，統計預約車次總計、預約總重以及已到貨量總計
@@ -24,7 +24,7 @@ FROM (
 		SELECT a.pOId ,a.CUS_NO ,a.PRD_NO ,a.typeId ,a.requestWeight
 			,CASE
 				-- 若進貨重量已填，取較大者之重量。廠商/地磅秤重皆未填則為0
-				WHEN (ISNULL(a.supplierWeight,0)=ISNULL(a.actualWeight,0)) THEN 0 -- 預防兩者皆未填時，帶null值可能產生未預防之錯誤
+				WHEN ((a.supplierWeight IS NULL) AND (a.actualWeight IS NULL)) THEN 0 -- 預防兩者皆未填時，帶null值可能產生未預防之錯誤
 				WHEN a.actualWeight<=a.supplierWeight THEN a.actualWeight
 				ELSE a.supplierWeight
 				END AS receivedWeight

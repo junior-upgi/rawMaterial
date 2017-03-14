@@ -2,8 +2,8 @@
     <div class="text-center col-xs-12 col-sm-10">
         <h2>窯爐模組</h2>
         <br>
-        <shipmentSchedule></shipmentSchedule>
         <batch-reservation></batch-reservation>
+        <shipmentSchedule></shipmentSchedule>
     </div>
 </template>
 

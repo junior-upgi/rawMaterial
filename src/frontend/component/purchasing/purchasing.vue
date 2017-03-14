@@ -5,7 +5,7 @@
         <pOOverview></pOOverview>
         <div class="row">
             <div class="col-md-8">
-                <shipmentOverview :workingMaterial="filterWorkingMaterial()"></shipmentOverview>
+                <shipmentOverview></shipmentOverview>
             </div>
             <!--
             <div class="col-md-4">
@@ -41,32 +41,14 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
     import pOOverview from './pOOverview/pOOverview.vue';
-    import shipmentOverview from './shipmentOverview.vue';
+    import shipmentOverview from './shipmentOverview/shipmentOverview.vue';
 
     export default {
         name: 'purchasing',
         components: {
             pOOverview,
             shipmentOverview
-        },
-        computed: {
-            ...mapGetters({
-                workingMaterial: 'workingMaterial',
-                workingYear: 'workingYear',
-                workingMonth: 'workingMonth'
-            })
-        },
-        methods: {
-            filterWorkingMaterial: function() {
-                return this.workingMaterial.filter((material) => {
-                    return (
-                        (material.workingYear === this.workingYear) &&
-                        (material.workingMonth === this.workingMonth )
-                    );
-                });
-            }
         }
     };
 

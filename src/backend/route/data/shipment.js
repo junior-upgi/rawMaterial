@@ -10,35 +10,11 @@ const utility = require('../../utility.js');
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.get('/data/shipment/newRequestSummary', tokenValidation, function(request, response) {
-    let knex = require('knex')(serverConfig.mssqlConfig);
-    knex.select('*')
-        .from('rawMaterial.dbo.newRequestSummary')
-        .orderBy('workingYear')
-        .orderBy('workingMonth')
-        .orderBy('CUS_NO')
-        .debug(false)
-        .then((resultset) => {
-            return response.status(200).json({ newRequestSummary: resultset });
-        })
-        .catch((error) => {
-            return response.status(500).json(
-                utility.endpointErrorHandler(
-                    request.method,
-                    request.originalUrl,
-                    `新增預約概況資料讀取發生錯誤: ${error}`)
-            );
-        })
-        .finally(() => {
-            knex.destroy();
-        });
-});
-
 router.route('/data/shipment')
     .all(tokenValidation)
     .get(function(request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
-        knex.select('*').from('rawMaterial.dbo.shipmentSchedule')
+        knex('rawMaterial.dbo.shipmentSchedule').select('*')
             .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false)
             .then((resultset) => {
                 let shipmentSchedule = new Treeize();
@@ -72,7 +48,9 @@ router.route('/data/shipment')
             shipmentSchedule: null,
             newRequestSummary: null,
             activePOList: null,
-            pOContentSummary: null
+            pOContentSummary: null,
+            receivingRecord: null,
+            monthlyShipmentOverview: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex.transaction((trx) => {
@@ -137,9 +115,20 @@ router.route('/data/shipment')
                     responseObject.activePOList = tempList;
                     // get a set of fresh contentSummary data
                     return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+                }).then((resultset) => {
+                    responseObject.pOContentSummary = resultset;
+                    // get simplified shipment records
+                    return trx('rawMaterial.dbo.receivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.receivingRecord = resultset;
+                    // get monthly shipment overview data
+                    return trx('rawMaterial.dbo.monthlyShipmentOverview').select('*')
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO')
+                        .orderBy('PRD_NO').debug(false);
                 });
         }).then((resultset) => {
-            responseObject.pOContentSummary = resultset;
+            responseObject.monthlyShipmentOverview = resultset;
             return response.status(200).json(responseObject);
         }).catch((error) => {
             return utility.endpointErrorHandler(
@@ -155,7 +144,9 @@ router.route('/data/shipment')
             shipmentSchedule: null,
             newRequestSummary: null,
             activePOList: null,
-            pOContentSummary: null
+            pOContentSummary: null,
+            receivingRecord: null,
+            monthlyShipmentOverview: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex.transaction((trx) => {
@@ -217,9 +208,20 @@ router.route('/data/shipment')
                     responseObject.activePOList = tempList;
                     // get a set of fresh contentSummary data
                     return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+                }).then((resultset) => {
+                    responseObject.pOContentSummary = resultset;
+                    // get simplified shipment records
+                    return trx('rawMaterial.dbo.receivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.receivingRecord = resultset;
+                    // get monthly shipment overview data
+                    return trx('rawMaterial.dbo.monthlyShipmentOverview').select('*')
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO')
+                        .orderBy('PRD_NO').debug(false);
                 });
         }).then((resultset) => {
-            responseObject.pOContentSummary = resultset;
+            responseObject.monthlyShipmentOverview = resultset;
             return response.status(200).json(responseObject);
         }).catch((error) => {
             return utility.endpointErrorHandler(
@@ -235,7 +237,9 @@ router.route('/data/shipment')
             shipmentSchedule: null,
             newRequestSummary: null,
             activePOList: null,
-            pOContentSummary: null
+            pOContentSummary: null,
+            receivingRecord: null,
+            monthlyShipmentOverview: null
         };
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex.transaction((trx) => {
@@ -296,9 +300,20 @@ router.route('/data/shipment')
                         responseObject.activePOList = tempList;
                         // get a set of fresh contentSummary data
                         return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+                    }).then((resultset) => {
+                        responseObject.pOContentSummary = resultset;
+                        // get simplified shipment records
+                        return trx('rawMaterial.dbo.receivingRecord').select('*')
+                            .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                    }).then((resultset) => {
+                        responseObject.receivingRecord = resultset;
+                        // get monthly shipment overview data
+                        return trx('rawMaterial.dbo.monthlyShipmentOverview').select('*')
+                            .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO')
+                            .orderBy('PRD_NO').debug(false);
                     });
             }).then((resultset) => {
-                responseObject.shipmentSummary = resultset;
+                responseObject.monthlyShipmentOverview = resultset;
                 return response.status(200).json(responseObject);
             })
             .catch((error) => {
@@ -314,7 +329,101 @@ router.route('/data/shipment')
             });
     });
 
+router.get('/data/shipment/newRequestSummary', tokenValidation, function(request, response) {
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    knex.select('*')
+        .from('rawMaterial.dbo.newRequestSummary')
+        .orderBy('workingYear')
+        .orderBy('workingMonth')
+        .orderBy('CUS_NO')
+        .debug(false)
+        .then((resultset) => {
+            return response.status(200).json({ newRequestSummary: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `新增預約概況資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+
+router.get('/data/shipment/receivingRecord', tokenValidation, function(request, response) {
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    knex('rawMaterial.dbo.receivingRecord').select('*')
+        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false)
+        .then((resultset) => {
+            return response.status(200).json({ receivingRecord: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `簡化進貨明細資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+
+router.get('/data/shipment/monthlyOverview', tokenValidation, function(request, response) {
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    knex('rawMaterial.dbo.monthlyShipmentOverview').select('*')
+        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').orderBy('PRD_NO').debug(false)
+        .then((resultset) => {
+            return response.status(200).json({ monthlyShipmentOverview: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `進貨概況資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+
 module.exports = router;
+
+/*
+router.get('/data/shipment/overview', tokenValidation, function(request, response) {
+    const knex = require('knex')(serverConfig.mssqlConfig);
+    knex.select('*')
+        .from('rawMaterial.dbo.shipmentOverview')
+        .where({
+            workingYear: request.query.workingYear,
+            workingMonth: request.query.workingMonth
+        })
+        .orderBy('CUS_NO')
+        .orderBy('PRDT_SNM')
+        .orderBy('workingDate')
+        .debug(false)
+        .then((resultset) => {
+            return response.status(200).json({ shipmentOverview: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `原料進貨概況相關資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+*/
 
 /*
 function shipmentSchedule(knexObj) {
@@ -380,36 +489,6 @@ router.get('/data/shipment/tonnageSummary', tokenValidation, function(request, r
                     request.method,
                     request.originalUrl,
                     `原料進貨重量概況相關資料讀取發生錯誤: ${error}`)
-            );
-        })
-        .finally(() => {
-            knex.destroy();
-        });
-});
-*/
-
-/*
-router.get('/data/shipment/overview', tokenValidation, function(request, response) {
-    const knex = require('knex')(serverConfig.mssqlConfig);
-    knex.select('*')
-        .from('rawMaterial.dbo.shipmentOverview')
-        .where({
-            workingYear: request.query.workingYear,
-            workingMonth: request.query.workingMonth
-        })
-        .orderBy('CUS_NO')
-        .orderBy('PRDT_SNM')
-        .orderBy('workingDate')
-        .debug(false)
-        .then((resultset) => {
-            return response.status(200).json({ shipmentOverview: resultset });
-        })
-        .catch((error) => {
-            return response.status(500).json(
-                utility.endpointErrorHandler(
-                    request.method,
-                    request.originalUrl,
-                    `原料進貨概況相關資料讀取發生錯誤: ${error}`)
             );
         })
         .finally(() => {

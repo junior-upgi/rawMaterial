@@ -70,7 +70,9 @@ router.route('/data/purchaseOrder')
             shipmentSchedule: null,
             newRequestSummary: null,
             activePOList: null,
-            pOContentSummary: null
+            pOContentSummary: null,
+            receivingRecord: null,
+            monthlyShipmentOverview: null
         };
         // create a new PO entry data object
         let newPOId = uuidV4().toUpperCase();
@@ -105,10 +107,10 @@ router.route('/data/purchaseOrder')
                     request.body.pendingOrderList.forEach((pendingShipment) => {
                         queryList.push(
                             trx('rawMaterial.dbo.shipment')
-                                .update({ pOId: newPOId })
-                                .where({
-                                    id: pendingShipment.id
-                                }).debug(false)
+                            .update({ pOId: newPOId })
+                            .where({
+                                id: pendingShipment.id
+                            }).debug(false)
                         );
                     });
                     return Promise.all(queryList);
@@ -168,9 +170,20 @@ router.route('/data/purchaseOrder')
                     responseObject.activePOList = tempList;
                     // get a set of fresh contentSummary data
                     return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+                }).then((resultset) => {
+                    responseObject.pOContentSummary = resultset;
+                    // get simplified shipment records
+                    return trx('rawMaterial.dbo.receivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.receivingRecord = resultset;
+                    // get monthly shipment overview data
+                    return trx('rawMaterial.dbo.monthlyShipmentOverview').select('*')
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO')
+                        .orderBy('PRD_NO').debug(false);
                 });
         }).then((resultset) => {
-            responseObject.pOContentSummary = resultset;
+            responseObject.monthlyShipmentOverview = resultset;
             return response.status(200).json(responseObject);
         }).catch((error) => {
             return response.status(500).json(
@@ -188,7 +201,9 @@ router.route('/data/purchaseOrder')
             shipmentSchedule: null,
             newRequestSummary: null,
             activePOList: null,
-            pOContentSummary: null
+            pOContentSummary: null,
+            receivingRecord: null,
+            monthlyShipmentOverview: null
         };
         // create a new PO entry data object
         let newPOId = uuidV4().toUpperCase();
@@ -277,9 +292,20 @@ router.route('/data/purchaseOrder')
                     responseObject.activePOList = tempList;
                     // get a set of fresh contentSummary data
                     return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+                }).then((resultset) => {
+                    responseObject.pOContentSummary = resultset;
+                    // get simplified shipment records
+                    return trx('rawMaterial.dbo.receivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.receivingRecord = resultset;
+                    // get monthly shipment overview data
+                    return trx('rawMaterial.dbo.monthlyShipmentOverview').select('*')
+                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO')
+                        .orderBy('PRD_NO').debug(false);
                 });
         }).then((resultset) => {
-            responseObject.pOContentSummary = resultset;
+            responseObject.monthlyShipmentOverview = resultset;
             return response.status(200).json(responseObject);
         }).catch((error) => {
             return response.status(500).json(

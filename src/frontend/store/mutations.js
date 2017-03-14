@@ -44,6 +44,8 @@ function emptyStoreValue(state) {
     state.newRequestSummary = [];
     state.activePOList = [];
     state.pOContentSummary = [];
+    state.receivingRecord = [];
+    state.monthlyShipmentOverview = [];
 }
 
 export default {

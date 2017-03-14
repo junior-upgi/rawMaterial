@@ -60,6 +60,8 @@ export default {
     shipmentSummary: function(state) { return state.shipmentSummary; },
     newShipmentRequestList: newShipmentRequestList,
     newRequestSummary: function(state) { return state.newRequestSummary; },
+    receivingRecord: function(state) { return state.receivingRecord; },
+    monthlyShipmentOverview: function(state) { return state.monthlyShipmentOverview; },
     // purchase order
     activePOList: function(state) { return state.activePOList; },
     pOContentSummary: function(state) { return state.pOContentSummary; }

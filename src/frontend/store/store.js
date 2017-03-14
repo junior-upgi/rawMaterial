@@ -59,6 +59,8 @@ export const store = new Vuex.Store({
         shipmentSchedule: [], // list of current shipment schedule with details
         shipmentSummary: [], // list of daily summary of current shipment schedule
         newRequestSummary: [],
+        receivingRecord: [],
+        monthlyShipmentOverview: [],
 
         // purchase order
         activePOList: [],
