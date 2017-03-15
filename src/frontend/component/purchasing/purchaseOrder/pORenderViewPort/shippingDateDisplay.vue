@@ -1,8 +1,8 @@
 <template>
-    <tbody :style="{border:printingBorder}">
+    <tbody>
         <tr>
-            <td colspan="7" class="text-left" style="padding-left:15px;">
-                <h4 style="margin-bottom:10px;"><strong>送貨日期</strong></h4>
+            <td colspan="7" class="text-left" :style="{border:printingBorder}">
+                送貨日期
                 <span v-for="receivingRecord in releventReceivingRecord">
                     【{{receivingRecord.workingMonth}}/{{receivingRecord.workingDay}}】
                 </span>

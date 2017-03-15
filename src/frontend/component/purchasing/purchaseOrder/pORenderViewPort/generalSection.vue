@@ -3,73 +3,38 @@
         <table class="table table-bordered table-condensed">
             <tbody>
                 <tr>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>廠 商 名 稱</h6>
-                    </td>
-                    <td style="padding-left:20px;"
-                        class="text-left"
-                        :style="{border:printingBorder}">
-                        <h6>{{supplier.NAME}}</h6>
-                    </td>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>訂 單 編 號</h6>
-                    </td>
-                    <td :style="{border:printingBorder}">
-                        <h6>{{pONumber}}</h6>
-                    </td>
+                    <td class="bg-primary" :style="{border:printingBorder}">廠 商 名 稱</td>
+                    <td :style="{border:printingBorder}">{{activePO.supplier.NAME}}</td>
+                    <td class="bg-primary" :style="{border:printingBorder}">訂 單 編 號</td>
+                    <td :style="{border:printingBorder}">{{activePO.pONumber}}</td>
                 </tr>
                 <tr>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>業 務 聯 絡 人</h6>
-                    </td>
-                    <td class="text-left" style="padding-left:20px;"
-                        :style="{border:printingBorder}">
-                        <h6>
-                            <span>{{supplier.CNT_MAN1}}</span>
-                            <span v-if="supplier.CNT_MAN2!==null">/</span>
-                            <span v-if="supplier.CNT_MAN2!==null">{{supplier.CNT_MAN2}}</span>
-                        </h6>
-                    </td>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>訂 貨 日 期</h6>
-                    </td>
+                    <td class="bg-primary" :style="{border:printingBorder}">業 務 聯 絡 人</td>
                     <td :style="{border:printingBorder}">
-                        <h6>{{documentDate}}</h6>
+                            <span>{{activePO.supplier.CNT_MAN1}}</span>
+                            <span v-if="activePO.supplier.CNT_MAN2!==null">/</span>
+                            <span v-if="activePO.supplier.CNT_MAN2!==null">{{activePO.supplier.CNT_MAN2}}</span>
                     </td>
+                    <td class="bg-primary" :style="{border:printingBorder}">訂 貨 日 期</td>
+                    <td :style="{border:printingBorder}">{{activePO.documentDate}}</td>
                 </tr>
                 <tr>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>聯 絡 電 話</h6>
-                    </td>
-                    <td class="text-left" style="padding-left:20px;"
-                        :style="{border:printingBorder}">
-                        <h6>
-                            <span>{{supplier.TEL1}}</span>
-                            <span v-if="supplier.TEL2!==null">/</span>
-                            <span v-if="supplier.TEL2!==null">{{supplier.TEL2}}</span>
-                        </h6>
-                    </td>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>訂 單 日 期</h6>
-                    </td>
+                    <td class="bg-primary" :style="{border:printingBorder}">聯 絡 電 話</td>
                     <td :style="{border:printingBorder}">
-                        <h6>{{documentDate}} (修訂版本: {{revisionNumber|revToString}})</h6>
+                        <span>{{activePO.supplier.TEL1}}</span>
+                        <span v-if="activePO.supplier.TEL2!==null">/</span>
+                        <span v-if="activePO.supplier.TEL2!==null">{{activePO.supplier.TEL2}}</span>
                     </td>
+                    <td class="bg-primary" :style="{border:printingBorder}">訂 單 日 期</td>
+                    <td :style="{border:printingBorder}">{{activePO.documentDate}} (修訂版本: {{activePO.revisionNumber|revToString}})</td>
                 </tr>
                 <tr>
+                    <td class="bg-primary" :style="{border:printingBorder}">傳 真 電 話</td>
+                    <td :style="{border:printingBorder}">{{activePO.supplier.FAX}}</td>
                     <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>傳 真 電 話</h6>
+                        採 購 經 辦
                     </td>
-                    <td class="text-left" style="padding-left:20px;"
-                        :style="{border:printingBorder}">
-                        <h6>{{supplier.FAX}}</h6>
-                    </td>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        <h6>採 購 經 辦</h6>
-                    </td>
-                    <td :style="{border:printingBorder}">
-                        <h6>{{userInfo.NAME}} 分機:166</h6>
-                    </td>
+                    <td :style="{border:printingBorder}">{{userInfo.NAME}} 分機:166</td>
                 </tr>
             </tbody>
         </table>
@@ -80,13 +45,7 @@
     import { mapGetters } from 'vuex';
     export default {
         name: 'generalSection',
-        props: [
-            'supplier',
-            'userInfo',
-            'pONumber',
-            'documentDate',
-            'revisionNumber'
-        ],
+        props: ['activePO', 'userInfo'],
         computed: {
             ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
             printingBorder: function() {

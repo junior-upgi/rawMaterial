@@ -87,7 +87,7 @@
                 return `${numeral(value).format('0,0')}`;
             },
             unitPrice: function(value) {
-                return `${numeral(value).format('0.000')}`;
+                return `${numeral(value).format('0.[00000]')}`;
             }
         }
     };
