@@ -20,7 +20,7 @@
                 </thead>
                 <summarySection :activePO="activePO"></summarySection>
                 <shippingDateDisplay :activePO="activePO"></shippingDateDisplay>
-                <reminderDisplay :activePO="activePO"></reminderDisplay>
+                <reminderDisplay :pONoticeList="activePO.pONotices"></reminderDisplay>
             </table>
         </div>
         <!--

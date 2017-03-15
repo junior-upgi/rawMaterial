@@ -1,19 +1,17 @@
 <template>
     <tbody>
-        <!--
         <tr>
             <td colspan="7" class="text-left"
                 :style="{border:printingBorder}">
                 <div
-                    v-for="message in pONoticeArray"
+                    v-for="message in pONoticeList"
                     style="margin:0px;padding-left:10px;">
                     <h4 style="padding-top:5px;padding-bottom:5px;">
-                        {{message}}
+                        {{message.string}}
                     </h4>
                 </div>
             </td>
         </tr>
-        -->
     </tbody>
 </template>
 
@@ -22,7 +20,7 @@
 
     export default {
         name: 'reminderDisplay',
-        props: [''],
+        props: ['pONoticeList'],
         computed: {
             ...mapGetters({
                 pOPrintMode: 'checkPOPrintMode'
