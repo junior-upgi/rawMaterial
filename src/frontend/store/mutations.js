@@ -7,7 +7,6 @@ function emptyStoreValue(state) {
     state.pOCreateMode = false;
     state.pOEditMode = false;
     state.pOList = [];
-    state.pONoticeArray = [];
     state.pOPrintMode = false;
     state.pOShipmentList = [];
     state.pOShipmentSummary = [];
@@ -44,6 +43,7 @@ function emptyStoreValue(state) {
     state.newRequestSummary = [];
     state.activePOList = [];
     state.pOContentSummary = [];
+    state.consolidatedReceivingRecord = [];
     state.receivingRecord = [];
     state.monthlyShipmentOverview = [];
 }

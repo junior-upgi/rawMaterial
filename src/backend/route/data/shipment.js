@@ -49,6 +49,7 @@ router.route('/data/shipment')
             newRequestSummary: null,
             activePOList: null,
             pOContentSummary: null,
+            consolidatedReceivingRecord: null,
             receivingRecord: null,
             monthlyShipmentOverview: null
         };
@@ -118,6 +119,11 @@ router.route('/data/shipment')
                 }).then((resultset) => {
                     responseObject.pOContentSummary = resultset;
                     // get simplified shipment records
+                    return trx('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.consolidatedReceivingRecord = resultset;
+                    // get simplified shipment records
                     return trx('rawMaterial.dbo.receivingRecord').select('*')
                         .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
                 }).then((resultset) => {
@@ -145,6 +151,7 @@ router.route('/data/shipment')
             newRequestSummary: null,
             activePOList: null,
             pOContentSummary: null,
+            consolidatedReceivingRecord: null,
             receivingRecord: null,
             monthlyShipmentOverview: null
         };
@@ -211,6 +218,11 @@ router.route('/data/shipment')
                 }).then((resultset) => {
                     responseObject.pOContentSummary = resultset;
                     // get simplified shipment records
+                    return trx('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.consolidatedReceivingRecord = resultset;
+                    // get simplified shipment records
                     return trx('rawMaterial.dbo.receivingRecord').select('*')
                         .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
                 }).then((resultset) => {
@@ -238,6 +250,7 @@ router.route('/data/shipment')
             newRequestSummary: null,
             activePOList: null,
             pOContentSummary: null,
+            consolidatedReceivingRecord: null,
             receivingRecord: null,
             monthlyShipmentOverview: null
         };
@@ -303,6 +316,11 @@ router.route('/data/shipment')
                     }).then((resultset) => {
                         responseObject.pOContentSummary = resultset;
                         // get simplified shipment records
+                        return trx('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
+                            .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                    }).then((resultset) => {
+                        responseObject.consolidatedReceivingRecord = resultset;
+                        // get simplified shipment records
                         return trx('rawMaterial.dbo.receivingRecord').select('*')
                             .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
                     }).then((resultset) => {
@@ -346,6 +364,26 @@ router.get('/data/shipment/newRequestSummary', tokenValidation, function(request
                     request.method,
                     request.originalUrl,
                     `新增預約概況資料讀取發生錯誤: ${error}`)
+            );
+        })
+        .finally(() => {
+            knex.destroy();
+        });
+});
+
+router.get('/data/shipment/receivingRecord/consolidated', tokenValidation, function(request, response) {
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    knex('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
+        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false)
+        .then((resultset) => {
+            return response.status(200).json({ consolidatedReceivingRecord: resultset });
+        })
+        .catch((error) => {
+            return response.status(500).json(
+                utility.endpointErrorHandler(
+                    request.method,
+                    request.originalUrl,
+                    `簡化每日進貨明細資料讀取發生錯誤: ${error}`)
             );
         })
         .finally(() => {

@@ -71,6 +71,7 @@ router.route('/data/purchaseOrder')
             newRequestSummary: null,
             activePOList: null,
             pOContentSummary: null,
+            consolidatedReceivingRecord: null,
             receivingRecord: null,
             monthlyShipmentOverview: null
         };
@@ -173,6 +174,11 @@ router.route('/data/purchaseOrder')
                 }).then((resultset) => {
                     responseObject.pOContentSummary = resultset;
                     // get simplified shipment records
+                    return trx('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.consolidatedReceivingRecord = resultset;
+                    // get simplified shipment records
                     return trx('rawMaterial.dbo.receivingRecord').select('*')
                         .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
                 }).then((resultset) => {
@@ -202,6 +208,7 @@ router.route('/data/purchaseOrder')
             newRequestSummary: null,
             activePOList: null,
             pOContentSummary: null,
+            consolidatedReceivingRecord: null,
             receivingRecord: null,
             monthlyShipmentOverview: null
         };
@@ -294,6 +301,11 @@ router.route('/data/purchaseOrder')
                     return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
                 }).then((resultset) => {
                     responseObject.pOContentSummary = resultset;
+                    // get simplified shipment records
+                    return trx('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
+                        .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.consolidatedReceivingRecord = resultset;
                     // get simplified shipment records
                     return trx('rawMaterial.dbo.receivingRecord').select('*')
                         .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);

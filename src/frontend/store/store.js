@@ -25,11 +25,11 @@ export const store = new Vuex.Store({
         pOPrintMode: false,
         pOCreateMode: false,
         pOEditMode: false,
-        pONoticeArray: [],
         pOShipmentList: [],
         pOShipmentSummary: [],
         pOViewMode: false,
         tonnageSummary: [],
+        pONoticeArray: [],
         */
 
         // ////////////////////////////////////////////////////////////////
@@ -59,6 +59,7 @@ export const store = new Vuex.Store({
         shipmentSchedule: [], // list of current shipment schedule with details
         shipmentSummary: [], // list of daily summary of current shipment schedule
         newRequestSummary: [],
+        consolidatedReceivingRecord: [],
         receivingRecord: [],
         monthlyShipmentOverview: [],
 

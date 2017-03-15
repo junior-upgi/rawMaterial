@@ -35,6 +35,10 @@ export default {
                 headers: { 'x-access-token': sessionStorage.token }
             }, {
                 method: 'get',
+                url: `${serverUrl}/data/shipment/receivingRecord/consolidated`,
+                headers: { 'x-access-token': sessionStorage.token }
+            }, {
+                method: 'get',
                 url: `${serverUrl}/data/shipment/receivingRecord`,
                 headers: { 'x-access-token': sessionStorage.token }
             }, {

@@ -3,7 +3,7 @@
         <table class="table table-bordered table-condensed">
             <tbody>
                 <tr>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>廠 商 名 稱</h5>
                     </td>
                     <td style="padding-left:20px;"
@@ -11,7 +11,7 @@
                         :style="{border:printingBorder}">
                         <h5>{{supplier.NAME}}</h5>
                     </td>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>訂 單 編 號</h5>
                     </td>
                     <td :style="{border:printingBorder}">
@@ -19,7 +19,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>業 務 聯 絡 人</h5>
                     </td>
                     <td class="text-left" style="padding-left:20px;"
@@ -30,7 +30,7 @@
                             <span v-if="supplier.CNT_MAN2!==null">{{supplier.CNT_MAN2}}</span>
                         </h5>
                     </td>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>訂 貨 日 期</h5>
                     </td>
                     <td :style="{border:printingBorder}">
@@ -38,7 +38,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>聯 絡 電 話</h5>
                     </td>
                     <td class="text-left" style="padding-left:20px;"
@@ -49,7 +49,7 @@
                             <span v-if="supplier.TEL2!==null">{{supplier.TEL2}}</span>
                         </h5>
                     </td>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>訂 單 日 期</h5>
                     </td>
                     <td :style="{border:printingBorder}">
@@ -57,14 +57,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>傳 真 電 話</h5>
                     </td>
                     <td class="text-left" style="padding-left:20px;"
                         :style="{border:printingBorder}">
                         <h5>{{supplier.FAX}}</h5>
                     </td>
-                    <td :style="{border:printingBorder}">
+                    <td class="bg-primary" :style="{border:printingBorder}">
                         <h5>採 購 經 辦</h5>
                     </td>
                     <td :style="{border:printingBorder}">

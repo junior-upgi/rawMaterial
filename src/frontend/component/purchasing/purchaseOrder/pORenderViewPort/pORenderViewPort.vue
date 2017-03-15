@@ -19,19 +19,11 @@
                     </tr>
                 </thead>
                 <summarySection :activePO="activePO"></summarySection>
-                <!--
-                <summaryEntry
-                    v-for="(summaryItem,index) in pOShipmentSummary"
-                    :summaryItem="summaryItem"
-                    :index="index">
-                </summaryEntry>
-                -->
+                <shippingDateDisplay :activePO="activePO"></shippingDateDisplay>
+                <reminderDisplay :activePO="activePO"></reminderDisplay>
             </table>
         </div>
         <!--
-                <tbody>
-                    <detailListing :shipmentList="activePO.shipments"></detailListing>
-                </tbody>
                 <tbody>
                     <tr v-if="pOPrintMode!==true">
                         <td colspan="7">
@@ -47,8 +39,7 @@
                         </td>
                     </tr>
                 </tbody>
-                <shipping-date-display></shipping-date-display>
-                <reminder-display></reminder-display>
+
                 <tbody>
                     <tr>
                         <td colspan="5" :style="{border:printingBorder}">
@@ -131,29 +122,29 @@
     import { mapActions, mapGetters, mapMutations } from 'vuex';
     import documentHeading from './documentHeading.vue';
     import generalSection from './generalSection.vue';
-    import summarySection from './summarySection/summarySection.vue';
+    import summarySection from './summarySection.vue';
+    import shippingDateDisplay from './shippingDateDisplay.vue';
+    import reminderDisplay from './reminderDisplay.vue';
     /*
     import detailListing from './detailListing.vue';
     import summaryEntry from './summaryEntry.vue';
     import shipmentEntry from './shipmentEntry.vue';
     import moment from 'moment-timezone';
     import numeral from 'numeral';
-    import reminderDisplay from './reminderDisplay.vue';
-    import shippingDateDisplay from './shippingDateDisplay.vue';
     */
     export default {
         name: 'pORenderViewPort',
         components: {
             documentHeading,
             generalSection,
-            summarySection
+            summarySection,
+            shippingDateDisplay,
+            reminderDisplay
             /* ,
             detailListing,
             summaryEntry
             shipmentEntry supplierSelector,
-            ,
-            shippingDateDisplay,
-            reminderDisplay*/
+            */
         },
         props: ['activePO'],
         computed: {
