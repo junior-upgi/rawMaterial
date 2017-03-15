@@ -20,10 +20,7 @@
 
     export default {
         name: 'monthlySummary',
-        components: {
-            dailySummaryItem
-            // editPane
-        },
+        components: { dailySummaryItem },
         computed: {
             ...mapGetters({
                 selectedRawMaterial: 'selectedRawMaterial',

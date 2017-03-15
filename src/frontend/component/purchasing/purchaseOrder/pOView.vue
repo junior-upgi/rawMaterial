@@ -4,7 +4,7 @@
         <br>
         <div class="panel-group" id="shipmentSchedule" role="tablist">
             <div class="panel panel-primary">
-                <div class="panel-body">
+                <div class="panel-header">
                     <select
                         class="form-control"
                         v-model="selectedIndex">
@@ -14,6 +14,10 @@
                         </option>
                     </select>
                 </div>
+                <div class="panel-body">
+                    <pORenderViewPort
+                        :activePO="activePOList[selectedIndex]"></pORenderViewPort>
+                </div>
             </div>
         </div>
     </div>
@@ -21,8 +25,13 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import pORenderViewPort from './pORenderViewPort/pORenderViewPort.vue';
+
     export default {
         name: 'pOView',
+        components: {
+            pORenderViewPort
+        },
         computed: {
             ...mapGetters({ activePOList: 'activePOList' })
         },

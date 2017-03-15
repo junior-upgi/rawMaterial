@@ -13,6 +13,9 @@ SELECT
 	,ISNULL(b.pendingShipmentCount,0) AS pendingShipmentCount
 	,a.requestShipmentCount-ISNULL(b.pendingShipmentCount,0) AS receivedShipmentCount
 	,a.totalReceivedWeight
+    ,c.unitPrice
+    ,c.currency
+    ,c.UT
 FROM (
 	-- 將所有未失效並已下單預約記錄以訂單號與貨品分類集結後，統計預約車次總計、預約總重以及已到貨量總計
 	SELECT c.pOId ,c.CUS_NO ,c.PRD_NO ,c.typeId
