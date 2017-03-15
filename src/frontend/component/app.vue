@@ -1,12 +1,16 @@
 <template>
     <div class="container-fluid">
-        <div class="row" style="margin-left:10px;">
+        <div
+            v-if="!pOPrintMode"
+            class="row" style="margin-left:10px;">
             <div class="page-header" style="margin-top:15px;">
                 <h2 style="margin-top:0px;">統義玻璃股份有限公司 <small style="white-space:nowrap;">玻璃原物料進貨管控系統</small></h2>
             </div>
         </div>
         <div class="row">
-            <sidebar v-if="activeView!=='login'"></sidebar>
+            <sidebar
+                v-if="(activeView!=='login') && (!pOPrintMode)">
+            </sidebar>
             <div :is="activeView"></div>
         </div>
     </div>
@@ -37,7 +41,12 @@
             purchasing,
             pOView
         },
-        computed: { ...mapGetters({ activeView: 'activeView' }) },
+        computed: {
+            ...mapGetters({
+                activeView: 'activeView',
+                pOPrintMode: 'checkPOPrintMode'
+            })
+        },
         methods: {
             ...mapActions({
                 componentErrorHandler: 'componentErrorHandler',
@@ -81,8 +90,7 @@
         },
         computed: {
             ...mapGetters({
-                activeView: 'activeView',
-                pOPrintMode: 'checkPOPrintMode'
+                activeView: 'activeView'
             })
         }
         */

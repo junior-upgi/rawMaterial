@@ -1,19 +1,19 @@
 <template>
-    <div style="margin-top:20px;margin-bottom:20px;">
+    <div>
         <div class="row">
-            <h1 style="font-size:35px;">{{NAME}}</h1>
+            <h2>{{NAME}}</h2>
         </div>
         <div class="row">
-            <h4 style="margin-top:10px;">
+            <h4 style="margin-top:5px;">
                 {{CMP_ADR}}&nbsp;&nbsp;&nbsp;
                 TEL:&nbsp;{{TEL1}}&nbsp;&nbsp;&nbsp;
                 FAX:&nbsp;{{TEL3}}
             </h4>
         </div>
         <div class="row">
-            <h2 style="margin-top:10px;">
+            <h3 style="margin-top:5px;">
                 <span>{{documentTitle}}</span>
-            </h2>
+            </h3>
         </div>
     </div>
 </template>

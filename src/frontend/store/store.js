@@ -22,7 +22,6 @@ export const store = new Vuex.Store({
 
         // purchase order
         pOList: [],
-        pOPrintMode: false,
         pOCreateMode: false,
         pOEditMode: false,
         pOShipmentList: [],
@@ -48,6 +47,7 @@ export const store = new Vuex.Store({
         workingYear: parseInt(currentDatetime().format('YYYY')),
         workingSupplier: null,
         activeShipmentEditorDate: null,
+        pOPrintMode: false,
 
         // basic working data
         rawMatList: [], // list of raw material with details

@@ -1,14 +1,14 @@
 <template>
     <div class="container-fluid text-center">
-        <document-heading :documentTitle="documentTitle"></document-heading>
-        <general-section
+        <documentHeading :documentTitle="documentTitle"></documentHeading>
+        <generalSection
             :supplier="activePO.supplier"
             :userInfo="userInfo"
             :pONumber="activePO.pONumber"
             :documentDate="activePO.documentDate"
             :revisionNumber="activePO.revisionNumber">
-        </general-section>
-        <div class="row table-responsive">
+        </generalSection>
+        <div class="row table-responsive" style="font-size:75%;">
             <table class="table table-bordered table-condensed">
                 <thead>
                     <tr class="bg-primary">
@@ -21,25 +21,6 @@
                 <summarySection :activePO="activePO"></summarySection>
                 <shippingDateDisplay :activePO="activePO"></shippingDateDisplay>
                 <reminderDisplay :pONoticeList="activePO.pONotices"></reminderDisplay>
-            </table>
-        </div>
-        <!--
-                <tbody>
-                    <tr v-if="pOPrintMode!==true">
-                        <td colspan="7">
-                            <div class="list-group" style="height:300px;overflow-y:auto;">
-                                <shipment-entry
-                                    v-for="(shipment,index) in pOShipmentList"
-                                    :shipment="shipment"
-                                    :index="index"
-                                    @shipmentSelection="addToSummary($event)"
-                                    @shipmentDeselection="removeFromSummary($event)">
-                                </shipment-entry>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-
                 <tbody>
                     <tr>
                         <td colspan="5" :style="{border:printingBorder}">
@@ -47,11 +28,11 @@
                                 <div class="text-left" style="margin:0px;padding-left:10px;">
                                     <span><strong>備 註：</strong></span>
                                     <ol style="margin-top:5px;">
-                                        <li style="padding-top:5px;padding-bottom:5px;">請於送貨單上註明訂單編號</li>
-                                        <li style="padding-top:5px;padding-bottom:5px;">請回覆訂單以確定交貨期</li>
-                                        <li style="padding-top:5px;padding-bottom:5px;">付款方式：月結3個月電匯</li>
-                                        <li style="padding-top:5px;padding-bottom:5px;">統一編號：{{UNI_NO}}</li>
-                                        <li style="padding-top:5px;padding-bottom:5px;">送貨地點：{{CMP_ADR}}</li>
+                                        <li>請於送貨單上註明訂單編號</li>
+                                        <li>請回覆訂單以確定交貨期</li>
+                                        <li>付款方式：月結3個月電匯</li>
+                                        <li>統一編號：{{UNI_NO}}</li>
+                                        <li>送貨地點：{{CMP_ADR}}</li>
                                     </ol>
                                 </div>
                             </h4>
@@ -59,7 +40,7 @@
                         <td colspan="2" :style="{border:printingBorder}">
                             <div class="container-fluid">
                                 <h4>
-                                    <div class="row" style="padding-bottom:20px;">
+                                    <div class="row" style="padding-bottom:10px;">
                                         <div class="col-xs-4 text-left">
                                             <h5>
                                                 <strong>金 額</strong>
@@ -71,10 +52,10 @@
                                             </h4>
                                         </div>
                                     </div>
-                                    <div class="row" style="padding-bottom:20px;">
+                                    <div class="row" style="padding-bottom:10px;">
                                         <div class="col-xs-4 text-left">
                                             <h5>
-                                                <strong>稅 金 5%</strong>
+                                                <strong>稅 金 {{taxRate * 100}}%</strong>
                                             </h5>
                                         </div>
                                         <div class="col-xs-8 text-right">
@@ -114,24 +95,20 @@
                             style="padding-right:5%;">({{isoCode}})</td>
                     </tr>
                 </tbody>
-        -->
+            </table>
+        </div>
     </div>
 </template>
 
 <script>
-    import { mapActions, mapGetters, mapMutations } from 'vuex';
+    import numeral from 'numeral';
+    import { mapGetters } from 'vuex';
     import documentHeading from './documentHeading.vue';
     import generalSection from './generalSection.vue';
     import summarySection from './summarySection.vue';
     import shippingDateDisplay from './shippingDateDisplay.vue';
     import reminderDisplay from './reminderDisplay.vue';
-    /*
-    import detailListing from './detailListing.vue';
-    import summaryEntry from './summaryEntry.vue';
-    import shipmentEntry from './shipmentEntry.vue';
-    import moment from 'moment-timezone';
-    import numeral from 'numeral';
-    */
+
     export default {
         name: 'pORenderViewPort',
         components: {
@@ -148,7 +125,42 @@
         },
         props: ['activePO'],
         computed: {
-            ...mapGetters({ userInfo: 'userData' })
+            ...mapGetters({
+                pOPrintMode: 'checkPOPrintMode',
+                userInfo: 'userData'
+            }),
+            pOSummaryGross: function() {
+                return Math.round(this.pOSummaryNet + this.pOSummaryTax);
+            },
+            pOSummaryNet: function() {
+                if(this.activePO.customNet === null) {
+                    let amount = 0;
+                    this.activePO.shipments.forEach((shipment) => {
+                        amount += shipment.unitPrice * shipment.requestWeight;
+                    });
+                    return amount;
+                } else {
+                    return this.activePO.customNet;
+                }
+            },
+            pOSummaryTax: function() {
+                if(this.activePO.customTax === null) {
+                    let amount = 0;
+                    this.activePO.shipments.forEach((shipment) => {
+                        amount += shipment.unitPrice * shipment.requestWeight * this.taxRate;
+                    });
+                    return amount;
+                } else {
+                    return this.activePO.customTax;
+                }
+            },
+            printingBorder: function() {
+                if (this.pOPrintMode) {
+                    return '2px solid black !important';
+                } else {
+                    return null;
+                }
+            }
         },
         data: function() {
             return {
@@ -160,24 +172,18 @@
                 taxRate: 0.05,
                 thList: ['項 次', '品 名', '規 格', '數 量', '單 位', '單 價', '合 計']
             };
-        }
-        /* ,
-        data: function() {
-            return {
-                CMP_ADR: '台南市新營區新工路36號',
-                documentTitle: '訂 購 單',
-                UNI_NO: '70752833',
-                isoCode: 'R7-03-02A',
-                revisionNumber: 1,
-                taxRate: 0.05
-            };
         },
+        filters: {
+            formatCurrency: function(amount) {
+                return '$' + numeral(amount).format('0,0.00');
+            }
+        }
+        /*
         computed: {
             ...mapGetters({
                 pOShipmentList: 'getPOShipmentList',
                 pOShipmentSummary: 'getPOShipmentSummary',
                 pOWorkingSupplier: 'getPOWorkingSupplier',
-                pOPrintMode: 'checkPOPrintMode',
                 checkPOViewMode: 'checkPOViewMode',
                 shipmentOverview: 'getShipmentOverview',
                 supplierList: 'getSupplierList',
@@ -191,30 +197,6 @@
                 const yearPartString = (new Date().getFullYear() - 1911).toString();
                 const datePartString = moment(new Date(), 'YYYY-MM-DD HH:MM:ss').format('MMDD');
                 return `${yearPartString}${datePartString}${('0' + this.revisionNumber).slice(-2)}`;
-            },
-            pOSummaryGross: function() {
-                return Math.round(this.pOSummaryNet + this.pOSummaryTax);
-            },
-            pOSummaryNet: function() {
-                let amount = 0;
-                this.pOShipmentSummary.forEach((summaryItem) => {
-                    amount += summaryItem.unitPrice * summaryItem.workingWeight;
-                });
-                return amount;
-            },
-            pOSummaryTax: function() {
-                let amount = 0;
-                this.pOShipmentSummary.forEach((summaryItem) => {
-                    amount += summaryItem.unitPrice * summaryItem.workingWeight * this.taxRate;
-                });
-                return amount;
-            },
-            printingBorder: function() {
-                if (this.pOPrintMode) {
-                    return '2px solid black !important';
-                } else {
-                    return null;
-                }
             },
             supplier: function() {
                 if (this.pOWorkingSupplier !== null) {
@@ -262,11 +244,6 @@
                 pOViewMode: false,
                 pOPrintMode: false
             });
-        },
-        filters: {
-            formatCurrency: function(amount) {
-                return '$' + numeral(amount).format('0,0.00');
-            }
         }
         */
     };

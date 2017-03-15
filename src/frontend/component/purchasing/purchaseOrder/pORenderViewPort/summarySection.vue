@@ -1,11 +1,11 @@
 <template>
-    <tbody v-if="!summarizedMode">
+    <tbody v-if="!summarizedMode && !pOPrintMode">
         <tr v-for="(shipment, shipmentIndex) in activePO.shipments"
             style="font-size:75%;"
             @click="summarizedMode=!summarizedMode">
             <td>{{shipmentIndex + 1}}</td>
             <td>{{releventRawMaterial(shipment.CUS_NO, shipment.PRD_NO, shipment.typeId).PRDT_SNM}}</td>
-            <td>{{releventRawMaterial(shipment.CUS_NO, shipment.PRD_NO, shipment.typeId).specification}}</td>
+            <td style="white-space:nowrap;">{{releventRawMaterial(shipment.CUS_NO, shipment.PRD_NO, shipment.typeId).specification}}</td>
             <td>{{shipment.requestWeight|markThousand}}</td>
             <td>{{releventRawMaterial(shipment.CUS_NO, shipment.PRD_NO, shipment.typeId).UT}}</td>
             <td>
@@ -19,16 +19,17 @@
             </td>
         </tr>
     </tbody>
-    <tbody v-else-if="summarizedMode">
+    <tbody v-else-if="summarizedMode || pOPrintMode" :style="{border:printingBorder}">
         <tr v-for="(summaryEntry, summaryIndex) in releventPOContentSummary"
+            :style="{border:printingBorder}"
             @click="summarizedMode=!summarizedMode">
-            <td>{{summaryIndex + 1}}</td>
-            <td>{{summaryEntry.PRDT_SNM}}</td>
-            <td>{{summaryEntry.specification}}</td>
-            <td>{{summaryEntry.totalRequestedWeight|markThousand}}</td>
-            <td>{{summaryEntry.UT}}</td>
-            <td>{{summaryEntry.unitPrice|unitPrice}} {{summaryEntry.currency}}</td>
-            <td>{{(summaryEntry.unitPrice * summaryEntry.totalRequestedWeight)|markThousand}} {{summaryEntry.currency}}</td>
+            <td :style="{border:printingBorder}">{{summaryIndex + 1}}</td>
+            <td :style="{border:printingBorder}">{{summaryEntry.PRDT_SNM}}</td>
+            <td :style="{border:printingBorder}" style="white-space:nowrap;">{{summaryEntry.specification}}</td>
+            <td :style="{border:printingBorder}">{{summaryEntry.totalRequestedWeight|markThousand}}</td>
+            <td :style="{border:printingBorder}">{{summaryEntry.UT}}</td>
+            <td :style="{border:printingBorder}">{{summaryEntry.unitPrice|unitPrice}} {{summaryEntry.currency}}</td>
+            <td :style="{border:printingBorder}">{{(summaryEntry.unitPrice * summaryEntry.totalRequestedWeight)|markThousand}} {{summaryEntry.currency}}</td>
         </tr>
     </tbody>
 </template>
@@ -41,6 +42,7 @@
         props: ['activePO'],
         computed: {
             ...mapGetters({
+                pOPrintMode: 'checkPOPrintMode',
                 pOContentSummary: 'pOContentSummary',
                 rawMaterialList: 'rawMaterialList'
             }),
@@ -48,6 +50,13 @@
                 return this.pOContentSummary.filter((pOContentSummaryEntry) => {
                     return pOContentSummaryEntry.pOId === this.activePO.id;
                 });
+            },
+            printingBorder: function() {
+                if (this.pOPrintMode) {
+                    return '2px solid black !important';
+                } else {
+                    return null;
+                }
             }
         },
         data: function() {

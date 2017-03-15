@@ -6,9 +6,7 @@
                 <div
                     v-for="message in pONoticeList"
                     style="margin:0px;padding-left:10px;">
-                    <h4 style="padding-top:5px;padding-bottom:5px;">
-                        {{message.string}}
-                    </h4>
+                    <h5>{{message.string}}</h5>
                 </div>
             </td>
         </tr>

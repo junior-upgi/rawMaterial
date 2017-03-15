@@ -7,7 +7,6 @@ function emptyStoreValue(state) {
     state.pOCreateMode = false;
     state.pOEditMode = false;
     state.pOList = [];
-    state.pOPrintMode = false;
     state.pOShipmentList = [];
     state.pOShipmentSummary = [];
     state.pOViewMode = false;
@@ -32,6 +31,7 @@ function emptyStoreValue(state) {
     state.workingYear = parseInt(currentDatetime().format('YYYY'));
     state.workingSupplier = null;
     state.activeShipmentEditorDate = null;
+    state.pOPrintMode = false;
 
     // basic working data
     state.rawMatList = [];
@@ -174,6 +174,7 @@ export default {
     redirectUser: function(state) { state.activeView = state.role; }, // activeView specific
     changeActiveShipmentEditorDate: function(state, newDateString) { state.activeShipmentEditorDate = newDateString; },
     clearActiveShipmentEditorDate: function(state) { state.activeShipmentEditorDate = null; },
+    pOPrintModeSwitch: function(state, onOffSwitch) { state.pOPrintMode = onOffSwitch; },
     // utility functions
     restoreToken: restoreToken, // restore token if exists
     // general vuex store data manipulation

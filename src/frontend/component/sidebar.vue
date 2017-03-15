@@ -63,6 +63,7 @@
         computed: {
             ...mapGetters({
                 activeView: 'activeView',
+                pOPrintMode: 'checkPOPrintMode',
                 dataProcessingState: 'checkDataProcessingState',
                 role: 'role'
             })
@@ -102,37 +103,6 @@
                     });
             }
         }
-        /*
-            printPO: function() {
-                this.changePOMode({ pOPrintMode: true, pOViewMode: false });
-                setTimeout(() => {
-                    if (confirm('請確認是否儲存訂單資料並產生正式訂單?')) {
-                        this.savePOData()
-                            .then(() => {
-                                print();
-                                setTimeout(() => {
-                                    this.changePOMode({ pOPrintMode: false, pOViewMode: true });
-                                    this.refreshPOShipmentListing();
-                                    this.switchPOWorkingSupplier(this.pOWorkingSupplier);
-                                    this.forceViewChange('pOTemplate');
-                                }, 500);
-                            }).catch((error) => {
-                                console.log(`訂單儲存發生錯誤: ${error}`);
-                                this.changePOMode({ pOPrintMode: false, pOViewMode: true });
-                                this.refreshPOShipmentListing();
-                                this.switchPOWorkingSupplier(this.pOWorkingSupplier);
-                                this.forceViewChange('pOTemplate');
-                            });
-                    } else {
-                        this.changePOMode({ pOPrintMode: false, pOViewMode: true });
-                        this.refreshPOShipmentListing();
-                        this.switchPOWorkingSupplier(this.pOWorkingSupplier);
-                        this.forceViewChange('pOTemplate');
-                    }
-                }, 500);
-            }
-        }
-        */
     };
 
 </script>

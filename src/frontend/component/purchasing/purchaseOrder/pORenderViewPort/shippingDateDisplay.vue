@@ -40,10 +40,10 @@
         props: ['activePO'],
         computed: {
             ...mapGetters({
-                consolidatedReceivingRecord: 'consolidatedReceivingRecord'
+                consolidatedReceivingRecord: 'consolidatedReceivingRecord',
+                pOPrintMode: 'checkPOPrintMode'
                 // rawMaterialList: 'rawMaterialList'
-                /*
-                pOPrintMode: 'checkPOPrintMode',
+                /* ,
                 pOShipmentList: 'getPOShipmentList',
                 pOShipmentSummary: 'getPOShipmentSummary'
                 */
@@ -59,8 +59,7 @@
                 return this.consolidatedReceivingRecord.filter((receivingRecord) => {
                     return receivingRecord.CUS_NO === this.activePO.CUS_NO;
                 });
-            }
-            /* ,
+            },
             printingBorder: function() {
                 if (this.pOPrintMode) {
                     return '2px solid black !important';
@@ -68,7 +67,6 @@
                     return null;
                 }
             }
-            */
         }
     };
 </script>

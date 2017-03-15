@@ -39,7 +39,11 @@ SELECT
     ,b.CUS_NO AS 'shipments:CUS_NO'
     ,b.PRD_NO AS 'shipments:PRD_NO'
     ,b.typeId AS 'shipments:typeId'
-    ,b.unitPrice AS 'shipments:unitPrice'
+    ,CASE
+        WHEN b.unitPrice IS NULL THEN d.unitPrice
+        ELSE b.unitPrice
+        END AS 'shipments:unitPrice'
+    -- ,b.unitPrice AS 'shipments:unitPrice'
     ,b.requestWeight AS 'shipments:requestWeight'
     ,b.supplierWeight AS 'shipments:supplierWeight'
     ,b.actualWeight AS 'shipments:actualWeight'

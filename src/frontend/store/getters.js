@@ -1,6 +1,5 @@
 export default {
     checkDateInEditMode: function(state) { return state.dateInEditMode; },
-    checkPOPrintMode: function(state) { return state.pOPrintMode; },
     checkPOViewMode: function(state) { return state.pOViewMode; },
     checkPOCreateMode: function(state) { return state.pOCreateMode; },
     checkPOEditMode: function(state) { return state.pOEditMode; },
@@ -43,6 +42,7 @@ export default {
     workingMonth: function(state) { return state.workingMonth; },
     workingYear: function(state) { return state.workingYear; },
     activeShipmentEditorDate: function(state) { return state.activeShipmentEditorDate; },
+    checkPOPrintMode: function(state) { return state.pOPrintMode; },
     // user info and permission
     activeView: activeView,
     role: function(state) { return state.role; },
