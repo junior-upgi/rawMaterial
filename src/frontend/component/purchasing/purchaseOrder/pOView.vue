@@ -51,54 +51,20 @@
         data: function() { return { selectedIndex: 0 }; },
         created: function() { this.selectedIndex = 0; },
         methods: {
-            ...mapMutations({ pOPrintModeSwitch: 'pOPrintModeSwitch' }),
+            ...mapMutations({
+                pOPrintModeSwitch: 'pOPrintModeSwitch',
+                processingDataSwitch: 'processingDataSwitch'
+            }),
             printPO: function() {
+                this.processingDataSwitch(true);
                 this.pOPrintModeSwitch(true);
-                /*
                 setTimeout(() => {
-                    if (confirm('請確認是否儲存訂單資料並產生正式訂單?')) {
-                        this.savePOData()
-                            .then(() => {
-                                print();
-                                setTimeout(() => {
-                                    this.pOPrintModeSwitch(true);
-                                    this.refreshPOShipmentListing();
-                                    this.switchPOWorkingSupplier(this.pOWorkingSupplier);
-                                    this.forceViewChange('pOTemplate');
-                                }, 500);
-                            }).catch((error) => {
-                                console.log(`訂單儲存發生錯誤: ${error}`);
-                                this.pOPrintModeSwitch(true);
-                                this.refreshPOShipmentListing();
-                                this.switchPOWorkingSupplier(this.pOWorkingSupplier);
-                                this.forceViewChange('pOTemplate');
-                            });
-                    } else {
-                        this.pOPrintModeSwitch(false);
-                        this.refreshPOShipmentListing();
-                        this.switchPOWorkingSupplier(this.pOWorkingSupplier);
-                        this.forceViewChange('pOTemplate');
-                    }
-                }, 500);
-                */
+                    print();
+                    this.pOPrintModeSwitch(false);
+                    this.processingDataSwitch(false);
+                }, 50);
             }
         }
-        /*
-        methods: {
-            ...mapMutations({
-                selectRawMaterial: 'selectRawMaterial'
-            }),
-            rawMaterialSelected: function() {
-                this.selectRawMaterial(this.selectedIndex);
-                this.$emit('workingMaterialChange');
-            }
-        },
-        watch: {
-            selectedRawMatIndex: function(newValue) {
-                this.selectedIndex = newValue;
-            }
-        },
-        */
     };
 
 </script>
