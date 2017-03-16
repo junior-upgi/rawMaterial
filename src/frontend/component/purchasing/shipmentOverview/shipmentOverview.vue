@@ -33,7 +33,6 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    // import workingMaterialRecord from './workingMaterialRecord.vue';
     import shipmentOverviewRecord from './shipmentOverviewRecord.vue';
     import workingTimeSelector from '../../common/workingTimeSelector.vue';
 

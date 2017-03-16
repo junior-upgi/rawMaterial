@@ -59,14 +59,17 @@
             @click="logout()">
             登出系統
         </button>
+        <messagingUnit></messagingUnit>
     </div>
 </template>
 
 <script>
     import { mapActions, mapGetters, mapMutations } from 'vuex';
+    import messagingUnit from './messagingUnit.vue';
 
     export default {
         name: 'sidebar',
+        components: { messagingUnit },
         computed: {
             ...mapGetters({
                 activeView: 'activeView',
