@@ -20,54 +20,54 @@
 </template>
 
 <script>
-    import numeral from 'numeral';
-    import { mapGetters } from 'vuex';
-    export default {
-        name: 'amountSummary',
-        props: ['activePO'],
-        computed: {
-            ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
-            printingBorder: function() {
-                if (this.pOPrintMode) {
-                    return '2px solid black !important';
-                } else {
-                    return null;
-                }
-            },
-            pOSummaryGross: function() {
-                return this.pOSummaryNet + this.pOSummaryTax;
-            },
-            pOSummaryNet: function() {
-                if(this.activePO.customNet === null) {
-                    let amount = 0;
-                    this.activePO.shipments.forEach((shipment) => {
-                        amount += shipment.unitPrice * shipment.requestWeight;
-                    });
-                    return amount;
-                } else {
-                    return this.activePO.customNet;
-                }
-            },
-            pOSummaryTax: function() {
-                if(this.activePO.customTax === null) {
-                    let amount = 0;
-                    this.activePO.shipments.forEach((shipment) => {
-                        amount += shipment.unitPrice * shipment.requestWeight * this.activePO.supplier.taxRate;
-                    });
-                    return amount;
-                } else {
-                    return this.activePO.customTax;
-                }
+import numeral from 'numeral';
+import { mapGetters } from 'vuex';
+export default {
+    name: 'amountSummary',
+    props: ['activePO'],
+    computed: {
+        ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
+        printingBorder: function() {
+            if (this.pOPrintMode) {
+                return '2px solid black !important';
+            } else {
+                return null;
             }
         },
-        filters: {
-            formatCurrency: function(amount) {
-                return numeral(amount).format('0,0.[00]');
+        pOSummaryGross: function() {
+            return this.pOSummaryNet + this.pOSummaryTax;
+        },
+        pOSummaryNet: function() {
+            if (this.activePO.customNet === null) {
+                let amount = 0;
+                this.activePO.shipments.forEach((shipment) => {
+                    amount += shipment.unitPrice * shipment.requestWeight;
+                });
+                return amount;
+            } else {
+                return this.activePO.customNet;
+            }
+        },
+        pOSummaryTax: function() {
+            if (this.activePO.customTax === null) {
+                let amount = 0;
+                this.activePO.shipments.forEach((shipment) => {
+                    amount += shipment.unitPrice * shipment.requestWeight * this.activePO.supplier.taxRate;
+                });
+                return amount;
+            } else {
+                return this.activePO.customTax;
             }
         }
-    };
+    },
+    filters: {
+        formatCurrency: function(amount) {
+            return numeral(amount).format('0,0.[00]');
+        }
+    }
+};
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

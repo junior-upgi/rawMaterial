@@ -15,22 +15,21 @@
 </template>
 
 <script>
-    import pOOverview from './pOOverview/pOOverview.vue';
-    import contactInfo from './contactInfo.vue';
-    import shipmentOverview from './shipmentOverview/shipmentOverview.vue';
+import pOOverview from './pOOverview/pOOverview.vue';
+import contactInfo from './contactInfo.vue';
+import shipmentOverview from './shipmentOverview/shipmentOverview.vue';
 
-    export default {
-        name: 'purchasing',
-        components: {
-            pOOverview,
-            contactInfo,
-            shipmentOverview
-        }
-    };
+export default {
+    name: 'purchasing',
+    components: {
+        pOOverview,
+        contactInfo,
+        shipmentOverview
+    }
+};
 
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

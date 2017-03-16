@@ -15,18 +15,17 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
-    export default {
-        name: 'knownRawMaterial',
-        computed: {
-            ...mapGetters({ rawMaterialTypeList: 'getRawMaterialTypeList' })
-        }
-    };
+export default {
+    name: 'knownRawMaterial',
+    computed: {
+        ...mapGetters({ rawMaterialTypeList: 'getRawMaterialTypeList' })
+    }
+};
 
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

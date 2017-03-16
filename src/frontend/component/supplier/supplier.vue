@@ -6,13 +6,12 @@
 </template>
 
 <script>
-    export default {
-        name: 'supplier'
-    };
+export default {
+    name: 'supplier'
+};
 
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

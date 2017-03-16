@@ -9,22 +9,20 @@
 </template>
 
 <script>
-    import shipmentOverview from '../purchasing/shipmentOverview/shipmentOverview.vue';
-    import batchReservation from './batchReservation/batchReservation.vue';
-    import shipmentSchedule from './shipmentSchedule/shipmentSchedule.vue';
+import shipmentOverview from '../purchasing/shipmentOverview/shipmentOverview.vue';
+import batchReservation from './batchReservation/batchReservation.vue';
+import shipmentSchedule from './shipmentSchedule/shipmentSchedule.vue';
 
-    export default {
-        name: 'furnace',
-        components: {
-            shipmentOverview,
-            batchReservation,
-            shipmentSchedule
-        }
-    };
-
+export default {
+    name: 'furnace',
+    components: {
+        shipmentOverview,
+        batchReservation,
+        shipmentSchedule
+    }
+};
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

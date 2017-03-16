@@ -13,12 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <pOOverviewRecord
-                        v-for="purchaseOrder in activePOList"
-                        :purchaseOrder="purchaseOrder"
-                        :pOContentSummary="filterPOContentSummary(purchaseOrder.id)"
-                        :revokedPendingShipmentSchedule="revokedPendingShipmentSchedule"
-                        :unattendedShipmentSchedule="unattendedShipmentSchedule">
+                    <pOOverviewRecord v-for="purchaseOrder in activePOList" :purchaseOrder="purchaseOrder" :pOContentSummary="filterPOContentSummary(purchaseOrder.id)" :revokedPendingShipmentSchedule="revokedPendingShipmentSchedule" :unattendedShipmentSchedule="unattendedShipmentSchedule">
                     </pOOverviewRecord>
                 </tbody>
                 <newRequestList></newRequestList>
@@ -28,57 +23,56 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import newRequestList from './newRequestList/newRequestList.vue';
-    import pOOverviewRecord from './pOOverviewRecord/pOOverviewRecord.vue';
+import { mapGetters } from 'vuex';
+import newRequestList from './newRequestList/newRequestList.vue';
+import pOOverviewRecord from './pOOverviewRecord/pOOverviewRecord.vue';
 
-    export default {
-        name: 'pOOverview',
-        components: {
-            newRequestList,
-            pOOverviewRecord
+export default {
+    name: 'pOOverview',
+    components: {
+        newRequestList,
+        pOOverviewRecord
+    },
+    computed: {
+        ...mapGetters({
+            activePOList: 'activePOList',
+            shipmentSchedule: 'shipmentSchedule',
+            pOContentSummary: 'pOContentSummary'
+        }),
+        revokedPendingShipmentSchedule: function() {
+            return this.shipmentSchedule.filter((shipment) => {
+                return (
+                    (shipment.deprecated !== null) &&
+                    (shipment.pOId !== null) &&
+                    (shipment.purchaseOrder.deprecated === null)
+                );
+            });
         },
-        computed: {
-            ...mapGetters({
-                activePOList: 'activePOList',
-                shipmentSchedule: 'shipmentSchedule',
-                pOContentSummary: 'pOContentSummary'
-            }),
-            revokedPendingShipmentSchedule: function() {
-                return this.shipmentSchedule.filter((shipment) => {
-                    return (
-                        (shipment.deprecated !== null) &&
-                        (shipment.pOId !== null) &&
-                        (shipment.purchaseOrder.deprecated === null)
-                    );
-                });
-            },
-            unattendedShipmentSchedule: function() {
-                return this.shipmentSchedule.filter((shipment) => {
-                    return (
-                        (shipment.deprecated === null) &&
-                        (shipment.pOId === null)
-                    );
-                });
-            }
-        },
-        data: function() {
-            return {
-                thList: ['編號', '年度', '月份', '廠商', '規格項目', '狀態']
-            };
-        },
-        methods: {
-            filterPOContentSummary: function(pOId) {
-                return this.pOContentSummary.filter((summaryItem) => {
-                    return summaryItem.pOId === pOId;
-                });
-            }
+        unattendedShipmentSchedule: function() {
+            return this.shipmentSchedule.filter((shipment) => {
+                return (
+                    (shipment.deprecated === null) &&
+                    (shipment.pOId === null)
+                );
+            });
         }
-    };
+    },
+    data: function() {
+        return {
+            thList: ['編號', '年度', '月份', '廠商', '規格項目', '狀態']
+        };
+    },
+    methods: {
+        filterPOContentSummary: function(pOId) {
+            return this.pOContentSummary.filter((summaryItem) => {
+                return summaryItem.pOId === pOId;
+            });
+        }
+    }
+};
 
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

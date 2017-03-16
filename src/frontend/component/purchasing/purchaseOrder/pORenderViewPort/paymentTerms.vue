@@ -1,6 +1,5 @@
 <template>
-    <td colspan="4"
-        :style="{border:printingBorder}">
+    <td colspan="4" :style="{border:printingBorder}">
         <div class="container-fluid text-left">
             <h4>備 註：</h4>
             <ol>
@@ -15,23 +14,23 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
-    export default {
-        name: 'paymentTerms',
-        props: ['UNI_NO', 'CMP_ADR'],
-        computed: {
-            ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
-            printingBorder: function() {
-                if (this.pOPrintMode) {
-                    return '2px solid black !important';
-                } else {
-                    return null;
-                }
+import { mapGetters } from 'vuex';
+export default {
+    name: 'paymentTerms',
+    props: ['UNI_NO', 'CMP_ADR'],
+    computed: {
+        ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
+        printingBorder: function() {
+            if (this.pOPrintMode) {
+                return '2px solid black !important';
+            } else {
+                return null;
             }
         }
-    };
+    }
+};
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

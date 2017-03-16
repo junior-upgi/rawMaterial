@@ -7,16 +7,15 @@
 </template>
 
 <script>
-    import knownRawMaterial from './knownRawMaterial.vue';
+import knownRawMaterial from './knownRawMaterial.vue';
 
-    export default {
-        name: 'admin',
-        components: { knownRawMaterial }
-    };
+export default {
+    name: 'admin',
+    components: { knownRawMaterial }
+};
 
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

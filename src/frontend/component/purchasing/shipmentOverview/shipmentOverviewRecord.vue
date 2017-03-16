@@ -9,41 +9,40 @@
 </template>
 
 <script>
-    import numeral from 'numeral';
-    import { mapGetters } from 'vuex';
-    import graphicalDate from './graphicalDate.vue';
+import numeral from 'numeral';
+import { mapGetters } from 'vuex';
+import graphicalDate from './graphicalDate.vue';
 
-    export default {
-        name: 'shipmentOverviewRecord',
-        components: { graphicalDate },
-        props: ['monthlyShipmentOverview'],
-        computed: {
-            ...mapGetters({
-                receivingRecord: 'receivingRecord',
-                workingYear: 'workingYear',
-                workingMonth: 'workingMonth'
-            }),
-            filterReceivingRecord: function() {
-                return this.receivingRecord.filter((record) => {
-                    return (
-                        (record.CUS_NO === this.monthlyShipmentOverview.CUS_NO) &&
-                        (record.PRD_NO === this.monthlyShipmentOverview.PRD_NO) &&
-                        (record.workingYear === this.workingYear) &&
-                        (record.workingMonth === this.workingMonth)
-                    );
-                });
-            }
-        },
-        filters: {
-            tonnage: function(value) {
-                return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
-            }
+export default {
+    name: 'shipmentOverviewRecord',
+    components: { graphicalDate },
+    props: ['monthlyShipmentOverview'],
+    computed: {
+        ...mapGetters({
+            receivingRecord: 'receivingRecord',
+            workingYear: 'workingYear',
+            workingMonth: 'workingMonth'
+        }),
+        filterReceivingRecord: function() {
+            return this.receivingRecord.filter((record) => {
+                return (
+                    (record.CUS_NO === this.monthlyShipmentOverview.CUS_NO) &&
+                    (record.PRD_NO === this.monthlyShipmentOverview.PRD_NO) &&
+                    (record.workingYear === this.workingYear) &&
+                    (record.workingMonth === this.workingMonth)
+                );
+            });
         }
-    };
+    },
+    filters: {
+        tonnage: function(value) {
+            return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
+        }
+    }
+};
 
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>

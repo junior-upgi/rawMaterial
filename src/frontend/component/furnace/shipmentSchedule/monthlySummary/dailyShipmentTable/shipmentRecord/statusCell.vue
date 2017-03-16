@@ -10,68 +10,67 @@
 </template>
 
 <script>
-    export default {
-        name: 'statusCell',
-        props: ['shipment'],
-        computed: {
-            validShipment: function() { return (this.shipment.deprecated === null) ? true : false; },
-            onPO: function() {
-                if (
-                    (this.shipment.pOId !== null) &&
-                    (this.shipment.purchaseOrder.deprecated === null)
-                ) { return true; } else { return false; }
-            },
-            pOPending: function() { if ( this.validShipment && !this.onPO) { return true; } else { return false; } },
-            revocationPending: function() { if ( !this.validShipment && this.onPO) { return true; } else { return false; } },
-            shipmentPending: function() {
-                if (
-                    (this.shipment.deprecated === null) &&
-                    (this.shipment.receivedDate === null) &&
-                    (this.shipment.pOId !== null) &&
-                    (this.shipment.purchaseOrder.deprecated === null)
-                ) { return true; } else { return false; }
-            },
-            fulfilled: function() {
-                if (
-                    (this.shipment.deprecated === null) &&
-                    (this.shipment.receivedDate !== null) &&
-                    (this.shipment.pOId !== null) &&
-                    (this.shipment.purchaseOrder.deprecated === null)
-                ) { return true; } else { return false; }
-            },
-            pOClosed: function() {
-                if (
-                    (this.fulfilled) &&
-                    (this.shipment.purchaseOrder.finalizedDate === null)
-                ) { return true; } else { return false; }
-            },
-            shipmentState: function() {
-                if (this.pOClosed) {
-                    return { stateCode: 'pOClosed', stateMessage: '結案' };
-                } else if (this.fulfilled) {
-                    return { stateCode: 'fulfilled', stateMessage: '已入廠' };
-                } else if (this.shipmentPending) {
-                    return { stateCode: 'shipmentPending', stateMessage: '待入廠' };
-                } else if (this.revocationPending) {
-                    return { stateCode: 'revocationPending', stateMessage: '待取消' };
-                } else if (this.pOPending) {
-                    return { stateCode: 'pOPending', stateMessage: '待下單' };
-                } else {
-                    return { stateCode: 'error', stateMessage: '狀態異常' };
-                }
+export default {
+    name: 'statusCell',
+    props: ['shipment'],
+    computed: {
+        validShipment: function() { return (this.shipment.deprecated === null) ? true : false; },
+        onPO: function() {
+            if (
+                (this.shipment.pOId !== null) &&
+                (this.shipment.purchaseOrder.deprecated === null)
+            ) { return true; } else { return false; }
+        },
+        pOPending: function() { if (this.validShipment && !this.onPO) { return true; } else { return false; } },
+        revocationPending: function() { if (!this.validShipment && this.onPO) { return true; } else { return false; } },
+        shipmentPending: function() {
+            if (
+                (this.shipment.deprecated === null) &&
+                (this.shipment.receivedDate === null) &&
+                (this.shipment.pOId !== null) &&
+                (this.shipment.purchaseOrder.deprecated === null)
+            ) { return true; } else { return false; }
+        },
+        fulfilled: function() {
+            if (
+                (this.shipment.deprecated === null) &&
+                (this.shipment.receivedDate !== null) &&
+                (this.shipment.pOId !== null) &&
+                (this.shipment.purchaseOrder.deprecated === null)
+            ) { return true; } else { return false; }
+        },
+        pOClosed: function() {
+            if (
+                (this.fulfilled) &&
+                (this.shipment.purchaseOrder.finalizedDate === null)
+            ) { return true; } else { return false; }
+        },
+        shipmentState: function() {
+            if (this.pOClosed) {
+                return { stateCode: 'pOClosed', stateMessage: '結案' };
+            } else if (this.fulfilled) {
+                return { stateCode: 'fulfilled', stateMessage: '已入廠' };
+            } else if (this.shipmentPending) {
+                return { stateCode: 'shipmentPending', stateMessage: '待入廠' };
+            } else if (this.revocationPending) {
+                return { stateCode: 'revocationPending', stateMessage: '待取消' };
+            } else if (this.pOPending) {
+                return { stateCode: 'pOPending', stateMessage: '待下單' };
+            } else {
+                return { stateCode: 'error', stateMessage: '狀態異常' };
             }
-        },
-        mounted: function() {
-            this.$emit('recordStateDetermined', this.shipmentState);
-        },
-        updated: function() {
-            this.$emit('recordStateDetermined', this.shipmentState);
         }
-    };
+    },
+    mounted: function() {
+        this.$emit('recordStateDetermined', this.shipmentState);
+    },
+    updated: function() {
+        this.$emit('recordStateDetermined', this.shipmentState);
+    }
+};
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>
 

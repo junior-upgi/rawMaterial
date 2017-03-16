@@ -37,18 +37,17 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
-    export default {
-        name: 'contactInfo',
-        computed: {
-            ...mapGetters({ supplierList: 'supplierList' })
-        }
-    };
+export default {
+    name: 'contactInfo',
+    computed: {
+        ...mapGetters({ supplierList: 'supplierList' })
+    }
+};
 
 </script>
 
 <style>
-    @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
+@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 </style>
