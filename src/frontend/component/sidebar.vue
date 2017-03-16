@@ -40,6 +40,13 @@
             檢視訂單
         </button>
         <button
+            v-if="((role==='admin')||(role==='purchasing'))&&(activeView==='pOView')"
+            type="button" class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
+            @click="printPO()">
+            列印訂單
+        </button>
+        <button
             v-if="role==='admin'"
             type="button" class="btn btn-default btn-block"
             :disabled="dataProcessingState?true:false"
@@ -77,6 +84,7 @@
                 buildStore: 'buildStore',
                 redirectUser: 'redirectUser',
                 forceViewChange: 'forceViewChange',
+                pOPrintModeSwitch: 'pOPrintModeSwitch',
                 processingDataSwitch: 'processingDataSwitch',
                 resetStore: 'resetStore'
             }),
@@ -101,6 +109,17 @@
                             systemMessage: error
                         });
                     });
+            },
+            printPO: function() {
+                // let customMessageHolder = this.customMessage;
+                this.processingDataSwitch(true);
+                this.pOPrintModeSwitch(true);
+                setTimeout(() => {
+                    // this.customMessage = customMessageHolder;
+                    print();
+                    this.pOPrintModeSwitch(false);
+                    this.processingDataSwitch(false);
+                }, 50);
             }
         }
     };

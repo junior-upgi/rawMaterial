@@ -37,7 +37,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import { mapGetters } from 'vuex';
     import pORenderViewPort from './pORenderViewPort/pORenderViewPort.vue';
 
     export default {
@@ -59,24 +59,28 @@
         },
         created: function() { this.selectedIndex = 0; },
         methods: {
+            saveCustomMessage: function($event) {
+                this.customMessage = $event;
+            }
+            /*
             ...mapMutations({
                 pOPrintModeSwitch: 'pOPrintModeSwitch',
                 processingDataSwitch: 'processingDataSwitch'
             }),
-            saveCustomMessage: function($event) {
-                this.customMessage = $event;
-            },
+            */
+            /* ,
             printPO: function() {
-                let customMessageHolder = this.customMessage;
+                // let customMessageHolder = this.customMessage;
                 this.processingDataSwitch(true);
                 this.pOPrintModeSwitch(true);
                 setTimeout(() => {
-                    this.customMessage = customMessageHolder;
+                    // this.customMessage = customMessageHolder;
                     print();
                     this.pOPrintModeSwitch(false);
                     this.processingDataSwitch(false);
                 }, 50);
             }
+            */
         }
     };
 </script>
