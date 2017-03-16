@@ -33,7 +33,7 @@
                 }
             },
             pOSummaryGross: function() {
-                return Math.round(this.pOSummaryNet + this.pOSummaryTax);
+                return this.pOSummaryNet + this.pOSummaryTax;
             },
             pOSummaryNet: function() {
                 if(this.activePO.customNet === null) {
@@ -60,7 +60,7 @@
         },
         filters: {
             formatCurrency: function(amount) {
-                return '$ ' + numeral(amount).format('0,0.[00]');
+                return numeral(amount).format('0,0.[00]');
             }
         }
     };
