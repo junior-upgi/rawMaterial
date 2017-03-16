@@ -5,10 +5,12 @@
                 <div class="col-xs-4 text-left">金額</div>
                 <div class="col-xs-8 text-right">{{pOSummaryNet|formatCurrency}} {{activePO.supplier.currency}}</div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-xs-4 text-left">稅金 {{activePO.supplier.taxRate * 100}}%</div>
                 <div class="col-xs-8 text-right">{{pOSummaryTax|formatCurrency}} {{activePO.supplier.currency}}</div>
             </div>
+            <br>
             <div class="row">
                 <div class="col-xs-4 text-left">總計</div>
                 <div class="col-xs-8 text-right">{{pOSummaryGross|formatCurrency}} {{activePO.supplier.currency}}</div>

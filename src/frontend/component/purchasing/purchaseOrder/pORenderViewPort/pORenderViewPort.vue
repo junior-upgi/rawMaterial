@@ -8,6 +8,7 @@
             <table class="table table-bordered table-condensed">
                 <summarySectionHeader></summarySectionHeader>
                 <summarySection :activePO="activePO"></summarySection>
+                <tbody><tr><td colspan="7" style="padding:15px;"></td></tr></tbody>
                 <shippingDateDisplay :activePO="activePO"></shippingDateDisplay>
                 <reminderDisplay :pONoticeList="activePO.pONotices"></reminderDisplay>
                 <tbody>
@@ -18,7 +19,9 @@
                 </tbody>
                 <tbody :style="{border:printingBorder}">
                     <tr>
-                        <td colspan="7" class="text-left">回 覆 確 認</td>
+                        <td colspan="7" class="text-left">
+                            <h3 style="margin:20px;">回 覆 確 認</h3>
+                        </td>
                     </tr>
                     <tr>
                         <td colspan="7" class="text-right">({{isoCode}})</td>

@@ -1,7 +1,8 @@
 <template>
-    <td colspan="4" :style="{border:printingBorder}">
+    <td colspan="4"
+        :style="{border:printingBorder}">
         <div class="container-fluid text-left">
-            <span>備 註：</span>
+            <h4>備 註：</h4>
             <ol>
                 <li>請於送貨單上註明訂單編號</li>
                 <li>請回覆訂單以確定交貨期</li>

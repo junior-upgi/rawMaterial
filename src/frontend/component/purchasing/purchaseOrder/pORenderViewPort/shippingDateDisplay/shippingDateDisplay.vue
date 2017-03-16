@@ -1,6 +1,10 @@
 <template>
     <tbody :style="{border:printingBorder}">
-        <tr><td colspan="7" class="text-left">送貨日期</td></tr>
+        <tr>
+            <td colspan="7" class="text-left">
+                <h4>送貨日期：</h4>
+            </td>
+        </tr>
         <tr v-for="(rawMaterial, index) in releventRawMaterialList">
             <shippingDateRecord
                 :index="index"

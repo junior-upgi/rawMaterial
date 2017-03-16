@@ -1,13 +1,17 @@
 <template>
     <div>
-        <div>{{NAME}}</div>
-        <div class="row">
-            {{CMP_ADR}}&nbsp;&nbsp;&nbsp;
-            TEL:&nbsp;{{TEL1}}&nbsp;&nbsp;&nbsp;
-            FAX:&nbsp;{{TEL3}}
+        <div class="row" style="margin:0px;padding:0px;">
+            <h1 style="margin:0px;padding:0px;">{{NAME}}</h1>
         </div>
-        <div class="row">
-            <span>{{documentTitle}}</span>
+        <div class="row" style="margin:10px;padding:0px;">
+            <h4 style="margin:0px;padding:0px;">
+                {{CMP_ADR}}&nbsp;&nbsp;&nbsp;
+                TEL:&nbsp;{{TEL1}}&nbsp;&nbsp;&nbsp;
+                FAX:&nbsp;{{TEL3}}
+            </h4>
+        </div>
+        <div class="row" style="margin:10px;padding:0px;">
+            <h2 style="margin:0px;padding:0px;">{{documentTitle}}</h2>
         </div>
     </div>
 </template>
