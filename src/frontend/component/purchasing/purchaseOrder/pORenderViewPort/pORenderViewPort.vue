@@ -51,11 +51,6 @@
             reminderDisplay,
             paymentTerms,
             amountSummary
-            /* ,
-            detailListing,
-            summaryEntry
-            shipmentEntry supplierSelector,
-            */
         },
         props: ['activePO'],
         computed: {
@@ -79,74 +74,6 @@
                 isoCode: 'R7-03-02A'
             };
         }
-        /*
-        computed: {
-            ...mapGetters({
-                pOShipmentList: 'getPOShipmentList',
-                pOShipmentSummary: 'getPOShipmentSummary',
-                pOWorkingSupplier: 'getPOWorkingSupplier',
-                checkPOViewMode: 'checkPOViewMode',
-                shipmentOverview: 'getShipmentOverview',
-                supplierList: 'getSupplierList',
-                workingMonth: 'getWorkingMonth',
-                workingYear: 'getWorkingYear'
-            }),
-            pODate: function() {
-                return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-            },
-            pONumber: function() {
-                const yearPartString = (new Date().getFullYear() - 1911).toString();
-                const datePartString = moment(new Date(), 'YYYY-MM-DD HH:MM:ss').format('MMDD');
-                return `${yearPartString}${datePartString}${('0' + this.revisionNumber).slice(-2)}`;
-            },
-            supplier: function() {
-                if (this.pOWorkingSupplier !== null) {
-                    return this.supplierList.filter((supplier) => {
-                        return supplier.CUS_NO === this.pOWorkingSupplier;
-                    })[0];
-                } else {
-                    return null;
-                }
-            }
-        },
-        methods: {
-            ...mapActions({ refreshPOShipmentListing: 'refreshPOShipmentListing' }),
-            ...mapMutations({
-                addToSummary: 'addToPOShipmentSummary',
-                removeFromSummary: 'removeFromPOShipmentSummary',
-                changePOMode: 'changePOMode',
-                resetPOShipmentList: 'resetPOShipmentList',
-                resetStore: 'resetStore'
-            }),
-            filterPOShipmentData: function(summaryItem) {
-                const shipmentList = [];
-                this.pOShipmentList.forEach((shipment) => {
-                    if (
-                        (shipment.CUS_NO === summaryItem.CUS_NO) &&
-                        (shipment.PRD_NO === summaryItem.PRD_NO) &&
-                        (shipment.typeId === summaryItem.typeId)
-                    ) {
-                        shipmentList.push(shipment);
-                    }
-                });
-                return shipmentList;
-            }
-        },
-        created: function() {
-            this.changePOMode({
-                pOViewMode: true,
-                pOPrintMode: false
-            });
-        },
-        destroyed: function() {
-            this.resetPOShipmentList();
-            this.shipmentSummary = [];
-            this.changePOMode({
-                pOViewMode: false,
-                pOPrintMode: false
-            });
-        }
-        */
     };
 </script>
 
