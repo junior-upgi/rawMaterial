@@ -22,6 +22,13 @@
                         v-for="(monthlyShipmentOverview, index) in releventMonthlyShipmentOverview"
                         :monthlyShipmentOverview="monthlyShipmentOverview">
                     </shipmentOverviewRecord>
+                    <tr>
+                        <td colspan="5">
+                            <span class="label label-primary">今日</span>
+                            <span class="label label-danger">待進廠</span>
+                            <span class="label label-success">已入廠</span>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

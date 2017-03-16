@@ -6,13 +6,15 @@
             <span
                 v-if="record.receivedWeight>0"
                 style="padding:2px;"
-                class="label label-primary">
+                class="label"
+                :class="{'label-primary':isCurrentDate(record.workingDate),'label-success':!isCurrentDate(record.workingDate)}">
                 {{record.workingMonth}}/{{record.workingDay}}
             </span>
             <span
                 v-else
-                class="label label-danger"
-                style="padding:2px;">
+                style="padding:2px;"
+                class="label"
+                :class="{'label-primary':isCurrentDate(record.workingDate),'label-danger':!isCurrentDate(record.workingDate)}">
                 {{record.workingMonth}}/{{record.workingDay}}
             </span>
         </div>
@@ -20,9 +22,15 @@
 </template>
 
 <script>
+    import moment from 'moment-timezone';
     export default {
         name: 'graphicalDate',
-        props: ['receivingRecord']
+        props: ['receivingRecord'],
+        methods: {
+            isCurrentDate: function(dateString) {
+                return (moment(new Date()).format('YYYY-MM-DD') === dateString) ? true : false;
+            }
+        }
     };
 
 </script>
