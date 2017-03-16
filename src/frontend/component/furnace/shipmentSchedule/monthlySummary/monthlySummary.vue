@@ -4,8 +4,8 @@
         class="panel-group" id="monthlySummary" role="tablist">
         <dailySummaryItem
             v-for="index in daysInCurrentWorkingMonth"
-            :workingDateString="getWorkingDateString(index + 1)"
-            :workingDay="index + 1"
+            :workingDateString="getWorkingDateString(index)"
+            :workingDay="index"
             :shipmentSchedule="releventShipmentSchedule"
             @editModeToggled="editModeToggled($event)">
         </dailySummaryItem>
