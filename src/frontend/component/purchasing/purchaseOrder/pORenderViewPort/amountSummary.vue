@@ -3,15 +3,15 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xs-4 text-left">金額</div>
-                <div class="col-xs-8 text-right">{{pOSummaryNet|formatCurrency}}</div>
+                <div class="col-xs-8 text-right">{{pOSummaryNet|formatCurrency}} {{activePO.supplier.currency}}</div>
             </div>
             <div class="row">
-                <div class="col-xs-4 text-left">稅金 {{taxRate * 100}}%</div>
-                <div class="col-xs-8 text-right">{{pOSummaryTax|formatCurrency}}</div>
+                <div class="col-xs-4 text-left">稅金 {{activePO.supplier.taxRate * 100}}%</div>
+                <div class="col-xs-8 text-right">{{pOSummaryTax|formatCurrency}} {{activePO.supplier.currency}}</div>
             </div>
             <div class="row">
                 <div class="col-xs-4 text-left">總計</div>
-                <div class="col-xs-8 text-right">{{pOSummaryGross|formatCurrency}}</div>
+                <div class="col-xs-8 text-right">{{pOSummaryGross|formatCurrency}} {{activePO.supplier.currency}}</div>
             </div>
         </div>
     </td>
@@ -22,7 +22,7 @@
     import { mapGetters } from 'vuex';
     export default {
         name: 'amountSummary',
-        props: ['activePO', 'taxRate'],
+        props: ['activePO'],
         computed: {
             ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
             printingBorder: function() {
@@ -50,7 +50,7 @@
                 if(this.activePO.customTax === null) {
                     let amount = 0;
                     this.activePO.shipments.forEach((shipment) => {
-                        amount += shipment.unitPrice * shipment.requestWeight * this.taxRate;
+                        amount += shipment.unitPrice * shipment.requestWeight * this.activePO.supplier.taxRate;
                     });
                     return amount;
                 } else {
@@ -60,7 +60,7 @@
         },
         filters: {
             formatCurrency: function(amount) {
-                return '$' + numeral(amount).format('0,0.[00]');
+                return '$ ' + numeral(amount).format('0,0.[00]');
             }
         }
     };

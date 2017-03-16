@@ -31,9 +31,13 @@ router.route('/data/purchaseOrder')
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.ActivePurchaseOrder')
             .select('*')
+            .orderBy('pONumber')
+            .orderBy('shipments:workingDate')
+            /*
             .orderBy('workingYear')
             .orderBy('workingMonth')
             .orderBy('CUS_NO')
+            */
             .debug(false)
             .then((resultset) => {
                 let pOList = new Treeize();
@@ -147,8 +151,16 @@ router.route('/data/purchaseOrder')
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data
-                    return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
-                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
+                    return trx('rawMaterial.dbo.ActivePurchaseOrder')
+                        .select('*')
+                        .orderBy('pONumber')
+                        .orderBy('shipments:workingDate')
+                        /*
+                        .orderBy('workingYear')
+                        .orderBy('workingMonth')
+                        .orderBy('CUS_NO')
+                        */
+                        .debug(false);
                 }).then((resultset) => {
                     // process active purchase order data
                     let pOList = new Treeize();
@@ -275,8 +287,16 @@ router.route('/data/purchaseOrder')
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data
-                    return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
-                        .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
+                    return trx('rawMaterial.dbo.ActivePurchaseOrder')
+                        .select('*')
+                        .orderBy('pONumber')
+                        .orderBy('shipments:workingDate')
+                        /*
+                        .orderBy('workingYear')
+                        .orderBy('workingMonth')
+                        .orderBy('CUS_NO')
+                        */
+                        .debug(false);
                 }).then((resultset) => {
                     // process active purchase order data
                     let pOList = new Treeize();

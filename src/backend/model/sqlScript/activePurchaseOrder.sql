@@ -20,6 +20,8 @@ SELECT
     ,c.TEL1 AS 'suppliers:TEL1'
     ,c.TEL2 AS 'suppliers:TEL2'
     ,c.FAX AS 'suppliers:FAX'
+    ,c.taxRate AS 'suppliers:taxRate'
+    ,c.currency AS 'suppliers:currency'
     ,a.customGross
     ,a.customTax
     ,a.customNet

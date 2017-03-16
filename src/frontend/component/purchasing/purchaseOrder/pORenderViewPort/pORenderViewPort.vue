@@ -13,7 +13,7 @@
                 <tbody>
                     <tr>
                         <paymentTerms :UNI_NO="UNI_NO" :CMP_ADR="CMP_ADR"></paymentTerms>
-                        <amountSummary :activePO="activePO" :taxRate="taxRate"></amountSummary>
+                        <amountSummary :activePO="activePO"></amountSummary>
                     </tr>
                 </tbody>
                 <tbody :style="{border:printingBorder}">
@@ -35,7 +35,7 @@
     import generalSection from './generalSection.vue';
     import summarySectionHeader from './summarySectionHeader.vue';
     import summarySection from './summarySection.vue';
-    import shippingDateDisplay from './shippingDateDisplay.vue';
+    import shippingDateDisplay from './shippingDateDisplay/shippingDateDisplay.vue';
     import reminderDisplay from './reminderDisplay.vue';
     import paymentTerms from './paymentTerms.vue';
     import amountSummary from './amountSummary.vue';
@@ -76,10 +76,7 @@
                 CMP_ADR: '台南市新營區新工路36號',
                 documentTitle: '訂 購 單',
                 UNI_NO: '70752833',
-                isoCode: 'R7-03-02A',
-                revisionNumber: 1,
-                taxRate: 0.05,
-                thList: ['項 次', '品 名', '規 格', '數 量', '單 位', '單 價', '合 計']
+                isoCode: 'R7-03-02A'
             };
         }
         /*

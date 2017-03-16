@@ -1,5 +1,5 @@
 <template>
-    <div class="row table-responsive" style="font-size:75%;">
+    <div class="row table-responsive">
         <table class="table table-bordered table-condensed">
             <tbody>
                 <tr>
@@ -31,9 +31,7 @@
                 <tr>
                     <td class="bg-primary" :style="{border:printingBorder}">傳 真 電 話</td>
                     <td :style="{border:printingBorder}">{{activePO.supplier.FAX}}</td>
-                    <td class="bg-primary" :style="{border:printingBorder}">
-                        採 購 經 辦
-                    </td>
+                    <td class="bg-primary" :style="{border:printingBorder}">採 購 經 辦</td>
                     <td :style="{border:printingBorder}">{{userInfo.NAME}} 分機:{{userInfo.compPhoneExt}}</td>
                 </tr>
             </tbody>

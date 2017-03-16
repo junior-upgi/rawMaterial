@@ -92,8 +92,16 @@ router.route('/data/shipment')
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data
-                    return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
-                        .orderBy('CUS_NO').debug(false);
+                    return trx('rawMaterial.dbo.ActivePurchaseOrder')
+                        .select('*')
+                        .orderBy('pONumber')
+                        .orderBy('shipments:workingDate')
+                        /*
+                        .orderBy('workingYear')
+                        .orderBy('workingMonth')
+                        .orderBy('CUS_NO')
+                        */
+                        .debug(false);
                 }).then((resultset) => {
                     // process active purchase order data
                     let pOList = new Treeize();
@@ -191,8 +199,16 @@ router.route('/data/shipment')
                 }).then((resultset) => {
                     responseObject.newRequestSummary = resultset;
                     // get a set of fresh purchaseOrder data
-                    return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
-                        .orderBy('CUS_NO').debug(false);
+                    return trx('rawMaterial.dbo.ActivePurchaseOrder')
+                        .select('*')
+                        .orderBy('pONumber')
+                        .orderBy('shipments:workingDate')
+                        /*
+                        .orderBy('workingYear')
+                        .orderBy('workingMonth')
+                        .orderBy('CUS_NO')
+                        */
+                        .debug(false);
                 }).then((resultset) => {
                     // process active purchase order data
                     let pOList = new Treeize();
@@ -289,8 +305,16 @@ router.route('/data/shipment')
                     }).then((resultset) => {
                         responseObject.newRequestSummary = resultset;
                         // get a set of fresh purchaseOrder data
-                        return trx('rawMaterial.dbo.ActivePurchaseOrder').select('*')
-                            .orderBy('CUS_NO').debug(false);
+                        return trx('rawMaterial.dbo.ActivePurchaseOrder')
+                            .select('*')
+                            .orderBy('pONumber')
+                            .orderBy('shipments:workingDate')
+                            /*
+                            .orderBy('workingYear')
+                            .orderBy('workingMonth')
+                            .orderBy('CUS_NO')
+                            */
+                            .debug(false);
                     }).then((resultset) => {
                         // process active purchase order data
                         let pOList = new Treeize();
