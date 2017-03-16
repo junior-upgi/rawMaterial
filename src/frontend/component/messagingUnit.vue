@@ -1,5 +1,7 @@
 <template>
-    <div style="margin-top:25px;">
+    <div
+        v-if="!pOPrintMode"
+        style="margin-top:25px;">
         <textarea
             rows="8"
             style="width:100%;resize:vertical;"
@@ -23,6 +25,7 @@
         name: 'messagingUnit',
         computed: {
             ...mapGetters({
+                pOPrintMode: 'checkPOPrintMode',
                 dataProcessingState: 'checkDataProcessingState',
                 userData: 'userData'
             })
