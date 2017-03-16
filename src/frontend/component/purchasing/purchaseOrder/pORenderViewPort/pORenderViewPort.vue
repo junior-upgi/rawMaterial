@@ -8,7 +8,7 @@
             <table class="table table-bordered table-condensed">
                 <summarySectionHeader></summarySectionHeader>
                 <summarySection :activePO="activePO"></summarySection>
-                <tbody><tr><td colspan="7" style="padding:15px;"></td></tr></tbody>
+                <tbody><tr><td colspan="7" style="padding:5px;"></td></tr></tbody>
                 <shippingDateDisplay :activePO="activePO"></shippingDateDisplay>
                 <reminderDisplay
                     :pONoticeList="activePO.pONotices"

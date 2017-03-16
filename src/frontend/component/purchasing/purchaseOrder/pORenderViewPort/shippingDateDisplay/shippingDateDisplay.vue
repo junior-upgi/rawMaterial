@@ -2,7 +2,7 @@
     <tbody :style="{border:printingBorder}">
         <tr>
             <td colspan="7" class="text-left">
-                <h4>送貨日期：</h4>
+                <h4 style="margin-top:0px;margin-bottom:0px;">送貨日期：</h4>
             </td>
         </tr>
         <tr v-for="(rawMaterial, index) in releventRawMaterialList">
