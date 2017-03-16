@@ -34,7 +34,7 @@
                     <td class="bg-primary" :style="{border:printingBorder}">
                         採 購 經 辦
                     </td>
-                    <td :style="{border:printingBorder}">{{userInfo.NAME}} 分機:166</td>
+                    <td :style="{border:printingBorder}">{{userInfo.NAME}} 分機:{{userInfo.compPhoneExt}}</td>
                 </tr>
             </tbody>
         </table>
