@@ -27,9 +27,9 @@
             <td :style="{border:printingBorder}">{{summaryEntry.PRDT_SNM}}</td>
             <td :style="{border:printingBorder}" style="white-space:nowrap;">{{summaryEntry.specification}}</td>
             <td class="text-right" :style="{border:printingBorder}">{{summaryEntry.totalRequestedWeight|markThousand}}</td>
-            <td :style="{border:printingBorder}">{{summaryEntry.UT}}</td>
-            <td class="text-right" :style="{border:printingBorder}">{{summaryEntry.unitPrice|unitPrice}} {{summaryEntry.currency}}</td>
-            <td class="text-right" :style="{border:printingBorder}">{{(summaryEntry.unitPrice * summaryEntry.totalRequestedWeight)|markThousand}} {{summaryEntry.currency}}</td>
+            <td :style="{border:printingBorder}" style="white-space:nowrap;">{{summaryEntry.UT}}</td>
+            <td class="text-right" style="white-space:nowrap;" :style="{border:printingBorder}">{{summaryEntry.unitPrice|unitPrice}} {{summaryEntry.currency}}</td>
+            <td class="text-right" style="white-space:nowrap;" :style="{border:printingBorder}">{{(summaryEntry.unitPrice * summaryEntry.totalRequestedWeight)|markThousand}} {{summaryEntry.currency}}</td>
         </tr>
     </tbody>
 </template>
