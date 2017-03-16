@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <button class="text-left btn btn-sm btn-danger btn-block" style="padding:1px 0px 1px 0px;margin-bottom:5px;" :disabled="processingData?true:false" @click="cancelReservation">
         <strong>
                 未下訂車次: {{shipmentSchedule.length}}

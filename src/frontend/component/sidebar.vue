@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="col-xs-12 col-sm-2">
         <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false" :class="{'btn-danger':activeView==='admin'}" @click="changeWorkingView('admin')">
             管理模組

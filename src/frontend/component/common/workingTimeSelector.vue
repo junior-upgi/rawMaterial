@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <span>
             <button
                 class="btn btn-primary" style="border:0px;"

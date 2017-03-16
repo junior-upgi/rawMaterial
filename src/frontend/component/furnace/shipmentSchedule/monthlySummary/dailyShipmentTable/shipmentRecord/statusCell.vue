@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td>
         <span v-if="pOClosed" class="label label-default">結案</span>
         <span v-else-if="fulfilled" class="label label-default">已入廠</span>

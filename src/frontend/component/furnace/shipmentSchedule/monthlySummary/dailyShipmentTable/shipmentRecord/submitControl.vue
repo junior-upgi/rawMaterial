@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td style="white-space:nowrap;">
         <button v-if="(!pristine && workingDateReady && weightDataReady)" type="button" class="btn btn-primary btn-sm" :disabled="dataProcessingState?true:false" @click="$emit('submitRecordEvent')">
             <span class="glyphicon glyphicon-ok-sign"></span> 修改

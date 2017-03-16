@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="row table-responsive" style="margin-top:20px;">
         <table class="table table-bordered table-condensed">
             <tbody>

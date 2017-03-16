@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td colspan="4" :style="{border:printingBorder}">
         <div class="container-fluid text-left">
             <h4>備 註：</h4>

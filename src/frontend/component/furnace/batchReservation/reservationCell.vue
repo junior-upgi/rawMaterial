@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="container-fluid">
         <div class="row">
             <span class="label label-primary col-xs-12" style="margin-bottom:10px;padding:3px;">

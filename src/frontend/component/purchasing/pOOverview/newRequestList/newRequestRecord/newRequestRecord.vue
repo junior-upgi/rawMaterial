@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <tr>
         <actionField :requestList="organizedRequestList[requestSummary.CUS_NO]" :requestSummary="requestSummary">
         </actionField>

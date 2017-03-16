@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="table-responsive">
         <table class="table table-bordered table-condensed table-hover" style="font-size:75%;margin:0px;">
             <thead>

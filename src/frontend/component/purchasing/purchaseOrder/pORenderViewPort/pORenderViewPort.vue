@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="text-center" :class="{'container-fluid':!pOPrintMode, container:pOPrintMode}">
         <documentHeading :documentTitle="documentTitle"></documentHeading>
         <generalSection :activePO="activePO" :userInfo="userInfo"></generalSection>

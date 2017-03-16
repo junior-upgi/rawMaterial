@@ -13,24 +13,6 @@ export const store = new Vuex.Store({
     getters: getters,
     mutations: mutations,
     state: {
-        /*
-        // shipment schedule
-        shipmentOverview: [], // list of shipment overview data
-
-        // basic data
-        supplyingSpecList: [],
-
-        // purchase order
-        pOList: [],
-        pOCreateMode: false,
-        pOEditMode: false,
-        pOShipmentList: [],
-        pOShipmentSummary: [],
-        pOViewMode: false,
-        tonnageSummary: [],
-        pONoticeArray: [],
-        */
-
         // ////////////////////////////////////////////////////////////////
         // user permission control
         // accessExp: currentDatetime().format('HH:mm'), // may be deprecated

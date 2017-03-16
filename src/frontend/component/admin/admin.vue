@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="text-center col-xs-12 col-sm-10">
         <h2>管理模組</h2>
         <br>

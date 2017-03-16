@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td colspan="7" class="text-left">
         <div style="display:inline-block;">
             <span>{{index + 1}}. 【{{rawMaterial.PRDT_SNM}}】{{rawMaterial.specification}}：</span>

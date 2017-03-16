@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td>
         <span v-if="pOClosed">{{workingDateString}}</span>
         <del v-else-if="revocationPending">{{workingDateString}}</del>

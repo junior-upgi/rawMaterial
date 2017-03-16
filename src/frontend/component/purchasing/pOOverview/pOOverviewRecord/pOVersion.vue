@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td>
         <div style="white-space:nowrap;">{{pONumber}} 版本: {{revisionNumber}}</div>
         <button v-if="pendingIssueFlag" type="button" class="btn btn-danger btn-md" @click="$emit('updatePOEvent')">

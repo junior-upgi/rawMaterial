@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <tr style="font-size:75%;">
         <pOVersion :pONumber="purchaseOrder.pONumber" :revisionNumber="purchaseOrder.revisionNumber" :revokedPendingShipmentSchedule="releventRevokedPendingShipmentSchedule" :unattendedShipmentSchedule="releventUnattenedShipmentSchedule" @updatePOEvent="updatePO()">
         </pOVersion>

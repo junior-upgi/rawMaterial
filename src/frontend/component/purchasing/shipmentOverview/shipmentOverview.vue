@@ -1,13 +1,13 @@
-<template>
+<template lang="html">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>
-                        <workingTimeSelector></workingTimeSelector>
-                        &nbsp;原料進廠概況&nbsp;&nbsp;&nbsp;
-                        <span style="border:1px solid white;" class="label label-success">已入廠</span>
-                        <span style="border:1px solid white;" class="label label-danger">待進廠</span>
-                        <span style="border:1px solid white;" class="label label-primary">今日</span>
-                    </h4>
+                    <workingTimeSelector></workingTimeSelector>
+                    &nbsp;原料進廠概況&nbsp;&nbsp;&nbsp;
+                    <span style="border:1px solid white;" class="label label-success">已入廠</span>
+                    <span style="border:1px solid white;" class="label label-danger">待進廠</span>
+                    <span style="border:1px solid white;" class="label label-primary">今日</span>
+                </h4>
         </div>
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover">

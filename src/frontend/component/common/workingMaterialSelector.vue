@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <select class="form-control" v-model="selectedIndex" :disabled="dataProcessingState?true:false" @change="rawMaterialSelected()">
         <option v-for="(rawMaterial,index) in rawMaterialList" :value="index">
             【{{rawMaterial.CUST_SNM}}】{{rawMaterial.PRDT_SNM}} - {{rawMaterial.specification}}

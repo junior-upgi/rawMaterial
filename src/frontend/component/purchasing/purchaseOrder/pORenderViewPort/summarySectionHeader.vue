@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <thead>
         <tr class="bg-primary">
             <td v-for="tdItem in tdList" class="text-center" :style="{border:printingBorder}">

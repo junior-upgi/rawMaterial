@@ -1,12 +1,15 @@
-<template>
+<template lang="html">
     <td class="text-left">
-        <div v-for="record in receivingRecord" style="margin-right:3px;margin-bottom:3px;display:inline-block;">
-            <span v-if="record.receivedWeight>0" style="padding:2px;" class="label" :class="{'label-primary':isCurrentDate(record.workingDate),'label-success':!isCurrentDate(record.workingDate)}">
-                            {{record.workingMonth}}/{{record.workingDay}}
-                        </span>
-            <span v-else style="padding:2px;" class="label" :class="{'label-primary':isCurrentDate(record.workingDate),'label-danger':!isCurrentDate(record.workingDate)}">
-                            {{record.workingMonth}}/{{record.workingDay}}
-                        </span>
+        <div v-for="record in receivingRecord"
+             style="margin-right:3px;margin-bottom:3px;display:inline-block;">
+            <span v-if="record.receivedWeight>0"
+                  style="padding:2px;"
+                  class="label"
+                  :class="{'label-primary':isCurrentDate(record.workingDate),'label-success':!isCurrentDate(record.workingDate)}">{{record.workingMonth}}/{{record.workingDay}}</span>
+            <span v-else
+                  style="padding:2px;"
+                  class="label"
+                  :class="{'label-primary':isCurrentDate(record.workingDate),'label-danger':!isCurrentDate(record.workingDate)}">{{record.workingMonth}}/{{record.workingDay}}</span>
         </div>
     </td>
 </template>

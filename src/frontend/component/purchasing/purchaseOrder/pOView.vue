@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="text-center" :class="{'col-xs-12 col-sm-10':!pOPrintMode}">
         <h2 v-if="!pOPrintMode">訂單檢視模組</h2>
         <br>

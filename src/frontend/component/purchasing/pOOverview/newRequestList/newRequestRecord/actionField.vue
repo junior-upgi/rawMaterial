@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td>
         <span v-if="matchingActivePO !== null" class="label label-danger label-xs">
                     同期訂單已開立，請更新訂單

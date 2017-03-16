@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <form class="form-inline">
         <div class="form-group">
             <label for="supplierSelector">選擇廠商</label>

@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div v-if="releventShipmentSchedule.length > 0" class="panel-group" id="monthlySummary" role="tablist">
         <dailySummaryItem v-for="index in daysInCurrentWorkingMonth" :workingDateString="getWorkingDateString(index)" :workingDay="index" :shipmentSchedule="releventShipmentSchedule" @editModeToggled="editModeToggled($event)">
         </dailySummaryItem>

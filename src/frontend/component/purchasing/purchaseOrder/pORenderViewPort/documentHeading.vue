@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div>
         <div class="row" style="margin:0px;padding:0px;">
             <h1 style="margin:0px;padding:0px;">{{NAME}}</h1>

@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td>
         <span v-if="revocationPending || pOClosed">{{note}}</span>
         <input v-else type="text" class="form-control input-sm" style="border:0px;" :disabled="dataProcessingState ? true : false" v-model.lazy.trim="noteValue" />

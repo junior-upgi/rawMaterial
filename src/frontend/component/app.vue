@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="container-fluid">
         <div v-if="!pOPrintMode" class="row" style="margin-left:10px;">
             <div class="page-header" style="margin-top:15px;">

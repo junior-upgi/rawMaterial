@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="panel-group" id="shipmentSchedule" role="tablist">
         <div class="panel panel-primary">
             <div class="panel-heading" role="tab" id="heading">

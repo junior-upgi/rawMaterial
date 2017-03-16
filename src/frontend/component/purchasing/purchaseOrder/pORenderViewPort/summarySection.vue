@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <tbody v-if="!summarizedMode && !pOPrintMode">
         <tr v-for="(shipment, shipmentIndex) in activePO.shipments" style="font-size:75%;" @click="summarizedMode=!summarizedMode">
             <td>{{shipmentIndex + 1}}</td>

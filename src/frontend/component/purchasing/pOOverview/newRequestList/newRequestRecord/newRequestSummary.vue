@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td colspan="2" class="text-left">
         <ul style="margin:0px 0px 0px 20px;padding:0px">
             <template v-for="(requestedMaterial,PRD_NO) in requestList">

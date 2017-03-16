@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <td colspan="3" :style="{border:printingBorder}">
         <div class="container-fluid">
             <div class="row">

@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4>

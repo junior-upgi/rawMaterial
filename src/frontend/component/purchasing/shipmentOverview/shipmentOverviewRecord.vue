@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <tr style="font-size:75%;">
         <td>{{monthlyShipmentOverview.CUST_SNM}}</td>
         <td style="white-space:nowrap;">{{monthlyShipmentOverview.PRDT_SNM}}</td>

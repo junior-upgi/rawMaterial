@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div v-if="releventShipmentSchedule.length > 0" class="panel" :class="{'panel-success':!isWeekend, 'panel-danger':isWeekend}">
         <div class="panel-heading" role="tab" :id="'dailySummaryRecord' + workingDay">
             <h4 class="panel-title text-left" role="button" data-toggle="collapse" data-parent="#monthlySummary" :href="'#' + workingDay" @click="changeActiveShipmentEditorDate(workingDateString)">

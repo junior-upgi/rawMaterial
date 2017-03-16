@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <div class="col-xs-10 col-sm-6 col-md-5 col-lg-4">
         <form id="loginForm" @submit.prevent>
             <div class="form-group">

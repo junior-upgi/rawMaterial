@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
     <tbody :style="{border:printingBorder}">
         <tr>
             <td colspan="3" class="text-left" style="padding:10px;">
