@@ -9,10 +9,13 @@
                     </div>
                 </div>
             </td>
-            <td colspan="4" class="text-left">
+            <td colspan="4" class="text-right">
                 <textarea
-                    style="width:100%;height:100%;"
-                    placeholder="手動輸入其他資訊，訊息不會儲存(請自行調整尺寸)">
+                    style="width:100%;height:100%;resize:vertical;"
+                    rows="10"a
+                    placeholder="可在此手動輸入其他資訊。訊息可列印但不加以儲存 (高度調整可能超過單頁列印尺寸，請自行斟酌輸入內容多寡)"
+                    v-model.lazy="customMessageValue"
+                    @change="$emit('customMessageChangeEvent', customMessageValue)">
                 </textarea>
             </td>
         </tr>
@@ -24,9 +27,11 @@
 
     export default {
         name: 'reminderDisplay',
-        props: ['pONoticeList'],
+        props: ['customMessage', 'pONoticeList'],
         computed: {
-            ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
+            ...mapGetters({
+                pOPrintMode: 'checkPOPrintMode'
+            }),
             printingBorder: function() {
                 if (this.pOPrintMode) {
                     return '2px solid black !important';
@@ -34,12 +39,20 @@
                     return null;
                 }
             }
+        },
+        data: function() {
+            return {
+                customMessageValue: this.customMessage
+            };
+        },
+        watch: {
+            customMessage: function(changedCustomMessageValue) {
+                this.customMessageValue = changedCustomMessageValue;
+            }
         }
     };
-
 </script>
 
 <style>
     @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
 </style>

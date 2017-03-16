@@ -11,7 +11,8 @@
                     class="panel-header">
                     <select
                         class="form-control"
-                        v-model="selectedIndex">
+                        v-model="selectedIndex"
+                        @change="customMessage=''">
                         <option v-for="(activePO,index) in activePOList" :value="index">
                             【{{activePO.supplier.SNM}}】 訂單編號：{{activePO.pONumber}} - {{activePO.revisionNumber}}
                             訂單類別：{{activePO.contractType}} 起訖時間：{{activePO.startingDate}} - {{activePO.endDate}}
@@ -20,7 +21,9 @@
                 </div>
                 <div class="panel-body">
                     <pORenderViewPort
-                        :activePO="activePOList[selectedIndex]">
+                        :customMessage="customMessage"
+                        :activePO="activePOList[selectedIndex]"
+                        @customMessageChangeEvent="customMessage=$event">
                     </pORenderViewPort>
                 </div>
                 <button
@@ -48,17 +51,27 @@
                 pOPrintMode: 'checkPOPrintMode'
             })
         },
-        data: function() { return { selectedIndex: 0 }; },
+        data: function() {
+            return {
+                selectedIndex: 0,
+                customMessage: ''
+            };
+        },
         created: function() { this.selectedIndex = 0; },
         methods: {
             ...mapMutations({
                 pOPrintModeSwitch: 'pOPrintModeSwitch',
                 processingDataSwitch: 'processingDataSwitch'
             }),
+            saveCustomMessage: function($event) {
+                this.customMessage = $event;
+            },
             printPO: function() {
+                let customMessageHolder = this.customMessage;
                 this.processingDataSwitch(true);
                 this.pOPrintModeSwitch(true);
                 setTimeout(() => {
+                    this.customMessage = customMessageHolder;
                     print();
                     this.pOPrintModeSwitch(false);
                     this.processingDataSwitch(false);
@@ -66,10 +79,8 @@
             }
         }
     };
-
 </script>
 
 <style>
     @import './bower_components/bootstrap/dist/css/bootstrap.min.css';
-
 </style>

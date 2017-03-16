@@ -10,7 +10,11 @@
                 <summarySection :activePO="activePO"></summarySection>
                 <tbody><tr><td colspan="7" style="padding:15px;"></td></tr></tbody>
                 <shippingDateDisplay :activePO="activePO"></shippingDateDisplay>
-                <reminderDisplay :pONoticeList="activePO.pONotices"></reminderDisplay>
+                <reminderDisplay
+                    :pONoticeList="activePO.pONotices"
+                    :customMessage="customMessage"
+                    @customMessageChangeEvent="$emit('customMessageChangeEvent', $event)">
+                </reminderDisplay>
                 <tbody>
                     <tr>
                         <paymentTerms :UNI_NO="UNI_NO" :CMP_ADR="CMP_ADR"></paymentTerms>
@@ -55,7 +59,7 @@
             paymentTerms,
             amountSummary
         },
-        props: ['activePO'],
+        props: ['activePO', 'customMessage'],
         computed: {
             ...mapGetters({
                 pOPrintMode: 'checkPOPrintMode',

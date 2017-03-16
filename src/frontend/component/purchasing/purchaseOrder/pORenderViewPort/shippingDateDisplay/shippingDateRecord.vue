@@ -17,14 +17,12 @@
             dateList: function() {
                 let dateList = [];
                 this.shipmentList.forEach((shipment) => {
-                    console.log('shipmentList loop: ' + shipment.workingDate);
                     let matched = false;
                     if(dateList.length === 0) {
                         dateList.push(shipment.workingDate);
                     } else {
                         let tempDateList = dateList.slice();
                         tempDateList.forEach((date) => {
-                            console.log('tempDateList loop: ' + date);
                             if(
                                 (shipment.PRD_NO === this.rawMaterial.PRD_NO) &&
                                 (shipment.typeId === this.rawMaterial.typeId) &&
