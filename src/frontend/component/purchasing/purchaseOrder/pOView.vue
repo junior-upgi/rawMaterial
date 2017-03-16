@@ -26,11 +26,6 @@
                         @customMessageChangeEvent="customMessage=$event">
                     </pORenderViewPort>
                 </div>
-                <button
-                    v-if="!pOPrintMode"
-                    @click="printPO()">
-                    訂單列印
-                </button>
             </div>
         </div>
     </div>
@@ -62,25 +57,6 @@
             saveCustomMessage: function($event) {
                 this.customMessage = $event;
             }
-            /*
-            ...mapMutations({
-                pOPrintModeSwitch: 'pOPrintModeSwitch',
-                processingDataSwitch: 'processingDataSwitch'
-            }),
-            */
-            /* ,
-            printPO: function() {
-                // let customMessageHolder = this.customMessage;
-                this.processingDataSwitch(true);
-                this.pOPrintModeSwitch(true);
-                setTimeout(() => {
-                    // this.customMessage = customMessageHolder;
-                    print();
-                    this.pOPrintModeSwitch(false);
-                    this.processingDataSwitch(false);
-                }, 50);
-            }
-            */
         }
     };
 </script>
