@@ -5,9 +5,17 @@
         <div class="panel-group" id="shipmentSchedule" role="tablist">
             <div class="panel panel-primary">
                 <div v-if="!pOPrintMode" class="panel-header">
-                    <select class="form-control" v-model="selectedIndex" @change="customMessage=''">
-                        <option v-for="(activePO,index) in activePOList" :value="index">
-                            【{{activePO.supplier.SNM}}】 訂單編號：{{activePO.pONumber}} - {{activePO.revisionNumber}} 訂單類別：{{activePO.contractType}} 起訖時間：{{activePO.startingDate}} - {{activePO.endDate}}
+                    <select
+                        class="form-control"
+                        v-model="selectedIndex"
+                        @change="customMessage=''">
+                        <option
+                            v-for="(activePO,index) in activePOList"
+                            :value="index">
+                            【{{activePO.supplier.SNM}}】
+                            【訂單編號：{{activePO.pONumber}} - {{activePO.revisionNumber}}】
+                            【訂單類別：{{activePO.contractType}}】
+                            【起訖時間：{{activePO.startingDate}} 至 {{activePO.endDate}}】
                         </option>
                     </select>
                 </div>

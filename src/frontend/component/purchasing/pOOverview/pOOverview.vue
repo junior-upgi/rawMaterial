@@ -17,6 +17,9 @@
                     </pOOverviewRecord>
                 </tbody>
                 <newRequestList></newRequestList>
+                <revokedRequestList
+                    :revokedPendingShipmentSchedule="revokedPendingShipmentSchedule">
+                </revokedRequestList>
             </table>
         </div>
     </div>
@@ -24,13 +27,15 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import newRequestList from './newRequestList/newRequestList.vue';
 import pOOverviewRecord from './pOOverviewRecord/pOOverviewRecord.vue';
+import newRequestList from './newRequestList/newRequestList.vue';
+import revokedRequestList from './revokedRequestList/revokedRequestList.vue';
 
 export default {
     name: 'pOOverview',
     components: {
         newRequestList,
+        revokedRequestList,
         pOOverviewRecord
     },
     computed: {

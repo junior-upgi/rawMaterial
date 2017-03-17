@@ -1,8 +1,10 @@
 <template lang="html">
     <td>
-        <span v-if="matchingActivePO !== null" class="label label-danger label-xs">
-                    同期訂單已開立，請更新訂單
-                </span>
+        <span
+            v-if="matchingActivePO !== null"
+            class="label label-danger label-xs">
+            新增項目 (請更新訂單)
+        </span>
         <button v-else type="button" class="btn btn-primary btn-md" @click="createNewPO()">
             開立訂單
         </button>

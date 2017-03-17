@@ -22,6 +22,7 @@ import admin from './admin/admin.vue';
 import furnace from './furnace/furnace.vue';
 import purchasing from './purchasing/purchasing.vue';
 import pOView from './purchasing/purchaseOrder/pOView.vue';
+import shippingStatement from './purchasing/shippingStatement/shippingStatement.vue';
 /*
 import supplier from './userInterface/supplier.vue';
 import pOTemplate from './userInterface/purchaseOrder/pOTemplate.vue';
@@ -36,7 +37,8 @@ export default {
         admin,
         furnace,
         purchasing,
-        pOView
+        pOView,
+        shippingStatement
     },
     computed: {
         ...mapGetters({

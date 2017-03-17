@@ -6,7 +6,11 @@
         <button v-if="(role==='admin')||(role==='furnace')" type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false" :class="{'btn-danger':activeView==='furnace'}" @click="changeWorkingView('furnace')">
             窯爐模組
         </button>
-        <button v-if="(role==='admin')||(role==='furnace')" type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false">
+        <button
+            v-if="(role==='admin')||(role==='furnace')"
+            type="button" class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
+            disabled>
             轉入廠單
         </button>
         <button v-if="(role==='admin')||(role==='purchasing')" type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false" :class="{'btn-danger':activeView==='purchasing'}" @click="changeWorkingView('purchasing')">
@@ -18,7 +22,18 @@
         <button v-if="((role==='admin')||(role==='purchasing'))&&(activeView==='pOView')" type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false" @click="printPO()">
             列印訂單
         </button>
-        <button v-if="role==='admin'" type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false" :class="{'btn-danger':role==='supplier'}">
+        <button
+            type="button" class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
+            :class="{'btn-danger':activeView==='shippingStatement'}"
+            @click="changeWorkingView('shippingStatement')">
+            對帳資料
+        </button>
+        <button
+            v-if="role==='admin'"
+            type="button" class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
+            :class="{'btn-danger':role==='supplier'}" disabled>
             廠商模組
         </button>
         <button type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false" @click="logout()">
