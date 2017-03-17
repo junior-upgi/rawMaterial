@@ -1,158 +1,15 @@
 import axios from 'axios';
 import moment from 'moment-timezone';
 
-import { serverUrl } from '../clientConfig.js';
+import {
+    broadcastServiceUrl,
+    defaultBot,
+    employeeChatGroup,
+    serverUrl
+} from '../clientConfig.js';
 
 export default {
-    initData: function(context) {
-        const optionList = [{
-                method: 'get',
-                url: `${serverUrl}/data/supplier`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/supplier/workingMaterial`,
-                params: {
-                    workingYear: context.state.workingYear,
-                    workingMonth: context.state.workingMonth
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/rawMaterial`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/rawMaterial/knownList`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/shipment`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/newRequestSummary`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/receivingRecord/consolidated`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/receivingRecord`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/monthlyOverview`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/purchaseOrder`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/purchaseOrder/contentSummary`,
-                headers: { 'x-access-token': sessionStorage.token }
-            }
-            /* , {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/tonnageSummary`,
-                params: {
-                    workingYear: context.state.workingYear,
-                    workingMonth: context.state.workingMonth
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            }, {
-                method: 'get',
-                url: `${serverUrl}/data/rawMaterial/supplyingSpecList`,
-                params: {
-                    workingYear: context.state.workingYear,
-                    workingMonth: context.state.workingMonth
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            }
-            */
-        ];
-        return Promise.all(optionList.map(axios));
-    },
-    /*
-    refreshPOShipmentListing: function(context) {
-        context.commit('resetPOShipmentList');
-        context.commit('resetPOShipmentSummary');
-        const workingMonth = context.state.workingMonth;
-        const workingYear = context.state.workingYear;
-        const pOWorkingSupplier = context.state.pOWorkingSupplier;
-        if (pOWorkingSupplier !== null) {
-            const supplierObject = context.state.supplierList.filter((supplier) => {
-                return supplier.CUS_NO === pOWorkingSupplier;
-            })[0];
-            let requestOption = {
-                method: 'get',
-                url: `${serverUrl}/data/shipment/newPOListing`,
-                params: {
-                    startingDate: startingDate(supplierObject.contractType, workingYear, workingMonth),
-                    endDate: endDate(supplierObject.contractType, workingYear, workingMonth),
-                    contractType: supplierObject.contractType,
-                    CUS_NO: pOWorkingSupplier
-                },
-                headers: { 'x-access-token': sessionStorage.token }
-            };
-            axios(requestOption)
-                .then((resultset) => {
-                    resultset.data.forEach((result) => {
-                        result.selected = false;
-                    });
-                    context.commit('updatePOShipmentList', resultset.data);
-                    requestOption = {
-                        method: 'get',
-                        url: `${serverUrl}/data/supplier/pONotice`,
-                        params: { CUS_NO: pOWorkingSupplier },
-                        headers: { 'x-access-token': sessionStorage.token }
-                    };
-                    return axios(requestOption);
-                }).then(function(resultset) {
-                    context.commit('updatePONoticeArray', resultset.data);
-                }).catch((error) => {
-                    alert(`訂單頁面資料讀取發生錯誤 ${error}`);
-                    this.resetStore();
-                });
-        }
-    },
-    savePOData: function(context) {
-        const workingMonth = context.state.workingMonth;
-        const workingYear = context.state.workingYear;
-        const pOWorkingSupplier = context.state.pOWorkingSupplier;
-
-        if (pOWorkingSupplier !== null) {
-            const supplierObject = context.state.supplierList.filter((supplier) => {
-                return supplier.CUS_NO === pOWorkingSupplier;
-            })[0];
-            const savePOPromise = new Promise((resolve, reject) => {
-                const requestOption = {
-                    method: 'put',
-                    url: `${serverUrl}/data/purchaseOrder`,
-                    data: {
-                        CUS_NO: pOWorkingSupplier,
-                        contractType: supplierObject.contractType,
-                        startingDate: startingDate(supplierObject.contractType, workingYear, workingMonth),
-                        endDate: endDate(supplierObject.contractType, workingYear, workingMonth),
-                        shipmentList: context.state.pOShipmentList.slice()
-                    },
-                    headers: { 'x-access-token': sessionStorage.token }
-                };
-                axios(requestOption)
-                    .then(function() {
-                        resolve('success in testing...');
-                    }).catch(function(error) {
-                        reject(`error in testing: ${error}...`);
-                    });
-            });
-            return savePOPromise;
-        } else {
-            return Promise.reject('下單客戶資料異常');
-        }
-    },
-    */
+    initData: initData,
     updateShipment: updateShipment,
     cancelShipment: cancelShipment,
     componentErrorHandler: componentErrorHandler,
@@ -161,8 +18,62 @@ export default {
     createPurchaseOrder: createPurchaseOrder,
     nextWorkingMonth: nextWorkingMonth,
     prevWorkingMonth: prevWorkingMonth,
-    setWorkingTime: setWorkingTime
+    setWorkingTime: setWorkingTime,
+    employeeChatBroadcast: employeeChatBroadcast
 };
+
+function initData(context) {
+    const optionList = [{
+        method: 'get',
+        url: `${serverUrl}/data/supplier`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/supplier/workingMaterial`,
+        params: {
+            workingYear: context.state.workingYear,
+            workingMonth: context.state.workingMonth
+        },
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/rawMaterial`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/rawMaterial/knownList`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/shipment`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/shipment/newRequestSummary`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/shipment/receivingRecord/consolidated`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/shipment/receivingRecord`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/shipment/monthlyOverview`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/purchaseOrder`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/purchaseOrder/contentSummary`,
+        headers: { 'x-access-token': sessionStorage.token }
+    }];
+    return Promise.all(optionList.map(axios));
+}
 
 function prevWorkingMonth(context) {
     const workingMonth = context.state.workingMonth;
@@ -306,30 +217,15 @@ function createPurchaseOrder(context, payload) {
     return axios(requestOption);
 }
 
-/*
-function startingDate(contractType, workingYear, workingMonth) {
-    switch (contractType) {
-        case 'annual':
-            return moment(new Date(workingYear, 0, 1)).format('YYYY-MM-DD');
-        case 'monthly':
-            return moment(new Date(workingYear, workingMonth - 1, 1)).format('YYYY-MM-DD');
-        case 'oneTime':
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-        default:
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-    }
+function employeeChatBroadcast(context, payload) {
+    let option = {
+        method: 'post',
+        url: broadcastServiceUrl,
+        data: {
+            chat_id: employeeChatGroup.id,
+            text: `${payload.groupMessage}\n\n${context.state.userData.NAME} 發送`,
+            token: defaultBot.token
+        }
+    };
+    return axios(option);
 }
-
-function endDate(contractType, workingYear, workingMonth) {
-    switch (contractType) {
-        case 'annual':
-            return moment(new Date(workingYear, 11, 31)).format('YYYY-MM-DD');
-        case 'monthly':
-            return moment(new Date(workingYear, workingMonth, 0)).format('YYYY-MM-DD');
-        case 'oneTime':
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-        default:
-            return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
-    }
-}
-*/

@@ -38,14 +38,14 @@ export default {
                 this.userInputValue = null;
             } else {
                 this.processReservation();
-                this.userInputValue = null;
             }
         }
     },
     methods: {
         ...mapActions({
             componentErrorHandler: 'componentErrorHandler',
-            shipmentReservation: 'shipmentReservation'
+            shipmentReservation: 'shipmentReservation',
+            employeeChatBroadcast: 'employeeChatBroadcast'
         }),
         ...mapMutations({
             processingDataSwitch: 'processingDataSwitch',
@@ -62,6 +62,10 @@ export default {
                 shipmentCount: this.userInputValue
             }).then((resultset) => {
                 this.rebuildData(resultset.data);
+                let actionDescription = `向【${this.selectedRawMaterial.CUST_SNM}】預約【${this.selectedRawMaterial.PRDT_SNM}-${this.selectedRawMaterial.specification}】【${this.userInputValue}】車，預定於【${this.cellDateString}】進廠。請採購人員注意下單時間`;
+                return this.employeeChatBroadcast({ groupMessage: actionDescription });
+            }).then((result) => {
+                this.userInputValue = null;
                 this.processingDataSwitch(false);
             }).catch((error) => {
                 this.componentErrorHandler({
