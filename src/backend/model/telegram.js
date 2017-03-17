@@ -54,7 +54,8 @@ const userList = [
     { id: 300751359, username: 'Abcdefghdvdghs', first_name: '雄峰', last_name: '蔡', email: null, erpId: '99030007' },
     { id: 330988841, username: 'jason741029', first_name: '柏志', last_name: '林', email: 'furnace@upgi.com.tw', erpId: '09100001' },
     { id: 378192530, username: 'hcl4167', first_name: '虹貞', last_name: '陳連', email: 'hcl4167@upgi.com.tw', erpId: '95070003' },
-    { id: 293770218, username: 'upgiken', first_name: '可慶', last_name: '許', email: 'ken@upgi.com.tw', erpId: '99043017' }
+    { id: 293770218, username: 'upgiken', first_name: '可慶', last_name: '許', email: 'ken@upgi.com.tw', erpId: '99043017' },
+    { id: 315730922, username: 'hungmien', first_name: '綿', last_name: '洪', email: 'mien@upgi.com.tw', erpId: '17020004' }
 ];
 
 module.exports = {
