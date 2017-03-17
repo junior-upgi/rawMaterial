@@ -39,13 +39,17 @@ SELECT
         ELSE CONVERT(CHAR(10),b.receivedDate,126)
         END AS 'shipments:workingDate'
     ,b.CUS_NO AS 'shipments:CUS_NO'
+    ,c.SNM AS 'shipments:CUST_SNM'
     ,b.PRD_NO AS 'shipments:PRD_NO'
+    ,d.PRDT_SNM AS 'shipments:PRDT_SNM'
     ,b.typeId AS 'shipments:typeId'
+    ,d.specification AS 'shipments:specification'
     ,CASE
         WHEN b.unitPrice IS NULL THEN d.unitPrice
         ELSE b.unitPrice
         END AS 'shipments:unitPrice'
-    -- ,b.unitPrice AS 'shipments:unitPrice'
+    ,d.UT AS 'shipments:UT'
+    ,d.currency AS 'shipments:currency'
     ,b.requestWeight AS 'shipments:requestWeight'
     ,b.supplierWeight AS 'shipments:supplierWeight'
     ,b.actualWeight AS 'shipments:actualWeight'

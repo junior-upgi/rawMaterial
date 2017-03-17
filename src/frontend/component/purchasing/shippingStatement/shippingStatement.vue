@@ -36,27 +36,39 @@
                     <tr v-for="(shipment, index) in activePO.shipments"
                         v-if="activePO.id === selectedPOId">
                         <td>{{index + 1}}</td>
-                        <td>{{shipment.CUS_NO}}</td>
-                        <td>{{shipment.PRD_NO}} - {{shipment.typeId}}</td>
+                        <td>{{shipment.CUST_SNM}}</td>
+                        <td>{{shipment.PRDT_SNM}} - {{shipment.specification}}</td>
                         <td style="white-space:nowrap;">{{shipment.workingDate}}</td>
-                        <td style="white-space:nowrap;">{{shipment.requestWeight|kilogram}}</td>
+                        <td style="white-space:nowrap;">
+                            <span>
+                                {{shipment.requestWeight|kilogram}} {{shipment.UT}}
+                            </span>
+                        </td>
                         <td style="white-space:nowrap;"
                             :class="{'bg-danger':shipment.supplierWeight<shipment.actualWeight}">
-                            {{shipment.supplierWeight|kilogram}}
+                            <span v-if="shipment.supplierWeight!==null">
+                                {{shipment.supplierWeight|kilogram}} {{shipment.UT}}
+                            </span>
                         </td>
                         <td style="white-space:nowrap;"
                             :class="{'bg-primary':shipment.actualWeight<=shipment.supplierWeight}">
-                            {{shipment.actualWeight|kilogram}}
+                            <span v-if="shipment.actualWeight!==null">
+                                {{shipment.actualWeight|kilogram}} {{shipment.UT}}
+                            </span>
                         </td>
                         <td style="white-space:nowrap;"
                             :class="{'bg-danger':shipment.supplierWeight<shipment.actualWeight,'bg-primary':shipment.actualWeight<=shipment.supplierWeight}">
-                            {{determineWorkingWeight(shipment.supplierWeight, shipment.actualWeight)|kilogram}}
+                            <span v-if="(shipment.supplierWeight!==null)&&(shipment.actualWeight!==null)">
+                                {{determineWorkingWeight(shipment.supplierWeight, shipment.actualWeight)|kilogram}} {{shipment.UT}}
+                            </span>
                         </td>
                         <td>{{shipment.note}}</td>
                     </tr>
                     <tr>
                         <td colspan="7" class="text-right">對 帳 重 量 總 計</td>
-                        <td style="white-space:nowrap;">{{totalWorkingWeight|kilogram}}</td>
+                        <td style="white-space:nowrap;">
+                            <span v-if="totalWorkingWeight!==null">{{totalWorkingWeight|kilogram}} 公斤</span>
+                        </td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -107,7 +119,7 @@ export default {
     },
     filters: {
         kilogram: function(value) {
-            return (value !== null) ? `${numeral(value).format('0,0')} 公斤` : null;
+            return (value !== null) ? `${numeral(value).format('0,0')}` : null;
         }
     }
 };
