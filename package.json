@@ -114,7 +114,7 @@
         "server:lint": "eslint --color --ext .js karma.conf.js src/backend",
         "rebuild:test": "karma start karma.conf.js",
         "rebuild:transpile": "run-p client:transpile server:transpile",
-        "client:transpile": "browserify -e src/frontend/main.js -o public/main.js -p [ vueify/plugins/extract-css -o public/style.css ] --debug",
+        "client:transpile": "browserify -p [ vueify/plugins/extract-css -o public/style.css ] -e src/frontend/main.js -o public/main.js --debug",
         "rebuild:transfer": "npm run client:transfer:rebuild",
         "client:transfer:rebuild": "run-p client:transfer:html client:transfer:favicon",
         "client:transfer:html": "cpx src/frontend/**/*.html public",
@@ -125,7 +125,6 @@
         "server:start": "run-p server:watch:retranspile server:watch:restart",
         "client:watch:hmr": "watchify -vd -p browserify-hmr -e src/frontend/main.js -o public/main.js",
         "browser:start": "start %npm_package_config_appurl%",
-        "deprecated:prestart:dev:server": "run-s rebuild:cleanup rebuild:lint rebuild:test rebuild:transpile rebuild:transfer",
         "prestart:dev:server": "run-s rebuild:cleanup rebuild:lint rebuild:transpile rebuild:transfer",
         "start:dev:server": "run-p server:start client:watch:hmr browser:start",
         "server:watch:relint": "nodemon --ext js --watch src/backend --on-change-only --exec \"npm run server:lint\"",
@@ -136,6 +135,8 @@
         "start:dev:test": "run-p server:watch:retest client:watch:retest",
         "prestart:dev": "run-s rebuild:cleanup rebuild:lint rebuild:test rebuild:transpile rebuild:transfer",
         "start:dev": "run-p server:start client:watch:hmr server:watch:relint server:watch:retest client:watch:relint client:watch:retest browser:start",
-        "client:build": "cross-env NODE_ENV=production browserify -g envify -p [ vueify/plugins/extract-css -o public/style.css ] -e src/frontend/main.js | uglifyjs -c warnings=false -m > public/main.js"
+        "client:build": "cross-env NODE_ENV=production browserify -g envify -p [ vueify/plugins/extract-css -o public/style.css ] -e src/frontend/main.js | uglifyjs -c warnings=false -m > public/main.js",
+        "preproduction:build": "run-s prestart:dev:server",
+        "production:build": "run-s client:build server:start"
     }
 }
