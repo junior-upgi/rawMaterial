@@ -89,7 +89,6 @@ export default {
 </script>
 
 <style>
-@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 input.reservationInput::-webkit-inner-spin-button,
 input.reservationInput::-webkit-outer-spin-button {
     -webkit-appearance: none;

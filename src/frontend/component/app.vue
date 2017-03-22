@@ -23,10 +23,6 @@ import furnace from './furnace/furnace.vue';
 import purchasing from './purchasing/purchasing.vue';
 import pOView from './purchasing/purchaseOrder/pOView.vue';
 import shippingStatement from './purchasing/shippingStatement/shippingStatement.vue';
-/*
-import supplier from './userInterface/supplier.vue';
-import pOTemplate from './userInterface/purchaseOrder/pOTemplate.vue';
-*/
 
 export default {
     name: 'app',
@@ -80,25 +76,13 @@ export default {
                 });
         }
     }
-    /* ,
-    components: {
-        furnace,
-        purchasing,
-        supplier,
-        pOTemplate
-    },
-    computed: {
-        ...mapGetters({
-            activeView: 'activeView'
-        })
-    }
-    */
 };
 
 </script>
 
 <style>
-@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
+@import "./bower_components/bootstrap/dist/css/bootstrap.min.css";
+@import "./bower_components/bootstrap/dist/css/bootstrap-theme.min.css";
 body {
     overflow-x: hidden;
 }

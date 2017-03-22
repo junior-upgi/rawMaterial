@@ -59,7 +59,6 @@ export default {
 </script>
 
 <style>
-@import './bower_components/bootstrap/dist/css/bootstrap.min.css';
 input.valueInput::-webkit-inner-spin-button,
 input.valueInput::-webkit-outer-spin-button {
     -webkit-appearance: none;
