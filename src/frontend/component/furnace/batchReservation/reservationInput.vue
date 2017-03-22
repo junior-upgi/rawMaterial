@@ -1,6 +1,13 @@
 <template lang="html">
     <div class="row" style="margin-bottom:6px;">
-        <input reservationType="number" min="1" :max="maxUserInputValueAllowed" step="1" placeholder="預約車趟" class="form-control text-center input-sm reservationInput" v-model.lazy.number="userInputValue" :disabled="processingData?true:false" />
+        <input
+            reservationType="number"
+            min="1" step="1"
+            :max="maxUserInputValueAllowed"
+            placeholder="預約車趟"
+            class="form-control text-center input-sm reservationInput"
+            v-model.lazy.number="userInputValue"
+            :disabled="processingData ? true : false" />
     </div>
 </template>
 

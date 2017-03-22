@@ -1,13 +1,21 @@
 <template lang="html">
     <tr style="font-size:75%;">
-        <pOVersion :pONumber="purchaseOrder.pONumber" :revisionNumber="purchaseOrder.revisionNumber" :revokedPendingShipmentSchedule="releventRevokedPendingShipmentSchedule" :unattendedShipmentSchedule="releventUnattenedShipmentSchedule" @updatePOEvent="updatePO()">
+        <pOVersion
+            :pONumber="purchaseOrder.pONumber"
+            :revisionNumber="purchaseOrder.revisionNumber"
+            :revokedPendingShipmentSchedule="releventRevokedPendingShipmentSchedule"
+            :unattendedShipmentSchedule="releventUnattenedShipmentSchedule"
+            @updatePOEvent="updatePO()">
         </pOVersion>
         <td>{{purchaseOrder.workingYear}}</td>
         <td>{{purchaseOrder.workingMonth}}</td>
         <td>{{purchaseOrder.supplier.SNM}}</td>
-        <contentSummary :pOContentSummary="pOContentSummary">
+        <contentSummary
+            :pOContentSummary="pOContentSummary">
         </contentSummary>
-        <orderStatus :revokedPendingShipmentSchedule="releventRevokedPendingShipmentSchedule" :unattendedShipmentSchedule="releventUnattenedShipmentSchedule">
+        <orderStatus
+            :revokedPendingShipmentSchedule="releventRevokedPendingShipmentSchedule"
+            :unattendedShipmentSchedule="releventUnattenedShipmentSchedule">
         </orderStatus>
     </tr>
 </template>
@@ -86,7 +94,8 @@ export default {
     methods: {
         ...mapActions({
             componentErrorHandler: 'componentErrorHandler',
-            updatePurchaseOrder: 'updatePurchaseOrder'
+            updatePurchaseOrder: 'updatePurchaseOrder',
+            employeeChatBroadcast: 'employeeChatBroadcast'
         }),
         ...mapMutations({
             processingDataSwitch: 'processingDataSwitch',
@@ -99,6 +108,9 @@ export default {
                 pendingOrderList: this.releventUnattenedShipmentSchedule
             }).then((resultset) => {
                 this.rebuildData(resultset.data);
+                let actionDescription = `【${this.purchaseOrder.supplier.SNM}】訂單【${this.purchaseOrder.pONumber}-${this.purchaseOrder.revisionNumber}】已更新`;
+                return this.employeeChatBroadcast({ groupMessage: actionDescription });
+            }).then((result) => {
                 this.processingDataSwitch(false);
             }).catch((error) => {
                 this.componentErrorHandler({

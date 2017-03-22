@@ -1,23 +1,39 @@
 <template lang="html">
     <div class="container-fluid">
         <div class="row">
-            <span class="label label-primary col-xs-12" style="margin-bottom:10px;padding:3px;">
-                    {{cellDate.format('M/D')}}
-                </span>
+            <span
+                class="label label-primary col-xs-12"
+                style="margin-bottom:10px;padding:3px;">
+                {{cellDate.format('M/D')}}
+            </span>
             <div class="container-fluid">
-                <reservationInput v-if="isFutureDate()||role==='admin'" :cellDateString="cellDateString">
+                <reservationInput
+                    v-if="isFutureDate()||role==='admin'"
+                    :cellDateString="cellDateString">
                 </reservationInput>
             </div>
-            <span v-if="receivedCount>0" class="label label-default col-xs-12" style="padding:5px 0px 5px 0px;margin-bottom:5px;">
-                    已進廠車次: {{receivedCount}}
-                </span>
-            <pendingShipment v-if="pendingShipmentSchedule.length > 0" :shipmentSchedule="pendingShipmentSchedule">
+            <span
+                v-if="receivedCount>0"
+                class="label label-default col-xs-12"
+                style="padding:5px 0px 5px 0px;margin-bottom:5px;">
+                已進廠車次: {{receivedCount}}
+            </span>
+            <pendingShipment
+                v-if="pendingShipmentSchedule.length > 0"
+                :shipmentSchedule="pendingShipmentSchedule"
+                :cellDateString="cellDateString">
             </pendingShipment>
-            <pOPendingShipment v-if="pOPendingShipmentSchedule.length > 0" :shipmentSchedule="pOPendingShipmentSchedule">
+            <pOPendingShipment
+                v-if="pOPendingShipmentSchedule.length > 0"
+                :shipmentSchedule="pOPendingShipmentSchedule"
+                :cellDateString="cellDateString">
             </pOPendingShipment>
-            <span v-if="revokedShipmentSchedule.length>0" class="label label-default col-xs-12" style="padding:5px 0px 5px 0px;">
-                    待取消車次: {{revokedShipmentSchedule.length}}
-                </span>
+            <span
+                v-if="revokedShipmentSchedule.length>0"
+                class="label label-default col-xs-12"
+                style="padding:5px 0px 5px 0px;">
+                待取消車次: {{revokedShipmentSchedule.length}}
+            </span>
         </div>
     </div>
 </template>
