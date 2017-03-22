@@ -10,7 +10,7 @@ npm install
 bower install
 
 # start development server with hot reload at localhost:9006
-npm run start:dev:server (browser client should start automatically)
+npm run start:dev:server (both node.js server and the browser client should start automatically)
 
 # start production server at upgi.ddns.net:9006
 1. modify src/backend/serverConfig.js (const development = false;)
