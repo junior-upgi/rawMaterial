@@ -13,15 +13,15 @@ const telegram = require('./model/telegram.js');
 if (!fs.existsSync(serverConfig.logDir)) {
     fs.mkdirSync(serverConfig.logDir);
 }
-const logger = new (winston.Logger)({
+const logger = new(winston.Logger)({
     transports: [
         // colorize the output to the console
-        new (winston.transports.Console)({
+        new(winston.transports.Console)({
             timestamp: currentDatetimeString(),
             colorize: true,
             level: 'debug'
         }),
-        new (winston.transports.File)({
+        new(winston.transports.File)({
             filename: `${serverConfig.logDir}/results.log`,
             timestamp: currentDatetimeString(),
             level: serverConfig.development ? 'debug' : 'info'
@@ -32,7 +32,7 @@ const logger = new (winston.Logger)({
 // status report utility
 const statusReport = cron.schedule('0 0 8,22 * * *', () => {
     logger.info(`${serverConfig.systemReference} reporting mechanism triggered`);
-    const issuedDatetime = currentDatetimeString();
+    const issuedDatetime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
     const message = `${issuedDatetime} ${serverConfig.systemReference} server reporting in from ${os.hostname()}`;
     httpRequest({
         method: 'post',
