@@ -1,26 +1,75 @@
 <template lang="html">
     <tr>
         <td>{{index}}</td>
-        <statusCell :shipment="shipment" @recordStateDetermined="processRecordState($event)">
+        <statusCell
+            :shipment="shipment"
+            @recordStateDetermined="processRecordState($event)">
         </statusCell>
         <td>
-            <del v-if="revocationPending" style="white-space:nowrap;">【{{shipment.CUST_SNM}}】{{shipment.PRDT_SNM}} - {{shipment.specification}}</del>
-            <span v-else style="white-space:nowrap;">【{{shipment.CUST_SNM}}】{{shipment.PRDT_SNM}} - {{shipment.specification}}</span>
+            <del
+                v-if="revocationPending"
+                style="white-space:nowrap;">
+                【{{shipment.CUST_SNM}}】{{shipment.PRDT_SNM}} - {{shipment.specification}}
+            </del>
+            <span
+                v-else style="white-space:nowrap;">
+                【{{shipment.CUST_SNM}}】{{shipment.PRDT_SNM}} - {{shipment.specification}}
+            </span>
         </td>
-        <workingDateCell :pOClosed="pOClosed" :revocationPending="revocationPending" :workingDateString="this.workingDate" @workingDateFieldUpdateEvent="processWorkingDateFieldUpdateEvent($event)">
+        <workingDateCell
+            :pOClosed="pOClosed"
+            :revocationPending="revocationPending"
+            :workingDateString="this.workingDate"
+            @workingDateFieldUpdateEvent="processWorkingDateFieldUpdateEvent($event)">
         </workingDateCell>
         <td>
-            <span v-if="pOClosed" style="white-space:nowrap;">{{shipment.workingWeight|tonnage}} (結案)</span>
-            <del v-else-if="revocationPending" style="white-space:nowrap;">{{shipment.requestWeight|tonnage}} (需求)</del>
-            <span v-else style="white-space:nowrap;">{{shipment.requestWeight|tonnage}} (需求)</span>
+            <span
+                v-if="pOClosed"
+                style="white-space:nowrap;">
+                {{shipment.workingWeight|tonnage}} (結案)
+            </span>
+            <del
+                v-else-if="revocationPending"
+                style="white-space:nowrap;">
+                {{shipment.requestWeight|tonnage}} (需求)
+            </del>
+            <span
+                v-else
+                style="white-space:nowrap;">
+                {{shipment.requestWeight|tonnage}} (需求)
+            </span>
         </td>
-        <supplierWeightCell :pOClosed="pOClosed" :pOPending="pOPending" :revocationPending="revocationPending" :isFutureDate="isFutureDate" :supplierWeight="supplierWeight" @supplierWeightFieldUpdateEvent="processSupplierWeightFieldUpdateEvent($event)">
+        <supplierWeightCell
+            :pOClosed="pOClosed"
+            :pOPending="pOPending"
+            :revocationPending="revocationPending"
+            :isFutureDate="isFutureDate"
+            :supplierWeight="supplierWeight"
+            @supplierWeightFieldUpdateEvent="processSupplierWeightFieldUpdateEvent($event)">
         </supplierWeightCell>
-        <actualWeightCell :pOClosed="pOClosed" :pOPending="pOPending" :revocationPending="revocationPending" :isFutureDate="isFutureDate" :actualWeight="actualWeight" @actualWeightFieldUpdateEvent="processActualWeightFieldUpdateEvent($event)">
+        <actualWeightCell
+            :pOClosed="pOClosed"
+            :pOPending="pOPending"
+            :revocationPending="revocationPending"
+            :isFutureDate="isFutureDate"
+            :actualWeight="actualWeight"
+            @actualWeightFieldUpdateEvent="processActualWeightFieldUpdateEvent($event)">
         </actualWeightCell>
-        <noteCell :revocationPending="revocationPending" :pOClosed="pOClosed" :id="this.shipment.id" :workingDate="this.shipment.workingDate" :supplierWeight="this.shipment.supplierWeight" :actualWeight="this.shipment.actualWeight" :note="this.shipment.note">
+        <noteCell
+            :revocationPending="revocationPending"
+            :pOClosed="pOClosed"
+            :id="shipment.id"
+            :workingDate="shipment.workingDate"
+            :supplierWeight="shipment.supplierWeight"
+            :actualWeight="shipment.actualWeight"
+            :note="shipment.note">
         </noteCell>
-        <submitControl :pristine="pristine" :fulfilled="fulfilled" :weightDataReady="weightDataReady" :workingDateReady="workingDateReady" @submitRecordEvent="processSubmitRecordEvent()">
+        <submitControl
+            :pristine="pristine"
+            :fulfilled="fulfilled"
+            :weightDataReady="weightDataReady"
+            :workingDateReady="workingDateReady"
+            @submitRecordEvent="processSubmitRecordEvent()">
         </submitControl>
     </tr>
 </template>
