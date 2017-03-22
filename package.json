@@ -114,7 +114,7 @@
         "server:lint": "eslint --color --ext .js karma.conf.js src/backend",
         "rebuild:test": "karma start karma.conf.js",
         "rebuild:transpile": "run-p client:transpile server:transpile",
-        "client:transpile": "browserify -e src/frontend/main.js -o public/main.js --debug",
+        "client:transpile": "browserify -e src/frontend/main.js -o public/main.js -p [ vueify/plugins/extract-css -o public/style.css ] --debug",
         "rebuild:transfer": "npm run client:transfer:rebuild",
         "client:transfer:rebuild": "run-p client:transfer:html client:transfer:favicon",
         "client:transfer:html": "cpx src/frontend/**/*.html public",

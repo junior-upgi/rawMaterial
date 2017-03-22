@@ -1,8 +1,14 @@
 <template lang="html">
     <div v-if="!pOPrintMode" style="margin-top:25px;">
-        <textarea rows="8" style="width:100%;resize:vertical;" :disabled="dataProcessingState ? true : false" v-model="groupMessage">
+        <textarea
+            rows="8" style="width:100%;resize:vertical;"
+            :disabled="dataProcessingState ? true : false"
+            v-model="groupMessage">
         </textarea>
-        <button class="btn btn-primary btn-block" :disabled="dataProcessingState ? true : false" @click="sendGroupMessage()">
+        <button
+            class="btn btn-primary btn-block"
+            :disabled="dataProcessingState ? true : false"
+            @click="sendGroupMessage()">
             發送訊息
         </button>
     </div>
