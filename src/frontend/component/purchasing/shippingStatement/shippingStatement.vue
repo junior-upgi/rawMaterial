@@ -64,10 +64,14 @@
                         </td>
                         <td>{{shipment.note}}</td>
                     </tr>
+                </tbody>
+                <tbody>
                     <tr>
                         <td colspan="7" class="text-right">對 帳 重 量 總 計</td>
                         <td style="white-space:nowrap;">
-                            <span v-if="totalWorkingWeight!==null">{{totalWorkingWeight|kilogram}} 公斤</span>
+                            <span v-if="totalWorkingWeight!==null">
+                                {{totalWorkingWeight|kilogram}} 公斤
+                            </span>
                         </td>
                         <td></td>
                     </tr>
