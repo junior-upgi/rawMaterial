@@ -38,7 +38,8 @@ export default {
         ...mapActions({
             componentErrorHandler: 'componentErrorHandler',
             createPurchaseOrder: 'createPurchaseOrder',
-            setWorkingTime: 'setWorkingTime'
+            setWorkingTime: 'setWorkingTime',
+            employeeChatBroadcast: 'employeeChatBroadcast'
         }),
         ...mapMutations({
             processingDataSwitch: 'processingDataSwitch',
@@ -94,6 +95,9 @@ export default {
                 workingYear: this.requestSummary.workingYear
             }).then((resultset) => {
                 this.rebuildData(resultset.data);
+                let actionDescription = `【${this.requestSummary.CUST_SNM}】新建訂單`;
+                return this.employeeChatBroadcast({ groupMessage: actionDescription });
+            }).then((result) => {
                 this.processingDataSwitch(false);
             }).catch((error) => {
                 this.componentErrorHandler({
