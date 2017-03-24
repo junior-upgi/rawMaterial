@@ -6,7 +6,10 @@
             </td>
         </tr>
         <tr v-for="(rawMaterial, index) in releventRawMaterialList">
-            <shippingDateRecord :index="index" :rawMaterial="rawMaterial" :shipmentList="activePO.shipments">
+            <shippingDateRecord
+                :index="index"
+                :rawMaterial="rawMaterial"
+                :shipmentList="activePO.shipments">
             </shippingDateRecord>
         </tr>
     </tbody>

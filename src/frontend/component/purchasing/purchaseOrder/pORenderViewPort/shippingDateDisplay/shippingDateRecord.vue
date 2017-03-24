@@ -3,8 +3,8 @@
         <div style="display:inline-block;">
             <span>{{index + 1}}. 【{{rawMaterial.PRDT_SNM}}】{{rawMaterial.specification}}：</span>
             <span v-for="date in dateList">
-                    【{{workingMonth(date)}}/{{workingDay(date)}}】
-                </span>
+                【{{workingMonth(date)}}/{{workingDay(date)}}】
+            </span>
         </div>
     </td>
 </template>
@@ -18,7 +18,10 @@ export default {
             let dateList = [];
             this.shipmentList.forEach((shipment) => {
                 let matched = false;
-                if (dateList.length === 0) {
+                if ((dateList.length === 0) && (
+                    (shipment.PRD_NO === this.rawMaterial.PRD_NO) &&
+                    (shipment.typeId === this.rawMaterial.typeId)
+                )) {
                     dateList.push(shipment.workingDate);
                 } else {
                     let tempDateList = dateList.slice();

@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import numeral from 'numeral';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -52,6 +53,11 @@ export default {
                 this.actualWeightValue = null;
             }
             this.$emit('actualWeightFieldUpdateEvent', this.actualWeightValue);
+        }
+    },
+    filters: {
+        tonnage: function(value) {
+            return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
         }
     }
 };
