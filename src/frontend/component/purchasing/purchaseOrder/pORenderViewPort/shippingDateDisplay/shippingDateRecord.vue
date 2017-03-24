@@ -1,6 +1,8 @@
 <template lang="html">
     <td colspan="7" class="text-left">
-        <div style="display:inline-block;">
+        <div
+            v-if="dateList.length>0"
+            style="display:inline-block;">
             <span>{{index + 1}}. 【{{rawMaterial.PRDT_SNM}}】{{rawMaterial.specification}}：</span>
             <span v-for="date in dateList">
                 【{{workingMonth(date)}}/{{workingDay(date)}}】
