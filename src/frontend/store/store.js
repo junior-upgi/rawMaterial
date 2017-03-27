@@ -36,6 +36,7 @@ export const store = new Vuex.Store({
         rawMatTypeList: [], // list of known raw material in the ERP system
         supplierList: [],
         workingMaterial: [], // a month-by-month list of suppliers and supplied raw material
+        vacationException: [], // list of exception days that should/should not make reservations
 
         // shipment schedule
         shipmentSchedule: [], // list of current shipment schedule with details

@@ -3,19 +3,6 @@ import moment from 'moment-timezone';
 import { currentDatetime } from '../utility.js';
 
 function emptyStoreValue(state) {
-    /*
-    state.pOCreateMode = false;
-    state.pOEditMode = false;
-    state.pOList = [];
-    state.pOShipmentList = [];
-    state.pOShipmentSummary = [];
-    state.pOViewMode = false;
-    state.pOWorkingSupplier = null;
-    state.shipmentOverview = [];
-    state.supplyingSpecList = [];
-    state.tonnageSummary = [];
-    */
-    // ////////////////////////////////////////////////
     // user permission control
     // state.accessExp = currentDatetime().format('HH:mm');
     state.activeView = 'login';
@@ -46,125 +33,10 @@ function emptyStoreValue(state) {
     state.consolidatedReceivingRecord = [];
     state.receivingRecord = [];
     state.monthlyShipmentOverview = [];
+    state.vacationException = [];
 }
 
 export default {
-    /*
-    // deals with purchase order operation
-    changePOMode: function(state, modeObj) {
-        state.pOCreateMode = modeObj.pOCreateMode;
-        state.pOEditMode = modeObj.pOEditMode;
-        state.pOPrintMode = modeObj.pOPrintMode;
-        state.pOViewMode = modeObj.pOViewMode;
-    },
-    resetPONoticeArray: function(state) {
-        state.pONoticeArray = [];
-    },
-    updatePONoticeArray: function(state, pONoticeArray) {
-        state.pONoticeArray = [];
-        pONoticeArray.forEach(function(noticeMessage) {
-            state.pONoticeArray.push(noticeMessage.string);
-        });
-    },
-    addToPOShipmentSummary: function(state, shipment) {
-        state.pOShipmentList.forEach((pOShipment) => {
-            if (pOShipment.id === shipment.id) {
-                pOShipment.selected = true;
-            }
-        });
-        if (state.pOShipmentSummary.length > 0) {
-            let summaryItem = state.pOShipmentSummary.filter((summaryItem) => {
-                return (
-                    (summaryItem.CUS_NO === shipment.CUS_NO) &&
-                    (summaryItem.PRD_NO === shipment.PRD_NO) &&
-                    (summaryItem.typeId === shipment.typeId) &&
-                    (summaryItem.unitPrice === shipment.unitPrice)
-                );
-            });
-            if (summaryItem[0] !== undefined) {
-                summaryItem[0].workingWeight += shipment.workingWeight;
-                summaryItem[0].summarizedEntryCount++;
-            } else {
-                state.pOShipmentSummary.push({
-                    CUS_NO: shipment.CUS_NO,
-                    PRD_NO: shipment.PRD_NO,
-                    PRDT_SNM: shipment.PRDT_SNM,
-                    typeId: shipment.typeId,
-                    specification: shipment.specification,
-                    unitPrice: shipment.unitPrice,
-                    workingWeight: shipment.workingWeight,
-                    UT: shipment.UT,
-                    summarizedEntryCount: 1
-                });
-            }
-        } else {
-            state.pOShipmentSummary.push({
-                CUS_NO: shipment.CUS_NO,
-                PRD_NO: shipment.PRD_NO,
-                PRDT_SNM: shipment.PRDT_SNM,
-                typeId: shipment.typeId,
-                specification: shipment.specification,
-                unitPrice: shipment.unitPrice,
-                workingWeight: shipment.workingWeight,
-                UT: shipment.UT,
-                summarizedEntryCount: 1
-            });
-        }
-    },
-    removeFromPOShipmentSummary: (state, shipment) => {
-        state.pOShipmentList.forEach((pOShipment) => {
-            if (pOShipment.id === shipment.id) {
-                pOShipment.selected = false;
-            }
-        });
-        let summaryItem = state.pOShipmentSummary.filter((summaryItem) => {
-            return (
-                (summaryItem.CUS_NO === shipment.CUS_NO) &&
-                (summaryItem.PRD_NO === shipment.PRD_NO) &&
-                (summaryItem.typeId === shipment.typeId) &&
-                (summaryItem.unitPrice === shipment.unitPrice)
-            );
-        });
-        if (summaryItem[0] === undefined) {
-            alert('訂單進貨合計資料內容讀取錯誤');
-            sessionStorage.clear();
-            emptyStoreValue(state);
-        } else {
-            summaryItem[0].workingWeight -= shipment.workingWeight;
-            summaryItem[0].summarizedEntryCount--;
-            let emptyItemList = [];
-            state.pOShipmentSummary.forEach((summaryItem, index) => {
-                if (summaryItem.summarizedEntryCount === 0) {
-                    emptyItemList.push(index);
-                }
-            });
-            emptyItemList.reverse();
-            emptyItemList.forEach((itemIndex) => {
-                state.pOShipmentSummary.splice(itemIndex, 1);
-            });
-        }
-    },
-    resetPOShipmentSummary: function(state) {
-        state.pOShipmentSummary = [];
-    },
-    resetPOShipmentList: function(state) {
-        state.pOShipmentSummary = [];
-        state.pOShipmentList = [];
-    },
-    switchPOWorkingSupplier: function(state, CUS_NO) {
-        state.pOWorkingSupplier = CUS_NO;
-    },
-    updatePOShipmentList: function(state, pOShipmentList) {
-        state.pOShipmentSummary = [];
-        state.pOShipmentList = null;
-        state.pOShipmentList = pOShipmentList;
-    },
-    // dateInEditMode specific
-    switchDateInEditMode: function(state, date) { state.dateInEditMode = date; },
-    turnOffEditMode: function(state) { state.dateInEditMode = null; }
-    */
-
-    // ////////////////////////////////////////////////////////////
     // application state control
     processingDataSwitch: function(state, onOffSwitch) { state.processingData = onOffSwitch; },
     setWorkingTime: setWorkingTime, // workingMonth and workingYear manipulation

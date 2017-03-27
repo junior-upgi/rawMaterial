@@ -12,18 +12,18 @@
             <workingMaterialSelector @workingMaterialChange="dateInEditMode=null">
             </workingMaterialSelector>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="padding:3px;">
             <table class="table table-bordered">
                 <thead>
                     <tr class="info">
-                        <td v-for="weekdayIndex in 7" class="text-center">
+                        <td v-for="weekdayIndex in 7" class="text-center" style="border:2px solid black;">
                             <span class="label label-primary">{{weekdayList[weekdayIndex-1]}}</span>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="weekIndex in weekCount">
-                        <td v-for="weekdayIndex in 7">
+                        <td v-for="weekdayIndex in 7" style="border:2px solid black;">
                             <reservationCell v-if="checkVisibility(weekIndex,weekdayIndex)" :cellDateString="cellDate(weekIndex,weekdayIndex)" :shipmentSchedule="filterShipmentSchedule(cellDate(weekIndex,weekdayIndex))">
                             </reservationCell>
                         </td>

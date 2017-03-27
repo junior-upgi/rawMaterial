@@ -69,6 +69,12 @@ router.route('/data/shipment')
             }
             return Promise.all(requestPromiseList)
                 .then(() => {
+                    // get a fresh copy of vacation exceptions
+                    return trx('rawMaterial.dbo.vacationException')
+                        .select(knex.raw('CONVERT(CHAR(10),exceptionDate,126) AS exceptionDate, flag, CUS_NO'))
+                        .orderBy('exceptionDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.vacationException = resultset;
                     // get a set of fresh shipment data
                     return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
                         .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false);
@@ -176,6 +182,12 @@ router.route('/data/shipment')
             }
             return Promise.all(requestPromiseList)
                 .then(() => {
+                    // get a fresh copy of vacation exceptions
+                    return trx('rawMaterial.dbo.vacationException')
+                        .select(knex.raw('CONVERT(CHAR(10),exceptionDate,126) AS exceptionDate, flag, CUS_NO'))
+                        .orderBy('exceptionDate').debug(false);
+                }).then((resultset) => {
+                    responseObject.vacationException = resultset;
                     // get a set of fresh shipment data
                     return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
                         .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false);
@@ -282,6 +294,12 @@ router.route('/data/shipment')
                     .where({ id: request.body.id })
                     .debug(false)
                     .then(() => {
+                        // get a fresh copy of vacation exceptions
+                        return trx('rawMaterial.dbo.vacationException')
+                            .select(knex.raw('CONVERT(CHAR(10),exceptionDate,126) AS exceptionDate, flag, CUS_NO'))
+                            .orderBy('exceptionDate').debug(false);
+                    }).then((resultset) => {
+                        responseObject.vacationException = resultset;
                         // get a set of fresh shipment data
                         return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
                             .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false);
@@ -456,139 +474,3 @@ router.get('/data/shipment/monthlyOverview', tokenValidation, function(request, 
 });
 
 module.exports = router;
-
-/*
-router.get('/data/shipment/overview', tokenValidation, function(request, response) {
-    const knex = require('knex')(serverConfig.mssqlConfig);
-    knex.select('*')
-        .from('rawMaterial.dbo.shipmentOverview')
-        .where({
-            workingYear: request.query.workingYear,
-            workingMonth: request.query.workingMonth
-        })
-        .orderBy('CUS_NO')
-        .orderBy('PRDT_SNM')
-        .orderBy('workingDate')
-        .debug(false)
-        .then((resultset) => {
-            return response.status(200).json({ shipmentOverview: resultset });
-        })
-        .catch((error) => {
-            return response.status(500).json(
-                utility.endpointErrorHandler(
-                    request.method,
-                    request.originalUrl,
-                    `原料進貨概況相關資料讀取發生錯誤: ${error}`)
-            );
-        })
-        .finally(() => {
-            knex.destroy();
-        });
-});
-*/
-
-/*
-function shipmentSchedule(knexObj) {
-    return knexObj.select('*')
-        .from('rawMaterial.dbo.shipmentSchedule')
-        .orderBy('PRD_NO')
-        .orderBy('CUS_NO')
-        .orderBy('workingDate')
-        .debug(false);
-}
-*/
-
-/*
-router.get('/data/shipment/newPOListing', tokenValidation, function(request, response) {
-    const contractType = request.query.contractType;
-    const startingDate = request.query.startingDate;
-    const endDate = request.query.endDate;
-    const CUS_NO = request.query.CUS_NO;
-    const knex = require('knex')(serverConfig.mssqlConfig);
-    const query = knex.select('*')
-        .from('rawMaterial.dbo.newPOListing')
-        .where({ CUS_NO: CUS_NO });
-    if (contractType !== 'oneTime') {
-        query.whereBetween('workingDate', [startingDate, endDate]);
-    }
-    query.orderBy('PRD_NO')
-        .orderBy('typeId')
-        .orderBy('workingDate');
-    query.debug(false)
-        .then((resultset) => {
-            return response.status(200).json(resultset);
-        }).catch((error) => {
-            return response.status(500).json(
-                utility.endpointErrorHandler(
-                    request.method,
-                    request.originalUrl,
-                    `新增訂單進貨資料讀取發生錯誤: ${error}`)
-            );
-        }).finally(() => {
-            knex.destroy();
-        });
-});
-*/
-
-/*
-router.get('/data/shipment/tonnageSummary', tokenValidation, function(request, response) {
-    const knex = require('knex')(serverConfig.mssqlConfig);
-    knex.select('*')
-        .from('rawMaterial.dbo.tonnageSummary')
-        .where({
-            workingYear: request.query.workingYear,
-            workingMonth: request.query.workingMonth
-        })
-        .orderBy('CUS_NO')
-        .orderBy('PRD_NO')
-        .debug(false)
-        .then((resultset) => {
-            return response.status(200).json({ tonnageSummary: resultset });
-        })
-        .catch((error) => {
-            return response.status(500).json(
-                utility.endpointErrorHandler(
-                    request.method,
-                    request.originalUrl,
-                    `原料進貨重量概況相關資料讀取發生錯誤: ${error}`)
-            );
-        })
-        .finally(() => {
-            knex.destroy();
-        });
-});
-*/
-
-/*
-router.get('/data/shipment/summary', tokenValidation, function(request, response) {
-    const knex = require('knex')(serverConfig.mssqlConfig);
-    shipmentSummary(knex, request.query.workingYear, request.query.workingMonth)
-        .debug(false)
-        .then((resultset) => {
-            return response.status(200).json({ shipmentSummary: resultset });
-        })
-        .catch((error) => {
-            return response.status(500).json(
-                utility.endpointErrorHandler(
-                    request.method,
-                    request.originalUrl,
-                    `原料每日進貨預約相關資料讀取發生錯誤: ${error}`)
-            );
-        })
-        .finally(() => {
-            knex.destroy();
-        });
-});
-*/
-
-/*
-function shipmentSummary(knexObj, workingYear, workingMonth) {
-    return knexObj.select('*')
-        .from('rawMaterial.dbo.shipmentSummary')
-        .where({
-            workingYear: workingYear,
-            workingMonth: workingMonth
-        })
-        .orderBy('workingDate');
-}
-*/

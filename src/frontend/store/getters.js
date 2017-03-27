@@ -1,4 +1,5 @@
 export default {
+    /*
     checkDateInEditMode: function(state) { return state.dateInEditMode; },
     checkPOViewMode: function(state) { return state.pOViewMode; },
     checkPOCreateMode: function(state) { return state.pOCreateMode; },
@@ -8,7 +9,6 @@ export default {
     getPOShipmentSummary: function(state) { return state.pOShipmentSummary; },
     getPOWorkingSupplier: function(state) { return state.pOWorkingSupplier; },
     getRawMatList: function(state) { return state.rawMatList; },
-    getRawMaterialTypeList: function(state) { return state.rawMatTypeList; },
     getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
     getShipmentOverview: function(state) { return state.shipmentOverview; },
     getSupplyingSpecList: function(state) { return state.supplyingSpecList; },
@@ -32,6 +32,8 @@ export default {
         }
         return [];
     },
+    */
+    // getRawMaterialTypeList: function(state) { return state.rawMatTypeList; },
 
     // /////////////////////////////////////////////////////////////
     // application state
@@ -53,9 +55,6 @@ export default {
     supplierList: function(state) { return state.supplierList; },
     workingMaterial: function(state) { return state.workingMaterial; },
     // schedule data
-    // filteredShipmentScheduleByCusNo: filteredShipmentScheduleByCusNo,
-    // filteredShipmentScheduleByPrdNo: filteredShipmentScheduleByPrdNo,
-    // filteredShipmentSummaryByPrdNo: filteredShipmentSummaryByPrdNo,
     shipmentSchedule: function(state) { return state.shipmentSchedule; },
     shipmentSummary: function(state) { return state.shipmentSummary; },
     newShipmentRequestList: newShipmentRequestList,
@@ -63,6 +62,7 @@ export default {
     consolidatedReceivingRecord: function(state) { return state.consolidatedReceivingRecord; },
     receivingRecord: function(state) { return state.receivingRecord; },
     monthlyShipmentOverview: function(state) { return state.monthlyShipmentOverview; },
+    vacationException: function(state) { return state.vacationException; },
     // purchase order
     activePOList: function(state) { return state.activePOList; },
     pOContentSummary: function(state) { return state.pOContentSummary; }

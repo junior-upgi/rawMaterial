@@ -3,7 +3,7 @@
         <div class="row">
             <span
                 class="label col-xs-12"
-                style="margin-bottom:10px;padding:3px;"
+                style="margin-bottom:10px;padding:3px;border:2px solid black;"
                 :class="{'label-primary':!isVacationDay,'label-danger':isVacationDay}">
                 {{cellDate.format('M/D')}}
                 <span v-if="isVacationDay">(假日)</span>
@@ -63,7 +63,8 @@ export default {
             role: 'role',
             selectedRawMaterial: 'selectedRawMaterial',
             workingMonth: 'workingMonth',
-            workingYear: 'workingYear'
+            workingYear: 'workingYear',
+            vacationException: 'vacationException'
         }),
         receivedCount: function() {
             let receivedShipmentList = this.shipmentSchedule.filter((shipment) => {
@@ -132,12 +133,33 @@ export default {
             });
             return revokedList;
         },
-        isVacationDay: function() {
-            let weekday = new Date(this.cellDateString).getDay();
-            if ((weekday === 6) || (weekday === 0)) {
-                return true;
+        vacationExceptionFlag: function() {
+            // 由資料表 vacationException 列表資料辨識是否為休假日特例
+            // true - 特別預定為"休假日"
+            // false - 特別預定為"不休假日"
+            // null - 未設定
+            let dateMatchedRecord = this.vacationException.filter((exceptionEntry) => {
+                return (exceptionEntry.exceptionDate === this.cellDateString);
+            });
+            if (dateMatchedRecord.length > 0) {
+                if ((dateMatchedRecord[0].CUS_NO === null) || (dateMatchedRecord[0].CUS_NO === this.selectedRawMaterial.CUS_NO)) {
+                    return dateMatchedRecord[0].flag;
+                }
             } else {
-                return false;
+                return null;
+            }
+        },
+        isVacationDay: function() {
+            if (this.vacationExceptionFlag !== null) {
+                return this.vacationExceptionFlag;
+            } else {
+                let weekday = new Date(this.cellDateString).getDay();
+                // if (this.cellDateString)
+                if ((weekday === 6) || (weekday === 0)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     },

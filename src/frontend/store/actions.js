@@ -71,6 +71,10 @@ function initData(context) {
         method: 'get',
         url: `${serverUrl}/data/purchaseOrder/contentSummary`,
         headers: { 'x-access-token': sessionStorage.token }
+    }, {
+        method: 'get',
+        url: `${serverUrl}/data/vacationException`,
+        headers: { 'x-access-token': sessionStorage.token }
     }];
     return Promise.all(optionList.map(axios));
 }
