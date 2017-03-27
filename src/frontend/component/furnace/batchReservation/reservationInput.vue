@@ -17,7 +17,11 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
     name: 'reservationInput',
-    props: ['cellDateString'],
+    props: [
+        'cellDateString',
+        'vacationException',
+        'isVacationDay'
+    ],
     computed: {
         ...mapGetters({
             activeView: 'activeView',
@@ -59,29 +63,37 @@ export default {
             rebuildData: 'rebuildData'
         }),
         processReservation: function() {
-            this.processingDataSwitch(true);
-            this.shipmentReservation({
-                requestDate: this.cellDateString,
-                CUS_NO: this.selectedRawMaterial.CUS_NO,
-                PRD_NO: this.selectedRawMaterial.PRD_NO,
-                typeId: this.selectedRawMaterial.typeId,
-                qtyPerShipment: this.selectedRawMaterial.qtyPerShipment,
-                shipmentCount: this.userInputValue
-            }).then((resultset) => {
-                this.rebuildData(resultset.data);
-                let actionDescription = `向【${this.selectedRawMaterial.CUST_SNM}】預約【${this.selectedRawMaterial.PRDT_SNM}-${this.selectedRawMaterial.specification}】【${this.userInputValue}】車，預定於【${this.cellDateString}】進廠。請採購人員注意下單時間`;
-                return this.employeeChatBroadcast({ groupMessage: actionDescription });
-            }).then((result) => {
-                this.userInputValue = null;
-                this.processingDataSwitch(false);
-            }).catch((error) => {
-                this.componentErrorHandler({
-                    component: 'reservationInput',
-                    function: 'processReservation',
-                    situation: '預約作業發生錯誤',
-                    systemErrorMessage: error
+            let proceed = true;
+            if (this.isVacationDay) {
+                proceed = confirm(`${this.cellDateString} 為非工作日，請確認是否進行進貨預約！(請注意公昌六、日不出貨)`);
+            }
+            if (proceed === true) {
+                this.processingDataSwitch(true);
+                this.shipmentReservation({
+                    requestDate: this.cellDateString,
+                    CUS_NO: this.selectedRawMaterial.CUS_NO,
+                    PRD_NO: this.selectedRawMaterial.PRD_NO,
+                    typeId: this.selectedRawMaterial.typeId,
+                    qtyPerShipment: this.selectedRawMaterial.qtyPerShipment,
+                    shipmentCount: this.userInputValue
+                }).then((resultset) => {
+                    this.rebuildData(resultset.data);
+                    let actionDescription = `向【${this.selectedRawMaterial.CUST_SNM}】預約【${this.selectedRawMaterial.PRDT_SNM}-${this.selectedRawMaterial.specification}】【${this.userInputValue}】車，預定於【${this.cellDateString}】進廠。請採購人員注意下單時間`;
+                    return this.employeeChatBroadcast({ groupMessage: actionDescription });
+                }).then((result) => {
+                    this.userInputValue = null;
+                    this.processingDataSwitch(false);
+                }).catch((error) => {
+                    this.componentErrorHandler({
+                        component: 'reservationInput',
+                        function: 'processReservation',
+                        situation: '預約作業發生錯誤',
+                        systemErrorMessage: error
+                    });
                 });
-            });
+            } else {
+                this.userInputValue = null;
+            }
         }
     }
 };

@@ -11,7 +11,9 @@
             <div class="container-fluid">
                 <reservationInput
                     v-if="isFutureDate()||role==='admin'"
-                    :cellDateString="cellDateString">
+                    :cellDateString="cellDateString"
+                    :vacationException="releventVacationException"
+                    :isVacationDay="isVacationDay">
                 </reservationInput>
             </div>
             <span
@@ -133,25 +135,29 @@ export default {
             });
             return revokedList;
         },
-        vacationExceptionFlag: function() {
-            // 由資料表 vacationException 列表資料辨識是否為休假日特例
-            // true - 特別預定為"休假日"
-            // false - 特別預定為"不休假日"
-            // null - 未設定
+        releventVacationException: function() {
+            // 由資料表 vacationException 篩選此工作窗格是否有相關特定休假日資料
+            // .flag === true - 特別預定為"休假日"
+            // .flag === false - 特別預定為"不休假日"
+            // .flag === null - 未設定
             let dateMatchedRecord = this.vacationException.filter((exceptionEntry) => {
                 return (exceptionEntry.exceptionDate === this.cellDateString);
             });
             if (dateMatchedRecord.length > 0) {
                 if ((dateMatchedRecord[0].CUS_NO === null) || (dateMatchedRecord[0].CUS_NO === this.selectedRawMaterial.CUS_NO)) {
-                    return dateMatchedRecord[0].flag;
+                    return dateMatchedRecord[0];
                 }
             } else {
-                return null;
+                return {
+                    exceptionDate: this.cellDateString,
+                    flag: null,
+                    CUS_NO: null
+                };
             }
         },
         isVacationDay: function() {
-            if (this.vacationExceptionFlag !== null) {
-                return this.vacationExceptionFlag;
+            if (this.releventVacationException.flag !== null) {
+                return this.releventVacationException.flag;
             } else {
                 let weekday = new Date(this.cellDateString).getDay();
                 // if (this.cellDateString)
