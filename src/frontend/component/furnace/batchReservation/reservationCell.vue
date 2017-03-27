@@ -2,9 +2,11 @@
     <div class="container-fluid">
         <div class="row">
             <span
-                class="label label-primary col-xs-12"
-                style="margin-bottom:10px;padding:3px;">
+                class="label col-xs-12"
+                style="margin-bottom:10px;padding:3px;"
+                :class="{'label-primary':!isVacationDay,'label-danger':isVacationDay}">
                 {{cellDate.format('M/D')}}
+                <span v-if="isVacationDay">(假日)</span>
             </span>
             <div class="container-fluid">
                 <reservationInput
@@ -129,6 +131,14 @@ export default {
                 );
             });
             return revokedList;
+        },
+        isVacationDay: function() {
+            let weekday = new Date(this.cellDateString).getDay();
+            if ((weekday === 6) || (weekday === 0)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     },
     data: function() {
