@@ -10,7 +10,8 @@ import utility from '../../utility.js';
 
 const taskConfig = {
     reference: 'emailShipmentSchedule',
-    interval: '0 0 8 28-31 * *',
+    interval: '0 10 8 28-31 * *',
+    // interval: '0 0 8 28-31 * *',
     targetCUS_NO: 'JJ07',
     targetEmailList: [
         'cindy.chiu@upgi.com.tw',
@@ -51,7 +52,10 @@ function lastDateOfNextMonth() {
 }
 
 export default cron.schedule(taskConfig.interval, () => {
-    if (currentDate() === lastDateOfCurrentMonth()) {
+    if (
+        // currentDate() === lastDateOfCurrentMonth()
+        currentDate() === '2017-03-29'
+    ) {
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.shipmentSchedule')
             .select('purchaseOrder:pONumber', 'purchaseOrder:revisionNumber', 'requestDate', 'CUST_SNM', 'PRDT_SNM', 'specification', 'requestWeight')
