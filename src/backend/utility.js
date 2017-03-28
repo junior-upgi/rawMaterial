@@ -2,11 +2,14 @@ const cron = require('node-cron');
 const fs = require('fs');
 const moment = require('moment-timezone');
 const os = require('os');
+import nodemailer from 'nodemailer';
 const httpRequest = require('request-promise');
 const winston = require('winston');
 
 const serverConfig = require('./serverConfig.js');
 const telegram = require('./model/telegram.js');
+
+const smtpTransport = nodemailer.createTransport(serverConfig.smtpTransportAccount);
 
 // logging utility
 // Create the log directory if it does not exist
@@ -123,6 +126,25 @@ function todayDateString() {
     return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
 }
 
+function sendEmail(recipientList, attachmentList) {
+    const mailOption = {
+        from: '玻璃原物料預約進貨控管系統 <junior@upgi.com.tw>',
+        to: recipientList.join(),
+        subject: '佳集後續納長石進貨預約資料傳遞',
+        text: '佳集後續納長石進貨預約資料如附，請參閱...',
+        attachments: attachmentList
+    };
+    return new Promise((resolve, reject) => {
+        smtpTransport.sendMail(mailOption, function(error, info) {
+            if (error) {
+                reject('failed to send message: ' + error);
+            } else {
+                resolve('message sent successfully: ' + info.response);
+            }
+        });
+    });
+}
+
 module.exports = {
     alertSystemError: alertSystemError,
     endpointErrorHandler: endpointErrorHandler,
@@ -132,5 +154,6 @@ module.exports = {
     // date and time utility
     currentDatetimeString: currentDatetimeString,
     firstOfMonthString: firstOfMonthString,
-    todayDateString: todayDateString
+    todayDateString: todayDateString,
+    sendEmail: sendEmail
 };

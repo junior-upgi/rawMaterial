@@ -1,12 +1,13 @@
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const express = require('express');
-const morgan = require('morgan');
-const path = require('path');
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
+import morgan from 'morgan';
+import path from 'path';
 // const prettyJson = require('prettyjson');
 
-const serverConfig = require('./serverConfig.js');
-const utility = require('./utility.js');
+import serverConfig from './serverConfig.js';
+import utility from './utility.js';
+import emailShipmentSchedule from './module/scheduledTask/emailShipmentSchedule.js';
 
 const app = express();
 const main = express.Router();
@@ -42,6 +43,7 @@ if (!module.parent) {
         } else {
             utility.logger.info(`${serverConfig.systemReference} server in operation... (${serverConfig.serverUrl})`);
             utility.statusReport.start(); // start the server status reporting function
+            emailShipmentSchedule.start();
         }
     });
 }
