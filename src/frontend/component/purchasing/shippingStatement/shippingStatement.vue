@@ -21,6 +21,7 @@
                         <th class="text-center">項次</th>
                         <th class="text-center">廠商</th>
                         <th class="text-center">原料規格</th>
+                        <th class="text-center">預約日期</th>
                         <th class="text-center">進貨日期</th>
                         <th class="text-center">需求重量</th>
                         <th class="text-center">宣稱重量</th>
@@ -38,6 +39,7 @@
                         <td>{{index + 1}}</td>
                         <td>{{shipment.CUST_SNM}}</td>
                         <td>{{shipment.PRDT_SNM}} - {{shipment.specification}}</td>
+                        <td style="white-space:nowrap;">{{shipment.requestDate}}</td>
                         <td style="white-space:nowrap;">{{shipment.workingDate}}</td>
                         <td style="white-space:nowrap;">
                             <span>
