@@ -4,7 +4,9 @@
             <tbody>
                 <tr>
                     <td class="bg-primary" :style="{border:printingBorder}">廠 商 名 稱</td>
-                    <td class="text-left" style="padding-left:20px;right-padding:0px;" :style="{border:printingBorder}">{{activePO.supplier.NAME}}</td>
+                    <td
+                        class="text-left" style="padding-left:20px;right-padding:0px;font-size:130%;"
+                        :style="{border:printingBorder}">{{activePO.supplier.NAME}}</td>
                     <td class="bg-primary" :style="{border:printingBorder}">訂 單 編 號</td>
                     <td :style="{border:printingBorder}">{{activePO.pONumber}}</td>
                 </tr>
@@ -26,7 +28,10 @@
                         <span v-if="activePO.supplier.TEL2!==null">{{activePO.supplier.TEL2}}</span>
                     </td>
                     <td class="bg-primary" :style="{border:printingBorder}">訂 單 日 期</td>
-                    <td :style="{border:printingBorder}">{{activePO.documentDate}} (修訂版本: {{activePO.revisionNumber|revToString}})</td>
+                    <td :style="{border:printingBorder}">
+                        {{activePO.documentDate}}
+                        <span>(修訂版本: {{activePO.revisionNumber|revToString}})</span>
+                    </td>
                 </tr>
                 <tr>
                     <td class="bg-primary" :style="{border:printingBorder}">傳 真 電 話</td>

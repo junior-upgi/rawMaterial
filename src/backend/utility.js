@@ -126,11 +126,11 @@ function todayDateString() {
     return moment(new Date(), 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD');
 }
 
-function sendEmail(recipientList, attachmentList) {
+function sendEmail(recipientList, subject, attachmentList) {
     const mailOption = {
         from: '玻璃原物料預約進貨控管系統 <junior@upgi.com.tw>',
         to: recipientList.join(),
-        subject: '佳集後續納長石進貨預約資料傳遞',
+        subject: subject,
         text: '佳集後續納長石進貨預約資料如附，請參閱...',
         attachments: attachmentList
     };

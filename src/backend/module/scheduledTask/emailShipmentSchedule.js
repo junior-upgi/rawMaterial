@@ -10,7 +10,7 @@ import utility from '../../utility.js';
 
 const taskConfig = {
     reference: 'emailShipmentSchedule',
-    interval: '0 10 8 28-31 * *',
+    interval: '0 30 8 28-31 * *',
     // interval: '0 0 8 28-31 * *',
     targetCUS_NO: 'JJ07',
     targetEmailList: [
@@ -79,8 +79,11 @@ export default cron.schedule(taskConfig.interval, () => {
                 let wb = new Workbook(); // create an workbook object
                 wb.SheetNames.push(ws_name); // add a worksheet to the workbook
                 wb.Sheets[ws_name] = sheet_from_array_of_arrays(flatArray); // insert the data into the worksheet
-                xlsx.writeFile(wb, './temp/預估進廠車次列表.xlsx'); // write the workbook to file
-                return utility.sendEmail(taskConfig.targetEmailList, [{ path: './temp/預估進廠車次列表.xlsx' }]);
+                xlsx.writeFile(wb, `./temp/佳集${currentMonth() + 2}預估進廠車次列表.xlsx`); // write the workbook to file
+                return utility.sendEmail(
+                    taskConfig.targetEmailList,
+                    `佳集${currentMonth() + 2}預估進廠車次列表.xlsx`, [{ path: `./temp/佳集${currentMonth() + 2}預估進廠車次列表.xlsx` }]
+                );
             }).then((response) => {
                 return httpRequest({ // broadcast notification
                     method: 'post',
@@ -94,7 +97,7 @@ export default cron.schedule(taskConfig.interval, () => {
                 });
             }).then((response) => {
                 // remove temp file
-                rimraf('./temp/預估進廠車次列表.xlsx', () => {
+                rimraf(`./temp/佳集${currentMonth() + 2}預估進廠車次列表.xlsx`, () => {
                     console.log('file deleted');
                 });
             }).catch((error) => {
