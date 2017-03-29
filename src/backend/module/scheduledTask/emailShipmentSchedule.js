@@ -10,8 +10,7 @@ import utility from '../../utility.js';
 
 const taskConfig = {
     reference: 'emailShipmentSchedule',
-    interval: '0 30 8 28-31 * *',
-    // interval: '0 0 8 28-31 * *',
+    interval: '0 0 8 28-31 * *',
     targetCUS_NO: 'JJ07',
     targetEmailList: [
         'cindy.chiu@upgi.com.tw',
@@ -52,10 +51,7 @@ function lastDateOfNextMonth() {
 }
 
 export default cron.schedule(taskConfig.interval, () => {
-    if (
-        // currentDate() === lastDateOfCurrentMonth()
-        currentDate() === '2017-03-29'
-    ) {
+    if (currentDate() === lastDateOfCurrentMonth()) {
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.shipmentSchedule')
             .select('purchaseOrder:pONumber', 'purchaseOrder:revisionNumber', 'requestDate', 'CUST_SNM', 'PRDT_SNM', 'specification', 'requestWeight')
@@ -80,10 +76,7 @@ export default cron.schedule(taskConfig.interval, () => {
                 wb.SheetNames.push(ws_name); // add a worksheet to the workbook
                 wb.Sheets[ws_name] = sheet_from_array_of_arrays(flatArray); // insert the data into the worksheet
                 xlsx.writeFile(wb, `./temp/佳集${currentMonth() + 2}預估進廠車次列表.xlsx`); // write the workbook to file
-                return utility.sendEmail(
-                    taskConfig.targetEmailList,
-                    `佳集${currentMonth() + 2}預估進廠車次列表.xlsx`, [{ path: `./temp/佳集${currentMonth() + 2}預估進廠車次列表.xlsx` }]
-                );
+                return utility.sendEmail(taskConfig.targetEmailList, `佳集${currentMonth() + 2}預估進廠車次列表`, [{ path: `./temp/佳集${currentMonth() + 2}預估進廠車次列表.xlsx` }]);
             }).then((response) => {
                 return httpRequest({ // broadcast notification
                     method: 'post',
