@@ -25,6 +25,112 @@ router.get('/data/purchaseOrder/contentSummary', tokenValidation, (request, resp
         });
 });
 
+router.put('/data/purchaseOrder/close', tokenValidation, (request, response, next) => {
+    let responseObject = {
+        shipmentSchedule: null,
+        newRequestSummary: null,
+        activePOList: null,
+        pOContentSummary: null,
+        consolidatedReceivingRecord: null,
+        receivingRecord: null,
+        monthlyShipmentOverview: null
+    };
+    let knex = require('knex')(serverConfig.mssqlConfig);
+    knex.transaction((trx) => {
+        // update the target record by giving it a date for the 'finalizeDate' column
+        return trx('rawMaterial.dbo.purchaseOrder')
+            .update({ finalizeDate: moment(new Date()).format('YYYY-MM-DD') })
+            .where({ id: request.body.targetPOId })
+            .debug(false)
+            .then(() => {
+                // get a fresh copy of vacation exceptions
+                return trx('rawMaterial.dbo.vacationException')
+                    .select(knex.raw('CONVERT(CHAR(10),exceptionDate,126) AS exceptionDate, flag, CUS_NO'))
+                    .orderBy('exceptionDate').debug(false);
+            }).then((resultset) => {
+                responseObject.vacationException = resultset;
+                // get a set of fresh shipment data
+                return trx.select('*').from('rawMaterial.dbo.shipmentSchedule')
+                    .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false);
+            }).then((resultset) => {
+                let shipmentSchedule = new Treeize();
+                shipmentSchedule.setOptions({
+                    input: {
+                        detectCollection: false,
+                        uniformRows: true
+                    },
+                    output: {
+                        prune: false,
+                        objectOverwrite: false
+                    }
+                });
+                shipmentSchedule.grow(resultset);
+                responseObject.shipmentSchedule = shipmentSchedule.getData();
+                // get a set of fresh newRequestSummary data
+                return trx.select('*').from('rawMaterial.dbo.newRequestSummary')
+                    .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').debug(false);
+            }).then((resultset) => {
+                responseObject.newRequestSummary = resultset;
+                // get a set of fresh purchaseOrder data
+                return trx('rawMaterial.dbo.ActivePurchaseOrder')
+                    .select('*')
+                    .orderBy('pONumber')
+                    .orderBy('shipments:workingDate')
+                    .debug(false);
+            }).then((resultset) => {
+                // process active purchase order data
+                let pOList = new Treeize();
+                pOList.setOptions({
+                    input: {
+                        detectCollection: false,
+                        uniformRows: true
+                    },
+                    output: {
+                        prune: false,
+                        objectOverwrite: false
+                    }
+                });
+                pOList.grow(resultset);
+                let tempList = pOList.getData();
+                tempList.forEach((purchaseOrder, index, array) => {
+                    array[index].supplier = purchaseOrder.suppliers[0];
+                    delete array[index].suppliers;
+                });
+                responseObject.activePOList = tempList;
+                // get a set of fresh contentSummary data
+                return trx('rawMaterial.dbo.pOContentSummary').select('*').debug(false);
+            }).then((resultset) => {
+                responseObject.pOContentSummary = resultset;
+                // get simplified shipment records
+                return trx('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
+                    .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+            }).then((resultset) => {
+                responseObject.consolidatedReceivingRecord = resultset;
+                // get simplified shipment records
+                return trx('rawMaterial.dbo.receivingRecord').select('*')
+                    .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false);
+            }).then((resultset) => {
+                responseObject.receivingRecord = resultset;
+                // get monthly shipment overview data
+                return trx('rawMaterial.dbo.monthlyShipmentOverview').select('*')
+                    .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO')
+                    .orderBy('PRD_NO').debug(false);
+            });
+    }).then((resultset) => {
+        responseObject.monthlyShipmentOverview = resultset;
+        return response.status(200).json(responseObject);
+    }).catch((error) => {
+        return response.status(500).json(
+            utility.endpointErrorHandler(
+                request.method,
+                request.originalUrl,
+                `更新訂單資料發生錯誤: ${error}`)
+        );
+    }).finally(() => {
+        knex.destroy();
+    });
+});
+
 router.route('/data/purchaseOrder')
     .all(tokenValidation)
     .get((request, response, next) => {
@@ -33,11 +139,6 @@ router.route('/data/purchaseOrder')
             .select('*')
             .orderBy('pONumber')
             .orderBy('shipments:workingDate')
-            /*
-            .orderBy('workingYear')
-            .orderBy('workingMonth')
-            .orderBy('CUS_NO')
-            */
             .debug(false)
             .then((resultset) => {
                 let pOList = new Treeize();
@@ -161,11 +262,6 @@ router.route('/data/purchaseOrder')
                         .select('*')
                         .orderBy('pONumber')
                         .orderBy('shipments:workingDate')
-                        /*
-                        .orderBy('workingYear')
-                        .orderBy('workingMonth')
-                        .orderBy('CUS_NO')
-                        */
                         .debug(false);
                 }).then((resultset) => {
                     // process active purchase order data

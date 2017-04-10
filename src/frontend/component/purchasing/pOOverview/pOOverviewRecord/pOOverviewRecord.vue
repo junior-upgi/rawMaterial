@@ -5,7 +5,9 @@
             :revisionNumber="purchaseOrder.revisionNumber"
             :revokedPendingShipmentSchedule="releventRevokedPendingShipmentSchedule"
             :unattendedShipmentSchedule="releventUnattenedShipmentSchedule"
-            @updatePOEvent="updatePO()">
+            :readyToClose="readyToClose"
+            @updatePOEvent="updatePO()"
+            @closePOEvent="closePO()">
         </pOVersion>
         <td>{{purchaseOrder.workingYear}}</td>
         <td>{{purchaseOrder.workingMonth}}</td>
@@ -44,6 +46,37 @@ export default {
             dataProcessingState: 'checkDataProcessingState',
             shipmentSchedule: 'shipmentSchedule'
         }),
+        readyToClose: function() {
+            if (
+                this.purchaseOrder.shipments.filter((shipment) => {
+                    return (shipment.receivedDate === null);
+                }).length > 0
+            ) {
+                return false;
+            } else {
+                switch (this.purchaseOrder.contractType) {
+                    case 'annual':
+                        if (this.purchaseOrder.workingYear < new Date().getFullYear()) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    case 'monthly':
+                        if (
+                            (this.purchaseOrder.workingYear < new Date().getFullYear()) ||
+                            (
+                                (this.purchaseOrder.workingYear === new Date().getFullYear()) &&
+                                (this.purchaseOrder.workingMonth < new Date().getMonth() + 1)
+                            )
+                        ) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    default: return true;
+                }
+            }
+        },
         releventRevokedPendingShipmentSchedule: function() {
             switch (this.purchaseOrder.contractType) {
                 case 'annual':
@@ -94,6 +127,7 @@ export default {
     methods: {
         ...mapActions({
             componentErrorHandler: 'componentErrorHandler',
+            closePurchaseOrder: 'closePurchaseOrder',
             updatePurchaseOrder: 'updatePurchaseOrder',
             employeeChatBroadcast: 'employeeChatBroadcast'
         }),
@@ -117,6 +151,22 @@ export default {
                     component: 'pOOverviewRecord',
                     method: 'updatePO',
                     situation: '訂單更新作業發生錯誤',
+                    systemErrorMessage: error
+                });
+            });
+        },
+        closePO: function() {
+            this.processingDataSwitch(true);
+            this.closePurchaseOrder({
+                targetPOId: this.purchaseOrder.id
+            }).then((resultset) => {
+                this.rebuildData(resultset.data);
+                this.processingDataSwitch(false);
+            }).catch((error) => {
+                this.componentErrorHandler({
+                    component: 'pOOverviewRecord',
+                    method: 'closePO',
+                    situation: '訂單結案作業發生錯誤',
                     systemErrorMessage: error
                 });
             });

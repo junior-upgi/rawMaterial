@@ -64,4 +64,4 @@ FROM rawMaterial.dbo.purchaseOrder a
     LEFT JOIN rawMaterial.dbo.supplier c ON a.CUS_NO=c.CUS_NO
     LEFT JOIN rawMaterial.dbo.rawMaterialSpecDetail d ON (b.CUS_NO=d.CUS_NO) AND (b.PRD_NO=d.PRD_NO) AND (b.typeId=d.typeId)
     LEFT JOIN rawMaterial.dbo.pONotice e ON a.CUS_NO=e.CUS_NO
-WHERE a.deprecated IS NULL;
+WHERE a.deprecated IS NULL AND a.finalizeDate IS NULL;

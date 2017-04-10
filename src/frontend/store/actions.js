@@ -15,6 +15,7 @@ export default {
     componentErrorHandler: componentErrorHandler,
     shipmentReservation: shipmentReservation,
     updatePurchaseOrder: updatePurchaseOrder,
+    closePurchaseOrder: closePurchaseOrder,
     createPurchaseOrder: createPurchaseOrder,
     nextWorkingMonth: nextWorkingMonth,
     prevWorkingMonth: prevWorkingMonth,
@@ -205,6 +206,16 @@ function updatePurchaseOrder(context, payload) {
     const requestOption = {
         method: 'put',
         url: `${serverUrl}/data/purchaseOrder`,
+        data: payload,
+        headers: { 'x-access-token': sessionStorage.token }
+    };
+    return axios(requestOption);
+}
+
+function closePurchaseOrder(context, payload) {
+    const requestOption = {
+        method: 'put',
+        url: `${serverUrl}/data/purchaseOrder/close`,
         data: payload,
         headers: { 'x-access-token': sessionStorage.token }
     };
