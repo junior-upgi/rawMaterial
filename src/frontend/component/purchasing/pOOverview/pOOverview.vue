@@ -13,7 +13,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <pOOverviewRecord v-for="purchaseOrder in activePOList" :purchaseOrder="purchaseOrder" :pOContentSummary="filterPOContentSummary(purchaseOrder.id)" :revokedPendingShipmentSchedule="revokedPendingShipmentSchedule" :unattendedShipmentSchedule="unattendedShipmentSchedule">
+                    <pOOverviewRecord
+                        v-for="purchaseOrder in activePOList"
+                        :purchaseOrder="purchaseOrder"
+                        :pOContentSummary="filterPOContentSummary(purchaseOrder.id)"
+                        :revokedPendingShipmentSchedule="revokedPendingShipmentSchedule"
+                        :unattendedShipmentSchedule="unattendedShipmentSchedule">
                     </pOOverviewRecord>
                 </tbody>
                 <newRequestList></newRequestList>
