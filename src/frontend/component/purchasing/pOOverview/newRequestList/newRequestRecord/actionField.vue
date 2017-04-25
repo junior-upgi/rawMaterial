@@ -5,7 +5,11 @@
             class="label label-danger label-xs">
             新增項目 (請更新訂單)
         </span>
-        <button v-else type="button" class="btn btn-primary btn-md" @click="createNewPO()">
+        <button
+            v-else type="button"
+            class="btn btn-primary btn-md"
+            :disabled="dataProcessingState?true:false"
+            @click="createNewPO()">
             開立訂單
         </button>
     </td>
@@ -22,7 +26,10 @@ export default {
         'requestSummary'
     ],
     computed: {
-        ...mapGetters({ activePOList: 'activePOList' }),
+        ...mapGetters({
+            activePOList: 'activePOList',
+            dataProcessingState: 'checkDataProcessingState'
+        }),
         matchingActivePO: function() {
             let matchingActivePO = this.activePOList.filter((activePO) => {
                 return (

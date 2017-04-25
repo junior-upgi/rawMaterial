@@ -6,13 +6,19 @@
         <div class="table-responsive">
             <table class="table table-bordered tabel-hover table-striped table-condensed">
                 <thead>
+                </thead>
+                <newRequestList></newRequestList>
+                <tbody>
+                    <tr>
+                        <td colspan="6" class="bg-primary">
+                            <h4 style="margin:10px;padding:0px;">確認訂單項目</h4>
+                        </td>
+                    </tr>
                     <tr>
                         <th v-for="thItem in thList" class="text-center">
                             <strong>{{thItem}}</strong>
                         </th>
                     </tr>
-                </thead>
-                <tbody>
                     <pOOverviewRecord
                         v-for="purchaseOrder in activePOList"
                         :purchaseOrder="purchaseOrder"
@@ -21,7 +27,6 @@
                         :unattendedShipmentSchedule="unattendedShipmentSchedule">
                     </pOOverviewRecord>
                 </tbody>
-                <newRequestList></newRequestList>
                 <revokedRequestList
                     :revokedPendingShipmentSchedule="revokedPendingShipmentSchedule">
                 </revokedRequestList>

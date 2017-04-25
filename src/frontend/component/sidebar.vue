@@ -36,7 +36,10 @@
             :class="{'btn-danger':role==='supplier'}" disabled>
             廠商模組
         </button>
-        <button type="button" class="btn btn-default btn-block" :disabled="dataProcessingState?true:false" @click="logout()">
+        <button
+            type="button" class="btn btn-default btn-block"
+            :disabled="dataProcessingState?true:false"
+            @click="logout()">
             登出系統
         </button>
         <messagingUnit></messagingUnit>
