@@ -39,12 +39,12 @@ export default {
             pOContentSummary: 'pOContentSummary',
             rawMaterialList: 'rawMaterialList'
         }),
-        releventPOContentSummary: function() {
+        releventPOContentSummary: function () {
             return this.pOContentSummary.filter((pOContentSummaryEntry) => {
                 return pOContentSummaryEntry.pOId === this.activePO.id;
             });
         },
-        printingBorder: function() {
+        printingBorder: function () {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {
@@ -52,13 +52,13 @@ export default {
             }
         }
     },
-    data: function() {
+    data: function () {
         return {
             summarizedMode: true
         };
     },
     methods: {
-        releventRawMaterial: function(CUS_NO, PRD_NO, typeId) {
+        releventRawMaterial: function (CUS_NO, PRD_NO, typeId) {
             return this.rawMaterialList.filter((rawMaterial) => {
                 return (
                     (rawMaterial.CUS_NO === CUS_NO) &&
@@ -67,7 +67,7 @@ export default {
                 );
             })[0];
         },
-        unitPrice: function(shipmentUP, suggestedUP) {
+        unitPrice: function (shipmentUP, suggestedUP) {
             if (shipmentUP === null) {
                 return `${suggestedUP}`;
             } else {
@@ -76,10 +76,10 @@ export default {
         }
     },
     filters: {
-        markThousand: function(value) {
-            return `${numeral(value).format('0,0')}`;
+        markThousand: function (value) {
+            return `${numeral(value).format('0,0.0')}`;
         },
-        unitPrice: function(value) {
+        unitPrice: function (value) {
             return `${numeral(value).format('0.[00000]')}`;
         }
     }

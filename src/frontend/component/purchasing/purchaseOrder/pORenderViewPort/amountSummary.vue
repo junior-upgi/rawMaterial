@@ -13,7 +13,7 @@
             <br>
             <div class="row">
                 <div class="col-xs-4 text-left">總計</div>
-                <div class="col-xs-8 text-right" style="white-space:nowrap;">{{pOSummaryGross|formatCurrency}} {{activePO.supplier.currency}}</div>
+                <div class="col-xs-8 text-right" style="white-space:nowrap;">{{pOSummaryGross|netPrice}} {{activePO.supplier.currency}}</div>
             </div>
         </div>
     </td>
@@ -27,17 +27,17 @@ export default {
     props: ['activePO'],
     computed: {
         ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
-        printingBorder: function() {
+        printingBorder: function () {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {
                 return null;
             }
         },
-        pOSummaryGross: function() {
+        pOSummaryGross: function () {
             return this.pOSummaryNet + this.pOSummaryTax;
         },
-        pOSummaryNet: function() {
+        pOSummaryNet: function () {
             if (this.activePO.customNet === null) {
                 let amount = 0;
                 this.activePO.shipments.forEach((shipment) => {
@@ -48,7 +48,7 @@ export default {
                 return this.activePO.customNet;
             }
         },
-        pOSummaryTax: function() {
+        pOSummaryTax: function () {
             if (this.activePO.customTax === null) {
                 let amount = 0;
                 this.activePO.shipments.forEach((shipment) => {
@@ -61,8 +61,11 @@ export default {
         }
     },
     filters: {
-        formatCurrency: function(amount) {
+        formatCurrency: function (amount) {
             return numeral(amount).format('0,0.[00]');
+        },
+        netPrice: function (value) {
+            return `${numeral(Math.round(value)).format('0,0')}`;
         }
     }
 };

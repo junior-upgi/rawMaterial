@@ -43,15 +43,15 @@ export default {
             pOPrintMode: 'checkPOPrintMode'
         })
     },
-    data: function() {
+    data: function () {
         return {
             selectedIndex: 0,
             customMessage: ''
         };
     },
-    created: function() { this.selectedIndex = 0; },
+    created: function () { this.selectedIndex = 0; },
     methods: {
-        saveCustomMessage: function($event) {
+        saveCustomMessage: function ($event) {
             this.customMessage = $event;
         }
     }
