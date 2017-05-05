@@ -70,7 +70,7 @@ export default {
     props: ['activePO', 'userInfo'],
     computed: {
         ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
-        printingBorder: function() {
+        printingBorder: function ) {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {
@@ -79,7 +79,7 @@ export default {
         }
     },
     filters: {
-        revToString: function(revisionNumber) {
+        revToString: function revisionNumber) {
             return ('0' + revisionNumber).slice(-2);
         }
     }

@@ -28,14 +28,14 @@ export default {
     props: ['customMessage', 'pONoticeList'],
     computed: {
         ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
-        printingBorder: function() {
+        printingBorder: function ) {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {
                 return null;
             }
         },
-        customMessagePlaceholder: function() {
+        customMessagePlaceholder: function ) {
             if (this.pOPrintMode) {
                 return '';
             } else {
@@ -43,13 +43,13 @@ export default {
             }
         }
     },
-    data: function() {
+    data: function ) {
         return {
             customMessageValue: this.customMessage
         };
     },
     watch: {
-        customMessage: function(changedCustomMessageValue) {
+        customMessage: function changedCustomMessageValue) {
             this.customMessageValue = changedCustomMessageValue;
         }
     }

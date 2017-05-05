@@ -1,24 +1,24 @@
 export default {
     /*
-    checkDateInEditMode: function(state) { return state.dateInEditMode; },
-    checkPOViewMode: function(state) { return state.pOViewMode; },
-    checkPOCreateMode: function(state) { return state.pOCreateMode; },
-    checkPOEditMode: function(state) { return state.pOEditMode; },
-    getPONoticeArray: function(state) { return state.pONoticeArray; },
-    getPOShipmentList: function(state) { return state.pOShipmentList; },
-    getPOShipmentSummary: function(state) { return state.pOShipmentSummary; },
-    getPOWorkingSupplier: function(state) { return state.pOWorkingSupplier; },
-    getRawMatList: function(state) { return state.rawMatList; },
-    getSelectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
-    getShipmentOverview: function(state) { return state.shipmentOverview; },
-    getSupplyingSpecList: function(state) { return state.supplyingSpecList; },
-    getTonnageSummary: function(state) { return state.tonnageSummary; },
-    getUserName: function(state) { return state.userData.NAME; },
-    getWorkingMonth: function(state) { return state.workingMonth; },
-    getWorkingYear: function(state) { return state.workingYear; },
+    checkDateInEditMode: function state) { return state.dateInEditMode; },
+    checkPOViewMode: function state) { return state.pOViewMode; },
+    checkPOCreateMode: function state) { return state.pOCreateMode; },
+    checkPOEditMode: function state) { return state.pOEditMode; },
+    getPONoticeArray: function state) { return state.pONoticeArray; },
+    getPOShipmentList: function state) { return state.pOShipmentList; },
+    getPOShipmentSummary: function state) { return state.pOShipmentSummary; },
+    getPOWorkingSupplier: function state) { return state.pOWorkingSupplier; },
+    getRawMatList: function state) { return state.rawMatList; },
+    getSelectedRawMatIndex: function state) { return state.selectedRawMatIndex; },
+    getShipmentOverview: function state) { return state.shipmentOverview; },
+    getSupplyingSpecList: function state) { return state.supplyingSpecList; },
+    getTonnageSummary: function state) { return state.tonnageSummary; },
+    getUserName: function state) { return state.userData.NAME; },
+    getWorkingMonth: function state) { return state.workingMonth; },
+    getWorkingYear: function state) { return state.workingYear; },
     // purchase order
-    pOList: function(state) { return state.pOList; },
-    getMonthlySchedule: function(state) {
+    pOList: function state) { return state.pOList; },
+    getMonthlySchedule: function state) {
         if ((state.rawMatList !== null) && (state.rawMatList.length !== 0)) {
             let selectedRawMaterial = state.rawMatList[state.selectedRawMatIndex];
             let releventShipmentSchedule = state.shipmentSchedule.filter((shipment) => {
@@ -33,7 +33,7 @@ export default {
         return [];
     },
     */
-    // getRawMaterialTypeList: function(state) { return state.rawMatTypeList; },
+    // getRawMaterialTypeList: function state) { return state.rawMatTypeList; },
 
     // /////////////////////////////////////////////////////////////
     // application state

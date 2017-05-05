@@ -28,7 +28,7 @@ export default {
     },
     computed: {
         ...mapGetters({ rawMaterialList: 'rawMaterialList' }),
-        organizedRequestList: function() {
+        organizedRequestList: function ) {
             let organizedRequest = {};
             this.rawMaterialList.forEach((rawMaterial) => {
                 if (organizedRequest[rawMaterial.CUS_NO] === undefined) {

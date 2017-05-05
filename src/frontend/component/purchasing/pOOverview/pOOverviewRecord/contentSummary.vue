@@ -21,7 +21,7 @@ export default {
     name: 'contentSummary',
     props: ['pOContentSummary'],
     filters: {
-        tonnage: function(value) {
+        tonnage: function value) {
             return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
         }
     }

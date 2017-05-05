@@ -20,7 +20,7 @@ export default {
     name: 'graphicalDate',
     props: ['receivingRecord'],
     methods: {
-        isCurrentDate: function(dateString) {
+        isCurrentDate: function dateString) {
             return (moment(new Date()).format('YYYY-MM-DD') === dateString) ? true : false;
         }
     }

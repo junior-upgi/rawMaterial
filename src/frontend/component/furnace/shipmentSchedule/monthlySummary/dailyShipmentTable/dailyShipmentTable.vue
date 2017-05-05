@@ -29,7 +29,7 @@ export default {
     name: 'dailyShipmentTable',
     components: { shipmentRecord },
     props: ['shipmentSchedule'],
-    data: function() {
+    data: function ) {
         return {
             thList: ['', '狀態', '項目', '日期', '重量', '宣稱重量', '磅單重量', '備註', '']
         };

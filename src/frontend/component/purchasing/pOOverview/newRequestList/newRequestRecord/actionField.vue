@@ -30,7 +30,7 @@ export default {
             activePOList: 'activePOList',
             dataProcessingState: 'checkDataProcessingState'
         }),
-        matchingActivePO: function() {
+        matchingActivePO: function ) {
             let matchingActivePO = this.activePOList.filter((activePO) => {
                 return (
                     (activePO.CUS_NO === this.requestSummary.CUS_NO) &&
@@ -53,7 +53,7 @@ export default {
             rebuildData: 'rebuildData',
             setWorkingSupplier: 'setWorkingSupplier'
         }),
-        genStartingDate: function() {
+        genStartingDate: function ) {
             switch (this.requestSummary.contractType) {
                 case 'annual':
                     return moment(new Date(this.requestSummary.workingYear, 0, 1)).format('YYYY-MM-DD');
@@ -69,7 +69,7 @@ export default {
                     });
             }
         },
-        genEndDate: function() {
+        genEndDate: function ) {
             switch (this.requestSummary.contractType) {
                 case 'annual':
                     return moment(new Date(this.requestSummary.workingYear, 11, 31)).format('YYYY-MM-DD');
@@ -85,11 +85,11 @@ export default {
                     });
             }
         },
-        genPONumber: function() {
+        genPONumber: function ) {
             let dateString = moment(new Date()).format('YYYYMMDD');
             return `${this.requestSummary.CUS_NO}-${dateString}`;
         },
-        createNewPO: function() {
+        createNewPO: function ) {
             this.processingDataSwitch(true);
             this.createPurchaseOrder({
                 contractType: this.requestSummary.contractType,

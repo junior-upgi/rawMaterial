@@ -31,7 +31,7 @@ export default {
     name: 'revokedRequestList',
     props: ['revokedPendingShipmentSchedule'],
     filters: {
-        tonnage: function(value) {
+        tonnage: function value) {
             return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
         }
     }

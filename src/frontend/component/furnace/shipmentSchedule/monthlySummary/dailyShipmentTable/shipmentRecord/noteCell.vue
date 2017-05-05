@@ -22,13 +22,13 @@ export default {
     computed: {
         ...mapGetters({ dataProcessingState: 'checkDataProcessingState' })
     },
-    data: function() {
+    data: function ) {
         return {
             noteValue: this.note
         };
     },
     watch: {
-        noteValue: function(newNoteText) {
+        noteValue: function newNoteText) {
             if (newNoteText === '') {
                 this.noteValue = null;
             }
@@ -44,7 +44,7 @@ export default {
             processingDataSwitch: 'processingDataSwitch',
             rebuildData: 'rebuildData'
         }),
-        updateNote: function() {
+        updateNote: function ) {
             this.processingDataSwitch(true);
             this.updateShipment({
                 id: this.id,
