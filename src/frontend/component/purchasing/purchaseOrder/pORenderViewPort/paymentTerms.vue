@@ -20,7 +20,7 @@ export default {
     props: ['UNI_NO', 'CMP_ADR'],
     computed: {
         ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
-        printingBorder: function ) {
+        printingBorder: function() {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {

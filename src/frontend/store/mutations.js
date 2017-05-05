@@ -38,15 +38,15 @@ function emptyStoreValue(state) {
 
 export default {
     // application state control
-    processingDataSwitch: function (state, onOffSwitch) { state.processingData = onOffSwitch; },
+    processingDataSwitch: function(state, onOffSwitch) { state.processingData = onOffSwitch; },
     setWorkingTime: setWorkingTime, // workingMonth and workingYear manipulation
     selectRawMaterial: selectRawMaterial, // to be used by workingMaterialSelector component
     setWorkingSupplier: setWorkingSupplier,
-    forceViewChange: function (state, view) { state.activeView = view; }, // activeView specific
-    redirectUser: function (state) { state.activeView = state.role; }, // activeView specific
-    changeActiveShipmentEditorDate: function (state, newDateString) { state.activeShipmentEditorDate = newDateString; },
-    clearActiveShipmentEditorDate: function (state) { state.activeShipmentEditorDate = null; },
-    pOPrintModeSwitch: function (state, onOffSwitch) { state.pOPrintMode = onOffSwitch; },
+    forceViewChange: function(state, view) { state.activeView = view; }, // activeView specific
+    redirectUser: function(state) { state.activeView = state.role; }, // activeView specific
+    changeActiveShipmentEditorDate: function(state, newDateString) { state.activeShipmentEditorDate = newDateString; },
+    clearActiveShipmentEditorDate: function(state) { state.activeShipmentEditorDate = null; },
+    pOPrintModeSwitch: function(state, onOffSwitch) { state.pOPrintMode = onOffSwitch; },
     // utility functions
     restoreToken: restoreToken, // restore token if exists
     // general vuex store data manipulation

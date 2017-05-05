@@ -54,7 +54,7 @@ export default {
             shipmentSchedule: 'shipmentSchedule',
             pOContentSummary: 'pOContentSummary'
         }),
-        revokedPendingShipmentSchedule: function ) {
+        revokedPendingShipmentSchedule: function() {
             return this.shipmentSchedule.filter((shipment) => {
                 return (
                     (shipment.deprecated !== null) &&
@@ -63,7 +63,7 @@ export default {
                 );
             });
         },
-        unattendedShipmentSchedule: function ) {
+        unattendedShipmentSchedule: function() {
             return this.shipmentSchedule.filter((shipment) => {
                 return (
                     (shipment.deprecated === null) &&
@@ -72,13 +72,13 @@ export default {
             });
         }
     },
-    data: function ) {
+    data: function() {
         return {
             thList: ['編號', '年度', '月份', '廠商', '規格項目', '狀態']
         };
     },
     methods: {
-        filterPOContentSummary: function pOId) {
+        filterPOContentSummary: function(pOId) {
             return this.pOContentSummary.filter((summaryItem) => {
                 return summaryItem.pOId === pOId;
             });

@@ -53,7 +53,7 @@ export default {
             restoreToken: 'restoreToken'
         })
     },
-    created: function ) {
+    created: function() {
         // if jwt token exists in the sessionStorage
         if (
             (sessionStorage.token !== undefined) &&

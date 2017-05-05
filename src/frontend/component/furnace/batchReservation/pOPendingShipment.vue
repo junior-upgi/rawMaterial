@@ -34,7 +34,7 @@ export default {
             processingDataSwitch: 'processingDataSwitch',
             rebuildData: 'rebuildData'
         }),
-        cancelReservation: function ) {
+        cancelReservation: function() {
             this.processingDataSwitch(true);
             let targetList = [];
             this.shipmentSchedule.forEach((shipment) => {

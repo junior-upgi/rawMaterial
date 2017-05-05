@@ -30,7 +30,7 @@ export default {
             prevWorkingMonth: 'prevWorkingMonth'
         }),
         ...mapMutations({ buildStore: 'buildStore' }),
-        nextMonth: function ) {
+        nextMonth: function() {
             this.nextWorkingMonth()
                 .then((responseList) => {
                     this.buildStore(responseList);
@@ -40,7 +40,7 @@ export default {
                     alert(`作業月份選擇發生錯誤，請重新載入...\n${error.errorMessage}`);
                 });
         },
-        prevMonth: function ) {
+        prevMonth: function() {
             this.prevWorkingMonth()
                 .then((responseList) => {
                     this.buildStore(responseList);

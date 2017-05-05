@@ -21,7 +21,7 @@ export default {
             workingYear: 'workingYear',
             workingMonth: 'workingMonth'
         }),
-        releventShipmentSchedule: function ) {
+        releventShipmentSchedule: function() {
             return this.shipmentSchedule.filter((shipment) => {
                 return (
                     (new Date(shipment.workingDate).getFullYear() === this.workingYear) &&
@@ -30,12 +30,12 @@ export default {
                 );
             });
         },
-        daysInCurrentWorkingMonth: function ) {
+        daysInCurrentWorkingMonth: function() {
             return new Date(this.workingYear, this.workingMonth, 0).getDate();
         }
     },
     methods: {
-        getWorkingDateString: function workingDay) {
+        getWorkingDateString: function(workingDay) {
             return moment(new Date(this.workingYear, this.workingMonth - 1, workingDay)).format('YYYY-MM-DD');
         }
     }

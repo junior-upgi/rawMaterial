@@ -14,7 +14,7 @@ export default {
     name: 'summarySectionHeader',
     computed: {
         ...mapGetters({ pOPrintMode: 'checkPOPrintMode' }),
-        printingBorder: function ) {
+        printingBorder: function() {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {
@@ -22,7 +22,7 @@ export default {
             }
         }
     },
-    data: function ) {
+    data: function() {
         return {
             tdList: ['項 次', '品 名', '規 格', '數 量', '單 位', '單 價', '合 計']
         };

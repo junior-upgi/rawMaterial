@@ -34,7 +34,7 @@ export default {
             processingDataSwitch: 'processingDataSwitch',
             rebuildData: 'rebuildData'
         }),
-        revokeReservation: function ) {
+        revokeReservation: function() {
             this.processingDataSwitch(true);
             if (confirm('採購已經先行完成下單作業，請確認是否取消！')) {
                 let targetList = [];

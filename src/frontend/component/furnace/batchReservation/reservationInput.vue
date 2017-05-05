@@ -29,7 +29,7 @@ export default {
             selectedRawMaterial: 'selectedRawMaterial'
         })
     },
-    data: function ) {
+    data: function() {
         return {
             cellDate: moment(new Date(this.cellDateString)),
             maxUserInputValueAllowed: 5,
@@ -37,10 +37,10 @@ export default {
         };
     },
     watch: {
-        cellDateString: function newDate) {
+        cellDateString: function(newDate) {
             this.cellDate = moment(new Date(newDate));
         },
-        userInputValue: function newValue) {
+        userInputValue: function(newValue) {
             if (
                 (newValue === '') ||
                 ((newValue < 1) || (newValue > this.maxUserInputValueAllowed)) ||
@@ -62,7 +62,7 @@ export default {
             processingDataSwitch: 'processingDataSwitch',
             rebuildData: 'rebuildData'
         }),
-        processReservation: function ) {
+        processReservation: function() {
             let proceed = true;
             if (this.isVacationDay) {
                 proceed = confirm(`${this.cellDateString} 為非工作日，請確認是否進行進貨預約！(請注意公昌六、日不出貨)`);

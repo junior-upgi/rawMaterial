@@ -29,19 +29,19 @@ export default {
             pOPrintMode: 'checkPOPrintMode',
             rawMaterialList: 'rawMaterialList'
         }),
-        releventRawMaterialList: function ) {
+        releventRawMaterialList: function() {
             return this.rawMaterialList.filter((rawMaterial) => {
                 return rawMaterial.CUS_NO === this.activePO.CUS_NO;
             });
         },
         /*
-        releventReceivingRecord: function ) {
+        releventReceivingRecord: function() {
             return this.consolidatedReceivingRecord.filter((receivingRecord) => {
                 return receivingRecord.CUS_NO === this.activePO.CUS_NO;
             });
         },
         */
-        printingBorder: function ) {
+        printingBorder: function() {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {

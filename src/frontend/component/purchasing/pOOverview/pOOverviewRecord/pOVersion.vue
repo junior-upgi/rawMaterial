@@ -31,7 +31,7 @@ export default {
         'unattendedShipmentSchedule'
     ],
     computed: {
-        pendingIssueFlag: function ) {
+        pendingIssueFlag: function() {
             return ((this.revokedPendingShipmentSchedule.length > 0) || (this.unattendedShipmentSchedule.length > 0)) ? true : false;
         }
     }

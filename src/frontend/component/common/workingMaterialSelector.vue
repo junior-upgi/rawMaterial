@@ -17,22 +17,22 @@ export default {
             selectedRawMatIndex: 'selectedRawMatIndex'
         })
     },
-    data: function ) { return { selectedIndex: 0 }; },
+    data: function() { return { selectedIndex: 0 }; },
     methods: {
         ...mapMutations({
             selectRawMaterial: 'selectRawMaterial'
         }),
-        rawMaterialSelected: function ) {
+        rawMaterialSelected: function() {
             this.selectRawMaterial(this.selectedIndex);
             this.$emit('workingMaterialChange');
         }
     },
     watch: {
-        selectedRawMatIndex: function newValue) {
+        selectedRawMatIndex: function(newValue) {
             this.selectedIndex = newValue;
         }
     },
-    created: function ) {
+    created: function() {
         this.selectedIndex = 0;
         this.selectRawMaterial(this.selectedIndex);
     }

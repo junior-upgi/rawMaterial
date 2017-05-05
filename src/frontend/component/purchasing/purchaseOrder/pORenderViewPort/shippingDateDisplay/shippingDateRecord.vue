@@ -16,7 +16,7 @@ export default {
     name: 'shippingDateRecord',
     props: ['index', 'rawMaterial', 'shipmentList'],
     computed: {
-        dateList: function ) {
+        dateList: function() {
             let dateList = [];
             this.shipmentList.forEach((shipment) => {
                 let matched = false;
@@ -45,10 +45,10 @@ export default {
         }
     },
     methods: {
-        workingMonth: function dateString) {
+        workingMonth: function(dateString) {
             return new Date(dateString).getMonth() + 1;
         },
-        workingDay: function dateString) {
+        workingDay: function(dateString) {
             return new Date(dateString).getDate();
         }
     }

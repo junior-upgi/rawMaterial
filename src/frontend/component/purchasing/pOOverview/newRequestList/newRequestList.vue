@@ -28,7 +28,7 @@ export default {
         })
     },
     methods: {
-        filterNewShipmentRequestList: function CUS_NO, contractType, workingYear, workingMonth) {
+        filterNewShipmentRequestList: function(CUS_NO, contractType, workingYear, workingMonth) {
             switch (contractType) {
                 case 'annual':
                     return this.newShipmentRequestList.filter((newShipmentRequest) => {

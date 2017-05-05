@@ -93,10 +93,10 @@ export default {
         ...mapGetters({
             activePOList: 'activePOList'
         }),
-        selectedPOId: function ) {
+        selectedPOId: function() {
             return (this.selectedIndex !== 0) ? this.activePOList[this.selectedIndex - 1].id : null;
         },
-        totalWorkingWeight: function ) {
+        totalWorkingWeight: function() {
             if (this.selectedIndex === 0) {
                 return null;
             } else {
@@ -110,13 +110,13 @@ export default {
             }
         }
     },
-    data: function ) {
+    data: function() {
         return {
             selectedIndex: 0
         };
     },
     methods: {
-        determineWorkingWeight: function supplierWeight, actualWeight) {
+        determineWorkingWeight: function(supplierWeight, actualWeight) {
             if ((supplierWeight === null) && (actualWeight === null)) {
                 return null;
             }
@@ -124,7 +124,7 @@ export default {
         }
     },
     filters: {
-        kilogram: function value) {
+        kilogram: function(value) {
             return (value !== null) ? `${numeral(value).format('0,0')}` : null;
         }
     }

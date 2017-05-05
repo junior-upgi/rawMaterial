@@ -23,7 +23,7 @@ export default {
             workingYear: 'workingYear',
             workingMonth: 'workingMonth'
         }),
-        filterReceivingRecord: function ) {
+        filterReceivingRecord: function() {
             return this.receivingRecord.filter((record) => {
                 return (
                     (record.CUS_NO === this.monthlyShipmentOverview.CUS_NO) &&
@@ -35,7 +35,7 @@ export default {
         }
     },
     filters: {
-        tonnage: function value) {
+        tonnage: function(value) {
             return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
         }
     }
