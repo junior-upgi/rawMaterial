@@ -37,35 +37,35 @@ export default {
 
     // /////////////////////////////////////////////////////////////
     // application state
-    checkDataProcessingState: function(state) { return state.processingData; },
-    selectedRawMatIndex: function(state) { return state.selectedRawMatIndex; },
+    checkDataProcessingState: function (state) { return state.processingData; },
+    selectedRawMatIndex: function (state) { return state.selectedRawMatIndex; },
     selectedRawMaterial: selectedRawMaterial,
     workingSupplierDetail: workingSupplierDetail,
-    workingMonth: function(state) { return state.workingMonth; },
-    workingYear: function(state) { return state.workingYear; },
-    activeShipmentEditorDate: function(state) { return state.activeShipmentEditorDate; },
-    checkPOPrintMode: function(state) { return state.pOPrintMode; },
+    workingMonth: function (state) { return state.workingMonth; },
+    workingYear: function (state) { return state.workingYear; },
+    activeShipmentEditorDate: function (state) { return state.activeShipmentEditorDate; },
+    checkPOPrintMode: function (state) { return state.pOPrintMode; },
     // user info and permission
     activeView: activeView,
-    role: function(state) { return state.role; },
-    userData: function(state) { return state.userData; },
+    role: function (state) { return state.role; },
+    userData: function (state) { return state.userData; },
     // basic data set
-    rawMaterialList: function(state) { return state.rawMatList; },
-    rawMaterialTypeList: function(state) { return state.rawMatTypeList; },
-    supplierList: function(state) { return state.supplierList; },
-    workingMaterial: function(state) { return state.workingMaterial; },
+    rawMaterialList: function (state) { return state.rawMatList; },
+    rawMaterialTypeList: function (state) { return state.rawMatTypeList; },
+    supplierList: function (state) { return state.supplierList; },
+    workingMaterial: function (state) { return state.workingMaterial; },
     // schedule data
-    shipmentSchedule: function(state) { return state.shipmentSchedule; },
-    shipmentSummary: function(state) { return state.shipmentSummary; },
+    shipmentSchedule: function (state) { return state.shipmentSchedule; },
+    shipmentSummary: function (state) { return state.shipmentSummary; },
     newShipmentRequestList: newShipmentRequestList,
-    newRequestSummary: function(state) { return state.newRequestSummary; },
-    consolidatedReceivingRecord: function(state) { return state.consolidatedReceivingRecord; },
-    receivingRecord: function(state) { return state.receivingRecord; },
-    monthlyShipmentOverview: function(state) { return state.monthlyShipmentOverview; },
-    vacationException: function(state) { return state.vacationException; },
+    newRequestSummary: function (state) { return state.newRequestSummary; },
+    consolidatedReceivingRecord: function (state) { return state.consolidatedReceivingRecord; },
+    receivingRecord: function (state) { return state.receivingRecord; },
+    monthlyShipmentOverview: function (state) { return state.monthlyShipmentOverview; },
+    vacationException: function (state) { return state.vacationException; },
     // purchase order
-    activePOList: function(state) { return state.activePOList; },
-    pOContentSummary: function(state) { return state.pOContentSummary; }
+    activePOList: function (state) { return state.activePOList; },
+    pOContentSummary: function (state) { return state.pOContentSummary; }
 };
 
 function activeView(state) {
