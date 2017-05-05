@@ -23,6 +23,7 @@ SELECT
         WHEN a.SAL_NO = '95070003' THEN '#166' -- 採購 陳連虹貞
         WHEN a.SAL_NO = '17020004' THEN '#343' -- 採購 洪綿
         WHEN a.SAL_NO = '06070004' THEN '#163' -- 採購 陳逸樺 課長
+        WHEN a.SAL_NO = '99030003' THEN '#137' -- 資訊 翁宏達
         ELSE NULL
         END AS compPhoneExt
 FROM rawMaterial.dbo.privilege a
