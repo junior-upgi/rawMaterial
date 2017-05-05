@@ -14,16 +14,16 @@ export default {
     name: 'statusCell',
     props: ['shipment'],
     computed: {
-        validShipment: function() { return (this.shipment.deprecated === null) ? true : false; },
-        onPO: function() {
+        validShipment: function () { return (this.shipment.deprecated === null) ? true : false; },
+        onPO: function () {
             if (
                 (this.shipment.pOId !== null) &&
                 (this.shipment.purchaseOrder.deprecated === null)
             ) { return true; } else { return false; }
         },
-        pOPending: function() { if (this.validShipment && !this.onPO) { return true; } else { return false; } },
-        revocationPending: function() { if (!this.validShipment && this.onPO) { return true; } else { return false; } },
-        shipmentPending: function() {
+        pOPending: function () { if (this.validShipment && !this.onPO) { return true; } else { return false; } },
+        revocationPending: function () { if (!this.validShipment && this.onPO) { return true; } else { return false; } },
+        shipmentPending: function () {
             if (
                 (this.shipment.deprecated === null) &&
                 (this.shipment.receivedDate === null) &&
@@ -31,7 +31,7 @@ export default {
                 (this.shipment.purchaseOrder.deprecated === null)
             ) { return true; } else { return false; }
         },
-        fulfilled: function() {
+        fulfilled: function () {
             if (
                 (this.shipment.deprecated === null) &&
                 (this.shipment.receivedDate !== null) &&
@@ -39,13 +39,13 @@ export default {
                 (this.shipment.purchaseOrder.deprecated === null)
             ) { return true; } else { return false; }
         },
-        pOClosed: function() {
+        pOClosed: function () {
             if (
                 (this.fulfilled) &&
                 (this.shipment.purchaseOrder.finalizedDate === null)
             ) { return true; } else { return false; }
         },
-        shipmentState: function() {
+        shipmentState: function () {
             if (this.pOClosed) {
                 return { stateCode: 'pOClosed', stateMessage: '結案' };
             } else if (this.fulfilled) {
@@ -61,10 +61,10 @@ export default {
             }
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.$emit('recordStateDetermined', this.shipmentState);
     },
-    updated: function() {
+    updated: function () {
         this.$emit('recordStateDetermined', this.shipmentState);
     }
 };

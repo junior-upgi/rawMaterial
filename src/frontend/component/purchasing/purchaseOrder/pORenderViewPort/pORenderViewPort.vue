@@ -64,7 +64,7 @@ export default {
             pOPrintMode: 'checkPOPrintMode',
             userInfo: 'userData'
         }),
-        printingBorder: function() {
+        printingBorder: function () {
             if (this.pOPrintMode) {
                 return '2px solid black !important';
             } else {
@@ -72,7 +72,7 @@ export default {
             }
         }
     },
-    data: function() {
+    data: function () {
         return {
             CMP_ADR: '台南市新營區新工路36號',
             documentTitle: '訂 購 單',

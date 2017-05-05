@@ -46,7 +46,7 @@ export default {
             dataProcessingState: 'checkDataProcessingState',
             shipmentSchedule: 'shipmentSchedule'
         }),
-        readyToClose: function() {
+        readyToClose: function () {
             if (
                 this.purchaseOrder.shipments.filter((shipment) => {
                     return (shipment.receivedDate === null);
@@ -77,7 +77,7 @@ export default {
                 }
             }
         },
-        releventRevokedPendingShipmentSchedule: function() {
+        releventRevokedPendingShipmentSchedule: function () {
             switch (this.purchaseOrder.contractType) {
                 case 'annual':
                     return this.revokedPendingShipmentSchedule.filter((shipment) => {
@@ -100,7 +100,7 @@ export default {
                     });
             }
         },
-        releventUnattenedShipmentSchedule: function() {
+        releventUnattenedShipmentSchedule: function () {
             switch (this.purchaseOrder.contractType) {
                 case 'annual':
                     return this.unattendedShipmentSchedule.filter((shipment) => {
@@ -135,7 +135,7 @@ export default {
             processingDataSwitch: 'processingDataSwitch',
             rebuildData: 'rebuildData'
         }),
-        updatePO: function() {
+        updatePO: function () {
             this.processingDataSwitch(true);
             this.updatePurchaseOrder({
                 targetPO: this.purchaseOrder,
@@ -155,7 +155,7 @@ export default {
                 });
             });
         },
-        closePO: function() {
+        closePO: function () {
             this.processingDataSwitch(true);
             this.closePurchaseOrder({
                 targetPOId: this.purchaseOrder.id

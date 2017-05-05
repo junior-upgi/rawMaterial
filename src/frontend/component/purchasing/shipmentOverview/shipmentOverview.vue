@@ -52,7 +52,7 @@ export default {
             workingYear: 'workingYear',
             workingMonth: 'workingMonth'
         }),
-        releventMonthlyShipmentOverview: function() {
+        releventMonthlyShipmentOverview: function () {
             return this.monthlyShipmentOverview.filter((monthlyShipmentOverviewItem) => {
                 return (
                     (monthlyShipmentOverviewItem.workingYear === this.workingYear) &&

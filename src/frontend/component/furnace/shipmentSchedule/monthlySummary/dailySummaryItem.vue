@@ -28,19 +28,19 @@ export default {
     ],
     computed: {
         ...mapGetters({ selectedRawMaterial: 'selectedRawMaterial' }),
-        releventShipmentSchedule: function() {
+        releventShipmentSchedule: function () {
             return this.shipmentSchedule.filter((shipment) => {
                 return shipment.workingDate === this.workingDateString;
             });
         },
-        weekday: function() {
+        weekday: function () {
             return new Date(this.workingDateString).getDay();
         },
-        isWeekend: function() {
+        isWeekend: function () {
             return ((this.weekday === 0) || (this.weekday === 6)) ? true : false;
         }
     },
-    data: function() {
+    data: function () {
         return {
             weekdayReferenceList: ['週日', '週一', '週二', '週三', '週四', '週五', '週六']
         };

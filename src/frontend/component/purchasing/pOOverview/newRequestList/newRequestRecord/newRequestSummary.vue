@@ -29,7 +29,7 @@ export default {
         })
     },
     methods: {
-        getRawMaterialSNM: function(PRD_NO) {
+        getRawMaterialSNM: function (PRD_NO) {
             let PRDT_SNM = null;
             this.rawMaterialTypeList.forEach((rawMaterial) => {
                 if (rawMaterial.PRD_NO === PRD_NO) {
@@ -38,7 +38,7 @@ export default {
             });
             return PRDT_SNM;
         },
-        getRawMaterialSpec: function(CUS_NO, PRD_NO, typeId) {
+        getRawMaterialSpec: function (CUS_NO, PRD_NO, typeId) {
             let specification = null;
             this.rawMaterialList.forEach((rawMaterial) => {
                 if (

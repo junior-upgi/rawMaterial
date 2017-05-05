@@ -20,7 +20,7 @@
 export default {
     name: 'documentHeading',
     props: ['documentTitle'],
-    data: function() {
+    data: function () {
         return {
             NAME: '統 義 玻 璃 工 業 股 份 有 限 公 司',
             CMP_ADR: '台南市新營區新工路36號',

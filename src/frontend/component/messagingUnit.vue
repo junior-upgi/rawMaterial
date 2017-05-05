@@ -26,7 +26,7 @@ export default {
             userData: 'userData'
         })
     },
-    data: function() {
+    data: function () {
         return {
             groupMessage: ''
         };
@@ -37,7 +37,7 @@ export default {
             employeeChatBroadcast: 'employeeChatBroadcast'
         }),
         ...mapMutations({ processingDataSwitch: 'processingDataSwitch' }),
-        sendGroupMessage: function() {
+        sendGroupMessage: function () {
             this.processingDataSwitch(true);
             this.employeeChatBroadcast({
                 groupMessage: this.groupMessage

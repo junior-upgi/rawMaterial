@@ -48,7 +48,7 @@ export default {
         workingTimeSelector,
         reservationCell
     },
-    data: function() {
+    data: function () {
         return {
             weekdayList: ['週日', '週一', '週二', '週三', '週四', '週五', '週六']
         };
@@ -60,28 +60,28 @@ export default {
             workingMonth: 'workingMonth',
             workingYear: 'workingYear'
         }),
-        weekCount: function() {
+        weekCount: function () {
             const firstOfMonth = new Date(this.workingYear, this.workingMonth - 1, 1);
             const lastOfMonth = new Date(this.workingYear, this.workingMonth, 0);
             return Math.ceil((firstOfMonth.getDay() + 1 + (lastOfMonth.getDate() - firstOfMonth.getDate())) / 7);
         },
-        lastDayOfMonth: function() {
+        lastDayOfMonth: function () {
             return parseInt(
                 moment(new Date(this.workingYear, this.workingMonth - 1, 1))
                     .add(1, 'month')
                     .subtract(1, 'day')
                     .format('D'));
         },
-        weekdayOfFirstOfMonth: function() {
+        weekdayOfFirstOfMonth: function () {
             return new Date(this.workingYear, this.workingMonth - 1, 1).getDay();
         }
     },
     methods: {
         ...mapActions({ componentErrorHandler: 'componentErrorHandler' }),
-        cellIndex: function(weekIndex, weekdayIndex) {
+        cellIndex: function (weekIndex, weekdayIndex) {
             return (parseInt(weekIndex) - 1) * 7 + parseInt(weekdayIndex);
         },
-        cellDate: function(weekIndex, weekdayIndex) {
+        cellDate: function (weekIndex, weekdayIndex) {
             return moment(
                 new Date(
                     this.workingYear,
@@ -90,14 +90,14 @@ export default {
                 )
             ).format('YYYY-MM-DD');
         },
-        checkVisibility: function(weekIndex, weekdayIndex) {
+        checkVisibility: function (weekIndex, weekdayIndex) {
             const cellIndex = this.cellIndex(weekIndex, weekdayIndex);
             return (
                 (cellIndex > this.weekdayOfFirstOfMonth) &&
                 ((cellIndex - this.weekdayOfFirstOfMonth) <= this.lastDayOfMonth)
             );
         },
-        filterShipmentSchedule: function(dateString) {
+        filterShipmentSchedule: function (dateString) {
             return this.shipmentSchedule.filter((shipment) => {
                 return (
                     (shipment.workingDate === dateString) &&

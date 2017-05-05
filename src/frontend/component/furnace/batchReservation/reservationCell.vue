@@ -68,7 +68,7 @@ export default {
             workingYear: 'workingYear',
             vacationException: 'vacationException'
         }),
-        receivedCount: function() {
+        receivedCount: function () {
             let receivedShipmentList = this.shipmentSchedule.filter((shipment) => {
                 return (
                     (shipment.receivedDate !== null) &&
@@ -83,7 +83,7 @@ export default {
             });
             return receivedShipmentList.length;
         },
-        pOPendingShipmentSchedule: function() {
+        pOPendingShipmentSchedule: function () {
             let pOPendingList = this.shipmentSchedule.filter((shipment) => {
                 return (
                     (shipment.receivedDate === null) &&
@@ -100,7 +100,7 @@ export default {
             });
             return pOPendingList;
         },
-        pendingShipmentSchedule: function() {
+        pendingShipmentSchedule: function () {
             let pendingList = this.shipmentSchedule.filter((shipment) => {
                 return (
                     (shipment.receivedDate === null) &&
@@ -117,7 +117,7 @@ export default {
             });
             return pendingList;
         },
-        revokedShipmentSchedule: function() {
+        revokedShipmentSchedule: function () {
             let revokedList = this.shipmentSchedule.filter((shipment) => {
                 return (
                     (shipment.receivedDate === null) &&
@@ -135,7 +135,7 @@ export default {
             });
             return revokedList;
         },
-        releventVacationException: function() {
+        releventVacationException: function () {
             // 由資料表 vacationException 篩選此工作窗格是否有相關特定休假日資料
             // .flag === true - 特別預定為"休假日"
             // .flag === false - 特別預定為"不休假日"
@@ -155,7 +155,7 @@ export default {
                 };
             }
         },
-        isVacationDay: function() {
+        isVacationDay: function () {
             if (this.releventVacationException.flag !== null) {
                 return this.releventVacationException.flag;
             } else {
@@ -169,18 +169,18 @@ export default {
             }
         }
     },
-    data: function() {
+    data: function () {
         return {
             cellDate: moment.utc(this.cellDateString, 'YYYY-MM-DD HH:mm:ss')
         };
     },
     watch: {
-        cellDateString: function(newDate) {
+        cellDateString: function (newDate) {
             this.cellDate = moment.utc(newDate, 'YYYY-MM-DD HH:mm:ss');
         }
     },
     methods: {
-        isFutureDate: function() {
+        isFutureDate: function () {
             const today = new Date();
             const referenceDate = new Date(this.cellDateString);
             today.setHours(0, 0, 0, 0);

@@ -35,16 +35,16 @@ export default {
             dataProcessingState: 'checkDataProcessingState'
         })
     },
-    data: function() {
+    data: function () {
         return {
             supplierWeightValue: this.supplierWeight
         };
     },
     watch: {
-        activeShipmentEditorDate: function() {
+        activeShipmentEditorDate: function () {
             this.supplierWeightValue = this.supplierWeight;
         },
-        supplierWeightValue: function(newValue) {
+        supplierWeightValue: function (newValue) {
             if (
                 (newValue === '') ||
                 (newValue <= 1000) ||
@@ -56,7 +56,7 @@ export default {
         }
     },
     filters: {
-        tonnage: function(value) {
+        tonnage: function (value) {
             return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
         }
     }

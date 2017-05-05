@@ -74,12 +74,12 @@ export default {
             processingDataSwitch: 'processingDataSwitch',
             resetStore: 'resetStore'
         }),
-        logout: function() {
+        logout: function () {
             if (confirm('請確認是否登出系統？將遺失未儲存之資料...')) {
                 this.resetStore();
             }
         },
-        changeWorkingView: function(view) {
+        changeWorkingView: function (view) {
             this.processingDataSwitch(true);
             this.initData()
                 .then((responseList) => {
@@ -96,7 +96,7 @@ export default {
                     });
                 });
         },
-        printPO: function() {
+        printPO: function () {
             // let customMessageHolder = this.customMessage;
             this.processingDataSwitch(true);
             this.pOPrintModeSwitch(true);

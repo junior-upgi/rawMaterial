@@ -21,16 +21,16 @@ export default {
             dataProcessingState: 'checkDataProcessingState'
         })
     },
-    data: function() {
+    data: function () {
         return {
             workingDateValue: this.workingDateString
         };
     },
     watch: {
-        activeShipmentEditorDate: function() {
+        activeShipmentEditorDate: function () {
             this.workingDateValue = this.workingDateString;
         },
-        workingDateValue: function(newDateValue) {
+        workingDateValue: function (newDateValue) {
             let today = new Date();
             let referenceDate = new Date(newDateValue);
             today.setHours(0, 0, 0, 0);

@@ -98,36 +98,36 @@ export default {
     props: ['index', 'shipment'],
     computed: {
         ...mapGetters({ activeShipmentEditorDate: 'activeShipmentEditorDate' }),
-        fulfilled: function() {
+        fulfilled: function () {
             if (this.recordState.stateCode === 'fulfilled') { return true; } else { return false; }
         },
-        revocationPending: function() {
+        revocationPending: function () {
             if (this.recordState.stateCode === 'revocationPending') { return true; } else { return false; }
         },
-        pOClosed: function() {
+        pOClosed: function () {
             if (this.recordState.stateCode === 'pOClosed') { return true; } else { return false; }
         },
-        pOPending: function() {
+        pOPending: function () {
             if (this.recordState.stateCode === 'pOPending') { return true; } else { return false; }
         },
-        isFutureDate: function() {
+        isFutureDate: function () {
             let today = new Date();
             let referenceDate = new Date(this.shipment.workingDate);
             today.setHours(0, 0, 0, 0);
             referenceDate.setHours(0, 0, 0, 0);
             return (referenceDate > today) ? true : false;
         },
-        pristine: function() {
+        pristine: function () {
             return (
                 (this.shipment.workingDate === this.workingDate) &&
                 (this.shipment.supplierWeight === this.supplierWeight) &&
                 (this.shipment.actualWeight === this.actualWeight)
             ) ? true : false;
         },
-        weightDataReady: function() {
+        weightDataReady: function () {
             return ((this.supplierWeight !== null) === (this.actualWeight !== null));
         },
-        workingDateReady: function() {
+        workingDateReady: function () {
             let today = new Date();
             let referenceDate = new Date(this.workingDate);
             today.setHours(0, 0, 0, 0);
@@ -135,7 +135,7 @@ export default {
             return ((this.workingDate !== null) && (referenceDate <= today)) ? true : false;
         }
     },
-    data: function() {
+    data: function () {
         return {
             recordState: {
                 stateCode: 'uninitialized',
@@ -148,10 +148,10 @@ export default {
         };
     },
     watch: {
-        workingDate: function(newDateValue) {
+        workingDate: function (newDateValue) {
             if (newDateValue === '') { this.workingDate = null; }
         },
-        activeShipmentEditorDate: function() {
+        activeShipmentEditorDate: function () {
             this.workingDate = this.shipment.workingDate;
             this.supplierWeight = this.shipment.supplierWeight;
             this.actualWeight = this.shipment.actualWeight;
@@ -159,7 +159,7 @@ export default {
         }
     },
     filters: {
-        tonnage: function(value) {
+        tonnage: function (value) {
             return `${numeral(Math.round(value / 100) / 10).format('0,0.0')} 噸`;
         }
     },
@@ -172,23 +172,23 @@ export default {
             processingDataSwitch: 'processingDataSwitch',
             rebuildData: 'rebuildData'
         }),
-        processWorkingDateFieldUpdateEvent: function($event) {
+        processWorkingDateFieldUpdateEvent: function ($event) {
             this.workingDate = $event;
         },
-        processSupplierWeightFieldUpdateEvent: function($event) {
+        processSupplierWeightFieldUpdateEvent: function ($event) {
             this.supplierWeight = $event;
         },
-        processActualWeightFieldUpdateEvent: function($event) {
+        processActualWeightFieldUpdateEvent: function ($event) {
             this.actualWeight = $event;
         },
-        processRecordState: function(recordStateObject) { this.recordState = recordStateObject; },
-        processRecordRestoreEvent: function() {
+        processRecordState: function (recordStateObject) { this.recordState = recordStateObject; },
+        processRecordRestoreEvent: function () {
             this.workingDate = this.shipment.workingDate;
             this.supplierWeight = this.shipment.supplierWeight;
             this.actualWeight = this.shipment.actualWeight;
             this.note = this.shipment.note;
         },
-        processSubmitRecordEvent: function() {
+        processSubmitRecordEvent: function () {
             this.processingDataSwitch(true);
             this.updateShipment({
                 id: this.shipment.id,

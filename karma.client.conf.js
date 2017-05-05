@@ -1,5 +1,5 @@
 // https://github.com/Nikku/karma-browserify
-module.exports = function(config) {
+module.exports = function (config) {
     config.set({
         browsers: [
             // 'Chrome',

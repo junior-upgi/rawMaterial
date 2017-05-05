@@ -22,7 +22,7 @@ export default {
             pOWorkingSupplier: 'getPOWorkingSupplier',
             workingMaterial: 'getWorkingMaterial'
         }),
-        uniqueSupplierObjList: function() {
+        uniqueSupplierObjList: function () {
             const uniqueList = [];
             const lookup = {};
             for (const index in this.workingMaterial) {
@@ -38,19 +38,19 @@ export default {
             return uniqueList;
         }
     },
-    data: function() {
+    data: function () {
         return {
             selectedClient: null
         };
     },
     methods: {
         ...mapMutations({ switchPOWorkingSupplier: 'switchPOWorkingSupplier' }),
-        switchSupplier: function() {
+        switchSupplier: function () {
             this.switchPOWorkingSupplier(this.selectedClient);
             this.$emit('supplierSwitched', this.selectedClient);
         }
     },
-    mounted: function() {
+    mounted: function () {
         if (this.pOWorkingSupplier !== null) {
             this.selectedClient = this.pOWorkingSupplier;
         }
