@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 
 router.route('/data/shipment')
     .all(tokenValidation)
-    .get(function(request, response, next) {
+    .get(function (request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.shipmentSchedule').select('*')
             .orderBy('PRD_NO').orderBy('CUS_NO').orderBy('workingDate').debug(false)
@@ -389,7 +389,7 @@ router.route('/data/shipment')
             });
     });
 
-router.get('/data/shipment/newRequestSummary', tokenValidation, function(request, response) {
+router.get('/data/shipment/newRequestSummary', tokenValidation, function (request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex.select('*')
         .from('rawMaterial.dbo.newRequestSummary')
@@ -413,7 +413,7 @@ router.get('/data/shipment/newRequestSummary', tokenValidation, function(request
         });
 });
 
-router.get('/data/shipment/receivingRecord/consolidated', tokenValidation, function(request, response) {
+router.get('/data/shipment/receivingRecord/consolidated', tokenValidation, function (request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex('rawMaterial.dbo.consolidatedReceivingRecord').select('*')
         .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false)
@@ -433,7 +433,7 @@ router.get('/data/shipment/receivingRecord/consolidated', tokenValidation, funct
         });
 });
 
-router.get('/data/shipment/receivingRecord', tokenValidation, function(request, response) {
+router.get('/data/shipment/receivingRecord', tokenValidation, function (request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex('rawMaterial.dbo.receivingRecord').select('*')
         .orderBy('CUS_NO').orderBy('PRD_NO').orderBy('workingDate').debug(false)
@@ -453,7 +453,7 @@ router.get('/data/shipment/receivingRecord', tokenValidation, function(request, 
         });
 });
 
-router.get('/data/shipment/monthlyOverview', tokenValidation, function(request, response) {
+router.get('/data/shipment/monthlyOverview', tokenValidation, function (request, response) {
     let knex = require('knex')(serverConfig.mssqlConfig);
     knex('rawMaterial.dbo.monthlyShipmentOverview').select('*')
         .orderBy('workingYear').orderBy('workingMonth').orderBy('CUS_NO').orderBy('PRD_NO').debug(false)

@@ -7,7 +7,7 @@ const utility = require('../../utility.js');
 
 router.route('/data/vacationException')
     .all(tokenValidation)
-    .get(function(request, response, next) {
+    .get(function (request, response, next) {
         let knex = require('knex')(serverConfig.mssqlConfig);
         knex('rawMaterial.dbo.vacationException')
             .select(knex.raw('CONVERT(CHAR(10),exceptionDate,126) AS exceptionDate, flag, CUS_NO'))

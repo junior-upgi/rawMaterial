@@ -135,7 +135,7 @@ function sendEmail(recipientList, subject, attachmentList) {
         attachments: attachmentList
     };
     return new Promise((resolve, reject) => {
-        smtpTransport.sendMail(mailOption, function(error, info) {
+        smtpTransport.sendMail(mailOption, function (error, info) {
             if (error) {
                 reject('failed to send message: ' + error);
             } else {
