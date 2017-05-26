@@ -47,7 +47,7 @@ export default {
         actualWeightValue: function (newValue) {
             if (
                 (newValue === '') ||
-                (newValue <= 1000) ||
+                (newValue <= 0) ||
                 (newValue > 99999)
             ) {
                 this.actualWeightValue = null;
