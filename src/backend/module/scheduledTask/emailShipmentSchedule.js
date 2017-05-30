@@ -80,11 +80,11 @@ export default cron.schedule(taskConfig.interval, () => {
             }).then((response) => {
                 return httpRequest({ // broadcast notification
                     method: 'post',
-                    uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiITBot') + '/sendMessage',
+                    uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiItBot') + '/sendMessage',
                     body: {
                         chat_id: telegram.getChatID('統義原料控管系統群組'),
                         text: `${currentYear()}年度${currentMonth() + 2}月份佳集預估進廠車次列表已郵寄至各單位郵件信箱`,
-                        token: telegram.getBotToken('upgiITBot')
+                        token: telegram.getBotToken('upgiItBot')
                     },
                     json: true
                 });

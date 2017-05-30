@@ -39,11 +39,11 @@ const statusReport = cron.schedule('0 0 8,22 * * *', () => {
     const message = `${issuedDatetime} ${serverConfig.systemReference} server reporting in from ${os.hostname()}`;
     httpRequest({
         method: 'post',
-        uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiITBot') + '/sendMessage',
+        uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiItBot') + '/sendMessage',
         body: {
             chat_id: serverConfig.administrator,
             text: `${message}`,
-            token: telegram.getBotToken('upgiITBot')
+            token: telegram.getBotToken('upgiItBot')
         },
         json: true
     }).then((response) => {
@@ -59,21 +59,21 @@ const statusReport = cron.schedule('0 0 8,22 * * *', () => {
 function alertSystemError(functionRef, message) {
     httpRequest({ // broadcast alert heading
         method: 'post',
-        uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiITBot') + '/sendMessage',
+        uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiItBot') + '/sendMessage',
         body: {
             chat_id: serverConfig.administrator,
             text: `error encountered while executing [${serverConfig.systemReference}][${functionRef}] @ ${currentDatetimeString()}`,
-            token: telegram.getBotToken('upgiITBot')
+            token: telegram.getBotToken('upgiItBot')
         },
         json: true
     }).then((response) => {
         return httpRequest({ // broadcast alert body message
             method: 'post',
-            uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiITBot') + '/sendMessage',
+            uri: serverConfig.botAPIUrl + telegram.getBotToken('upgiItBot') + '/sendMessage',
             form: {
                 chat_id: serverConfig.administrator,
                 text: `error message: ${message}`,
-                token: telegram.getBotToken('upgiITBot')
+                token: telegram.getBotToken('upgiItBot')
             }
         });
     }).then((response) => {

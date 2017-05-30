@@ -4,7 +4,8 @@ const botList = [
     { id: 296411532, first_name: 'UPGI註冊機器人', username: 'upgiRegisterBot', token: '296411532:AAF9U92K7LLKB7g-jvvG4remdHGi90ph2fI' },
     { id: 278943684, first_name: '產品開發機器人', username: 'productDevelopmentBot', token: '278943684:AAHQDQMZrI2_3jPKnrY8tdrhn-2mKN9CwpI' },
     { id: 260542039, first_name: '測試機器人', username: 'testBot', token: '260542039:AAEOxo0MbczouifWwQKDyIyJKBN6Iy43htk' },
-    { id: 287236637, first_name: 'UPGI IT 機器人', username: 'upgiITBot', token: '287236637:AAHSuMHmaZJ2Vm9gXf3NeSlInrgr-XXzoRo' }
+    // { id: 287236637, first_name: 'UPGI IT 機器人', username: 'upgiITBot', token: '287236637:AAHSuMHmaZJ2Vm9gXf3NeSlInrgr-XXzoRo' },
+    { id: 313994191, first_name: 'UPGI IT Bot', username: 'upgiItBot', token: '313994181:AAHTIPRVfLeJ_YW4LSSfGx-Y7G5p_8_sC64' }
 ];
 
 const chatList = [
@@ -13,11 +14,14 @@ const chatList = [
     { id: -157638300, title: '資訊群組', type: 'group' },
     { id: -164742782, title: '產品開發群組', type: 'group' },
     { id: -162201704, title: '測試群組', type: 'group' },
-    { id: -170186986, title: '統義原料控管系統群組', type: 'group' }
+    // { id: -170186986, title: '統義原料控管系統群組', type: 'group' },
+    { id: -225498734, title: '統義原料控管系統群組', type: 'group' }
 ];
 
 const userList = [
-    { id: 241630569, username: 'junior_upgi', first_name: '佳佑', last_name: '蔡', email: 'junior@upgi.com.tw', erpId: '05060001' },
+    { id: 373228139, user_name: 'upgiItDepartment', first_name: '統義玻璃', last_name: '資訊課', email: 'junior@upgi.com.tw', upgEmployeeID: '05060001' },
+    // { id: 396145285, user_name: 'chiayutsaipersonal', first_name: 'Chia-Yu', last_name: 'Tsai', email: '', erpId: '05060001' },
+    // { id: 241630569, username: 'junior_upgi', first_name: '佳佑', last_name: '蔡', email: 'junior@upgi.com.tw', erpId: '05060001' },
     { id: 252069370, username: 'upgi_spark', first_name: '于斌', last_name: '林', email: 'it@upgi.com.tw', erpId: '16080003' },
     { id: 240006091, username: 'Ray0626', first_name: '治儒', last_name: '陳', email: null, erpId: '15050003' },
     { id: 261033177, username: 'Samhuang', first_name: '顯鈞', last_name: '黃', email: null, erpId: '16010002' },
