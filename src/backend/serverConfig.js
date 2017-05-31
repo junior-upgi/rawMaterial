@@ -12,7 +12,7 @@ function broadcastServerUrl() {
         return `http://192.168.168.25:${broadcastServerPort}/broadcast`; // access broadcast server from LAN (production)
     }
 }
-const smtpTransportAccount = 'smtps://junior.upgi@gmail.com:cHApPPZV@smtp.gmail.com';
+const smtpTransportAccount = 'smtps://unipresidentglassinc@gmail.com:decoration168168@smtp.gmail.com';
 
 // server configuration
 const serverHost = 'http://localhost';

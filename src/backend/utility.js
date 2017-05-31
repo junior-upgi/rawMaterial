@@ -128,7 +128,7 @@ function todayDateString() {
 
 function sendEmail(recipientList, subject, attachmentList) {
     const mailOption = {
-        from: '玻璃原物料預約進貨控管系統 <junior@upgi.com.tw>',
+        from: '玻璃原物料預約進貨控管系統 <mis@upgi.com.tw>',
         to: recipientList.join(),
         subject: subject,
         text: '佳集後續納長石進貨預約資料如附，請參閱...',
