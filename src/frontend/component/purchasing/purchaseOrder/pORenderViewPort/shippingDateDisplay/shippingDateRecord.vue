@@ -19,27 +19,31 @@ export default {
         dateList: function () {
             let dateList = [];
             this.shipmentList.forEach((shipment) => {
-                let matched = false;
-                if ((dateList.length === 0) && (
-                    (shipment.PRD_NO === this.rawMaterial.PRD_NO) &&
-                    (shipment.typeId === this.rawMaterial.typeId)
-                )) {
+                if ((shipment.PRD_NO === this.rawMaterial.PRD_NO) &&
+                    (shipment.typeId === this.rawMaterial.typeId)) {
                     dateList.push(shipment.workingDate);
-                } else {
-                    let tempDateList = dateList.slice();
-                    tempDateList.forEach((date) => {
-                        if (
-                            (shipment.PRD_NO === this.rawMaterial.PRD_NO) &&
-                            (shipment.typeId === this.rawMaterial.typeId) &&
-                            (shipment.workingDate !== date)
-                        ) {
-                            if (!matched) {
-                                dateList.push(shipment.workingDate);
-                                matched = true;
-                            }
-                        }
-                    });
                 }
+                //let matched = false;
+                //if ((dateList.length === 0) && (
+                //    (shipment.PRD_NO === this.rawMaterial.PRD_NO) &&
+                //    (shipment.typeId === this.rawMaterial.typeId)
+                //)) {
+                //    dateList.push(shipment.workingDate);
+                //} else {
+                //    let tempDateList = dateList.slice();
+                //    tempDateList.forEach((date) => {
+                //        if (
+                //            (shipment.PRD_NO === this.rawMaterial.PRD_NO) &&
+                //            (shipment.typeId === this.rawMaterial.typeId) &&
+                //            (shipment.workingDate !== date)
+                //        ) {
+                //            if (!matched) {
+                //                dateList.push(shipment.workingDate);
+                //                matched = true;
+                //            }
+                //        }
+                //    });
+                //}
             });
             return dateList;
         }
